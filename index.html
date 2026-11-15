@@ -71,7 +71,10 @@
         <div id="p-assistant-dash" class="hidden">
             <div class="flex justify-between items-center mb-6 flex-wrap gap-4 no-print">
                 <h3 class="text-2xl font-bold text-emerald-400 cyber-font">لوحة عمليات المعاون (سجل الغيابات)</h3>
-                <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">🖨️ طباعة / حفظ PDF</button>
+                <div class="flex gap-2">
+                    <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">🖨️ طباعة / حفظ PDF</button>
+                    <button onclick="clearAllAbsences()" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">🗑️ حذف السجل بالكامل</button>
+                </div>
             </div>
 
             <div class="cyber-card p-6 rounded-xl mb-8 no-print">
@@ -138,7 +141,10 @@
         <div id="p-teacher-dash" class="hidden">
             <div class="flex justify-between items-center mb-6 flex-wrap gap-4 no-print">
                 <h3 id="t-dash-title" class="text-2xl font-bold text-cyan-400 cyber-font">بوابة رصد الدرجات</h3>
-                <button onclick="window.print()" class="bg-cyan-600 hover:bg-cyan-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">🖨️ طباعة / حفظ PDF</button>
+                <div class="flex gap-2">
+                    <button onclick="window.print()" class="bg-cyan-600 hover:bg-cyan-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">🖨️ طباعة / حفظ PDF</button>
+                    <button onclick="clearSubjectGrades()" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">🗑️ حذف سجل المادة</button>
+                </div>
             </div>
 
             <!-- إشعار النجاح الداخلي -->
@@ -259,6 +265,13 @@
             loadAbs();
         }
 
+        function clearAllAbsences() {
+            if(confirm('هل أنت متأكد من حذف سجل الغيابات بالكامل؟')) {
+                localStorage.removeItem('marifati_abs');
+                loadAbs();
+            }
+        }
+
         function openTeacherSelect() {
             navTo('teacher-select');
             let box = document.getElementById('subj-box');
@@ -312,7 +325,6 @@
             document.getElementById('s-grade').value = '';
             loadGrades();
 
-            // إظهار إشعار داخلي بدلاً من الـ alert المزعج
             let alertBox = document.getElementById('grade-alert');
             alertBox.classList.remove('hidden');
             setTimeout(() => alertBox.classList.add('hidden'), 3000);
@@ -339,6 +351,12 @@
             localStorage.setItem('marifati_grades', JSON.stringify(allGrades));
             loadGrades();
         }
-    </script>
-</body>
-</html>
+
+        function clearSubjectGrades() {
+            if(confirm(`هل أنت متأكد من حذف سجل درجات (${currentSubj.name}) بالكامل؟`)) {
+                let allGrades = JSON.parse(localStorage.getItem('marifati_grades') || '[]');
+                allGrades = allGrades.filter(g => g.subject !== currentSubj.name);
+                localStorage.setItem('marifati_grades', JSON.stringify(allGrades));
+                loadGrades();
+            }
+            
