@@ -16,10 +16,14 @@
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between p-4 sm:p-6">
+<body class="min-h-screen flex flex-col justify-between p-4 sm:p-6 pb-16">
 
+    <!-- الهيدر العلوي المعدل -->
     <header class="flex justify-between items-center border-b border-emerald-500/30 pb-4 no-print">
-        <h1 class="text-emerald-400 font-bold text-lg">ALPHA_SEC // SYSTEM</h1>
+        <div class="flex flex-col text-right">
+            <h1 class="text-white font-bold text-base md:text-lg">إعدادية المعرفة المهنية الاهلية</h1>
+            <span class="text-[11px] md:text-xs text-emerald-400 font-mono">برمجة: عباس محمد عزيز</span>
+        </div>
         <button onclick="nav('home')" class="bg-slate-900 text-emerald-400 px-4 py-2 rounded-lg border border-emerald-500/30 text-sm font-semibold">الرئيسية</button>
     </header>
 
@@ -46,7 +50,6 @@
         <!-- دخول المعاون -->
         <div id="v-ast-login" class="hidden max-w-md mx-auto cyber-card p-6 rounded-2xl">
             <h3 class="text-xl text-emerald-400 font-bold mb-4 text-center">دخول المعاون</h3>
-            <!-- تم إخفاء الرمز تماماً من النص التوضيحي -->
             <input type="password" id="ast-pass" placeholder="أدخل رمز المرور السري" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center">
             <div class="flex gap-2">
                 <button onclick="checkAst()" class="flex-1 bg-emerald-500 text-black font-bold p-3 rounded-lg">دخول</button>
@@ -137,7 +140,16 @@
             </div>
         </div>
     </main>
-    <footer class="text-center text-xs text-slate-500 pt-4 no-print">إعدادية المعرفة المهنية © 2026 // تصميم وتطوير الطالب: عباس محمد</footer>
+
+    <!-- بصمة الحقوق الثابتة السفيلة المعدلة -->
+    <footer class="fixed bottom-0 left-0 w-full bg-slate-900/95 backdrop-blur-md border-t border-emerald-500/30 py-2.5 px-4 z-50 text-center shadow-lg no-print">
+      <div class="flex items-center justify-center gap-2 text-xs md:text-sm font-mono dir-rtl">
+        <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="text-slate-300">تم التطوير والبرمجة بواسطة:</span>
+        <span class="font-bold text-emerald-400 tracking-wide border-b border-emerald-500/40 pb-0.5">عباس محمد عزيز</span>
+      </div>
+    </footer>
+
     <script>
         const subs = [
             { name: "التربية الإسلامية", code: "1090" },
@@ -267,12 +279,5 @@
         }
     </script>
 </body>
-</html>
-<!-- بصمة الحقوق الثابتة والاحترافية -->
-<footer class="fixed bottom-0 left-0 w-full bg-slate-900/90 backdrop-blur-md border-t border-emerald-500/30 py-2.5 px-4 z-50 text-center shadow-lg">
-  <div class="flex items-center justify-center gap-2 text-xs md:text-sm font-mono dir-rtl">
-    <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-    <span class="text-slate-300">تم التطوير والبرمجة بواسطة:</span>
-    <span class="font-bold text-emerald-400 tracking-wide border-b border-emerald-500/40 pb-0.5">عباس محمد عزيز // ALPHA-SEC</span>
-  </div>
-</footer>
+    </html>
+    
