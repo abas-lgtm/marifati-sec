@@ -3,89 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام معرفة المهني // البوابة المركزية</title>
+    <title>ALPHA-SEC // نظام الإدارة المدرسية</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Fira+Code:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Cairo', sans-serif; background-color: #050b14; color: #e2e8f0; }
+        body { font-family: 'Cairo', sans-serif; background-color: #030712; color: #f3f4f6; }
         .cyber-font { font-family: 'Fira Code', monospace; }
-        .glass-card { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(56, 189, 248, 0.2); }
-        .glass-card:hover { border-color: rgba(56, 189, 248, 0.5); }
+        .cyber-card { background-color: #0b0f19; border: 1px solid rgba(0, 255, 102, 0.3); }
+        .cyber-card:active { transform: scale(0.98); }
         @media print {
             body { background: white !important; color: black !important; }
             .no-print { display: none !important; }
-            .print-only { display: block !important; }
             table { width: 100%; border-collapse: collapse; }
-            th, td { border: 1px solid #cbd5e1; padding: 8px; color: black !important; }
+            th, td { border: 1px solid #333; padding: 6px; color: black !important; }
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between selection:bg-sky-500 selection:text-black">
+<body class="min-h-screen flex flex-col justify-between selection:bg-emerald-500 selection:text-black">
 
-    <!-- الهيدر -->
-    <header class="glass-card border-b border-sky-500/20 py-4 px-6 no-print sticky top-0 z-50">
+    <header class="bg-[#0b0f19] border-b border-emerald-500/30 py-4 px-6 no-print">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <span class="text-3xl">🛡️</span>
                 <div>
-                    <h1 class="text-lg font-black text-sky-400 cyber-font">إعدادية المعرفة المهنية الأهلية</h1>
-                    <p class="text-xs text-slate-400">النظام المركزي لإدارة الغياب ورصد الدرجات</p>
+                    <h1 class="text-lg font-black text-emerald-400 cyber-font">ALPHA_SEC // SYSTEM</h1>
+                    <p class="text-xs text-slate-400">إعدادية المعرفة المهنية - الأمن السيبراني</p>
                 </div>
             </div>
-            <button onclick="goHome()" class="bg-slate-900 hover:bg-slate-800 text-sky-400 px-4 py-2 rounded-lg text-sm font-semibold border border-sky-500/30 transition cyber-font">الرئيسية</button>
+            <button onclick="navTo('home')" class="bg-slate-900 text-emerald-400 px-4 py-2 rounded-lg text-sm font-semibold border border-emerald-500/30 cyber-font">ROOT_HOME</button>
         </div>
     </header>
 
-    <!-- المحتوى -->
-    <main class="max-w-7xl mx-auto w-full p-4 sm:p-6 flex-grow pb-20">
+    <main class="max-w-7xl mx-auto w-full p-4 sm:p-6 flex-grow">
         
-        <!-- الواجهة الرئيسية -->
+        <!-- الرئيسية -->
         <div id="p-home" class="text-center py-12">
-            <h2 class="text-3xl sm:text-5xl font-black text-white mb-4">بوابات النظام الأكاديمي</h2>
-            <p class="text-slate-400 mb-12 max-w-lg mx-auto">اختر البوابة المناسبة للمتابعة وإدارة السجلات بدقة وأمان تام.</p>
+            <h2 class="text-3xl sm:text-5xl font-black text-white mb-4">نظام الإدارة المدرسية الآمن</h2>
+            <p class="text-slate-400 mb-12">اختر البوابة المطلوبة للمتابعة:</p>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-                <div onclick="showAssistantLogin()" class="glass-card p-8 rounded-2xl cursor-pointer shadow-2xl transition transform hover:-translate-y-1 text-right">
+                <button onclick="navTo('assistant-login')" class="cyber-card w-full text-right p-8 rounded-2xl shadow-2xl transition hover:border-emerald-400 focus:outline-none">
                     <div class="text-4xl mb-4">⚡</div>
-                    <h3 class="text-2xl font-bold text-sky-400 mb-2">بوابة المعاون</h3>
-                    <p class="text-sm text-slate-400">إدارة الغيابات وسجلات الشعب المدرسية (محمي بررمز VIP10)</p>
-                </div>
+                    <h3 class="text-2xl font-bold text-white mb-2">بوابة المعاون</h3>
+                    <p class="text-sm text-slate-400">إدارة الغيابات والسجلات والشعب (محمي بررمز VIP10)</p>
+                </button>
 
-                <div onclick="showTeacherSelection()" class="glass-card p-8 rounded-2xl cursor-pointer shadow-2xl transition transform hover:-translate-y-1 text-right">
+                <button onclick="openTeacherSelect()" class="cyber-card w-full text-right p-8 rounded-2xl shadow-2xl transition hover:border-cyan-400 focus:outline-none" style="border-color: rgba(6, 182, 212, 0.3);">
                     <div class="text-4xl mb-4">💻</div>
-                    <h3 class="text-2xl font-bold text-cyan-400 mb-2">بوابة المدرسين</h3>
-                    <p class="text-sm text-slate-400">رصد درجات الطلاب للمواد الدراسية عبر الرموز السرية</p>
-                </div>
+                    <h3 class="text-2xl font-bold text-white mb-2">بوابة المدرسين</h3>
+                    <p class="text-sm text-slate-400">رصد درجات الطلاب للمواد الدراسية عبر الرموز الخاصة</p>
+                </button>
             </div>
         </div>
 
         <!-- دخول المعاون -->
-        <div id="p-assistant-login" class="hidden max-w-md mx-auto glass-card p-8 rounded-2xl shadow-2xl mt-10">
-            <h3 class="text-2xl font-bold text-sky-400 mb-6 text-center cyber-font">ASSISTANT_AUTH</h3>
-            <input type="password" id="ast-pass" placeholder="أدخل رمز المرور (VIP10)" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-white mb-4 focus:border-sky-500 focus:outline-none cyber-font">
+        <div id="p-assistant-login" class="hidden max-w-md mx-auto cyber-card p-8 rounded-2xl shadow-2xl mt-10">
+            <h3 class="text-2xl font-bold text-emerald-400 mb-6 text-center cyber-font">ASSISTANT_AUTH</h3>
+            <input type="password" id="ast-pass" placeholder="أدخل رمز المرور (VIP10)" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-white mb-4 focus:border-emerald-500 focus:outline-none cyber-font">
             <p id="ast-err" class="text-red-400 text-xs mb-4 hidden">رمز المرور غير صحيح!</p>
             <div class="flex gap-4">
-                <button onclick="verifyAssistant()" class="flex-1 bg-sky-500 text-slate-950 font-bold py-3 rounded-lg shadow-lg hover:bg-sky-400 transition">دخول</button>
-                <button onclick="goHome()" class="px-4 bg-slate-900 text-slate-300 rounded-lg hover:bg-slate-800">إلغاء</button>
+                <button onclick="checkAssistant()" class="flex-1 bg-emerald-500 text-slate-950 font-bold py-3 rounded-lg shadow-lg">دخول</button>
+                <button onclick="navTo('home')" class="px-4 bg-slate-900 text-slate-300 rounded-lg">إلغاء</button>
             </div>
         </div>
 
-        <!-- لوحة المعاون (الغيابات) -->
+        <!-- لوحة المعاون -->
         <div id="p-assistant-dash" class="hidden">
-            <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
-                <h3 class="text-2xl font-bold text-sky-400 cyber-font">لوحة عمليات المعاون // سجل الغيابات</h3>
-                <div class="flex gap-2 no-print">
-                    <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">🖨️ طباعة السجل (PDF)</button>
-                    <button onclick="goHome()" class="bg-slate-900 text-sky-400 px-4 py-2 rounded-lg text-sm font-semibold border border-sky-500/30">خروج</button>
-                </div>
+            <div class="flex justify-between items-center mb-6 flex-wrap gap-4 no-print">
+                <h3 class="text-2xl font-bold text-emerald-400 cyber-font">لوحة عمليات المعاون (سجل الغيابات)</h3>
+                <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">🖨️ طباعة / حفظ PDF</button>
             </div>
 
-            <div class="glass-card p-6 rounded-xl mb-8 no-print">
-                <h4 class="text-md font-bold text-white mb-4">تسجيل غياب أو إجازة طالب</h4>
+            <div class="cyber-card p-6 rounded-xl mb-8 no-print">
                 <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-4">
-                    <input type="text" id="g-name" placeholder="اسم الطالب الكامل" class="bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white focus:border-sky-500 focus:outline-none">
+                    <input type="text" id="g-name" placeholder="اسم الطالب" class="bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white">
                     
-                    <select id="g-class" class="bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white focus:border-sky-500 focus:outline-none">
+                    <select id="g-class" class="bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white">
                         <option value="أول امن سيبراني A">أول امن سيبراني A</option>
                         <option value="أول امن سيبراني B">أول امن سيبراني B</option>
                         <option value="أول امن سيبراني C">أول امن سيبراني C</option>
@@ -97,23 +90,22 @@
                         <option value="ثالث تجميع حاسوب B">ثالث تجميع حاسوب B</option>
                     </select>
 
-                    <select id="g-type" class="bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white focus:border-sky-500 focus:outline-none">
-                        <option value="غياب">غياب بدون عذر</option>
-                        <option value="إجازة">إجازة رسمية</option>
+                    <select id="g-type" class="bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white">
+                        <option value="غياب">غياب</option>
+                        <option value="إجازة">إجازة</option>
                         <option value="هروب">هروب من الدرس</option>
                     </select>
 
-                    <input type="date" id="g-date" class="bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white focus:border-sky-500 focus:outline-none">
+                    <input type="date" id="g-date" class="bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white">
                 </div>
-                <button onclick="saveAbsence()" class="bg-sky-500 text-slate-950 font-bold px-6 py-2 rounded-lg hover:bg-sky-400 transition">حفظ السجل</button>
+                <button onclick="saveAbsence()" class="bg-emerald-500 text-slate-950 font-bold px-6 py-2 rounded-lg">حفظ الغياب</button>
             </div>
 
-            <div class="glass-card rounded-xl overflow-hidden shadow-xl">
+            <div class="cyber-card rounded-xl overflow-hidden">
                 <table class="w-full text-right border-collapse">
                     <thead>
-                        <tr class="bg-slate-950 text-sky-400 text-xs border-b border-slate-800">
-                            <th class="p-4">ت</th>
-                            <th class="p-4">اسم الطالب</th>
+                        <tr class="bg-slate-950 text-emerald-400 text-xs">
+                            <th class="p-4">الطالب</th>
                             <th class="p-4">الشعبة / الصف</th>
                             <th class="p-4">الحالة</th>
                             <th class="p-4">التاريخ</th>
@@ -126,51 +118,42 @@
         </div>
 
         <!-- اختيار المواد للمدرسين -->
-        <div id="p-teacher-select" class="hidden max-w-3xl mx-auto">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl font-bold text-cyan-400 cyber-font">اختر المادة الدراسية للمتابعة</h3>
-                <button onclick="goHome()" class="bg-slate-900 text-cyan-400 px-4 py-2 rounded-lg text-sm font-semibold border border-cyan-500/30">الرئيسية</button>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="subj-box"></div>
+        <div id="p-teacher-select" class="hidden max-w-2xl mx-auto">
+            <h3 class="text-2xl font-bold text-cyan-400 cyber-font mb-6">اختر المادة الدراسية للمدرس</h3>
+            <div class="grid grid-cols-1 gap-4" id="subj-box"></div>
         </div>
 
-        <!-- نافذة رمز المدرس -->
-        <div id="p-teacher-login" class="hidden max-w-md mx-auto glass-card p-8 rounded-2xl shadow-2xl mt-10">
-            <h3 id="login-subj-title" class="text-2xl font-bold text-cyan-400 mb-2 text-center cyber-font">تسجيل دخول المدرس</h3>
-            <p class="text-xs text-slate-400 mb-6 text-center">أدخل الرمز السري الخاص بالمادة للوصول إلى لوحة رصد الدرجات</p>
-            <input type="password" id="t-pass" placeholder="أدخل رمز المادة السري" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-white mb-4 focus:border-cyan-500 focus:outline-none cyber-font">
-            <p id="t-err" class="text-red-400 text-xs mb-4 hidden">الرمز غير صحيح!</p>
+        <!-- دخول المدرس برمز المادة -->
+        <div id="p-teacher-login" class="hidden max-w-md mx-auto cyber-card p-8 rounded-2xl shadow-2xl mt-10">
+            <h3 id="t-login-title" class="text-2xl font-bold text-cyan-400 mb-4 text-center cyber-font">تسجيل دخول المدرس</h3>
+            <input type="password" id="t-pass-input" placeholder="أدخل رمز المادة السري" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-white mb-4 focus:border-cyan-500 focus:outline-none cyber-font">
+            <p id="t-err" class="text-red-400 text-xs mb-4 hidden">رمز المادة غير صحيح!</p>
             <div class="flex gap-4">
-                <button onclick="verifyTeacher()" class="flex-1 bg-cyan-500 text-slate-950 font-bold py-3 rounded-lg shadow-lg hover:bg-cyan-400 transition">دخول للمادة</button>
-                <button onclick="showTeacherSelection()" class="px-4 bg-slate-900 text-slate-300 rounded-lg hover:bg-slate-800">رجوع</button>
+                <button onclick="verifyTeacher()" class="flex-1 bg-cyan-500 text-slate-950 font-bold py-3 rounded-lg shadow-lg">دخول للمادة</button>
+                <button onclick="openTeacherSelect()" class="px-4 bg-slate-900 text-slate-300 rounded-lg">رجوع</button>
             </div>
         </div>
 
-        <!-- لوحة درجات المدرس المحددة -->
+        <!-- لوحة درجات المدرس -->
         <div id="p-teacher-dash" class="hidden">
-            <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
-                <h3 id="dash-subj-title" class="text-2xl font-bold text-cyan-400 cyber-font">بوابة رصد الدرجات</h3>
-                <div class="flex gap-2 no-print">
-                    <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">🖨️ طباعة الدرجات (PDF)</button>
-                    <button onclick="showTeacherSelection()" class="bg-slate-900 text-cyan-400 px-4 py-2 rounded-lg text-sm font-semibold border border-cyan-500/30">تغيير المادة</button>
-                </div>
+            <div class="flex justify-between items-center mb-6 flex-wrap gap-4 no-print">
+                <h3 id="t-dash-title" class="text-2xl font-bold text-cyan-400 cyber-font">بوابة رصد الدرجات</h3>
+                <button onclick="window.print()" class="bg-cyan-600 hover:bg-cyan-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">🖨️ طباعة / حفظ PDF</button>
             </div>
 
-            <div class="glass-card p-6 rounded-xl mb-8 no-print">
-                <h4 class="text-md font-bold text-white mb-4">رصد درجة طالب جديد</h4>
+            <div class="cyber-card p-6 rounded-xl mb-8 no-print">
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
-                    <input type="text" id="s-name" placeholder="اسم الطالب الكامل" class="bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white focus:border-cyan-500 focus:outline-none">
-                    <input type="number" id="s-grade" placeholder="الدرجة (من 100)" class="bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white focus:border-cyan-500 focus:outline-none">
-                    <button onclick="saveGrade()" class="bg-cyan-500 text-slate-950 font-bold px-6 py-2 rounded-lg hover:bg-cyan-400 transition">حفظ الدرجة</button>
+                    <input type="text" id="s-name" placeholder="اسم الطالب" class="bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white">
+                    <input type="number" id="s-grade" placeholder="الدرجة" class="bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white">
+                    <button onclick="saveGrade()" class="bg-cyan-500 text-slate-950 font-bold px-6 py-2 rounded-lg">حفظ الدرجة</button>
                 </div>
             </div>
 
-            <div class="glass-card rounded-xl overflow-hidden shadow-xl">
+            <div class="cyber-card rounded-xl overflow-hidden">
                 <table class="w-full text-right border-collapse">
                     <thead>
-                        <tr class="bg-slate-950 text-cyan-400 text-xs border-b border-slate-800">
-                            <th class="p-4">ت</th>
-                            <th class="p-4">اسم الطالب</th>
+                        <tr class="bg-slate-950 text-cyan-400 text-xs">
+                            <th class="p-4">الطالب</th>
                             <th class="p-4">المادة</th>
                             <th class="p-4">الدرجة</th>
                             <th class="p-4 no-print">إجراء</th>
@@ -183,14 +166,11 @@
 
     </main>
 
-    <!-- الفوتر -->
-    <footer class="glass-card border-t border-sky-500/20 text-center py-6 text-xs text-slate-400 no-print">
-        <div>تصميم وتطوير: عباس محمد | <span class="text-sky-400 cyber-font">A B A // 2026</span></div>
+    <footer class="bg-[#0b0f19] border-t border-emerald-500/20 text-center py-6 text-xs text-slate-400 no-print">
+        <div>تصميم وتطوير: عباس محمد | <span class="text-emerald-400 cyber-font">A B A</span></div>
     </footer>
 
-    <!-- السكربت البرمجي -->
     <script>
-        // المواد والرموز السرية الخاصة بكل مدرس
         const subjects = [
             { name: "التربية الإسلامية", code: "ISL101" },
             { name: "اللغة العربية", code: "ARB202" },
@@ -204,102 +184,53 @@
             { name: "مبادى الحاسوب", code: "BAS110" }
         ];
 
-        let activeSubject = null;
+        let currentSubj = null;
 
-        function goHome() {
-            ['p-home', 'p-assistant-login', 'p-assistant-dash', 'p-teacher-select', 'p-teacher-login', 'p-teacher-dash'].forEach(v => {
-                document.getElementById(v).classList.add('hidden');
+        function navTo(view) {
+            ['home', 'assistant-login', 'assistant-dash', 'teacher-select', 'teacher-login', 'teacher-dash'].forEach(v => {
+                let el = document.getElementById('p-' + v);
+                if(el) el.classList.add('hidden');
             });
-            document.getElementById('p-home').classList.remove('hidden');
-            document.getElementById('ast-pass').value = '';
-            document.getElementById('t-pass').value = '';
-            document.getElementById('ast-err').classList.add('hidden');
-            document.getElementById('t-err').classList.add('hidden');
+            let target = document.getElementById('p-' + view);
+            if(target) target.classList.remove('hidden');
             window.scrollTo({top: 0});
         }
 
-        function showAssistantLogin() {
-            document.getElementById('p-home').classList.add('hidden');
-            document.getElementById('p-assistant-login').classList.remove('hidden');
-        }
-
-        function verifyAssistant() {
+        function checkAssistant() {
             if(document.getElementById('ast-pass').value === 'VIP10') {
-                document.getElementById('p-assistant-login').classList.add('hidden');
-                document.getElementById('p-assistant-dash').classList.remove('hidden');
-                loadAbsences();
+                navTo('assistant-dash');
+                loadAbs();
             } else {
                 document.getElementById('ast-err').classList.remove('hidden');
             }
         }
 
-        function showTeacherSelection() {
-            ['p-home', 'p-teacher-login', 'p-teacher-dash'].forEach(v => document.getElementById(v).classList.add('hidden'));
-            document.getElementById('p-teacher-select').classList.remove('hidden');
-            
-            let box = document.getElementById('subj-box');
-            box.innerHTML = subjects.map(s => `
-                <div onclick="selectSubject('${s.name}')" class="glass-card p-5 rounded-xl cursor-pointer shadow-lg transition flex justify-between items-center hover:border-cyan-400">
-                    <span class="font-bold text-white text-base">📚 ${s.name}</span>
-                    <span class="text-xs bg-slate-950 text-cyan-400 px-3 py-1 rounded-full border border-cyan-500/30 cyber-font">دخول المدرس 🔒</span>
-                </div>
-            `).join('');
-        }
-
-        function selectSubject(name) {
-            activeSubject = subjects.find(s => s.name === name);
-            document.getElementById('p-teacher-select').classList.add('hidden');
-            document.getElementById('p-teacher-login').classList.remove('hidden');
-            document.getElementById('login-subj-title').innerText = `تسجيل دخول: ${activeSubject.name}`;
-            document.getElementById('t-pass').value = '';
-            document.getElementById('t-err').classList.add('hidden');
-        }
-
-        function verifyTeacher() {
-            let inputCode = document.getElementById('t-pass').value;
-            if(inputCode === activeSubject.code) {
-                document.getElementById('p-teacher-login').classList.add('hidden');
-                document.getElementById('p-teacher-dash').classList.remove('hidden');
-                document.getElementById('dash-subj-title').innerText = `بوابة رصد درجات - ${activeSubject.name}`;
-                loadGrades();
-            } else {
-                document.getElementById('t-err').classList.remove('hidden');
-            }
-        }
-
-        // إدارة الغيابات
         function saveAbsence() {
-            let name = document.getElementById('g-name').value.trim();
+            let name = document.getElementById('g-name').value;
             let cls = document.getElementById('g-class').value;
             let type = document.getElementById('g-type').value;
             let date = document.getElementById('g-date').value;
 
-            if(!name || !date) { alert('يرجى إدخال اسم الطالب وتحديد التاريخ!'); return; }
-            
+            if(!name || !date) { alert('املأ اسم الطالب والتاريخ!'); return; }
             let list = JSON.parse(localStorage.getItem('marifati_abs') || '[]');
             list.push({name, cls, type, date});
             localStorage.setItem('marifati_abs', JSON.stringify(list));
-            
             document.getElementById('g-name').value = '';
             document.getElementById('g-date').value = '';
-            loadAbsences();
+            loadAbs();
+            alert('تم حفظ الغياب بنجاح!');
         }
 
-        function loadAbsences() {
+        function loadAbs() {
             let list = JSON.parse(localStorage.getItem('marifati_abs') || '[]');
             let tb = document.getElementById('abs-tbody');
-            if(list.length === 0) {
-                tb.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-500">لا توجد سجلات غياب محفوظة حالياً</td></tr>`;
-                return;
-            }
             tb.innerHTML = list.map((i, idx) => `
-                <tr class="hover:bg-slate-900/50">
-                    <td class="p-4 text-slate-400">${idx + 1}</td>
+                <tr class="border-b border-slate-900">
                     <td class="p-4 font-bold text-white">${i.name}</td>
-                    <td class="p-4 text-sky-300">${i.cls}</td>
-                    <td class="p-4 text-amber-400 font-semibold">${i.type}</td>
+                    <td class="p-4 text-emerald-400">${i.cls}</td>
+                    <td class="p-4 text-amber-400">${i.type}</td>
                     <td class="p-4 cyber-font text-slate-300">${i.date}</td>
-                    <td class="p-4 no-print"><button onclick="delAbs(${idx})" class="text-red-400 hover:text-red-300 text-xs font-bold">حذف</button></td>
+                    <td class="p-4 no-print"><button onclick="delAbs(${idx})" class="text-red-400 text-xs">حذف</button></td>
                 </tr>
             `).join('');
         }
@@ -308,37 +239,74 @@
             let list = JSON.parse(localStorage.getItem('marifati_abs') || '[]');
             list.splice(idx, 1);
             localStorage.setItem('marifati_abs', JSON.stringify(list));
-            loadAbsences();
+            loadAbs();
         }
 
-        // إدارة الدرجات للمدرسين
+        function openTeacherSelect() {
+            navTo('teacher-select');
+            let box = document.getElementById('subj-box');
+            box.innerHTML = subjects.map(s => `
+                <div onclick="promptTeacherLogin('${s.name}')" class="cyber-card p-4 rounded-xl text-right cursor-pointer hover:border-cyan-400 transition flex justify-between items-center">
+                    <span class="text-cyan-300 font-bold">${s.name}</span>
+                    <span class="text-xs bg-slate-950 text-slate-400 px-3 py-1 rounded-lg border border-cyan-500/30 cyber-font">دخول المدرس 🔒</span>
+                </div>
+            `).join('');
+        }
+
+        function promptTeacherLogin(name) {
+            currentSubj = subjects.find(s => s.name === name);
+            navTo('teacher-login');
+            document.getElementById('t-login-title').innerText = `تسجيل دخول: ${currentSubj.name}`;
+            document.getElementById('t-pass-input').value = '';
+            document.getElementById('t-err').classList.add('hidden');
+        }
+
+        function verifyTeacher() {
+            let inputCode = document.getElementById('t-pass-input').value;
+            if(inputCode === currentSubj.code) {
+                navTo('teacher-dash');
+                document.getElementById('t-dash-title').innerText = `بوابة رصد الدرجات - ${currentSubj.name}`;
+                loadGrades();
+            } else {
+                document.getElementById('t-err').classList.remove('hidden');
+            }
+        }
+
         function saveGrade() {
-            let name = document.getElementById('s-name').value.trim();
+            let name = document.getElementById('s-name').value;
             let grade = document.getElementById('s-grade').value;
 
-            if(!name || !grade) { alert('يرجى إدخال اسم الطالب والدرجة!'); return; }
-
+            if(!name || !grade) { alert('املأ الحقول المطلوبة!'); return; }
             let allGrades = JSON.parse(localStorage.getItem('marifati_grades') || '[]');
-            allGrades.push({ name, subject: activeSubject.name, grade });
+            allGrades.push({name, subject: currentSubj.name, grade});
             localStorage.setItem('marifati_grades', JSON.stringify(allGrades));
-
             document.getElementById('s-name').value = '';
             document.getElementById('s-grade').value = '';
             loadGrades();
+            alert('تم حفظ الدرجة بنجاح!');
         }
 
         function loadGrades() {
             let allGrades = JSON.parse(localStorage.getItem('marifati_grades') || '[]');
-            // تصفية الدرجات الخاصة بالمادة الحالية فقط
-            let subjectGrades = allGrades.filter(g => g.subject === activeSubject.name);
+            let subGrades = allGrades.filter(g => g.subject === currentSubj.name);
             let tb = document.getElementById('grades-tbody');
-            
-            if(subjectGrades.length === 0) {
-                tb.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-500">لا توجد درجات مرصودة لهذه المادة حتى الآن</td></tr>`;
-                return;
-            }
+            tb.innerHTML = subGrades.map((i, idx) => `
+                <tr class="border-b border-slate-900">
+                    <td class="p-4 font-bold text-white">${i.name}</td>
+                    <td class="p-4 text-cyan-400">${i.subject}</td>
+                    <td class="p-4 text-emerald-400 cyber-font font-bold">${i.grade}</td>
+                    <td class="p-4 no-print"><button onclick="delGrade('${i.name}', '${i.subject}')" class="text-red-400 text-xs">حذف</button></td>
+                </tr>
+            `).join('');
+        }
 
-            tb.innerHTML = subjectGrades.map((i, idx) => `
-                <tr class="hover:bg-slate-900/50">
-                    <td class="p-4 text-slate-400">${idx + 1}</td>
-                    <td class="p-4
+        function delGrade(name, subject) {
+            let allGrades = JSON.parse(localStorage.getItem('marifati_grades') || '[]');
+            allGrades = allGrades.filter(g => !(g.name === name && g.subject === subject));
+            localStorage.setItem('marifati_grades', JSON.stringify(allGrades));
+            loadGrades();
+        }
+    </script>
+</body>
+    </html>
+    
