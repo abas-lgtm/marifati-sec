@@ -26,19 +26,24 @@
     <main class="max-w-4xl mx-auto w-full my-6 flex-grow">
         
         <!-- الرئيسية -->
-        <div id="v-home" class="text-center py-10">
-            <h2 class="text-3xl font-black text-white mb-4">نظام إدارة المدرسة الآمن</h2>
+        <div id="v-home" class="text-center py-8">
+            <h2 class="text-3xl font-black text-white mb-3">نظام إدارة المدرسة الآمن</h2>
             <p class="text-slate-400 mb-8">اختر البوابة المطلوبة للمتابعة:</p>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <button onclick="nav('ast-login')" class="cyber-card p-8 rounded-2xl text-right hover:border-emerald-400 transition">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button onclick="nav('ast-login')" class="cyber-card p-6 rounded-2xl text-right hover:border-emerald-400 transition">
                     <div class="text-3xl mb-2">⚡</div>
-                    <h3 class="text-xl font-bold text-white mb-1">بوابة المعاون</h3>
-                    <p class="text-xs text-slate-400">إدارة الغيابات والشعب (منطقة آمنة ومحمية)</p>
+                    <h3 class="text-lg font-bold text-white mb-1">بوابة المعاون</h3>
+                    <p class="text-xs text-slate-400">إدارة الغيابات (منطقة محمية)</p>
                 </button>
-                <button onclick="nav('tch-select')" class="cyber-card p-8 rounded-2xl text-right hover:border-cyan-400 transition" style="border-color: rgba(6, 182, 212, 0.3);">
+                <button onclick="nav('tch-select')" class="cyber-card p-6 rounded-2xl text-right hover:border-cyan-400 transition" style="border-color: rgba(6, 182, 212, 0.3);">
                     <div class="text-3xl mb-2">💻</div>
-                    <h3 class="text-xl font-bold text-white mb-1">بوابة المدرسين</h3>
-                    <p class="text-xs text-slate-400">رصد درجات المواد عبر الرموز السرية</p>
+                    <h3 class="text-lg font-bold text-white mb-1">بوابة المدرسين</h3>
+                    <p class="text-xs text-slate-400">رصد الدرجات عبر الرموز السرية</p>
+                </button>
+                <button onclick="nav('std-portal')" class="cyber-card p-6 rounded-2xl text-right hover:border-purple-400 transition" style="border-color: rgba(168, 85, 247, 0.3);">
+                    <div class="text-3xl mb-2">🎓</div>
+                    <h3 class="text-lg font-bold text-white mb-1">بوابة الطلاب</h3>
+                    <p class="text-xs text-slate-400">استعلام الدرجات والغيابات</p>
                 </button>
             </div>
         </div>
@@ -46,7 +51,6 @@
         <!-- دخول المعاون -->
         <div id="v-ast-login" class="hidden max-w-md mx-auto cyber-card p-6 rounded-2xl">
             <h3 class="text-xl text-emerald-400 font-bold mb-4 text-center">دخول المعاون</h3>
-            <!-- تم إخفاء الرمز تماماً من النص التوضيحي -->
             <input type="password" id="ast-pass" placeholder="أدخل رمز المرور السري" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center">
             <div class="flex gap-2">
                 <button onclick="checkAst()" class="flex-1 bg-emerald-500 text-black font-bold p-3 rounded-lg">دخول</button>
@@ -137,6 +141,50 @@
             </div>
         </div>
 
+        <!-- بوابة الطلاب الجديدة -->
+        <div id="v-std-portal" class="hidden max-w-2xl mx-auto space-y-6">
+            <div class="cyber-card p-6 rounded-2xl no-print" style="border-color: rgba(168, 85, 247, 0.3);">
+                <h3 class="text-xl text-purple-400 font-bold mb-4 text-center">استعلام نتائج الطالب</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+                    <input type="text" id="find-std-name" placeholder="أدخل اسمك الثلاثي" class="bg-slate-950 border border-slate-800 p-3 rounded-lg text-white text-sm">
+                    <select id="find-std-cls" class="bg-slate-950 border border-slate-800 p-3 rounded-lg text-white text-sm">
+                        <option value="أول امن سيبراني A">أول امن سيبراني A</option>
+                        <option value="أول امن سيبراني B">أول امن سيبراني B</option>
+                        <option value="أول امن سيبراني C">أول امن سيبراني C</option>
+                        <option value="أول تكرار نفط A">أول تكرار نفط A</option>
+                        <option value="ثالث تجميع حاسوب A">ثالث تجميع حاسوب A</option>
+                    </select>
+                </div>
+                <button onclick="searchStudent()" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold p-3 rounded-lg transition">عرض التقرير الدراسي</button>
+            </div>
+
+            <!-- نتيجة البحث -->
+            <div id="std-result" class="hidden space-y-6">
+                <div class="flex justify-between items-center no-print">
+                    <h4 class="text-lg font-bold text-purple-300" id="std-res-title">التقرير الخاص بالطالب</h4>
+                    <button onclick="window.print()" class="bg-purple-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold">🖨️ طباعة / حفظ التقرير</button>
+                </div>
+
+                <!-- جدول الدرجات -->
+                <div class="cyber-card p-4 rounded-xl">
+                    <h5 class="text-cyan-400 font-bold mb-3 border-b border-slate-800 pb-2">📚 السجل الدراسي والدرجات</h5>
+                    <table class="w-full text-right text-sm">
+                        <thead class="bg-slate-950 text-cyan-400"><tr><th class="p-3">المادة</th><th class="p-3">الدرجة</th></tr></thead>
+                        <tbody id="std-grades-tb" class="divide-y divide-slate-900"></tbody>
+                    </table>
+                </div>
+
+                <!-- جدول الغيابات -->
+                <div class="cyber-card p-4 rounded-xl">
+                    <h5 class="text-amber-400 font-bold mb-3 border-b border-slate-800 pb-2">⚠️ سجل الغياب والدوام</h5>
+                    <table class="w-full text-right text-sm">
+                        <thead class="bg-slate-950 text-amber-400"><tr><th class="p-3">التاريخ</th><th class="p-3">الحالة</th></tr></thead>
+                        <tbody id="std-abs-tb" class="divide-y divide-slate-900"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <footer class="text-center text-xs text-slate-500 pt-4 no-print">إعدادية المعرفة المهنية © 2026 // تصميم: عباس محمد</footer>
@@ -156,7 +204,7 @@
         let currSubj = null;
 
         function nav(v) {
-            ['home', 'ast-login', 'ast-dash', 'tch-select', 'tch-login', 'tch-dash'].forEach(id => {
+            ['home', 'ast-login', 'ast-dash', 'tch-select', 'tch-login', 'tch-dash', 'std-portal'].forEach(id => {
                 let el = document.getElementById('v-' + id);
                 if(el) el.classList.add('hidden');
             });
@@ -175,7 +223,7 @@
         }
 
         function saveAbs() {
-            let name = document.getElementById('g-name').value;
+            let name = document.getElementById('g-name').value.trim();
             let cls = document.getElementById('g-class').value;
             let type = document.getElementById('g-type').value;
             let date = document.getElementById('g-date').value;
@@ -230,7 +278,7 @@
         }
 
         function saveGrade() {
-            let name = document.getElementById('s-name').value;
+            let name = document.getElementById('s-name').value.trim();
             let cls = document.getElementById('s-class').value;
             let grade = Number(document.getElementById('s-grade').value);
             if(!name || document.getElementById('s-grade').value === '') { alert('املأ الحقول'); return; }
@@ -268,6 +316,25 @@
                 loadGrades();
             }
         }
-    </script>
-</body>
-</html>
+
+        // دالة بحث واستعلام الطالب
+        function searchStudent() {
+            let qName = document.getElementById('find-std-name').value.trim();
+            let qCls = document.getElementById('find-std-cls').value;
+            if(!qName) { alert('يرجى كتابة اسم الطالب!'); return; }
+
+            let allGrades = JSON.parse(localStorage.getItem('grades') || '[]');
+            let allAbs = JSON.parse(localStorage.getItem('abs') || '[]');
+
+            let myGrades = allGrades.filter(g => g.name.includes(qName) && g.cls === qCls);
+            let myAbs = allAbs.filter(a => a.name.includes(qName) && a.cls === qCls);
+
+            document.getElementById('std-res-title').innerText = `تقرير الطالب: ${qName} (${qCls})`;
+
+            // عرض الدرجات
+            let gTb = document.getElementById('std-grades-tb');
+            if(myGrades.length === 0) {
+                gTb.innerHTML = `<tr><td colspan="2" class="p-3 text-slate-500 text-center">لا توجد درجات مرصودة حتى الآن.</td></tr>`;
+            } else {
+                gTb.innerHTML = myGrades.map(g => `
+                    <tr><td class="p-3 font-bold 
