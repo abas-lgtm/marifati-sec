@@ -3,150 +3,349 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALPHA-SEC // نظام الإدارة المدرسية</title>
+    <title>نظام معرفة - إدارة الغياب والدرجات</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Fira+Code:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Cairo', sans-serif; background-color: #030712; color: #f3f4f6; }
-        .cyber-font { font-family: 'Fira Code', monospace; }
-        .cyber-card { background-color: #0b0f19; border: 1px solid rgba(0, 255, 102, 0.3); }
-        .cyber-card:active { transform: scale(0.98); }
+        body { font-family: 'Cairo', sans-serif; background-color: #0f172a; color: #f8fafc; }
+        .bg-navy { background-color: #0f172a; }
+        .bg-navy-card { background-color: #1e293b; }
+        .border-gold { border-color: #d4af37; }
+        .text-gold { color: #d4af37; }
+        .bg-gold { background-color: #d4af37; }
+        .bg-gold:hover { background-color: #c5a028; }
+        @media print {
+            body { background: white !important; color: black !important; }
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between selection:bg-emerald-500 selection:text-black">
+<body class="min-h-screen flex flex-col justify-between">
 
-    <header class="bg-[#0b0f19] border-b border-emerald-500/30 py-4 px-6">
+    <!-- الهيدر الرئيسي -->
+    <header class="bg-navy-card border-b border-gold/30 shadow-lg py-4 px-6 no-print">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <span class="text-3xl">🛡️</span>
+                <span class="text-3xl">🏛️</span>
                 <div>
-                    <h1 class="text-lg font-black text-emerald-400 cyber-font">ALPHA_SEC // SYSTEM</h1>
-                    <p class="text-xs text-slate-400">إعدادية المعرفة المهنية - الأمن السيبراني</p>
+                    <h1 class="text-xl font-bold text-gold">إعدادية المعرفة المهنية الأهلية</h1>
+                    <p class="text-xs text-slate-400">نظام إدارة الغياب والدرجات الموحد</p>
                 </div>
             </div>
-            <button onclick="navTo('home')" class="bg-slate-900 text-emerald-400 px-4 py-2 rounded-lg text-sm font-semibold border border-emerald-500/30 cyber-font">ROOT_HOME</button>
+            <button onclick="goHome()" class="bg-slate-800 hover:bg-slate-700 text-gold px-4 py-2 rounded-lg text-sm font-semibold border border-gold/30 transition">
+                الرئيسية
+            </button>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto w-full p-4 sm:p-6 flex-grow">
+    <!-- المحتوى الرئيسي -->
+    <main class="max-w-7xl mx-auto w-full p-4 sm:p-6 flex-grow pb-24">
         
-        <!-- الرئيسية -->
-        <div id="p-home" class="text-center py-12">
-            <h2 class="text-3xl sm:text-5xl font-black text-white mb-4">نظام الإدارة المدرسية الآمن</h2>
-            <p class="text-slate-400 mb-12">اختر البوابة المطلوبة للمتابعة:</p>
+        <!-- صفحة اختيار البوابة (الرئيسية) - تصميم متمركز وإيموجيات بالنص -->
+        <div id="home-view" class="text-center py-12">
+            <h2 class="text-3xl sm:text-4xl font-black text-gold mb-4">أهلاً بك في نظام معرفة</h2>
+            <p class="text-slate-300 mb-10 max-w-xl mx-auto">يرجى اختيار البوابة المطلوبة للمتابعة وإدارة السجلات بدقة عالية وسرعة فائقة.</p>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-                <button onclick="navTo('assistant-login')" class="cyber-card w-full text-right p-8 rounded-2xl shadow-2xl transition hover:border-emerald-400 focus:outline-none">
-                    <div class="text-4xl mb-4">⚡</div>
-                    <h3 class="text-2xl font-bold text-white mb-2">بوابة المعاون</h3>
-                    <p class="text-sm text-slate-400">إدارة الغيابات والسجلات (محمي بررمز VIP10)</p>
-                </button>
-
-                <button onclick="navTo('teacher-select')" class="cyber-card w-full text-right p-8 rounded-2xl shadow-2xl transition hover:border-cyan-400 focus:outline-none" style="border-color: rgba(6, 182, 212, 0.3);">
-                    <div class="text-4xl mb-4">💻</div>
-                    <h3 class="text-2xl font-bold text-white mb-2">بوابة المدرسين</h3>
-                    <p class="text-sm text-slate-400">رصد درجات الطلاب لمختلف المواد</p>
-                </button>
-            </div>
-        </div>
-
-        <!-- دخول المعاون -->
-        <div id="p-assistant-login" class="hidden max-w-md mx-auto cyber-card p-8 rounded-2xl shadow-2xl mt-10">
-            <h3 class="text-2xl font-bold text-emerald-400 mb-6 text-center cyber-font">ASSISTANT_AUTH</h3>
-            <input type="password" id="ast-pass" placeholder="أدخل رمز المرور (VIP10)" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-white mb-4 focus:border-emerald-500 focus:outline-none cyber-font">
-            <p id="ast-err" class="text-red-400 text-xs mb-4 hidden">رمز المرور غير صحيح!</p>
-            <div class="flex gap-4">
-                <button onclick="checkAssistant()" class="flex-1 bg-emerald-500 text-slate-950 font-bold py-3 rounded-lg shadow-lg">دخول</button>
-                <button onclick="navTo('home')" class="px-4 bg-slate-900 text-slate-300 rounded-lg">إلغاء</button>
-            </div>
-        </div>
-
-        <!-- لوحة المعاون -->
-        <div id="p-assistant-dash" class="hidden">
-            <h3 class="text-2xl font-bold text-emerald-400 cyber-font mb-6">لوحة عمليات المعاون</h3>
-            <div class="cyber-card p-6 rounded-xl mb-8">
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
-                    <input type="text" id="g-name" placeholder="اسم الطالب" class="bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white">
-                    <select id="g-type" class="bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white">
-                        <option value="غياب">غياب</option>
-                        <option value="إجازة">إجازة</option>
-                        <option value="هروب">هروب من الدرس</option>
-                    </select>
-                    <select id="g-class" class="bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white">
-                        <option value="أول امن سيبراني A">أول امن سيبراني A</option>
-                        <option value="أول امن سيبراني B">أول امن سيبراني B</option>
-                    </select>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+                <div onclick="showAssistantLogin()" class="bg-navy-card border-2 border-gold/40 hover:border-gold p-8 rounded-2xl cursor-pointer shadow-xl transition transform hover:-translate-y-1 text-center">
+                    <div class="text-5xl mb-4">🛡️</div>
+                    <h3 class="text-xl font-bold text-gold mb-2">بوابة المعاون</h3>
+                    <p class="text-sm text-slate-400">إدارة الغياب، السجلات اليومية، والتقارير الشاملة (محمي بررمز مرور)</p>
                 </div>
-                <button onclick="saveAbsence()" class="bg-emerald-500 text-slate-950 font-bold px-6 py-2 rounded-lg">حفظ الغياب</button>
+
+                <div onclick="showTeacherSelection()" class="bg-navy-card border-2 border-gold/40 hover:border-gold p-8 rounded-2xl cursor-pointer shadow-xl transition transform hover:-translate-y-1 text-center">
+                    <div class="text-5xl mb-4">📖</div>
+                    <h3 class="text-xl font-bold text-gold mb-2">بوابة المدرسين</h3>
+                    <p class="text-sm text-slate-400">رصد الدرجات لكل مادة عبر رمز سري خاص بالمدرس</p>
+                </div>
             </div>
-            <div class="cyber-card rounded-xl overflow-hidden">
+        </div>
+
+        <!-- نافذة تسجيل دخول المعاون (VIP10) -->
+        <div id="assistant-login-view" class="hidden max-w-md mx-auto bg-navy-card border border-gold/30 p-8 rounded-2xl shadow-2xl mt-10">
+            <h3 class="text-2xl font-bold text-gold mb-6 text-center">تسجيل دخول المعاون</h3>
+            <div class="mb-4">
+                <label class="block text-sm text-slate-300 mb-2">رمز المرور السري:</label>
+                <input type="password" id="assistant-pass" placeholder="أدخل الرمز السري" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:border-gold focus:outline-none">
+            </div>
+            <p id="login-error" class="text-red-400 text-xs mb-4 hidden">رمز المرور غير صحيح! حاول مرة أخرى.</p>
+            <div class="flex gap-4">
+                <button onclick="verifyAssistant()" class="flex-1 bg-gold text-slate-950 font-bold py-3 rounded-lg transition shadow-lg">دخول</button>
+                <button onclick="goHome()" class="px-4 bg-slate-800 text-slate-300 rounded-lg hover:bg-slate-700">إلغاء</button>
+            </div>
+        </div>
+
+        <!-- قائمة اختيار المواد للمدرسين -->
+        <div id="teacher-selection-view" class="hidden max-w-3xl mx-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gold">اختر المادة الدراسية للمتابعة</h3>
+                <button onclick="goHome()" class="bg-slate-800 hover:bg-slate-700 text-gold px-4 py-2 rounded-lg text-sm font-semibold border border-gold/30">الرئيسية</button>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="subjects-grid">
+                <!-- يتم تعبئتها برمجياً -->
+            </div>
+        </div>
+
+        <!-- نافذة إدخال رمز المادة للمدرس -->
+        <div id="teacher-login-view" class="hidden max-w-md mx-auto bg-navy-card border border-gold/30 p-8 rounded-2xl shadow-2xl mt-10">
+            <h3 id="target-subject-title" class="text-2xl font-bold text-gold mb-4 text-center">تسجيل دخول المدرس</h3>
+            <p class="text-xs text-slate-400 mb-6 text-center">أدخل الرمز السري الخاص بالمادة للوصول إلى لوحة رصد الدرجات</p>
+            <div class="mb-4">
+                <label class="block text-sm text-slate-300 mb-2">رمز المادة:</label>
+                <input type="password" id="teacher-pass" placeholder="أدخل الرمز السري للمادة" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:border-gold focus:outline-none">
+            </div>
+            <p id="teacher-login-error" class="text-red-400 text-xs mb-4 hidden">الرمز غير صحيح! يرجى التأكد من رمز المادة.</p>
+            <div class="flex gap-4">
+                <button onclick="verifyTeacher()" class="flex-1 bg-gold text-slate-950 font-bold py-3 rounded-lg transition shadow-lg">دخول للمادة</button>
+                <button onclick="showTeacherSelection()" class="px-4 bg-slate-800 text-slate-300 rounded-lg hover:bg-slate-700">رجوع للمواد</button>
+            </div>
+        </div>
+
+        <!-- لوحة تحكم المعاون (الغيابات) -->
+        <div id="assistant-dashboard" class="hidden">
+            <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
+                <h3 class="text-2xl font-bold text-gold">سجل الغيابات اليومي</h3>
+                <div class="flex gap-2 no-print">
+                    <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">طباعة السجل</button>
+                    <button onclick="goHome()" class="bg-slate-800 hover:bg-slate-700 text-gold px-4 py-2 rounded-lg text-sm font-semibold border border-gold/30">خروج</button>
+                </div>
+            </div>
+
+            <!-- نموذج إضافة غياب -->
+            <div class="bg-navy-card p-6 rounded-xl border border-gold/20 mb-8 no-print">
+                <h4 class="text-lg font-semibold text-gold mb-4">تسجيل غياب طالب جديد</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                    <input type="text" id="g-name" placeholder="اسم الطالب" class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:border-gold focus:outline-none">
+                    <input type="text" id="g-class" placeholder="الشعبة / الصف" class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:border-gold focus:outline-none">
+                    <input type="date" id="g-date" class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:border-gold focus:outline-none">
+                    <button onclick="addAbsence()" class="bg-gold text-slate-950 font-bold rounded-lg px-4 py-2 transition">حفظ الغياب</button>
+                </div>
+            </div>
+
+            <!-- جدول الغيابات -->
+            <div class="bg-navy-card rounded-xl border border-gold/20 overflow-hidden shadow-xl">
                 <table class="w-full text-right border-collapse">
-                    <thead><tr class="bg-slate-950 text-emerald-400 text-xs"><th class="p-4">الطالب</th><th class="p-4">الحالة</th><th class="p-4">القاعة</th></tr></thead>
-                    <tbody id="abs-tbody" class="divide-y divide-slate-900"></tbody>
+                    <thead>
+                        <tr class="bg-slate-900 text-gold border-b border-slate-700">
+                            <th class="p-4">ت</th>
+                            <th class="p-4">اسم الطالب</th>
+                            <th class="p-4">الصف / الشعبة</th>
+                            <th class="p-4">التاريخ</th>
+                            <th class="p-4 no-print">الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="absences-list" class="divide-y divide-slate-800">
+                        <!-- تظهر البيانات هنا ديناميكياً -->
+                    </tbody>
                 </table>
             </div>
         </div>
 
-        <!-- اختيار المواد للمدرسين -->
-        <div id="p-teacher-select" class="hidden max-w-2xl mx-auto">
-            <h3 class="text-2xl font-bold text-cyan-400 cyber-font mb-6">اختر المادة الدراسية</h3>
-            <div class="grid grid-cols-1 gap-4" id="subj-box"></div>
+        <!-- لوحة بوابة المدرسين (الدرجات حسب المادة المختارة) -->
+        <div id="teacher-portal" class="hidden">
+            <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
+                <h3 id="current-subject-heading" class="text-2xl font-bold text-gold">بوابة رصد درجات الطلاب</h3>
+                <div class="flex gap-2 no-print">
+                    <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">طباعة الدرجات</button>
+                    <button onclick="showTeacherSelection()" class="bg-slate-800 hover:bg-slate-700 text-gold px-4 py-2 rounded-lg text-sm font-semibold border border-gold/30">تغيير المادة</button>
+                </div>
+            </div>
+
+            <!-- نموذج إضافة درجات -->
+            <div class="bg-navy-card p-6 rounded-xl border border-gold/20 mb-8 no-print">
+                <h4 class="text-lg font-semibold text-gold mb-4">إدخال درجة جديدة للمادة</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <input type="text" id="s-name" placeholder="اسم الطالب" class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:border-gold focus:outline-none">
+                    <input type="number" id="s-grade" placeholder="الدرجة" class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:border-gold focus:outline-none">
+                    <button onclick="addGrade()" class="bg-gold text-slate-950 font-bold rounded-lg px-4 py-2 transition">حفظ الدرجة</button>
+                </div>
+            </div>
+
+            <!-- جدول الدرجات -->
+            <div class="bg-navy-card rounded-xl border border-gold/20 overflow-hidden shadow-xl">
+                <table class="w-full text-right border-collapse">
+                    <thead>
+                        <tr class="bg-slate-900 text-gold border-b border-slate-700">
+                            <th class="p-4">ت</th>
+                            <th class="p-4">اسم الطالب</th>
+                            <th class="p-4">المادة الدراسية</th>
+                            <th class="p-4">الدرجة</th>
+                            <th class="p-4 no-print">الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="grades-list" class="divide-y divide-slate-800">
+                        <!-- تظهر البيانات هنا ديناميكياً -->
+                    </tbody>
+                </table>
+            </div>
         </div>
 
     </main>
 
-    <footer class="bg-[#0b0f19] border-t border-emerald-500/20 text-center py-6 text-xs text-slate-400">
-        <div>تصميم وتطوير: عباس محمد | <span class="text-emerald-400 cyber-font">A B A</span></div>
+    <!-- الفوتر الاحترافي والتوقيع -->
+    <footer class="bg-navy-card border-t border-gold/30 text-center py-6 px-4 text-xs text-slate-400 no-print mt-16">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
+            <div>جميع الحقوق محفوظة © 2026 - إعدادية المعرفة المهنية الأهلية</div>
+            <div class="flex items-center gap-2 bg-slate-900/60 px-4 py-2 rounded-lg border border-gold/20 shadow-lg">
+                <span class="text-slate-300">تصميم وتطوير:</span>
+                <span class="text-gold font-bold tracking-widest">ABA</span>
+            </div>
+        </div>
     </footer>
 
+    <!-- سكربت التشغيل المباشر الفوري -->
     <script>
-        const subjects = [
+        const subjectsData = [
             { name: "اللغة العربية", code: "202500" },
-            { name: "الرياضيات", code: "1001" },
-            { name: "مبادئ الحاسوب", code: "9632" }
+            { name: "🕌 التربية الإسلامية", code: "200100" },
+            { name: "📐 الرياضيات", code: "1001" },
+            { name: "⚡ الطبيعيات", code: "0085" },
+            { name: "🔌 أساسيات الكهرباء", code: "0085" },
+            { name: "💻 مبادئ الحاسوب", code: "9632" },
+            { name: "🖥️ تطبيقات الحاسوب", code: "9632" },
+            { name: "🖨️ تجميع الحاسوب", code: "5214" },
+            { name: "📡 الاتصالات", code: "5214" },
+            { name: "الانجليزي", code: "9008" }
         ];
 
-        function navTo(view) {
-            ['home', 'assistant-login', 'assistant-dash', 'teacher-select'].forEach(v => {
-                document.getElementById('p-' + v).classList.add('hidden');
-            });
-            document.getElementById('p-' + view).classList.remove('hidden');
-            window.scrollTo({top: 0});
+        let selectedSubject = "";
+        let currentSubjectCode = "";
+
+        function goHome() {
+            document.getElementById('home-view').classList.remove('hidden');
+            document.getElementById('assistant-login-view').classList.add('hidden');
+            document.getElementById('assistant-dashboard').classList.add('hidden');
+            document.getElementById('teacher-selection-view').classList.add('hidden');
+            document.getElementById('teacher-login-view').classList.add('hidden');
+            document.getElementById('teacher-portal').classList.add('hidden');
+            document.getElementById('assistant-pass').value = '';
+            document.getElementById('teacher-pass').value = '';
+            document.getElementById('login-error').classList.add('hidden');
+            document.getElementById('teacher-login-error').classList.add('hidden');
         }
 
-        function checkAssistant() {
-            if(document.getElementById('ast-pass').value === 'VIP10') {
-                navTo('assistant-dash');
-                loadAbs();
+        function showAssistantLogin() {
+            document.getElementById('home-view').classList.add('hidden');
+            document.getElementById('assistant-login-view').classList.remove('hidden');
+        }
+
+        function verifyAssistant() {
+            const pass = document.getElementById('assistant-pass').value;
+            if (pass === 'VIP10') {
+                document.getElementById('assistant-login-view').classList.add('hidden');
+                document.getElementById('assistant-dashboard').classList.remove('hidden');
+                loadAbsences();
             } else {
-                document.getElementById('ast-err').classList.remove('hidden');
+                document.getElementById('login-error').classList.remove('hidden');
             }
         }
 
-        function saveAbsence() {
-            let name = document.getElementById('g-name').value;
-            if(!name) { alert('اكتب اسم الطالب'); return; }
-            let list = JSON.parse(localStorage.getItem('abs') || '[]');
-            list.push({name, type: document.getElementById('g-type').value, cls: document.getElementById('g-class').value});
-            localStorage.setItem('abs', JSON.stringify(list));
+        function showTeacherSelection() {
+            document.getElementById('home-view').classList.add('hidden');
+            document.getElementById('assistant-login-view').classList.add('hidden');
+            document.getElementById('assistant-dashboard').classList.add('hidden');
+            document.getElementById('teacher-login-view').classList.add('hidden');
+            document.getElementById('teacher-portal').classList.add('hidden');
+            
+            let grid = document.getElementById('subjects-grid');
+            grid.innerHTML = '';
+            subjectsData.forEach(sub => {
+                let div = document.createElement('div');
+                div.className = "bg-navy-card border border-gold/30 hover:border-gold p-5 rounded-xl cursor-pointer shadow-lg transition flex justify-between items-center";
+                div.innerHTML = `
+                    <span class="font-bold text-gold text-lg">${sub.name}</span>
+                    <span class="text-xs bg-slate-900 text-slate-400 px-3 py-1 rounded-full border border-slate-700">دخول المادة 🔒</span>
+                `;
+                div.onclick = function() {
+                    selectedSubject = sub.name;
+                    currentSubjectCode = sub.code;
+                    document.getElementById('target-subject-title').innerText = `تسجيل دخول مدرس: ${sub.name}`;
+                    document.getElementById('teacher-pass').value = '';
+                    document.getElementById('teacher-login-error').classList.add('hidden');
+                    document.getElementById('teacher-selection-view').classList.add('hidden');
+                    document.getElementById('teacher-login-view').classList.remove('hidden');
+                };
+                grid.appendChild(div);
+            });
+            document.getElementById('teacher-selection-view').classList.remove('hidden');
+        }
+
+        function verifyTeacher() {
+            const inputPass = document.getElementById('teacher-pass').value;
+            if (inputPass === currentSubjectCode) {
+                document.getElementById('teacher-login-view').classList.add('hidden');
+                document.getElementById('teacher-portal').classList.remove('hidden');
+                document.getElementById('current-subject-heading').innerText = `بوابة رصد درجات - ${selectedSubject}`;
+                loadGrades();
+            } else {
+                document.getElementById('teacher-login-error').classList.remove('hidden');
+            }
+        }
+
+        // إدارة الغيابات
+        function addAbsence() {
+            const name = document.getElementById('g-name').value.trim();
+            const className = document.getElementById('g-class').value.trim();
+            const date = document.getElementById('g-date').value;
+
+            if(!name || !className || !date) {
+                alert('يرجى ملء جميع الحقول المطلوبة!');
+                return;
+            }
+
+            let absences = JSON.parse(localStorage.getItem('marifati_absences') || '[]');
+            absences.push({ name, className, date });
+            localStorage.setItem('marifati_absences', JSON.stringify(absences));
+
             document.getElementById('g-name').value = '';
-            loadAbs();
-            alert('تم الحفظ!');
+            document.getElementById('g-class').value = '';
+            document.getElementById('g-date').value = '';
+            loadAbsences();
         }
 
-        function loadAbs() {
-            let list = JSON.parse(localStorage.getItem('abs') || '[]');
-            let tb = document.getElementById('abs-tbody');
-            tb.innerHTML = list.map(i => `<tr class="border-b border-slate-900"><td class="p-4">${i.name}</td><td class="p-4 text-emerald-400">${i.type}</td><td class="p-4">${i.cls}</td></tr>`).join('');
+        function loadAbsences() {
+            let absences = JSON.parse(localStorage.getItem('marifati_absences') || '[]');
+            let tbody = document.getElementById('absences-list');
+            tbody.innerHTML = '';
+            if(absences.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-500">لا توجد سجلات غياب حالياً</td></tr>`;
+                return;
+            }
+            absences.forEach((item, index) => {
+                let tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-800/50";
+                tr.innerHTML = `
+                    <td class="p-4">${index + 1}</td>
+                    <td class="p-4 font-semibold">${item.name}</td>
+                    <td class="p-4">${item.className}</td>
+                    <td class="p-4">${item.date}</td>
+                    <td class="p-4 no-print"><button onclick="deleteAbsence(${index})" class="text-red-400 hover:text-red-300 text-sm">حذف</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
         }
 
-        function openTeacherSelect() {
-            navTo('teacher-select');
-            let box = document.getElementById('subj-box');
-            box.innerHTML = subjects.map(s => `<div class="cyber-card p-4 rounded-xl text-right text-cyan-400 font-bold">${s.name} (رمز: ${s.code})</div>`).join('');
+        function deleteAbsence(index) {
+            let absences = JSON.parse(localStorage.getItem('marifati_absences') || '[]');
+            absences.splice(index, 1);
+            localStorage.setItem('marifati_absences', JSON.stringify(absences));
+            loadAbsences();
         }
 
-        document.querySelector("button[onclick*='teacher-select']").setAttribute("onclick", "openTeacherSelect()");
-    </script>
-</body>
-</html>
+        // إدارة الدرجات
+        function addGrade() {
+            const name = document.getElementById('s-name').value.trim();
+            const grade = document.getElementById('s-grade').value;
+
+            if(!name || !grade) {
+                alert('يرجى ملء جميع الحقول المطلوبة!');
+                return;
+            }
+
+            let grades = JSON.parse(localStorage.getItem('marifati_grades') || '[]');
+            grades.push({ name, subject: selectedSubject, grade });
+            localStorage.setItem('marifati_grades', JSON.stringify(grades));
+
+            document.getElementById('s-name').value = '';
+            document.getElementById('s-grade').value
