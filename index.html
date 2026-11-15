@@ -45,7 +45,7 @@
                 <button onclick="navTo('assistant-login')" class="cyber-card w-full text-right p-8 rounded-2xl shadow-2xl transition hover:border-emerald-400 focus:outline-none">
                     <div class="text-4xl mb-4">⚡</div>
                     <h3 class="text-2xl font-bold text-white mb-2">بوابة المعاون</h3>
-                    <p class="text-sm text-slate-400">إدارة الغيابات والسجلات والشعب (محمي بررمز 2020)</p>
+                    <p class="text-sm text-slate-400">إدارة الغيابات والسجلات والشعب (منطقة آمنة ومحمية)</p>
                 </button>
 
                 <button onclick="openTeacherSelect()" class="cyber-card w-full text-right p-8 rounded-2xl shadow-2xl transition hover:border-cyan-400 focus:outline-none" style="border-color: rgba(6, 182, 212, 0.3);">
@@ -59,7 +59,7 @@
         <!-- دخول المعاون -->
         <div id="p-assistant-login" class="hidden max-w-md mx-auto cyber-card p-8 rounded-2xl shadow-2xl mt-10">
             <h3 class="text-2xl font-bold text-emerald-400 mb-6 text-center cyber-font">ASSISTANT_AUTH</h3>
-            <input type="password" id="ast-pass" placeholder="أدخل رمز المرور (2020)" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-white mb-4 focus:border-emerald-500 focus:outline-none cyber-font">
+            <input type="password" id="ast-pass" placeholder="أدخل رمز المرور السري" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-white mb-4 focus:border-emerald-500 focus:outline-none cyber-font">
             <p id="ast-err" class="text-red-400 text-xs mb-4 hidden">رمز المرور غير صحيح!</p>
             <div class="flex gap-4">
                 <button onclick="checkAssistant()" class="flex-1 bg-emerald-500 text-slate-950 font-bold py-3 rounded-lg shadow-lg">دخول</button>
@@ -141,10 +141,28 @@
                 <button onclick="window.print()" class="bg-cyan-600 hover:bg-cyan-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">🖨️ طباعة / حفظ PDF</button>
             </div>
 
+            <!-- إشعار النجاح الداخلي -->
+            <div id="grade-alert" class="hidden bg-emerald-500/10 border border-emerald-500 text-emerald-400 p-3 rounded-lg mb-4 text-sm font-semibold text-center">
+                ✅ تم حفظ الدرجة بنجاح!
+            </div>
+
             <div class="cyber-card p-6 rounded-xl mb-8 no-print">
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-4">
                     <input type="text" id="s-name" placeholder="اسم الطالب" class="bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white">
-                    <input type="number" id="s-grade" placeholder="الدرجة" class="bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white">
+                    
+                    <select id="s-class" class="bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white">
+                        <option value="أول امن سيبراني A">أول امن سيبراني A</option>
+                        <option value="أول امن سيبراني B">أول امن سيبراني B</option>
+                        <option value="أول امن سيبراني C">أول امن سيبراني C</option>
+                        <option value="أول تكرار نفط A">أول تكرار نفط A</option>
+                        <option value="أول تكرار نفط B">أول تكرار نفط B</option>
+                        <option value="أول تجميع حاسوب A">أول تجميع حاسوب A</option>
+                        <option value="أول أجهزة طبية A">أول أجهزة طبية A</option>
+                        <option value="ثالث تجميع حاسوب A">ثالث تجميع حاسوب A</option>
+                        <option value="ثالث تجميع حاسوب B">ثالث تجميع حاسوب B</option>
+                    </select>
+
+                    <input type="number" id="s-grade" min="0" max="100" placeholder="الدرجة (من 100)" class="bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white">
                     <button onclick="saveGrade()" class="bg-cyan-500 text-slate-950 font-bold px-6 py-2 rounded-lg">حفظ الدرجة</button>
                 </div>
             </div>
@@ -154,6 +172,7 @@
                     <thead>
                         <tr class="bg-slate-950 text-cyan-400 text-xs">
                             <th class="p-4">الطالب</th>
+                            <th class="p-4">الشعبة / الصف</th>
                             <th class="p-4">المادة</th>
                             <th class="p-4">الدرجة</th>
                             <th class="p-4 no-print">إجراء</th>
@@ -217,7 +236,6 @@
             document.getElementById('g-name').value = '';
             document.getElementById('g-date').value = '';
             loadAbs();
-            alert('تم حفظ الغياب بنجاح!');
         }
 
         function loadAbs() {
@@ -267,23 +285,37 @@
                 document.getElementById('t-dash-title').innerText = `بوابة رصد الدرجات - ${currentSubj.name}`;
                 loadGrades();
             } else {
-                document.getElementById('t-err').classList.add('hidden');
                 document.getElementById('t-err').classList.remove('hidden');
             }
         }
 
         function saveGrade() {
             let name = document.getElementById('s-name').value;
-            let grade = document.getElementById('s-grade').value;
+            let cls = document.getElementById('s-class').value;
+            let grade = Number(document.getElementById('s-grade').value);
 
-            if(!name || !grade) { alert('املأ الحقول المطلوبة!'); return; }
+            if(!name || document.getElementById('s-grade').value === '') { 
+                alert('يرجى إدخال اسم الطالب والدرجة!'); 
+                return; 
+            }
+
+            if(grade < 0 || grade > 100) {
+                alert('خطأ: يجب أن تكون الدرجة بين 0 و 100 فقط!');
+                return;
+            }
+
             let allGrades = JSON.parse(localStorage.getItem('marifati_grades') || '[]');
-            allGrades.push({name, subject: currentSubj.name, grade});
+            allGrades.push({name, cls, subject: currentSubj.name, grade});
             localStorage.setItem('marifati_grades', JSON.stringify(allGrades));
+            
             document.getElementById('s-name').value = '';
             document.getElementById('s-grade').value = '';
             loadGrades();
-            alert('تم حفظ الدرجة بنجاح!');
+
+            // إظهار إشعار داخلي بدلاً من الـ alert المزعج
+            let alertBox = document.getElementById('grade-alert');
+            alertBox.classList.remove('hidden');
+            setTimeout(() => alertBox.classList.add('hidden'), 3000);
         }
 
         function loadGrades() {
@@ -293,16 +325,17 @@
             tb.innerHTML = subGrades.map((i, idx) => `
                 <tr class="border-b border-slate-900">
                     <td class="p-4 font-bold text-white">${i.name}</td>
+                    <td class="p-4 text-cyan-300">${i.cls}</td>
                     <td class="p-4 text-cyan-400">${i.subject}</td>
                     <td class="p-4 text-emerald-400 cyber-font font-bold">${i.grade}</td>
-                    <td class="p-4 no-print"><button onclick="delGrade('${i.name}', '${i.subject}')" class="text-red-400 text-xs">حذف</button></td>
+                    <td class="p-4 no-print"><button onclick="delGrade('${i.name}', '${i.subject}', '${i.cls}')" class="text-red-400 text-xs">حذف</button></td>
                 </tr>
             `).join('');
         }
 
-        function delGrade(name, subject) {
+        function delGrade(name, subject, cls) {
             let allGrades = JSON.parse(localStorage.getItem('marifati_grades') || '[]');
-            allGrades = allGrades.filter(g => !(g.name === name && g.subject === subject));
+            allGrades = allGrades.filter(g => !(g.name === name && g.subject === subject && g.cls === cls));
             localStorage.setItem('marifati_grades', JSON.stringify(allGrades));
             loadGrades();
         }
