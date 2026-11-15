@@ -1,3 +1,4 @@
+cat << 'EOF' > index.html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -20,7 +21,7 @@
 
     <header class="flex justify-between items-center border-b border-emerald-500/30 pb-4 no-print">
         <h1 class="text-emerald-400 font-bold text-lg">ALPHA_SEC // SYSTEM</h1>
-        <button onclick="nav('home')" class="bg-slate-900 text-emerald-400 px-4 py-2 rounded-lg border border-emerald-500/30 text-sm font-semibold">الرئيسية</button>
+        <button onclick="nav('home')" class="bg-slate-900 text-emerald-400 px-4 py-2 rounded-lg border border-emerald-500/30 text-sm font-semibold cursor-pointer">الرئيسية</button>
     </header>
 
     <main class="max-w-4xl mx-auto w-full my-6 flex-grow">
@@ -30,17 +31,17 @@
             <h2 class="text-3xl font-black text-white mb-3">نظام إدارة المدرسة الآمن</h2>
             <p class="text-slate-400 mb-8">اختر البوابة المطلوبة للمتابعة:</p>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <button onclick="nav('ast-login')" class="cyber-card p-6 rounded-2xl text-right hover:border-emerald-400 transition">
+                <button onclick="nav('ast-login')" class="cyber-card p-6 rounded-2xl text-right hover:border-emerald-400 transition cursor-pointer">
                     <div class="text-3xl mb-2">⚡</div>
                     <h3 class="text-lg font-bold text-white mb-1">بوابة المعاون</h3>
                     <p class="text-xs text-slate-400">إدارة الغيابات (منطقة محمية)</p>
                 </button>
-                <button onclick="nav('tch-select')" class="cyber-card p-6 rounded-2xl text-right hover:border-cyan-400 transition" style="border-color: rgba(6, 182, 212, 0.3);">
+                <button onclick="nav('tch-select')" class="cyber-card p-6 rounded-2xl text-right hover:border-cyan-400 transition cursor-pointer" style="border-color: rgba(6, 182, 212, 0.3);">
                     <div class="text-3xl mb-2">💻</div>
                     <h3 class="text-lg font-bold text-white mb-1">بوابة المدرسين</h3>
                     <p class="text-xs text-slate-400">رصد الدرجات عبر الرموز السرية</p>
                 </button>
-                <button onclick="nav('std-portal')" class="cyber-card p-6 rounded-2xl text-right hover:border-purple-400 transition" style="border-color: rgba(168, 85, 247, 0.3);">
+                <button onclick="nav('std-portal')" class="cyber-card p-6 rounded-2xl text-right hover:border-purple-400 transition cursor-pointer" style="border-color: rgba(168, 85, 247, 0.3);">
                     <div class="text-3xl mb-2">🎓</div>
                     <h3 class="text-lg font-bold text-white mb-1">بوابة الطلاب</h3>
                     <p class="text-xs text-slate-400">استعلام الدرجات والغيابات</p>
@@ -51,10 +52,10 @@
         <!-- دخول المعاون -->
         <div id="v-ast-login" class="hidden max-w-md mx-auto cyber-card p-6 rounded-2xl">
             <h3 class="text-xl text-emerald-400 font-bold mb-4 text-center">دخول المعاون</h3>
-            <input type="password" id="ast-pass" placeholder="أدخل رمز المرور السري" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center">
+            <input type="password" id="ast-pass" placeholder="أدخل رمز المرور السري" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center focus:outline-none focus:border-emerald-500">
             <div class="flex gap-2">
-                <button onclick="checkAst()" class="flex-1 bg-emerald-500 text-black font-bold p-3 rounded-lg">دخول</button>
-                <button onclick="nav('home')" class="bg-slate-800 px-4 rounded-lg text-slate-300">إلغاء</button>
+                <button onclick="checkAst()" class="flex-1 bg-emerald-500 text-black font-bold p-3 rounded-lg cursor-pointer">دخول</button>
+                <button onclick="nav('home')" class="bg-slate-800 px-4 rounded-lg text-slate-300 cursor-pointer">إلغاء</button>
             </div>
         </div>
 
@@ -63,8 +64,8 @@
             <div class="flex justify-between items-center mb-6 flex-wrap gap-2 no-print">
                 <h3 class="text-xl font-bold text-emerald-400">سجل الغيابات والدوام</h3>
                 <div class="flex gap-2">
-                    <button onclick="window.print()" class="bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold">🖨️ طباعة PDF</button>
-                    <button onclick="clearData('abs')" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold">🗑️ مسح السجل</button>
+                    <button onclick="window.print()" class="bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">🖨️ طباعة PDF</button>
+                    <button onclick="clearData('abs')" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">🗑️ مسح السجل</button>
                 </div>
             </div>
             <div class="cyber-card p-4 rounded-xl mb-6 no-print">
@@ -84,7 +85,7 @@
                     </select>
                     <input type="date" id="g-date" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
                 </div>
-                <button onclick="saveAbs()" class="bg-emerald-500 text-black font-bold px-4 py-2 rounded text-sm w-full">حفظ الغياب</button>
+                <button onclick="saveAbs()" class="bg-emerald-500 text-black font-bold px-4 py-2 rounded text-sm w-full cursor-pointer">حفظ الغياب</button>
             </div>
             <div class="cyber-card rounded-xl overflow-hidden">
                 <table class="w-full text-right text-sm">
@@ -103,10 +104,10 @@
         <!-- دخول المدرس -->
         <div id="v-tch-login" class="hidden max-w-md mx-auto cyber-card p-6 rounded-2xl">
             <h3 id="tch-title" class="text-xl text-cyan-400 font-bold mb-4 text-center">تسجيل دخول المدرس</h3>
-            <input type="password" id="tch-pass" placeholder="أدخل رمز المادة السري" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center">
+            <input type="password" id="tch-pass" placeholder="أدخل رمز المادة السري" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center focus:outline-none focus:border-cyan-500">
             <div class="flex gap-2">
-                <button onclick="verifyTch()" class="flex-1 bg-cyan-500 text-black font-bold p-3 rounded-lg">دخول</button>
-                <button onclick="nav('tch-select')" class="bg-slate-800 px-4 rounded-lg text-slate-300">رجوع</button>
+                <button onclick="verifyTch()" class="flex-1 bg-cyan-500 text-black font-bold p-3 rounded-lg cursor-pointer">دخول</button>
+                <button onclick="nav('tch-select')" class="bg-slate-800 px-4 rounded-lg text-slate-300 cursor-pointer">رجوع</button>
             </div>
         </div>
 
@@ -115,8 +116,8 @@
             <div class="flex justify-between items-center mb-6 flex-wrap gap-2 no-print">
                 <h3 id="dash-title" class="text-xl font-bold text-cyan-400">رصد الدرجات</h3>
                 <div class="flex gap-2">
-                    <button onclick="window.print()" class="bg-cyan-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold">🖨️ طباعة PDF</button>
-                    <button onclick="clearGrades()" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold">🗑️ مسح السجل</button>
+                    <button onclick="window.print()" class="bg-cyan-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">🖨️ طباعة PDF</button>
+                    <button onclick="clearGrades()" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">🗑️ مسح السجل</button>
                 </div>
             </div>
             <div class="cyber-card p-4 rounded-xl mb-6 no-print">
@@ -131,7 +132,7 @@
                     </select>
                     <input type="number" id="s-grade" min="0" max="100" placeholder="الدرجة (0-100)" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
                 </div>
-                <button onclick="saveGrade()" class="bg-cyan-500 text-black font-bold px-4 py-2 rounded text-sm w-full">حفظ الدرجة</button>
+                <button onclick="saveGrade()" class="bg-cyan-500 text-black font-bold px-4 py-2 rounded text-sm w-full cursor-pointer">حفظ الدرجة</button>
             </div>
             <div class="cyber-card rounded-xl overflow-hidden">
                 <table class="w-full text-right text-sm">
@@ -155,14 +156,14 @@
                         <option value="ثالث تجميع حاسوب A">ثالث تجميع حاسوب A</option>
                     </select>
                 </div>
-                <button onclick="searchStudent()" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold p-3 rounded-lg transition">عرض التقرير الدراسي</button>
+                <button onclick="searchStudent()" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold p-3 rounded-lg transition cursor-pointer">عرض التقرير الدراسي</button>
             </div>
 
             <!-- نتيجة البحث -->
             <div id="std-result" class="hidden space-y-6">
                 <div class="flex justify-between items-center no-print">
                     <h4 class="text-lg font-bold text-purple-300" id="std-res-title">التقرير الخاص بالطالب</h4>
-                    <button onclick="window.print()" class="bg-purple-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold">🖨️ طباعة / حفظ التقرير</button>
+                    <button onclick="window.print()" class="bg-purple-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">🖨️ طباعة / حفظ التقرير</button>
                 </div>
 
                 <!-- جدول الدرجات -->
@@ -238,7 +239,7 @@
         function loadAbs() {
             let list = JSON.parse(localStorage.getItem('abs') || '[]');
             document.getElementById('abs-list').innerHTML = list.map((i, idx) => `
-                <tr><td class="p-3 font-bold">${i.name}</td><td class="p-3 text-emerald-400">${i.cls}</td><td class="p-3">${i.type}</td><td class="p-3">${i.date}</td><td class="p-3 no-print"><button onclick="delAbs(${idx})" class="text-red-400 text-xs">حذف</button></td></tr>
+                <tr><td class="p-3 font-bold">${i.name}</td><td class="p-3 text-emerald-400">${i.cls}</td><td class="p-3">${i.type}</td><td class="p-3">${i.date}</td><td class="p-3 no-print"><button onclick="delAbs(${idx})" class="text-red-400 text-xs cursor-pointer">حذف</button></td></tr>
             `).join('');
         }
 
@@ -295,7 +296,7 @@
         function loadGrades() {
             let list = JSON.parse(localStorage.getItem('grades') || '[]').filter(g => g.subj === currSubj.name);
             document.getElementById('grades-list').innerHTML = list.map((i, idx) => `
-                <tr><td class="p-3 font-bold">${i.name}</td><td class="p-3 text-cyan-300">${i.cls}</td><td class="p-3">${i.subj}</td><td class="p-3 text-emerald-400 font-bold">${i.grade}</td><td class="p-3 no-print"><button onclick="delGrade(${idx})" class="text-red-400 text-xs">حذف</button></td></tr>
+                <tr><td class="p-3 font-bold">${i.name}</td><td class="p-3 text-cyan-300">${i.cls}</td><td class="p-3">${i.subj}</td><td class="p-3 text-emerald-400 font-bold">${i.grade}</td><td class="p-3 no-print"><button onclick="delGrade(${idx})" class="text-red-400 text-xs cursor-pointer">حذف</button></td></tr>
             `).join('');
         }
 
@@ -317,7 +318,6 @@
             }
         }
 
-        // دالة بحث واستعلام الطالب
         function searchStudent() {
             let qName = document.getElementById('find-std-name').value.trim();
             let qCls = document.getElementById('find-std-cls').value;
@@ -331,10 +331,4 @@
 
             document.getElementById('std-res-title').innerText = `تقرير الطالب: ${qName} (${qCls})`;
 
-            // عرض الدرجات
-            let gTb = document.getElementById('std-grades-tb');
-            if(myGrades.length === 0) {
-                gTb.innerHTML = `<tr><td colspan="2" class="p-3 text-slate-500 text-center">لا توجد درجات مرصودة حتى الآن.</td></tr>`;
-            } else {
-                gTb.innerHTML = myGrades.map(g => `
-                    <tr><td class="p-3 font-bold 
+            let gTb = document.getElementBy
