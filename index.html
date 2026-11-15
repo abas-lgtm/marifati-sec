@@ -45,7 +45,7 @@
                 <button onclick="navTo('assistant-login')" class="cyber-card w-full text-right p-8 rounded-2xl shadow-2xl transition hover:border-emerald-400 focus:outline-none">
                     <div class="text-4xl mb-4">⚡</div>
                     <h3 class="text-2xl font-bold text-white mb-2">بوابة المعاون</h3>
-                    <p class="text-sm text-slate-400">إدارة الغيابات والسجلات والشعب (محمي بررمز VIP10)</p>
+                    <p class="text-sm text-slate-400">إدارة الغيابات والسجلات والشعب (محمي بررمز 2020)</p>
                 </button>
 
                 <button onclick="openTeacherSelect()" class="cyber-card w-full text-right p-8 rounded-2xl shadow-2xl transition hover:border-cyan-400 focus:outline-none" style="border-color: rgba(6, 182, 212, 0.3);">
@@ -59,7 +59,7 @@
         <!-- دخول المعاون -->
         <div id="p-assistant-login" class="hidden max-w-md mx-auto cyber-card p-8 rounded-2xl shadow-2xl mt-10">
             <h3 class="text-2xl font-bold text-emerald-400 mb-6 text-center cyber-font">ASSISTANT_AUTH</h3>
-            <input type="password" id="ast-pass" placeholder="أدخل رمز المرور (VIP10)" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-white mb-4 focus:border-emerald-500 focus:outline-none cyber-font">
+            <input type="password" id="ast-pass" placeholder="أدخل رمز المرور (2020)" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-white mb-4 focus:border-emerald-500 focus:outline-none cyber-font">
             <p id="ast-err" class="text-red-400 text-xs mb-4 hidden">رمز المرور غير صحيح!</p>
             <div class="flex gap-4">
                 <button onclick="checkAssistant()" class="flex-1 bg-emerald-500 text-slate-950 font-bold py-3 rounded-lg shadow-lg">دخول</button>
@@ -172,16 +172,15 @@
 
     <script>
         const subjects = [
-            { name: "التربية الإسلامية", code: "ISL101" },
-            { name: "اللغة العربية", code: "ARB202" },
-            { name: "الرياضيات", code: "MTH303" },
-            { name: "الانجليزي", code: "ENG404" },
-            { name: "اساسيات الكهرباء", code: "ELE505" },
-            { name: "الطبيعيات", code: "PHY606" },
-            { name: "تجميع الحاسوب", code: "CMP707" },
-            { name: "تطبيقات الحاسوب", code: "APP808" },
-            { name: "الاتصالات والشبكات", code: "NET909" },
-            { name: "مبادى الحاسوب", code: "BAS110" }
+            { name: "التربية الإسلامية", code: "1090" },
+            { name: "اللغة العربية", code: "202500" },
+            { name: "الرياضيات", code: "12300" },
+            { name: "الانجليزي", code: "0005" },
+            { name: "اساسيات الكهرباء", code: "9000" },
+            { name: "تجميع الحاسوب", code: "6200" },
+            { name: "تطبيقات الحاسوب", code: "1999" },
+            { name: "الاتصالات والشبكات", code: "6100" },
+            { name: "مبادى الحاسوب", code: "1998" }
         ];
 
         let currentSubj = null;
@@ -197,7 +196,7 @@
         }
 
         function checkAssistant() {
-            if(document.getElementById('ast-pass').value === 'VIP10') {
+            if(document.getElementById('ast-pass').value === '2020') {
                 navTo('assistant-dash');
                 loadAbs();
             } else {
@@ -268,6 +267,7 @@
                 document.getElementById('t-dash-title').innerText = `بوابة رصد الدرجات - ${currentSubj.name}`;
                 loadGrades();
             } else {
+                document.getElementById('t-err').classList.add('hidden');
                 document.getElementById('t-err').classList.remove('hidden');
             }
         }
@@ -308,5 +308,4 @@
         }
     </script>
 </body>
-    </html>
-    
+</html>
