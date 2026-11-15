@@ -251,7 +251,6 @@
 
         function delGrade(idx) {
             let list = JSON.parse(localStorage.getItem('grades') || '[]');
-            // مسح العنصر المطابق للمادة الحالية فقط
             let subList = list.filter(g => g.subj === currSubj.name);
             subList.splice(idx, 1);
             let otherList = list.filter(g => g.subj !== currSubj.name);
