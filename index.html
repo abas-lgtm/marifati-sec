@@ -3,148 +3,342 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALPHA-SEC // نظام الإدارة المدرسية</title>
+    <title>نظام معرفة المهني // البوابة المركزية</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Fira+Code:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Cairo', sans-serif; background-color: #030712; color: #f3f4f6; }
+        body { font-family: 'Cairo', sans-serif; background-color: #050b14; color: #e2e8f0; }
         .cyber-font { font-family: 'Fira Code', monospace; }
-        .cyber-card { background-color: #0b0f19; border: 1px solid rgba(0, 255, 102, 0.3); }
-        .cyber-card:active { transform: scale(0.98); }
+        .glass-card { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(56, 189, 248, 0.2); }
+        .glass-card:hover { border-color: rgba(56, 189, 248, 0.5); }
+        @media print {
+            body { background: white !important; color: black !important; }
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            table { width: 100%; border-collapse: collapse; }
+            th, td { border: 1px solid #cbd5e1; padding: 8px; color: black !important; }
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between selection:bg-emerald-500 selection:text-black">
+<body class="min-h-screen flex flex-col justify-between selection:bg-sky-500 selection:text-black">
 
-    <header class="bg-[#0b0f19] border-b border-emerald-500/30 py-4 px-6">
+    <!-- الهيدر -->
+    <header class="glass-card border-b border-sky-500/20 py-4 px-6 no-print sticky top-0 z-50">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <span class="text-3xl">🛡️</span>
                 <div>
-                    <h1 class="text-lg font-black text-emerald-400 cyber-font">ALPHA_SEC // SYSTEM</h1>
-                    <p class="text-xs text-slate-400">إعدادية المعرفة المهنية - الأمن السيبراني</p>
+                    <h1 class="text-lg font-black text-sky-400 cyber-font">إعدادية المعرفة المهنية الأهلية</h1>
+                    <p class="text-xs text-slate-400">النظام المركزي لإدارة الغياب ورصد الدرجات</p>
                 </div>
             </div>
-            <button onclick="navTo('home')" class="bg-slate-900 text-emerald-400 px-4 py-2 rounded-lg text-sm font-semibold border border-emerald-500/30 cyber-font">ROOT_HOME</button>
+            <button onclick="goHome()" class="bg-slate-900 hover:bg-slate-800 text-sky-400 px-4 py-2 rounded-lg text-sm font-semibold border border-sky-500/30 transition cyber-font">الرئيسية</button>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto w-full p-4 sm:p-6 flex-grow">
+    <!-- المحتوى -->
+    <main class="max-w-7xl mx-auto w-full p-4 sm:p-6 flex-grow pb-20">
         
-        <!-- الرئيسية -->
+        <!-- الواجهة الرئيسية -->
         <div id="p-home" class="text-center py-12">
-            <h2 class="text-3xl sm:text-5xl font-black text-white mb-4">نظام الإدارة المدرسية الآمن</h2>
-            <p class="text-slate-400 mb-12">اختر البوابة المطلوبة للمتابعة:</p>
+            <h2 class="text-3xl sm:text-5xl font-black text-white mb-4">بوابات النظام الأكاديمي</h2>
+            <p class="text-slate-400 mb-12 max-w-lg mx-auto">اختر البوابة المناسبة للمتابعة وإدارة السجلات بدقة وأمان تام.</p>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-                <button onclick="navTo('assistant-login')" class="cyber-card w-full text-right p-8 rounded-2xl shadow-2xl transition hover:border-emerald-400 focus:outline-none">
+                <div onclick="showAssistantLogin()" class="glass-card p-8 rounded-2xl cursor-pointer shadow-2xl transition transform hover:-translate-y-1 text-right">
                     <div class="text-4xl mb-4">⚡</div>
-                    <h3 class="text-2xl font-bold text-white mb-2">بوابة المعاون</h3>
-                    <p class="text-sm text-slate-400">إدارة الغيابات والسجلات (محمي بررمز VIP10)</p>
-                </button>
+                    <h3 class="text-2xl font-bold text-sky-400 mb-2">بوابة المعاون</h3>
+                    <p class="text-sm text-slate-400">إدارة الغيابات وسجلات الشعب المدرسية (محمي بررمز VIP10)</p>
+                </div>
 
-                <button onclick="openTeacherSelect()" class="cyber-card w-full text-right p-8 rounded-2xl shadow-2xl transition hover:border-cyan-400 focus:outline-none" style="border-color: rgba(6, 182, 212, 0.3);">
+                <div onclick="showTeacherSelection()" class="glass-card p-8 rounded-2xl cursor-pointer shadow-2xl transition transform hover:-translate-y-1 text-right">
                     <div class="text-4xl mb-4">💻</div>
-                    <h3 class="text-2xl font-bold text-white mb-2">بوابة المدرسين</h3>
-                    <p class="text-sm text-slate-400">رصد درجات الطلاب لمختلف المواد</p>
-                </button>
+                    <h3 class="text-2xl font-bold text-cyan-400 mb-2">بوابة المدرسين</h3>
+                    <p class="text-sm text-slate-400">رصد درجات الطلاب للمواد الدراسية عبر الرموز السرية</p>
+                </div>
             </div>
         </div>
 
         <!-- دخول المعاون -->
-        <div id="p-assistant-login" class="hidden max-w-md mx-auto cyber-card p-8 rounded-2xl shadow-2xl mt-10">
-            <h3 class="text-2xl font-bold text-emerald-400 mb-6 text-center cyber-font">ASSISTANT_AUTH</h3>
-            <input type="password" id="ast-pass" placeholder="أدخل رمز المرور (VIP10)" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-white mb-4 focus:border-emerald-500 focus:outline-none cyber-font">
+        <div id="p-assistant-login" class="hidden max-w-md mx-auto glass-card p-8 rounded-2xl shadow-2xl mt-10">
+            <h3 class="text-2xl font-bold text-sky-400 mb-6 text-center cyber-font">ASSISTANT_AUTH</h3>
+            <input type="password" id="ast-pass" placeholder="أدخل رمز المرور (VIP10)" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-white mb-4 focus:border-sky-500 focus:outline-none cyber-font">
             <p id="ast-err" class="text-red-400 text-xs mb-4 hidden">رمز المرور غير صحيح!</p>
             <div class="flex gap-4">
-                <button onclick="checkAssistant()" class="flex-1 bg-emerald-500 text-slate-950 font-bold py-3 rounded-lg shadow-lg">دخول</button>
-                <button onclick="navTo('home')" class="px-4 bg-slate-900 text-slate-300 rounded-lg">إلغاء</button>
+                <button onclick="verifyAssistant()" class="flex-1 bg-sky-500 text-slate-950 font-bold py-3 rounded-lg shadow-lg hover:bg-sky-400 transition">دخول</button>
+                <button onclick="goHome()" class="px-4 bg-slate-900 text-slate-300 rounded-lg hover:bg-slate-800">إلغاء</button>
             </div>
         </div>
 
-        <!-- لوحة المعاون -->
+        <!-- لوحة المعاون (الغيابات) -->
         <div id="p-assistant-dash" class="hidden">
-            <h3 class="text-2xl font-bold text-emerald-400 cyber-font mb-6">لوحة عمليات المعاون</h3>
-            <div class="cyber-card p-6 rounded-xl mb-8">
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
-                    <input type="text" id="g-name" placeholder="اسم الطالب" class="bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white">
-                    <select id="g-type" class="bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white">
-                        <option value="غياب">غياب</option>
-                        <option value="إجازة">إجازة</option>
-                        <option value="هروب">هروب من الدرس</option>
-                    </select>
-                    <select id="g-class" class="bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white">
+            <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
+                <h3 class="text-2xl font-bold text-sky-400 cyber-font">لوحة عمليات المعاون // سجل الغيابات</h3>
+                <div class="flex gap-2 no-print">
+                    <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">🖨️ طباعة السجل (PDF)</button>
+                    <button onclick="goHome()" class="bg-slate-900 text-sky-400 px-4 py-2 rounded-lg text-sm font-semibold border border-sky-500/30">خروج</button>
+                </div>
+            </div>
+
+            <div class="glass-card p-6 rounded-xl mb-8 no-print">
+                <h4 class="text-md font-bold text-white mb-4">تسجيل غياب أو إجازة طالب</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-4">
+                    <input type="text" id="g-name" placeholder="اسم الطالب الكامل" class="bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white focus:border-sky-500 focus:outline-none">
+                    
+                    <select id="g-class" class="bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white focus:border-sky-500 focus:outline-none">
                         <option value="أول امن سيبراني A">أول امن سيبراني A</option>
                         <option value="أول امن سيبراني B">أول امن سيبراني B</option>
+                        <option value="أول امن سيبراني C">أول امن سيبراني C</option>
+                        <option value="أول تكرار نفط A">أول تكرار نفط A</option>
+                        <option value="أول تكرار نفط B">أول تكرار نفط B</option>
+                        <option value="أول تجميع حاسوب A">أول تجميع حاسوب A</option>
+                        <option value="أول أجهزة طبية A">أول أجهزة طبية A</option>
+                        <option value="ثالث تجميع حاسوب A">ثالث تجميع حاسوب A</option>
+                        <option value="ثالث تجميع حاسوب B">ثالث تجميع حاسوب B</option>
                     </select>
+
+                    <select id="g-type" class="bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white focus:border-sky-500 focus:outline-none">
+                        <option value="غياب">غياب بدون عذر</option>
+                        <option value="إجازة">إجازة رسمية</option>
+                        <option value="هروب">هروب من الدرس</option>
+                    </select>
+
+                    <input type="date" id="g-date" class="bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white focus:border-sky-500 focus:outline-none">
                 </div>
-                <button onclick="saveAbsence()" class="bg-emerald-500 text-slate-950 font-bold px-6 py-2 rounded-lg">حفظ الغياب</button>
+                <button onclick="saveAbsence()" class="bg-sky-500 text-slate-950 font-bold px-6 py-2 rounded-lg hover:bg-sky-400 transition">حفظ السجل</button>
             </div>
-            <div class="cyber-card rounded-xl overflow-hidden">
+
+            <div class="glass-card rounded-xl overflow-hidden shadow-xl">
                 <table class="w-full text-right border-collapse">
-                    <thead><tr class="bg-slate-950 text-emerald-400 text-xs"><th class="p-4">الطالب</th><th class="p-4">الحالة</th><th class="p-4">القاعة</th></tr></thead>
-                    <tbody id="abs-tbody" class="divide-y divide-slate-900"></tbody>
+                    <thead>
+                        <tr class="bg-slate-950 text-sky-400 text-xs border-b border-slate-800">
+                            <th class="p-4">ت</th>
+                            <th class="p-4">اسم الطالب</th>
+                            <th class="p-4">الشعبة / الصف</th>
+                            <th class="p-4">الحالة</th>
+                            <th class="p-4">التاريخ</th>
+                            <th class="p-4 no-print">إجراء</th>
+                        </tr>
+                    </thead>
+                    <tbody id="abs-tbody" class="divide-y divide-slate-900 text-sm"></tbody>
                 </table>
             </div>
         </div>
 
         <!-- اختيار المواد للمدرسين -->
-        <div id="p-teacher-select" class="hidden max-w-2xl mx-auto">
-            <h3 class="text-2xl font-bold text-cyan-400 cyber-font mb-6">اختر المادة الدراسية</h3>
-            <div class="grid grid-cols-1 gap-4" id="subj-box"></div>
+        <div id="p-teacher-select" class="hidden max-w-3xl mx-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-cyan-400 cyber-font">اختر المادة الدراسية للمتابعة</h3>
+                <button onclick="goHome()" class="bg-slate-900 text-cyan-400 px-4 py-2 rounded-lg text-sm font-semibold border border-cyan-500/30">الرئيسية</button>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="subj-box"></div>
+        </div>
+
+        <!-- نافذة رمز المدرس -->
+        <div id="p-teacher-login" class="hidden max-w-md mx-auto glass-card p-8 rounded-2xl shadow-2xl mt-10">
+            <h3 id="login-subj-title" class="text-2xl font-bold text-cyan-400 mb-2 text-center cyber-font">تسجيل دخول المدرس</h3>
+            <p class="text-xs text-slate-400 mb-6 text-center">أدخل الرمز السري الخاص بالمادة للوصول إلى لوحة رصد الدرجات</p>
+            <input type="password" id="t-pass" placeholder="أدخل رمز المادة السري" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-white mb-4 focus:border-cyan-500 focus:outline-none cyber-font">
+            <p id="t-err" class="text-red-400 text-xs mb-4 hidden">الرمز غير صحيح!</p>
+            <div class="flex gap-4">
+                <button onclick="verifyTeacher()" class="flex-1 bg-cyan-500 text-slate-950 font-bold py-3 rounded-lg shadow-lg hover:bg-cyan-400 transition">دخول للمادة</button>
+                <button onclick="showTeacherSelection()" class="px-4 bg-slate-900 text-slate-300 rounded-lg hover:bg-slate-800">رجوع</button>
+            </div>
+        </div>
+
+        <!-- لوحة درجات المدرس المحددة -->
+        <div id="p-teacher-dash" class="hidden">
+            <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
+                <h3 id="dash-subj-title" class="text-2xl font-bold text-cyan-400 cyber-font">بوابة رصد الدرجات</h3>
+                <div class="flex gap-2 no-print">
+                    <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">🖨️ طباعة الدرجات (PDF)</button>
+                    <button onclick="showTeacherSelection()" class="bg-slate-900 text-cyan-400 px-4 py-2 rounded-lg text-sm font-semibold border border-cyan-500/30">تغيير المادة</button>
+                </div>
+            </div>
+
+            <div class="glass-card p-6 rounded-xl mb-8 no-print">
+                <h4 class="text-md font-bold text-white mb-4">رصد درجة طالب جديد</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+                    <input type="text" id="s-name" placeholder="اسم الطالب الكامل" class="bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white focus:border-cyan-500 focus:outline-none">
+                    <input type="number" id="s-grade" placeholder="الدرجة (من 100)" class="bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white focus:border-cyan-500 focus:outline-none">
+                    <button onclick="saveGrade()" class="bg-cyan-500 text-slate-950 font-bold px-6 py-2 rounded-lg hover:bg-cyan-400 transition">حفظ الدرجة</button>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-xl overflow-hidden shadow-xl">
+                <table class="w-full text-right border-collapse">
+                    <thead>
+                        <tr class="bg-slate-950 text-cyan-400 text-xs border-b border-slate-800">
+                            <th class="p-4">ت</th>
+                            <th class="p-4">اسم الطالب</th>
+                            <th class="p-4">المادة</th>
+                            <th class="p-4">الدرجة</th>
+                            <th class="p-4 no-print">إجراء</th>
+                        </tr>
+                    </thead>
+                    <tbody id="grades-tbody" class="divide-y divide-slate-900 text-sm"></tbody>
+                </table>
+            </div>
         </div>
 
     </main>
 
-    <footer class="bg-[#0b0f19] border-t border-emerald-500/20 text-center py-6 text-xs text-slate-400">
-        <div>تصميم وتطوير: عباس محمد | <span class="text-emerald-400 cyber-font">A B A</span></div>
+    <!-- الفوتر -->
+    <footer class="glass-card border-t border-sky-500/20 text-center py-6 text-xs text-slate-400 no-print">
+        <div>تصميم وتطوير: عباس محمد | <span class="text-sky-400 cyber-font">A B A // 2026</span></div>
     </footer>
 
+    <!-- السكربت البرمجي -->
     <script>
+        // المواد والرموز السرية الخاصة بكل مدرس
         const subjects = [
-            { name: "اللغة العربية", code: "202500" },
-            { name: "الرياضيات", code: "1001" },
-            { name: "مبادئ الحاسوب", code: "9632" }
+            { name: "التربية الإسلامية", code: "ISL101" },
+            { name: "اللغة العربية", code: "ARB202" },
+            { name: "الرياضيات", code: "MTH303" },
+            { name: "الانجليزي", code: "ENG404" },
+            { name: "اساسيات الكهرباء", code: "ELE505" },
+            { name: "الطبيعيات", code: "PHY606" },
+            { name: "تجميع الحاسوب", code: "CMP707" },
+            { name: "تطبيقات الحاسوب", code: "APP808" },
+            { name: "الاتصالات والشبكات", code: "NET909" },
+            { name: "مبادى الحاسوب", code: "BAS110" }
         ];
 
-        function navTo(view) {
-            ['home', 'assistant-login', 'assistant-dash', 'teacher-select'].forEach(v => {
-                document.getElementById('p-' + v).classList.add('hidden');
+        let activeSubject = null;
+
+        function goHome() {
+            ['p-home', 'p-assistant-login', 'p-assistant-dash', 'p-teacher-select', 'p-teacher-login', 'p-teacher-dash'].forEach(v => {
+                document.getElementById(v).classList.add('hidden');
             });
-            document.getElementById('p-' + view).classList.remove('hidden');
+            document.getElementById('p-home').classList.remove('hidden');
+            document.getElementById('ast-pass').value = '';
+            document.getElementById('t-pass').value = '';
+            document.getElementById('ast-err').classList.add('hidden');
+            document.getElementById('t-err').classList.add('hidden');
             window.scrollTo({top: 0});
         }
 
-        function checkAssistant() {
+        function showAssistantLogin() {
+            document.getElementById('p-home').classList.add('hidden');
+            document.getElementById('p-assistant-login').classList.remove('hidden');
+        }
+
+        function verifyAssistant() {
             if(document.getElementById('ast-pass').value === 'VIP10') {
-                navTo('assistant-dash');
-                loadAbs();
+                document.getElementById('p-assistant-login').classList.add('hidden');
+                document.getElementById('p-assistant-dash').classList.remove('hidden');
+                loadAbsences();
             } else {
                 document.getElementById('ast-err').classList.remove('hidden');
             }
         }
 
-        function saveAbsence() {
-            let name = document.getElementById('g-name').value;
-            if(!name) { alert('اكتب اسم الطالب'); return; }
-            let list = JSON.parse(localStorage.getItem('abs') || '[]');
-            list.push({name, type: document.getElementById('g-type').value, cls: document.getElementById('g-class').value});
-            localStorage.setItem('abs', JSON.stringify(list));
-            document.getElementById('g-name').value = '';
-            loadAbs();
-            alert('تم الحفظ!');
-        }
-
-        function loadAbs() {
-            let list = JSON.parse(localStorage.getItem('abs') || '[]');
-            let tb = document.getElementById('abs-tbody');
-            tb.innerHTML = list.map(i => `<tr class="border-b border-slate-900"><td class="p-4">${i.name}</td><td class="p-4 text-emerald-400">${i.type}</td><td class="p-4">${i.cls}</td></tr>`).join('');
-        }
-
-        function openTeacherSelect() {
-            navTo('teacher-select');
+        function showTeacherSelection() {
+            ['p-home', 'p-teacher-login', 'p-teacher-dash'].forEach(v => document.getElementById(v).classList.add('hidden'));
+            document.getElementById('p-teacher-select').classList.remove('hidden');
+            
             let box = document.getElementById('subj-box');
-            box.innerHTML = subjects.map(s => `<div class="cyber-card p-4 rounded-xl text-right text-cyan-400 font-bold">${s.name} (رمز: ${s.code})</div>`).join('');
+            box.innerHTML = subjects.map(s => `
+                <div onclick="selectSubject('${s.name}')" class="glass-card p-5 rounded-xl cursor-pointer shadow-lg transition flex justify-between items-center hover:border-cyan-400">
+                    <span class="font-bold text-white text-base">📚 ${s.name}</span>
+                    <span class="text-xs bg-slate-950 text-cyan-400 px-3 py-1 rounded-full border border-cyan-500/30 cyber-font">دخول المدرس 🔒</span>
+                </div>
+            `).join('');
         }
-    </script>
-</body>
-</html>
+
+        function selectSubject(name) {
+            activeSubject = subjects.find(s => s.name === name);
+            document.getElementById('p-teacher-select').classList.add('hidden');
+            document.getElementById('p-teacher-login').classList.remove('hidden');
+            document.getElementById('login-subj-title').innerText = `تسجيل دخول: ${activeSubject.name}`;
+            document.getElementById('t-pass').value = '';
+            document.getElementById('t-err').classList.add('hidden');
+        }
+
+        function verifyTeacher() {
+            let inputCode = document.getElementById('t-pass').value;
+            if(inputCode === activeSubject.code) {
+                document.getElementById('p-teacher-login').classList.add('hidden');
+                document.getElementById('p-teacher-dash').classList.remove('hidden');
+                document.getElementById('dash-subj-title').innerText = `بوابة رصد درجات - ${activeSubject.name}`;
+                loadGrades();
+            } else {
+                document.getElementById('t-err').classList.remove('hidden');
+            }
+        }
+
+        // إدارة الغيابات
+        function saveAbsence() {
+            let name = document.getElementById('g-name').value.trim();
+            let cls = document.getElementById('g-class').value;
+            let type = document.getElementById('g-type').value;
+            let date = document.getElementById('g-date').value;
+
+            if(!name || !date) { alert('يرجى إدخال اسم الطالب وتحديد التاريخ!'); return; }
+            
+            let list = JSON.parse(localStorage.getItem('marifati_abs') || '[]');
+            list.push({name, cls, type, date});
+            localStorage.setItem('marifati_abs', JSON.stringify(list));
+            
+            document.getElementById('g-name').value = '';
+            document.getElementById('g-date').value = '';
+            loadAbsences();
+        }
+
+        function loadAbsences() {
+            let list = JSON.parse(localStorage.getItem('marifati_abs') || '[]');
+            let tb = document.getElementById('abs-tbody');
+            if(list.length === 0) {
+                tb.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-500">لا توجد سجلات غياب محفوظة حالياً</td></tr>`;
+                return;
+            }
+            tb.innerHTML = list.map((i, idx) => `
+                <tr class="hover:bg-slate-900/50">
+                    <td class="p-4 text-slate-400">${idx + 1}</td>
+                    <td class="p-4 font-bold text-white">${i.name}</td>
+                    <td class="p-4 text-sky-300">${i.cls}</td>
+                    <td class="p-4 text-amber-400 font-semibold">${i.type}</td>
+                    <td class="p-4 cyber-font text-slate-300">${i.date}</td>
+                    <td class="p-4 no-print"><button onclick="delAbs(${idx})" class="text-red-400 hover:text-red-300 text-xs font-bold">حذف</button></td>
+                </tr>
+            `).join('');
+        }
+
+        function delAbs(idx) {
+            let list = JSON.parse(localStorage.getItem('marifati_abs') || '[]');
+            list.splice(idx, 1);
+            localStorage.setItem('marifati_abs', JSON.stringify(list));
+            loadAbsences();
+        }
+
+        // إدارة الدرجات للمدرسين
+        function saveGrade() {
+            let name = document.getElementById('s-name').value.trim();
+            let grade = document.getElementById('s-grade').value;
+
+            if(!name || !grade) { alert('يرجى إدخال اسم الطالب والدرجة!'); return; }
+
+            let allGrades = JSON.parse(localStorage.getItem('marifati_grades') || '[]');
+            allGrades.push({ name, subject: activeSubject.name, grade });
+            localStorage.setItem('marifati_grades', JSON.stringify(allGrades));
+
+            document.getElementById('s-name').value = '';
+            document.getElementById('s-grade').value = '';
+            loadGrades();
+        }
+
+        function loadGrades() {
+            let allGrades = JSON.parse(localStorage.getItem('marifati_grades') || '[]');
+            // تصفية الدرجات الخاصة بالمادة الحالية فقط
+            let subjectGrades = allGrades.filter(g => g.subject === activeSubject.name);
+            let tb = document.getElementById('grades-tbody');
+            
+            if(subjectGrades.length === 0) {
+                tb.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-500">لا توجد درجات مرصودة لهذه المادة حتى الآن</td></tr>`;
+                return;
+            }
+
+            tb.innerHTML = subjectGrades.map((i, idx) => `
+                <tr class="hover:bg-slate-900/50">
+                    <td class="p-4 text-slate-400">${idx + 1}</td>
+                    <td class="p-4
