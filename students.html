@@ -58,18 +58,25 @@
                         <tr>
                             <th class="p-2 border">اليوم</th>
                             <th class="p-2 border">الحصة</th>
-                            <th class="p-2 border" colspan="2">أمن سيبراني (أول)</th>
-                            <th class="p-2 border" colspan="2">أجهزة طبية (أول)</th>
-                            <th class="p-2 border" colspan="2">تكرير نفط (أول)</th>
-                            <th class="p-2 border" colspan="2">تجميع حاسوب (ثالث)</th>
+                            <th class="p-2 border" colspan="2">أمن سيبراني A</th>
+                            <th class="p-2 border" colspan="2">أمن سيبراني B</th>
+                            <th class="p-2 border" colspan="2">أمن سيبراني C</th>
+                            <th class="p-2 border" colspan="2">تكرار نفط A</th>
+                            <th class="p-2 border" colspan="2">أجهزة طبية A</th>
+                            <th class="p-2 border" colspan="2">تجميع حاسوب A (أول)</th>
+                            <th class="p-2 border" colspan="2">تجميع حاسوب A (ثالث)</th>
+                            <th class="p-2 border" colspan="2">تجميع حاسوب B (ثالث)</th>
                         </tr>
                         <tr class="bg-slate-900 print:bg-gray-100 text-[9px] text-purple-200 print:text-black">
-                            <th class="border"></th>
-                            <th class="border"></th>
-                            <th class="p-1 border">المادة</th><th class="p-1 border">المدرس</th>
-                            <th class="p-1 border">المادة</th><th class="p-1 border">المدرس</th>
-                            <th class="p-1 border">المادة</th><th class="p-1 border">المدرس</th>
-                            <th class="p-1 border">المادة</th><th class="p-1 border">المدرس</th>
+                            <th class="border"></th><th class="border"></th>
+                            <th class="p-1 border">مادة</th><th class="p-1 border">مدرس</th>
+                            <th class="p-1 border">مادة</th><th class="p-1 border">مدرس</th>
+                            <th class="p-1 border">مادة</th><th class="p-1 border">مدرس</th>
+                            <th class="p-1 border">مادة</th><th class="p-1 border">مدرس</th>
+                            <th class="p-1 border">مادة</th><th class="p-1 border">مدرس</th>
+                            <th class="p-1 border">مادة</th><th class="p-1 border">مدرس</th>
+                            <th class="p-1 border">مادة</th><th class="p-1 border">مدرس</th>
+                            <th class="p-1 border">مادة</th><th class="p-1 border">مدرس</th>
                         </tr>
                     </thead>
                     <tbody id="central-schedule-body" class="divide-y divide-slate-800 text-slate-300 print:text-black">
@@ -81,7 +88,7 @@
 
         <!-- 2. لوحة تعديل وتخصيص الجدول المركزي -->
         <div id="tab-edit-sch" class="cyber-card-purple p-4 rounded-xl hidden max-w-xl mx-auto">
-            <h4 class="text-sm font-bold text-purple-400 mb-3">📌 تخصيص الحصة والمادة والمدرس لكل قسم</h4>
+            <h4 class="text-sm font-bold text-purple-400 mb-3">📌 تخصيص الحصة والمادة والمدرس لكل شعبة</h4>
             <div class="space-y-3 mb-3">
                 <div>
                     <label class="text-xs text-purple-300 block mb-1">اختر اليوم:</label>
@@ -108,12 +115,16 @@
                 </div>
 
                 <div>
-                    <label class="text-xs text-purple-300 block mb-1">اختر القسم المستهدف:</label>
+                    <label class="text-xs text-purple-300 block mb-1">اختر الشعبة / القسم المستهدف:</label>
                     <select id="ed-dept" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded text-white text-xs">
-                        <option value="cyber">أمن سيبراني (أول)</option>
-                        <option value="med">أجهزة طبية (أول)</option>
-                        <option value="oil">تكرير نفط (أول)</option>
-                        <option value="pc">تجميع حاسوب (ثالث)</option>
+                        <option value="cyberA">أول امن سيبراني A</option>
+                        <option value="cyberB">أول امن سيبراني B</option>
+                        <option value="cyberC">أول امن سيبراني C</option>
+                        <option value="oilA">اول تكرار نفط A</option>
+                        <option value="medA">اول اجهزه طبية A</option>
+                        <option value="pcA1">اول تجميع حاسوب A</option>
+                        <option value="pcA3">ثالث تجميع حاسوب A</option>
+                        <option value="pcB3">ثالث تجميع حاسوب B</option>
                     </select>
                 </div>
 
@@ -191,10 +202,14 @@
                 sched[day] = [];
                 for(let i=0; i<7; i++) {
                     sched[day].push({
-                        cyber: {subj: "رياضيات", teacher: "حيدر"},
-                        med: {subj: "علوم", teacher: "نور"},
-                        oil: {subj: "تجهيز عملي", teacher: "رائد"},
-                        pc: {subj: "معالجات", teacher: "محمد"}
+                        cyberA: {subj: "رياضيات", teacher: "حيدر"},
+                        cyberB: {subj: "الانجليزي", teacher: "أحمد"},
+                        cyberC: {subj: "اللغة العربية", teacher: "محمد"},
+                        oilA: {subj: "تجهيز عملي", teacher: "رائد"},
+                        medA: {subj: "علوم", teacher: "نور"},
+                        pcA1: {subj: "حاسوب", teacher: "علي"},
+                        pcA3: {subj: "معالجات", teacher: "حسين"},
+                        pcB3: {subj: "اتصالات", teacher: "قاسم"}
                     });
                 }
             });
@@ -219,10 +234,14 @@
 
                     let data = schedule[day][slot];
 
-                    row += `<td class="p-1 border">${data.cyber.subj}</td><td class="p-1 border text-purple-300">${data.cyber.teacher}</td>`;
-                    row += `<td class="p-1 border">${data.med.subj}</td><td class="p-1 border text-purple-300">${data.med.teacher}</td>`;
-                    row += `<td class="p-1 border">${data.oil.subj}</td><td class="p-1 border text-purple-300">${data.oil.teacher}</td>`;
-                    row += `<td class="p-1 border">${data.pc.subj}</td><td class="p-1 border text-purple-300">${data.pc.teacher}</td>`;
+                    row += `<td class="p-1 border">${data.cyberA.subj}</td><td class="p-1 border text-purple-300">${data.cyberA.teacher}</td>`;
+                    row += `<td class="p-1 border">${data.cyberB.subj}</td><td class="p-1 border text-purple-300">${data.cyberB.teacher}</td>`;
+                    row += `<td class="p-1 border">${data.cyberC.subj}</td><td class="p-1 border text-purple-300">${data.cyberC.teacher}</td>`;
+                    row += `<td class="p-1 border">${data.oilA.subj}</td><td class="p-1 border text-purple-300">${data.oilA.teacher}</td>`;
+                    row += `<td class="p-1 border">${data.medA.subj}</td><td class="p-1 border text-purple-300">${data.medA.teacher}</td>`;
+                    row += `<td class="p-1 border">${data.pcA1.subj}</td><td class="p-1 border text-purple-300">${data.pcA1.teacher}</td>`;
+                    row += `<td class="p-1 border">${data.pcA3.subj}</td><td class="p-1 border text-purple-300">${data.pcA3.teacher}</td>`;
+                    row += `<td class="p-1 border">${data.pcB3.subj}</td><td class="p-1 border text-purple-300">${data.pcB3.teacher}</td>`;
 
                     row += `</tr>`;
                     tbody.innerHTML += row;
@@ -250,7 +269,6 @@
         }
 
         function switchStuTab(tabId) {
-            // قائمة التبويبات الصحيحة بالكامل
             ['tab-sch', 'tab-edit-sch', 'tab-exm', 'tab-src'].forEach(id => {
                 let el = document.getElementById(id);
                 let btn = document.getElementById('btn-' + id);
