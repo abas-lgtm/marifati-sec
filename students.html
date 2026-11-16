@@ -35,7 +35,7 @@
         <!-- أزرار التنقل -->
         <div class="flex gap-2 border-b border-purple-500/30 pb-3 mb-4 justify-center no-print flex-wrap">
             <button onclick="switchStuTab('tab-sch')" id="btn-tab-sch" class="bg-purple-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer">📅 الجدول المركزي الشامل</button>
-            <button onclick="switchStuTab('tab-edit-sch')" id="btn-tab-edit-sch" class="bg-slate-900 text-purple-300 px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer">⚙️ تخصيص وتعديل الحصص</button>
+            <button onclick="requestEditAccess()" id="btn-tab-edit-sch" class="bg-slate-900 text-purple-300 px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer">⚙️ تخصيص وتعديل الحصص 🔒</button>
             <button onclick="switchStuTab('tab-exm')" id="btn-tab-exm" class="bg-slate-900 text-purple-300 px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer">📝 الامتحانات</button>
             <button onclick="switchStuTab('tab-src')" id="btn-tab-src" class="bg-slate-900 text-purple-300 px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer">📊 درجاتي والغيابات</button>
         </div>
@@ -86,9 +86,9 @@
             </div>
         </div>
 
-        <!-- 2. لوحة تعديل وتخصيص الجدول المركزي -->
+        <!-- 2. لوحة تعديل وتخصيص الجدول المركزي (محمية بكلمة المرور) -->
         <div id="tab-edit-sch" class="cyber-card-purple p-4 rounded-xl hidden max-w-xl mx-auto">
-            <h4 class="text-sm font-bold text-purple-400 mb-3">📌 تخصيص الحصة والمادة والمدرس لكل شعبة</h4>
+            <h4 class="text-sm font-bold text-purple-400 mb-3">📌 تخصيص الحصة والمادة والمدرس لكل شعبة (منطقة آمنة)</h4>
             <div class="space-y-3 mb-3">
                 <div>
                     <label class="text-xs text-purple-300 block mb-1">اختر اليوم:</label>
@@ -185,120 +185,4 @@
     <footer class="fixed bottom-0 left-0 w-full bg-slate-900/95 backdrop-blur-md border-t border-purple-500/30 py-2.5 px-4 z-50 text-center shadow-lg no-print">
       <div class="flex items-center justify-center gap-2 text-xs md:text-sm font-mono dir-rtl">
         <span class="inline-block w-2 h-2 rounded-full bg-purple-500 animate-pulse"></span>
-        <span class="text-slate-300">تم التطوير والبرمجة بواسطة:</span>
-        <span class="font-bold text-purple-400 tracking-wide border-b border-emerald-500/40 pb-0.5">عباس محمد عزيز</span>
-      </div>
-    </footer>
-
-    <script>
-        window.addEventListener('DOMContentLoaded', () => {
-            loadCentralSchedule();
-        });
-
-        function getDefaultCentralSchedule() {
-            let days = ["الأحد", "الإثنين", "الثلاثاء", "الأربعاء", "الخميس"];
-            let sched = {};
-            days.forEach(day => {
-                sched[day] = [];
-                for(let i=0; i<7; i++) {
-                    sched[day].push({
-                        cyberA: {subj: "رياضيات", teacher: "حيدر"},
-                        cyberB: {subj: "الانجليزي", teacher: "أحمد"},
-                        cyberC: {subj: "اللغة العربية", teacher: "محمد"},
-                        oilA: {subj: "تجهيز عملي", teacher: "رائد"},
-                        medA: {subj: "علوم", teacher: "نور"},
-                        pcA1: {subj: "حاسوب", teacher: "علي"},
-                        pcA3: {subj: "معالجات", teacher: "حسين"},
-                        pcB3: {subj: "اتصالات", teacher: "قاسم"}
-                    });
-                }
-            });
-            return sched;
-        }
-
-        function loadCentralSchedule() {
-            let schedule = JSON.parse(localStorage.getItem('central_school_schedule') || JSON.stringify(getDefaultCentralSchedule()));
-            let tbody = document.getElementById('central-schedule-body');
-            if(!tbody) return;
-
-            tbody.innerHTML = '';
-            let days = ["الأحد", "الإثنين", "الثلاثاء", "الأربعاء", "الخميس"];
-
-            days.forEach(day => {
-                for(let slot = 0; slot < 7; slot++) {
-                    let row = `<tr>`;
-                    if(slot === 0) {
-                        row += `<td class="p-2 border font-bold text-purple-400 bg-slate-950 print:bg-gray-100" rowspan="7">${day}</td>`;
-                    }
-                    row += `<td class="p-2 border font-bold text-slate-400">${slot + 1}</td>`;
-
-                    let data = schedule[day][slot];
-
-                    row += `<td class="p-1 border">${data.cyberA.subj}</td><td class="p-1 border text-purple-300">${data.cyberA.teacher}</td>`;
-                    row += `<td class="p-1 border">${data.cyberB.subj}</td><td class="p-1 border text-purple-300">${data.cyberB.teacher}</td>`;
-                    row += `<td class="p-1 border">${data.cyberC.subj}</td><td class="p-1 border text-purple-300">${data.cyberC.teacher}</td>`;
-                    row += `<td class="p-1 border">${data.oilA.subj}</td><td class="p-1 border text-purple-300">${data.oilA.teacher}</td>`;
-                    row += `<td class="p-1 border">${data.medA.subj}</td><td class="p-1 border text-purple-300">${data.medA.teacher}</td>`;
-                    row += `<td class="p-1 border">${data.pcA1.subj}</td><td class="p-1 border text-purple-300">${data.pcA1.teacher}</td>`;
-                    row += `<td class="p-1 border">${data.pcA3.subj}</td><td class="p-1 border text-purple-300">${data.pcA3.teacher}</td>`;
-                    row += `<td class="p-1 border">${data.pcB3.subj}</td><td class="p-1 border text-purple-300">${data.pcB3.teacher}</td>`;
-
-                    row += `</tr>`;
-                    tbody.innerHTML += row;
-                }
-            });
-        }
-
-        function saveCentralSlot() {
-            let day = document.getElementById('ed-day').value;
-            let slot = parseInt(document.getElementById('ed-slot').value);
-            let dept = document.getElementById('ed-dept').value;
-            let subj = document.getElementById('ed-subj').value;
-            let teacher = document.getElementById('ed-teacher').value.trim() || "غير محدد";
-
-            let schedule = JSON.parse(localStorage.getItem('central_school_schedule') || JSON.stringify(getDefaultCentralSchedule()));
-            
-            if(schedule[day] && schedule[day][slot]) {
-                schedule[day][slot][dept] = {subj, teacher};
-                localStorage.setItem('central_school_schedule', JSON.stringify(schedule));
-                alert("تم تحديث الجدول المركزي بنجاح!");
-                loadCentralSchedule();
-                switchStuTab('tab-sch');
-                document.getElementById('ed-teacher').value = '';
-            }
-        }
-
-        function switchStuTab(tabId) {
-            ['tab-sch', 'tab-edit-sch', 'tab-exm', 'tab-src'].forEach(id => {
-                let el = document.getElementById(id);
-                let btn = document.getElementById('btn-' + id);
-                if(el) el.classList.add('hidden');
-                if(btn) btn.className = "bg-slate-900 text-purple-300 px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer";
-            });
-            let targetEl = document.getElementById(tabId);
-            let targetBtn = document.getElementById('btn-' + tabId);
-            if(targetEl) targetEl.classList.remove('hidden');
-            if(targetBtn) targetBtn.className = "bg-purple-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer";
-        }
-
-        function searchStu() {
-            let q = document.getElementById('stu-search').value.trim();
-            if(!q) { alert('الرجاء إدخال اسم الطالب للبحث'); return; }
-            
-            let grades = JSON.parse(localStorage.getItem('grades') || '[]').filter(i => i.name.includes(q));
-            let abs = JSON.parse(localStorage.getItem('abs') || '[]').filter(i => i.name.includes(q));
-            
-            let resHtml = `<div class="cyber-card-purple p-3 rounded-lg"><h5 class="font-bold text-cyan-400 mb-2">درجات المواد المرصودة:</h5>`;
-            resHtml += grades.length ? grades.map(i => `<p class="border-b border-slate-900 py-1 flex justify-between"><span>${i.subj} (${i.cls})</span> <span class="text-emerald-400 font-bold">${i.grade}</span></p>`).join('') : `<p class="text-slate-500">لا توجد درجات مرصودة لهذا الاسم حالياً</p>`;
-            resHtml += `</div>`;
-
-            resHtml += `<div class="cyber-card-purple p-3 rounded-lg mt-3"><h5 class="font-bold text-amber-400 mb-2">سجل الغيابات والدوام:</h5>`;
-            resHtml += abs.length ? abs.map(i => `<p class="border-b border-slate-900 py-1 flex justify-between"><span>${i.date} - ${i.cls}</span> <span class="text-amber-400 font-bold">${i.type}</span></p>`).join('') : `<p class="text-slate-500">سجل الدوام نظيف، لا توجد غيابات مسجلة</p>`;
-            resHtml += `</div>`;
-
-            let resultsEl = document.getElementById('stu-results');
-            if(resultsEl) resultsEl.innerHTML = resHtml;
-        }
-    </script>
-</body>
-</html>
+    
