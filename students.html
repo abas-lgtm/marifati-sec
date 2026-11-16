@@ -1,100 +1,3 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALPHA-SEC // بوابة الطلاب المركزية</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { font-family: 'Cairo', sans-serif; background-color: #030712; color: #f3f4f6; -webkit-user-select: none; user-select: none; }
-        .cyber-card-purple { background-color: #0b0f19; border: 1px solid rgba(168, 85, 247, 0.3); }
-        @media print {
-            body { background: white !important; color: black !important; }
-            .no-print { display: none !important; }
-            .cyber-card-purple { border: 1px solid #333 !important; background: white !important; color: black !important; }
-        }
-    </style>
-</head>
-<body class="min-h-screen flex flex-col justify-between p-4 sm:p-6 pb-16">
-
-    <header class="flex justify-between items-center border-b border-purple-500/30 pb-4 no-print">
-        <div class="flex flex-col text-right">
-            <h1 class="text-white font-bold text-base md:text-lg">بوابة الطالب المركزية</h1>
-            <span class="text-[11px] md:text-xs text-purple-400 font-mono">إعدادية المعرفة المهنية الاهلية</span>
-        </div>
-        <button onclick="window.location.href='index.html'" class="bg-slate-900 text-purple-400 px-4 py-2 rounded-lg border border-purple-500/30 text-sm font-semibold cursor-pointer">الرئيسية 🏠</button>
-    </header>
-
-    <main class="max-w-3xl mx-auto w-full my-6 flex-grow">
-        <h3 class="text-2xl font-bold text-purple-400 mb-2 text-center no-print">خدمات الطلاب والتقييم</h3>
-        
-        <!-- شريط التنبيهات الإدارية الهامة (إعلان متحرك أو ثابت نظيف) -->
-        <div class="bg-purple-950/40 border border-purple-500/30 p-2.5 rounded-lg mb-4 text-xs text-purple-300 flex items-center gap-2 no-print">
-            <span class="animate-pulse">🔔</span>
-            <span><strong>تنبيه إداري:</strong> يرجى مراجعة الجدول الأسبوعي وجداول الامتحانات بانتظام.</span>
-        </div>
-
-        <!-- أزرار التبويبات -->
-        <div class="flex gap-2 border-b border-purple-500/30 pb-3 mb-4 justify-center flex-wrap no-print">
-            <button onclick="switchStuTab('tab-sch')" id="btn-tab-sch" class="bg-purple-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer">📅 الجدول الأسبوعي</button>
-            <button onclick="switchStuTab('tab-exm')" id="btn-tab-exm" class="bg-slate-900 text-purple-300 px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer">📝 الامتحانات الشهرية</button>
-            <button onclick="switchStuTab('tab-src')" id="btn-tab-src" class="bg-slate-900 text-purple-300 px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer">📊 درجاتي والغيابات</button>
-        </div>
-
-        <!-- 1. الجدول الأسبوعي البسيط -->
-        <div id="tab-sch" class="cyber-card-purple p-4 rounded-xl overflow-x-auto">
-            <div class="flex justify-between items-center mb-3">
-                <h4 class="text-sm font-bold text-purple-400">الجدول الأسبوعي للحصص الدراسية</h4>
-                <button onclick="window.print()" class="bg-purple-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer no-print">🖨️ طباعة الجدول</button>
-            </div>
-            <table class="w-full text-right text-xs">
-                <thead class="bg-slate-950 text-purple-300">
-                    <tr><th class="p-2">اليوم</th><th class="p-2">1</th><th class="p-2">2</th><th class="p-2">3</th><th class="p-2">4</th><th class="p-2">5</th><th class="p-2">6</th><th class="p-2">7</th></tr>
-                </thead>
-                <tbody id="student-schedule-body" class="divide-y divide-slate-900 text-slate-300">
-                    <!-- تعبئة تلقائية -->
-                </tbody>
-            </table>
-        </div>
-
-        <!-- 2. الامتحانات الشهرية -->
-        <div id="tab-exm" class="cyber-card-purple p-4 rounded-xl overflow-x-auto hidden">
-            <h4 class="text-sm font-bold text-purple-400 mb-3">جدول الامتحانات الشهرية</h4>
-            <table class="w-full text-right text-xs">
-                <thead class="bg-slate-950 text-purple-300">
-                    <tr><th class="p-2">التاريخ</th><th class="p-2">المادة الدراسية</th><th class="p-2">الصف المستهدف</th></tr>
-                </thead>
-                <tbody class="divide-y divide-slate-900 text-slate-300">
-                    <tr><td class="p-2">2026/03/10</td><td class="font-bold text-white p-2">التربية الإسلامية</td><td>جميع الشعب</td></tr>
-                    <tr><td class="p-2">2026/03/12</td><td class="font-bold text-white p-2">اللغة العربية</td><td>جميع الشعب</td></tr>
-                    <tr><td class="p-2">2026/03/15</td><td class="font-bold text-white p-2">الأمن السيبراني / الحاسوب</td><td>أول أمن سيبراني</td></tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- 3. الاستعلام عن النتائج والغيابات مع بطاقة الطالب الرقمية -->
-        <div id="tab-src" class="cyber-card-purple p-4 rounded-xl hidden space-y-4">
-            <h4 class="text-sm font-bold text-purple-400 mb-1">الاستعلام عن النتائج والغيابات</h4>
-            <div class="flex gap-2 no-print">
-                <input type="text" id="stu-search" placeholder="اكتب اسمك الثلاثي بدقة..." class="flex-1 bg-slate-950 border border-slate-800 p-2 rounded text-white text-xs">
-                <button onclick="searchStu()" class="bg-purple-600 text-white px-4 py-2 rounded text-xs font-bold cursor-pointer">بحث</button>
-            </div>
-            
-            <!-- حاوية بطاقة الطالب الرقمية -->
-            <div id="stu-results" class="text-xs space-y-3 text-slate-300 mt-3">
-                <p class="text-slate-500 text-center py-4">اكتب اسمك في الحقل أعلاه واضغط بحث للاطلاع على سجلك الدراسي</p>
-            </div>
-        </div>
-    </main>
-
-    <footer class="fixed bottom-0 left-0 w-full bg-slate-900/95 backdrop-blur-md border-t border-purple-500/30 py-2.5 px-4 z-50 text-center shadow-lg no-print">
-      <div class="flex items-center justify-center gap-2 text-xs md:text-sm font-mono dir-rtl">
-        <span class="inline-block w-2 h-2 rounded-full bg-purple-500 animate-pulse"></span>
-        <span class="text-slate-300">تم التطوير والبرمجة بواسطة:</span>
-        <span class="font-bold text-purple-400 tracking-wide border-b border-purple-500/40 pb-0.5">عباس محمد عزيز</span>
-      </div>
-    </footer>
-
     <script>
         window.addEventListener('DOMContentLoaded', () => {
             loadStudentSchedule();
@@ -116,10 +19,11 @@
             if(tbody) {
                 tbody.innerHTML = '';
                 for (let day in schedule) {
-                    let row = `<tr><td class="p-2 font-bold text-purple-400">${day}</td>`;
+                    let row = `<tr class="border-b border-purple-500/10"><td class="p-2 font-bold text-purple-400 bg-slate-950">${day}</td>`;
+                    let lessons = schedule[day];
                     for(let i = 0; i < 7; i++) {
-                        let lesson = schedule[day][i] || "-";
-                        row += `<td class="p-2">${lesson}</td>`;
+                        let lesson = (lessons && lessons[i]) ? lessons[i] : "-";
+                        row += `<td class="p-2 text-center text-slate-300">${lesson}</td>`;
                     }
                     row += `</tr>`;
                     tbody.innerHTML += row;
@@ -147,10 +51,34 @@
             let grades = JSON.parse(localStorage.getItem('grades') || '[]').filter(i => i.name.includes(q));
             let abs = JSON.parse(localStorage.getItem('abs') || '[]').filter(i => i.name.includes(q));
             
-            // تصميم بطاقة الطالب الرقمية العصرية
             let resHtml = `
-                <div class="cyber-card-purple p-4 rounded-xl border border-purple-500/50 shadow-lg relative bg-slate-950">
+                <div class="cyber-card-purple p-4 rounded-xl border border-purple-500/50 shadow-lg bg-slate-950">
                     <div class="flex justify-between items-center border-b border-purple-500/20 pb-3 mb-3">
                         <div>
-                            <h5 class="font-bold text-white text-sm">👤 سجل الطالب: <span class="text-purple-4
-                                                           
+                            <h5 class="font-bold text-white text-sm">👤 سجل الطالب: <span class="text-purple-400">${q}</span></h5>
+                            <span class="text-[10px] text-slate-400">إعدادية المعرفة المهنية الاهلية</span>
+                        </div>
+                        <button onclick="window.print()" class="bg-purple-600 hover:bg-purple-600 text-white px-3 py-1 rounded text-[11px] font-semibold cursor-pointer no-print">🖨️ طباعة السجل</button>
+                    </div>
+                    <div class="space-y-3">
+                        <div>
+                            <h6 class="font-bold text-cyan-400 mb-1.5 text-xs">📖 درجات المواد المرصودة:</h6>
+            `;
+            
+            resHtml += grades.length ? grades.map(i => `<p class="border-b border-slate-900 py-1 flex justify-between text-xs"><span>${i.subj} <span class="text-slate-500">(${i.cls})</span></span> <span class="text-emerald-400 font-bold">${i.grade}</span></p>`).join('') : `<p class="text-slate-500 text-xs py-1">لا توجد درجات مرصودة لهذا الاسم حالياً</p>`;
+            
+            resHtml += `
+                        </div>
+                        <div class="pt-2">
+                            <h6 class="font-bold text-amber-400 mb-1.5 text-xs">📋 سجل الغيابات والدوام:</h6>
+            `;
+            
+            resHtml += abs.length ? abs.map(i => `<p class="border-b border-slate-900 py-1 flex justify-between text-xs"><span>${i.date} <span class="text-slate-500">(${i.cls})</span></span> <span class="text-amber-400 font-bold">${i.type}</span></p>`).join('') : `<p class="text-slate-500 text-xs py-1">سجل الدوام نظيف، لا توجد غيابات مسجلة</p>`;
+            
+            resHtml += `</div></div></div>`;
+
+            let resultsEl = document.getElementById('stu-results');
+            if(resultsEl) resultsEl.innerHTML = resHtml;
+        }
+    </script>
+    
