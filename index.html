@@ -62,16 +62,35 @@
             </div>
         </div>
 
-        <!-- لوحة المعاون (الغيابات) -->
+        <!-- لوحة المعاون (الغيابات والجدول) -->
         <div id="v-ast-dash" class="hidden">
             <div class="flex justify-between items-center mb-6 flex-wrap gap-2 no-print">
-                <h3 class="text-xl font-bold text-emerald-400">سجل الغيابات والدوام</h3>
+                <h3 class="text-xl font-bold text-emerald-400">لوحة تحكم المعاون</h3>
                 <div class="flex gap-2">
                     <button onclick="window.print()" class="bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">🖨️ طباعة PDF</button>
                     <button onclick="clearData('abs')" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">🗑️ مسح السجل</button>
                 </div>
             </div>
+
+            <!-- لوحة التحكم بالجدول الأسبوعي للطلاب (التي طلبت إضافتها) -->
             <div class="cyber-card p-4 rounded-xl mb-6 no-print">
+                <h4 class="text-emerald-400 font-bold mb-3">📌 إعداد وتعديل الجدول الأسبوعي للطلاب</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
+                    <select id="sch-day" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
+                        <option value="الأحد">الأحد</option>
+                        <option value="الإثنين">الإثنين</option>
+                        <option value="الثلاثاء">الثلاثاء</option>
+                        <option value="الأربعاء">الأربعاء</option>
+                        <option value="الخميس">الخميس</option>
+                    </select>
+                    <input type="text" id="sch-classes" placeholder="الحصص مفصولة بفاصلة (مثال: اسلامية, عربي, رياضيات)" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm sm:col-span-2">
+                </div>
+                <button onclick="saveSchedule()" class="bg-emerald-500 text-black font-bold px-4 py-2 rounded text-sm w-full cursor-pointer">حفظ وتحديث الجدول للطلاب</button>
+            </div>
+
+            <!-- إدخال الغيابات -->
+            <div class="cyber-card p-4 rounded-xl mb-6 no-print">
+                <h4 class="text-emerald-400 font-bold mb-3">تسجيل غياب / إجازة</h4>
                 <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 mb-3">
                     <input type="text" id="g-name" placeholder="اسم الطالب" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
                     <select id="g-class" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
@@ -90,6 +109,7 @@
                 </div>
                 <button onclick="saveAbs()" class="bg-emerald-500 text-black font-bold px-4 py-2 rounded text-sm w-full cursor-pointer">حفظ الغياب</button>
             </div>
+            
             <div class="cyber-card rounded-xl overflow-hidden">
                 <table class="w-full text-right text-sm">
                     <thead class="bg-slate-950 text-emerald-400"><tr><th class="p-3">الطالب</th><th class="p-3">الصف</th><th class="p-3">الحالة</th><th class="p-3">التاريخ</th><th class="p-3 no-print">إجراء</th></tr></thead>
@@ -181,6 +201,21 @@
             } else { alert('رمز المعاون خطأ!'); }
         }
 
+        // دالة حفظ الجدول الأسبوعي (التي ترسل البيانات لـ localStorage ليراها الطلاب)
+        function saveSchedule() {
+            let day = document.getElementById('sch-day').value;
+            let classesText = document.getElementById('sch-classes').value.trim();
+            if(!classesText) { alert('الرجاء كتابة الحصص!'); return; }
+            
+            let lessons = classesText.split(',').map(item => item.trim());
+            let schedule = JSON.parse(localStorage.getItem('school_schedule') || '{}');
+            schedule[day] = lessons;
+            localStorage.setItem('school_schedule', JSON.stringify(schedule));
+            
+            alert(`تم تحديث وحفظ جدول يوم (${day}) بنجاح للطلاب!`);
+            document.getElementById('sch-classes').value = '';
+        }
+
         function saveAbs() {
             let name = document.getElementById('g-name').value, cls = document.getElementById('g-class').value;
             let type = document.getElementById('g-type').value, date = document.getElementById('g-date').value;
@@ -257,5 +292,4 @@
         }
     </script>
 </body>
-                        </html>
-                        
+</html>
