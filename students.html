@@ -3,106 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALPHA-SEC // بوابة الطلاب المركزية</title>
+    <title>ALPHA-SEC // الجدول المدرسي المركزي الشامل</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { font-family: 'Cairo', sans-serif; background-color: #030712; color: #f3f4f6; -webkit-user-select: none; user-select: none; }
         .cyber-card-purple { background-color: #0b0f19; border: 1px solid rgba(168, 85, 247, 0.3); }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid rgba(168, 85, 247, 0.2); text-align: center; }
         @media print {
-            body { background: white !important; color: black !important; }
+            body { background: white !important; color: black !important; font-size: 10px !important; }
             .no-print { display: none !important; }
             table { width: 100%; border-collapse: collapse; }
-            th, td { border: 1px solid #333; padding: 8px; color: black !important; }
-            .cyber-card-purple { border: 1px solid #ccc !important; background: white !important; }
+            th, td { border: 1px solid #333 !important; padding: 4px !important; color: black !important; }
+            .cyber-card-purple { border: none !important; background: white !important; padding: 0 !important; }
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between p-4 sm:p-6 pb-16">
+<body class="min-h-screen flex flex-col justify-between p-2 sm:p-6 pb-16">
 
     <header class="flex justify-between items-center border-b border-purple-500/30 pb-4 no-print">
         <div class="flex flex-col text-right">
-            <h1 class="text-white font-bold text-base md:text-lg">بوابة الطالب المركزية</h1>
-            <span class="text-[11px] md:text-xs text-purple-400 font-mono">إعدادية المعرفة المهنية الاهلية</span>
+            <h1 class="text-white font-bold text-base md:text-lg">إعدادية المعرفة المهنية الاهلية</h1>
+            <span class="text-[11px] md:text-xs text-purple-400 font-mono">الجدول المدرسي المركزي للعام الدراسي</span>
         </div>
         <button onclick="window.location.href='index.html'" class="bg-slate-900 text-purple-400 px-4 py-2 rounded-lg border border-purple-500/30 text-sm font-semibold cursor-pointer">الرئيسية 🏠</button>
     </header>
 
-    <main class="max-w-3xl mx-auto w-full my-6 flex-grow">
-        <h3 class="text-2xl font-bold text-purple-400 mb-4 text-center no-print">خدمات الطلاب والجداول</h3>
+    <main class="max-w-7xl mx-auto w-full my-4 flex-grow">
+        <h3 class="text-xl md:text-2xl font-bold text-purple-400 mb-4 text-center">بوابة الجداول المركزية الشاملة</h3>
         
-        <!-- أزرار التنقل بين التبويبات -->
+        <!-- أزرار التنقل -->
         <div class="flex gap-2 border-b border-purple-500/30 pb-3 mb-4 justify-center no-print flex-wrap">
-            <button onclick="switchStuTab('tab-sch')" id="btn-tab-sch" class="bg-purple-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer">📅 الجدول الأسبوعي</button>
-            <button onclick="switchStuTab('tab-edit-sch')" id="btn-tab-edit-sch" class="bg-slate-900 text-purple-300 px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer">⚙️ تعديل الجداول</button>
+            <button onclick="switchStuTab('tab-sch')" id="btn-tab-sch" class="bg-purple-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer">📅 الجدول المركزي الشامل</button>
+            <button onclick="switchStuTab('tab-edit-sch')" id="btn-tab-edit-sch" class="bg-slate-900 text-purple-300 px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer">⚙️ تخصيص وتعديل الحصص</button>
             <button onclick="switchStuTab('tab-exm')" id="btn-tab-exm" class="bg-slate-900 text-purple-300 px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer">📝 الامتحانات</button>
             <button onclick="switchStuTab('tab-src')" id="btn-tab-src" class="bg-slate-900 text-purple-300 px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer">📊 درجاتي والغيابات</button>
         </div>
 
-        <!-- 1. تبويب الجدول الأسبوعي وعرضه مع زر الطباعة -->
-        <div id="tab-sch" class="cyber-card-purple p-4 rounded-xl">
-            <div class="flex justify-between items-center mb-3">
-                <h4 class="text-sm font-bold text-purple-400">الجدول الأسبوعي للحصص الدراسية</h4>
-                <button onclick="window.print()" class="bg-purple-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer no-print">🖨️ طباعة الجدول PDF</button>
+        <!-- 1. الجدول المركزي الشامل (مثل الصورة) -->
+        <div id="tab-sch" class="cyber-card-purple p-2 sm:p-4 rounded-xl">
+            <div class="flex justify-between items-center mb-4 no-print flex-wrap gap-2">
+                <h4 class="text-xs sm:text-sm font-bold text-purple-400">جدول الحصص المدرسي لجميع الأقسام والشعب</h4>
+                <button onclick="window.print()" class="bg-purple-600 text-white px-4 py-2 rounded-lg text-xs font-semibold cursor-pointer shadow-lg">🖨️ طباعة الجدول الرسمي (PDF)</button>
             </div>
+            
+            <div class="text-center mb-3 hidden print:block">
+                <h2 class="text-lg font-bold text-black">إعدادية المعرفة المهنية الاهلية</h2>
+                <p class="text-xs text-black">الجدول الأسبوعي العام للعام الدراسي</p>
+            </div>
+
             <div class="overflow-x-auto">
-                <table class="w-full text-right text-xs">
-                    <thead class="bg-slate-950 text-purple-300">
+                <table class="w-full text-[10px] sm:text-xs">
+                    <thead class="bg-slate-950 text-purple-300 print:bg-gray-200 print:text-black">
                         <tr>
-                            <th class="p-2">اليوم</th>
-                            <th class="p-2">1</th>
-                            <th class="p-2">2</th>
-                            <th class="p-2">3</th>
-                            <th class="p-2">4</th>
-                            <th class="p-2">5</th>
-                            <th class="p-2">6</th>
-                            <th class="p-2">7</th>
+                            <th class="p-2 border">اليوم</th>
+                            <th class="p-2 border">الحصة</th>
+                            <th class="p-2 border" colspan="2">أمن سيبراني (أول)</th>
+                            <th class="p-2 border" colspan="2">أجهزة طبية (أول)</th>
+                            <th class="p-2 border" colspan="2">تكرير نفط (أول)</th>
+                            <th class="p-2 border" colspan="2">تجميع حاسوب (ثالث)</th>
+                        </tr>
+                        <tr class="bg-slate-900 print:bg-gray-100 text-[9px] text-purple-200 print:text-black">
+                            <th class="border"></th>
+                            <th class="border"></th>
+                            <th class="p-1 border">المادة</th><th class="p-1 border">المدرس</th>
+                            <th class="p-1 border">المادة</th><th class="p-1 border">المدرس</th>
+                            <th class="p-1 border">المادة</th><th class="p-1 border">المدرس</th>
+                            <th class="p-1 border">المادة</th><th class="p-1 border">المدرس</th>
                         </tr>
                     </thead>
-                    <tbody id="student-schedule-body" class="divide-y divide-slate-900 text-slate-300">
+                    <tbody id="central-schedule-body" class="divide-y divide-slate-800 text-slate-300 print:text-black">
                         <!-- تعبئة تلقائية -->
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <!-- 2. تبويب تعديل الجدول (اختيار الحصة والمادة بدقة) -->
-        <div id="tab-edit-sch" class="cyber-card-purple p-4 rounded-xl hidden">
-            <h4 class="text-sm font-bold text-purple-400 mb-3">📌 تخصيص وتعديل الجدول الأسبوعي</h4>
+        <!-- 2. لوحة تعديل وتخصيص الجدول المركزي -->
+        <div id="tab-edit-sch" class="cyber-card-purple p-4 rounded-xl hidden max-w-xl mx-auto">
+            <h4 class="text-sm font-bold text-purple-400 mb-3">📌 تخصيص الحصة والمادة والمدرس لكل قسم</h4>
             <div class="space-y-3 mb-3">
-                <select id="sch-day" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded text-white text-xs">
-                    <option value="الأحد">الأحد</option>
-                    <option value="الإثنين">الإثنين</option>
-                    <option value="الثلاثاء">الثلاثاء</option>
-                    <option value="الأربعاء">الأربعاء</option>
-                    <option value="الخميس">الخميس</option>
-                </select>
+                <div>
+                    <label class="text-xs text-purple-300 block mb-1">اختر اليوم:</label>
+                    <select id="ed-day" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded text-white text-xs">
+                        <option value="الأحد">الأحد</option>
+                        <option value="الإثنين">الإثنين</option>
+                        <option value="الثلاثاء">الثلاثاء</option>
+                        <option value="الأربعاء">الأربعاء</option>
+                        <option value="الخميس">الخميس</option>
+                    </select>
+                </div>
 
-                <select id="sch-slot" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded text-white text-xs">
-                    <option value="0">الحصة الأولى</option>
-                    <option value="1">الحصة الثانية</option>
-                    <option value="2">الحصة الثالثة</option>
-                    <option value="3">الحصة الرابعة</option>
-                    <option value="4">الحصة الخامسة</option>
-                    <option value="5">الحصة السادسة</option>
-                    <option value="6">الحصة السابعة</option>
-                </select>
+                <div>
+                    <label class="text-xs text-purple-300 block mb-1">اختر رقم الحصة:</label>
+                    <select id="ed-slot" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded text-white text-xs">
+                        <option value="0">الحصة الأولى</option>
+                        <option value="1">الحصة الثانية</option>
+                        <option value="2">الحصة الثالثة</option>
+                        <option value="3">الحصة الرابعة</option>
+                        <option value="4">الحصة الخامسة</option>
+                        <option value="5">الحصة السادسة</option>
+                        <option value="6">الحصة السابعة</option>
+                    </select>
+                </div>
 
-                <select id="sch-subject" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded text-white text-xs">
-                    <option value="التربية الاسلامية">التربية الاسلامية</option>
-                    <option value="اللغة العربية">اللغة العربية</option>
-                    <option value="الانجليزي">الانجليزي</option>
-                    <option value="الرياضيات">الرياضيات</option>
-                    <option value="الطبيعيات">الطبيعيات</option>
-                    <option value="اساسيات الكهرباء">اساسيات الكهرباء</option>
-                    <option value="تجميع الحاسوب">تجميع الحاسوب</option>
-                    <option value="اتصالات">اتصالات</option>
-                    <option value="مبادى الحاسوب">مبادى الحاسوب</option>
-                    <option value="تطبيقات الحاسوب">تطبيقات الحاسوب</option>
-                    <option value="الرياضة">الرياضة</option>
-                    <option value="كردي">كردي</option>
-                </select>
+                <div>
+                    <label class="text-xs text-purple-300 block mb-1">اختر القسم المستهدف:</label>
+                    <select id="ed-dept" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded text-white text-xs">
+                        <option value="cyber">أمن سيبراني (أول)</option>
+                        <option value="med">أجهزة طبية (أول)</option>
+                        <option value="oil">تكرير نفط (أول)</option>
+                        <option value="pc">تجميع حاسوب (ثالث)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="text-xs text-purple-300 block mb-1">المادة الدراسية:</label>
+                    <select id="ed-subj" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded text-white text-xs">
+                        <option value="التربية الاسلامية">التربية الاسلامية</option>
+                        <option value="اللغة العربية">اللغة العربية</option>
+                        <option value="الانجليزي">الانجليزي</option>
+                        <option value="الرياضيات">الرياضيات</option>
+                        <option value="الطبيعيات">الطبيعيات</option>
+                        <option value="اساسيات الكهرباء">اساسيات الكهرباء</option>
+                        <option value="تجميع الحاسوب">تجميع الحاسوب</option>
+                        <option value="اتصالات">اتصالات</option>
+                        <option value="مبادى الحاسوب">مبادى الحاسوب</option>
+                        <option value="تطبيقات الحاسوب">تطبيقات الحاسوب</option>
+                        <option value="الرياضة">الرياضة</option>
+                        <option value="كردي">كردي</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="text-xs text-purple-300 block mb-1">اسم المدرس:</label>
+                    <input type="text" id="ed-teacher" placeholder="مثال: حيدر، نور، أحمد..." class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded text-white text-xs">
+                </div>
             </div>
-            <button onclick="saveStudentScheduleSlot()" class="bg-purple-600 text-white font-bold px-4 py-2 rounded text-xs w-full cursor-pointer">حفظ وتحديث الجدول فوراً</button>
+            <button onclick="saveCentralSlot()" class="bg-purple-600 text-white font-bold px-4 py-2.5 rounded text-xs w-full cursor-pointer shadow">حفظ التحديث في الجدول المركزي</button>
         </div>
 
         <!-- 3. الامتحانات الشهرية -->
@@ -142,96 +180,83 @@
     </footer>
 
     <script>
-        // تحميل الجدول تلقائياً عند فتح الصفحة
         window.addEventListener('DOMContentLoaded', () => {
-            loadStudentSchedule();
+            loadCentralSchedule();
         });
 
-        function loadStudentSchedule() {
-            let schedule = JSON.parse(localStorage.getItem('school_schedule') || null);
-            
-            if (!schedule) {
-                schedule = {
-                    "الأحد": ["التربية الاسلامية", "اللغة العربية", "الرياضيات", "الانجليزي", "الطبيعيات", "اساسيات الكهرباء", "الرياضة"],
-                    "الإثنين": ["الرياضيات", "اتصالات", "تجميع الحاسوب", "اللغة العربية", "مبادى الحاسوب", "تطبيقات الحاسوب", "كردي"],
-                    "الثلاثاء": ["اتصالات", "تجميع الحاسوب", "الانجليزي", "الرياضيات", "التربية الاسلامية", "الطبيعيات", "الرياضة"],
-                    "الأربعاء": ["اللغة العربية", "التربية الاسلامية", "تجميع الحاسوب", "اتصالات", "اساسيات الكهرباء", "كردي", "مبادى الحاسوب"],
-                    "الخميس": ["تطبيقات الحاسوب", "الانجليزي", "اساسيات الكهرباء", "الرياضة", "الطبيعيات", "الرياضيات", "كردي"]
-                };
-            }
+        // هيكلية افتراضية مطابقة لصورتك لكل الأقسام (7 حصص لكل يوم)
+        function getDefaultCentralSchedule() {
+            let days = ["الأحد", "الإثنين", "الثلاثاء", "الأربعاء", "الخميس"];
+            let sched = {};
+            days.forEach(day => {
+                sched[day] = [];
+                for(let i=0; i<7; i++) {
+                    sched[day].push({
+                        cyber: {subj: "رياضيات", teacher: "حيدر"},
+                        med: {subj: "علوم", teacher: "نور"},
+                        oil: {subj: "تجهيز عملي", teacher: "رائد"},
+                        pc: {subj: "معالجات", teacher: "محمد"}
+                    });
+                }
+            });
+            return sched;
+        }
 
-            let tbody = document.getElementById('student-schedule-body');
-            if(tbody) {
-                tbody.innerHTML = '';
-                for (let day in schedule) {
-                    let row = `<tr><td class="p-2 font-bold text-purple-400">${day}</td>`;
-                    for(let i = 0; i < 7; i++) {
-                        let lesson = schedule[day][i] || "-";
-                        row += `<td class="p-2">${lesson}</td>`;
+        function loadCentralSchedule() {
+            let schedule = JSON.parse(localStorage.getItem('central_school_schedule') || JSON.stringify(getDefaultCentralSchedule()));
+            let tbody = document.getElementById('central-schedule-body');
+            if(!tbody) return;
+
+            tbody.innerHTML = '';
+            let days = ["الأحد", "الإثنين", "الثلاثاء", "الأربعاء", "الخميس"];
+
+            days.forEach(day => {
+                for(let slot = 0; slot < 7; slot++) {
+                    let row = `<tr>`;
+                    // عرض اسم اليوم فقط في أول حصة (دمج صفوف افتراضي أو تكرار منظم)
+                    if(slot === 0) {
+                        row += `<td class="p-2 border font-bold text-purple-400 bg-slate-950 print:bg-gray-100" rowspan="7">${day}</td>`;
                     }
+                    row += `<td class="p-2 border font-bold text-slate-400">${slot + 1}</td>`;
+
+                    let data = schedule[day][slot];
+
+                    // أمن سيبراني
+                    row += `<td class="p-1 border">${data.cyber.subj}</td><td class="p-1 border text-purple-300">${data.cyber.teacher}</td>`;
+                    // أجهزة طبية
+                    row += `<td class="p-1 border">${data.med.subj}</td><td class="p-1 border text-purple-300">${data.med.teacher}</td>`;
+                    // تكرير نفط
+                    row += `<td class="p-1 border">${data.oil.subj}</td><td class="p-1 border text-purple-300">${data.oil.teacher}</td>`;
+                    // تجميع حاسوب
+                    row += `<td class="p-1 border">${data.pc.subj}</td><td class="p-1 border text-purple-300">${data.pc.teacher}</td>`;
+
                     row += `</tr>`;
                     tbody.innerHTML += row;
                 }
-            }
+            });
         }
 
-        function saveStudentScheduleSlot() {
-            let day = document.getElementById('sch-day').value;
-            let slotIndex = parseInt(document.getElementById('sch-slot').value);
-            let subject = document.getElementById('sch-subject').value;
-            
-            let schedule = JSON.parse(localStorage.getItem('school_schedule') || JSON.stringify({
-                "الأحد": ["-", "-", "-", "-", "-", "-", "-"],
-                "الإثنين": ["-", "-", "-", "-", "-", "-", "-"],
-                "الثلاثاء": ["-", "-", "-", "-", "-", "-", "-"],
-                "الأربعاء": ["-", "-", "-", "-", "-", "-", "-"],
-                "الخميس": ["-", "-", "-", "-", "-", "-", "-"]
-            }));
+        function saveCentralSlot() {
+            let day = document.getElementById('ed-day').value;
+            let slot = parseInt(document.getElementById('ed-slot').value);
+            let dept = document.getElementById('ed-dept').value;
+            let subj = document.getElementById('ed-subj').value;
+            let teacher = document.getElementById('ed-teacher').value.trim() || "غير محدد";
 
-            if (!schedule[day]) {
-                schedule[day] = ["-", "-", "-", "-", "-", "-", "-"];
+            let schedule = JSON.parse(localStorage.getItem('central_school_schedule') || JSON.stringify(getDefaultCentralSchedule()));
+            
+            if(schedule[day] && schedule[day][slot]) {
+                schedule[day][slot][dept] = {subj, teacher};
+                localStorage.setItem('central_school_schedule', JSON.stringify(schedule));
+                alert("تم تحديث الجدول المركزي بنجاح!");
+                loadCentralSchedule();
+                switchStuTab('tab-sch');
+                document.getElementById('ed-teacher').value = '';
             }
-
-            schedule[day][slotIndex] = subject;
-            localStorage.setItem('school_schedule', JSON.stringify(schedule));
-            
-            alert(`تم تحديث الجدول بنجاح! تم وضع (${subject}) في الحصة المحددة.`);
-            loadStudentSchedule();
-            switchStuTab('tab-sch');
         }
 
         function switchStuTab(tabId) {
             ['tab-sch', 'tab-edit-sch', 'tab-exm', 'tab-src'].forEach(id => {
                 let el = document.getElementById(id);
-                let btn = document.getElementById('btn-' + id);
-                if(el) el.classList.add('hidden');
-                if(btn) btn.className = "bg-slate-900 text-purple-300 px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer";
-            });
-            let targetEl = document.getElementById(tabId);
-            let targetBtn = document.getElementById('btn-' + tabId);
-            if(targetEl) targetEl.classList.remove('hidden');
-            if(targetBtn) targetBtn.className = "bg-purple-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer";
-        }
-
-        function searchStu() {
-            let q = document.getElementById('stu-search').value.trim();
-            if(!q) { alert('الرجاء إدخال اسم الطالب للبحث'); return; }
+                let btn =
             
-            let grades = JSON.parse(localStorage.getItem('grades') || '[]').filter(i => i.name.includes(q));
-            let abs = JSON.parse(localStorage.getItem('abs') || '[]').filter(i => i.name.includes(q));
-            
-            let resHtml = `<div class="cyber-card-purple p-3 rounded-lg"><h5 class="font-bold text-cyan-400 mb-2">درجات المواد المرصودة:</h5>`;
-            resHtml += grades.length ? grades.map(i => `<p class="border-b border-slate-900 py-1 flex justify-between"><span>${i.subj} (${i.cls})</span> <span class="text-emerald-400 font-bold">${i.grade}</span></p>`).join('') : `<p class="text-slate-500">لا توجد درجات مرصودة لهذا الاسم حالياً</p>`;
-            resHtml += `</div>`;
-
-            resHtml += `<div class="cyber-card-purple p-3 rounded-lg mt-3"><h5 class="font-bold text-amber-400 mb-2">سجل الغيابات والدوام:</h5>`;
-            resHtml += abs.length ? abs.map(i => `<p class="border-b border-slate-900 py-1 flex justify-between"><span>${i.date} - ${i.cls}</span> <span class="text-amber-400 font-bold">${i.type}</span></p>`).join('') : `<p class="text-slate-500">سجل الدوام نظيف، لا توجد غيابات مسجلة</p>`;
-            resHtml += `</div>`;
-
-            let resultsEl = document.getElementById('stu-results');
-            if(resultsEl) resultsEl.innerHTML = resHtml;
-        }
-    </script>
-</body>
-                        </html>
-    
