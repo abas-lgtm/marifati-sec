@@ -29,19 +29,15 @@
             <button onclick="switchStuTab('tab-src')" id="btn-tab-src" class="bg-slate-900 text-purple-300 px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer">📊 درجاتي والغيابات</button>
         </div>
 
-        <!-- الجدول الأسبوعي -->
+        <!-- الجدول الأسبوعي (الديناميكي الذي يتحدث من لوحة المعاون) -->
         <div id="tab-sch" class="cyber-card-purple p-4 rounded-xl overflow-x-auto">
-            <h4 class="text-sm font-bold text-purple-400 mb-3">الجدول الأسبوعي للحصص الدراسية</h4>
+            <h4 class="text-sm font-bold text-purple-400 mb-3">الجدول الأسبوعي للحصص الدراسية (معتمد من الإدارة)</h4>
             <table class="w-full text-right text-xs">
                 <thead class="bg-slate-950 text-purple-300">
-                    <tr><th class="p-2">اليوم</th><th class="p-2">الحصة 1</th><th class="p-2">الحصة 2</th><th class="p-2">الحصة 3</th><th class="p-2">الحصة 4</th></tr>
+                    <tr><th class="p-2">اليوم</th><th class="p-2">الحصة الأولى</th><th class="p-2">الحصة الثانية</th><th class="p-2">الحصة الثالثة</th><th class="p-2">الحصة الرابعة</th></tr>
                 </thead>
-                <tbody class="divide-y divide-slate-900 text-slate-300">
-                    <tr><td class="p-2 font-bold text-purple-400">الأحد</td><td>اسلامية</td><td>عربي</td><td>رياضيات</td><td>أمن سيبراني</td></tr>
-                    <tr><td class="p-2 font-bold text-purple-400">الإثنين</td><td>رياضيات</td><td>شبكات</td><td>كهرباء</td><td>عربي</td></tr>
-                    <tr><td class="p-2 font-bold text-purple-400">الثلاثاء</td><td>اتصالات</td><td>حاسوب</td><td>انجليزي</td><td>رياضيات</td></tr>
-                    <tr><td class="p-2 font-bold text-purple-400">الأربعاء</td><td>عربي</td><td>اسلامية</td><td>تجميع حاسوب</td><td>اتصالات</td></tr>
-                    <tr><td class="p-2 font-bold text-purple-400">الخميس</td><td>حاسوب</td><td>انجليزي</td><td>كهرباء</td><td>نشاط مدرسي</td></tr>
+                <tbody id="student-schedule-body" class="divide-y divide-slate-900 text-slate-300">
+                    <!-- سيتم تعبئتها تلقائياً من إدخال المعاون -->
                 </tbody>
             </table>
         </div>
@@ -83,6 +79,38 @@
     </footer>
 
     <script>
+        // تحميل الجدول تلقائياً عند فتح الصفحة
+        window.addEventListener('DOMContentLoaded', () => {
+            loadStudentSchedule();
+        });
+
+        function loadStudentSchedule() {
+            let schedule = JSON.parse(localStorage.getItem('school_schedule') || null);
+            
+            // جدول افتراضي أساسي في حال المعاون ما مدخل شي بعد
+            if (!schedule) {
+                schedule = {
+                    "الأحد": ["اسلامية", "عربي", "رياضيات", "أمن سيبراني"],
+                    "الإثنين": ["رياضيات", "شبكات", "كهرباء", "عربي"],
+                    "الثلاثاء": ["اتصالات", "حاسوب", "انجليزي", "رياضيات"],
+                    "الأربعاء": ["عربي", "اسلامية", "تجميع حاسوب", "اتصالات"],
+                    "الخميس": ["حاسوب", "انجليزي", "كهرباء", "نشاط مدرسي"]
+                };
+            }
+
+            let tbody = document.getElementById('student-schedule-body');
+            tbody.innerHTML = '';
+
+            for (let day in schedule) {
+                let row = `<tr><td class="p-2 font-bold text-purple-400">${day}</td>`;
+                schedule[day].forEach(lesson => {
+                    row += `<td class="p-2">${lesson}</td>`;
+                });
+                row += `</tr>`;
+                tbody.innerHTML += row;
+            }
+        }
+
         function switchStuTab(tabId) {
             ['tab-sch', 'tab-exm', 'tab-src'].forEach(id => {
                 document.getElementById(id).classList.add('hidden');
@@ -111,5 +139,4 @@
         }
     </script>
 </body>
-          </html>
-            
+</html>
