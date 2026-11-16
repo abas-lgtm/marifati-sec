@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALPHA-SEC // بوابة الطلاب المركزية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Cairo', sans-serif; background-color: #030712; color: #f3f4f6; -webkit-user-select: none; user-select: none; }
+        .cyber-card-purple { background-color: #0b0f19; border: 1px solid rgba(168, 85, 247, 0.3); }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-4 sm:p-6 pb-16">
+
+    <header class="flex justify-between items-center border-b border-purple-500/30 pb-4">
+        <div class="flex flex-col text-right">
+            <h1 class="text-white font-bold text-base md:text-lg">بوابة الطالب المركزية</h1>
+            <span class="text-[11px] md:text-xs text-purple-400 font-mono">إعدادية المعرفة المهنية الاهلية</span>
+        </div>
+        <button onclick="window.location.href='index.html'" class="bg-slate-900 text-purple-400 px-4 py-2 rounded-lg border border-purple-500/30 text-sm font-semibold cursor-pointer">الرئيسية 🏠</button>
+    </header>
+
+    <main class="max-w-3xl mx-auto w-full my-6 flex-grow">
+        <h3 class="text-2xl font-bold text-purple-400 mb-4 text-center">خدمات الطلاب والتقييم</h3>
+        
+        <div class="flex gap-2 border-b border-purple-500/30 pb-3 mb-4 justify-center">
+            <button onclick="switchStuTab('tab-sch')" id="btn-tab-sch" class="bg-purple-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer">📅 الجدول الأسبوعي</button>
+            <button onclick="switchStuTab('tab-exm')" id="btn-tab-exm" class="bg-slate-900 text-purple-300 px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer">📝 الامتحانات الشهرية</button>
+            <button onclick="switchStuTab('tab-src')" id="btn-tab-src" class="bg-slate-900 text-purple-300 px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer">📊 درجاتي والغيابات</button>
+        </div>
+
+        <!-- الجدول الأسبوعي -->
+        <div id="tab-sch" class="cyber-card-purple p-4 rounded-xl overflow-x-auto">
+            <h4 class="text-sm font-bold text-purple-400 mb-3">الجدول الأسبوعي للحصص الدراسية</h4>
+            <table class="w-full text-right text-xs">
+                <thead class="bg-slate-950 text-purple-300">
+                    <tr><th class="p-2">اليوم</th><th class="p-2">الحصة 1</th><th class="p-2">الحصة 2</th><th class="p-2">الحصة 3</th><th class="p-2">الحصة 4</th></tr>
+                </thead>
+                <tbody class="divide-y divide-slate-900 text-slate-300">
+                    <tr><td class="p-2 font-bold text-purple-400">الأحد</td><td>اسلامية</td><td>عربي</td><td>رياضيات</td><td>أمن سيبراني</td></tr>
+                    <tr><td class="p-2 font-bold text-purple-400">الإثنين</td><td>رياضيات</td><td>شبكات</td><td>كهرباء</td><td>عربي</td></tr>
+                    <tr><td class="p-2 font-bold text-purple-400">الثلاثاء</td><td>اتصالات</td><td>حاسوب</td><td>انجليزي</td><td>رياضيات</td></tr>
+                    <tr><td class="p-2 font-bold text-purple-400">الأربعاء</td><td>عربي</td><td>اسلامية</td><td>تجميع حاسوب</td><td>اتصالات</td></tr>
+                    <tr><td class="p-2 font-bold text-purple-400">الخميس</td><td>حاسوب</td><td>انجليزي</td><td>كهرباء</td><td>نشاط مدرسي</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- الامتحانات الشهرية -->
+        <div id="tab-exm" class="cyber-card-purple p-4 rounded-xl overflow-x-auto hidden">
+            <h4 class="text-sm font-bold text-purple-400 mb-3">جدول الامتحانات الشهرية</h4>
+            <table class="w-full text-right text-xs">
+                <thead class="bg-slate-950 text-purple-300">
+                    <tr><th class="p-2">التاريخ</th><th class="p-2">المادة الدراسية</th><th class="p-2">الصف المستهدف</th></tr>
+                </thead>
+                <tbody class="divide-y divide-slate-900 text-slate-300">
+                    <tr><td class="p-2">2026/03/10</td><td class="font-bold text-white p-2">التربية الإسلامية</td><td>جميع الشعب</td></tr>
+                    <tr><td class="p-2">2026/03/12</td><td class="font-bold text-white p-2">اللغة العربية</td><td>جميع الشعب</td></tr>
+                    <tr><td class="p-2">2026/03/15</td><td class="font-bold text-white p-2">الأمن السيبراني / الحاسوب</td><td>أول أمن سيبراني</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- الاستعلام عن النتائج والغيابات -->
+        <div id="tab-src" class="cyber-card-purple p-4 rounded-xl hidden space-y-4">
+            <h4 class="text-sm font-bold text-purple-400 mb-1">الاستعلام عن النتائج والغيابات</h4>
+            <div class="flex gap-2">
+                <input type="text" id="stu-search" placeholder="اكتب اسمك الثلاثي بدقة..." class="flex-1 bg-slate-950 border border-slate-800 p-2 rounded text-white text-xs">
+                <button onclick="searchStu()" class="bg-purple-600 text-white px-4 py-2 rounded text-xs font-bold cursor-pointer">بحث</button>
+            </div>
+            <div id="stu-results" class="text-xs space-y-3 text-slate-300 mt-3">
+                <p class="text-slate-500 text-center py-4">اكتب اسمك في الحقل أعلاه واضغط بحث للاطلاع على سجلك الدراسي</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="fixed bottom-0 left-0 w-full bg-slate-900/95 backdrop-blur-md border-t border-purple-500/30 py-2.5 px-4 z-50 text-center shadow-lg">
+      <div class="flex items-center justify-center gap-2 text-xs md:text-sm font-mono dir-rtl">
+        <span class="inline-block w-2 h-2 rounded-full bg-purple-500 animate-pulse"></span>
+        <span class="text-slate-300">تم التطوير والبرمجة بواسطة:</span>
+        <span class="font-bold text-purple-400 tracking-wide border-b border-purple-500/40 pb-0.5">عباس محمد عزيز</span>
+      </div>
+    </footer>
+
+    <script>
+        function switchStuTab(tabId) {
+            ['tab-sch', 'tab-exm', 'tab-src'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+                document.getElementById('btn-' + id).className = "bg-slate-900 text-purple-300 px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer";
+            });
+            document.getElementById(tabId).classList.remove('hidden');
+            document.getElementById('btn-' + tabId).className = "bg-purple-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer";
+        }
+
+        function searchStu() {
+            let q = document.getElementById('stu-search').value.trim();
+            if(!q) { alert('الرجاء إدخال اسم الطالب للبحث'); return; }
+            
+            let grades = JSON.parse(localStorage.getItem('grades') || '[]').filter(i => i.name.includes(q));
+            let abs = JSON.parse(localStorage.getItem('abs') || '[]').filter(i => i.name.includes(q));
+            
+            let resHtml = `<div class="cyber-card-purple p-3 rounded-lg"><h5 class="font-bold text-cyan-400 mb-2">درجات المواد المرصودة:</h5>`;
+            resHtml += grades.length ? grades.map(i => `<p class="border-b border-slate-900 py-1 flex justify-between"><span>${i.subj} (${i.cls})</span> <span class="text-emerald-400 font-bold">${i.grade}</span></p>`).join('') : `<p class="text-slate-500">لا توجد درجات مرصودة لهذا الاسم حالياً</p>`;
+            resHtml += `</div>`;
+
+            resHtml += `<div class="cyber-card-purple p-3 rounded-lg mt-3"><h5 class="font-bold text-amber-400 mb-2">سجل الغيابات والدوام:</h5>`;
+            resHtml += abs.length ? abs.map(i => `<p class="border-b border-slate-900 py-1 flex justify-between"><span>${i.date} - ${i.cls}</span> <span class="text-amber-400 font-bold">${i.type}</span></p>`).join('') : `<p class="text-slate-500">سجل الدوام نظيف، لا توجد غيابات مسجلة</p>`;
+            resHtml += `</div>`;
+
+            document.getElementById('stu-results').innerHTML = resHtml;
+        }
+    </script>
+</body>
+          </html>
+            
