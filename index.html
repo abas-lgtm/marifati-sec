@@ -62,59 +62,17 @@
             </div>
         </div>
 
-        <!-- لوحة المعاون (الغيابات والجدول) -->
+        <!-- لوحة المعاون (الغيابات فقط) -->
         <div id="v-ast-dash" class="hidden">
             <div class="flex justify-between items-center mb-6 flex-wrap gap-2 no-print">
-                <h3 class="text-xl font-bold text-emerald-400">لوحة تحكم المعاون</h3>
+                <h3 class="text-xl font-bold text-emerald-400">سجل الغيابات والدوام</h3>
                 <div class="flex gap-2">
                     <button onclick="window.print()" class="bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">🖨️ طباعة PDF</button>
                     <button onclick="clearData('abs')" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">🗑️ مسح السجل</button>
                 </div>
             </div>
-
-            <!-- لوحة إعداد الجدول الأسبوعي -->
+            
             <div class="cyber-card p-4 rounded-xl mb-6 no-print">
-                <h4 class="text-emerald-400 font-bold mb-3">📌 إعداد الجدول الأسبوعي (اختر الحصة والمادة)</h4>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
-                    <select id="sch-day" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
-                        <option value="الأحد">الأحد</option>
-                        <option value="الإثنين">الإثنين</option>
-                        <option value="الثلاثاء">الثلاثاء</option>
-                        <option value="الأربعاء">الأربعاء</option>
-                        <option value="الخميس">الخميس</option>
-                    </select>
-
-                    <select id="sch-slot" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
-                        <option value="0">الحصة الأولى</option>
-                        <option value="1">الحصة الثانية</option>
-                        <option value="2">الحصة الثالثة</option>
-                        <option value="3">الحصة الرابعة</option>
-                        <option value="4">الحصة الخامسة</option>
-                        <option value="5">الحصة السادسة</option>
-                        <option value="6">الحصة السابعة</option>
-                    </select>
-
-                    <select id="sch-subject" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm sm:col-span-3">
-                        <option value="التربية الاسلامية">التربية الاسلامية</option>
-                        <option value="اللغة العربية">اللغة العربية</option>
-                        <option value="الانجليزي">الانجليزي</option>
-                        <option value="الرياضيات">الرياضيات</option>
-                        <option value="الطبيعيات">الطبيعيات</option>
-                        <option value="اساسيات الكهرباء">اساسيات الكهرباء</option>
-                        <option value="تجميع الحاسوب">تجميع الحاسوب</option>
-                        <option value="اتصالات">اتصالات</option>
-                        <option value="مبادى الحاسوب">مبادى الحاسوب</option>
-                        <option value="تطبيقات الحاسوب">تطبيقات الحاسوب</option>
-                        <option value="الرياضة">الرياضة</option>
-                        <option value="كردي">كردي</option>
-                    </select>
-                </div>
-                <button onclick="saveScheduleSlot()" class="bg-emerald-500 text-black font-bold px-4 py-2 rounded text-sm w-full cursor-pointer">حفظ المادة في الحصة المحددة</button>
-            </div>
-
-            <!-- إدخال الغيابات -->
-            <div class="cyber-card p-4 rounded-xl mb-6 no-print">
-                <h4 class="text-emerald-400 font-bold mb-3">تسجيل غياب / إجازة</h4>
                 <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 mb-3">
                     <input type="text" id="g-name" placeholder="اسم الطالب" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
                     <select id="g-class" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
@@ -234,29 +192,6 @@
             }
         }
 
-        function saveScheduleSlot() {
-            let day = document.getElementById('sch-day').value;
-            let slotIndex = parseInt(document.getElementById('sch-slot').value);
-            let subject = document.getElementById('sch-subject').value;
-            
-            let schedule = JSON.parse(localStorage.getItem('school_schedule') || JSON.stringify({
-                "الأحد": ["-", "-", "-", "-", "-", "-", "-"],
-                "الإثنين": ["-", "-", "-", "-", "-", "-", "-"],
-                "الثلاثاء": ["-", "-", "-", "-", "-", "-", "-"],
-                "الأربعاء": ["-", "-", "-", "-", "-", "-", "-"],
-                "الخميس": ["-", "-", "-", "-", "-", "-", "-"]
-            }));
-
-            if (!schedule[day]) {
-                schedule[day] = ["-", "-", "-", "-", "-", "-", "-"];
-            }
-
-            schedule[day][slotIndex] = subject;
-            localStorage.setItem('school_schedule', JSON.stringify(schedule));
-            
-            alert(`تم تعيين (${subject}) في الحصة المطلوبة ليوم ${day} بنجاح!`);
-        }
-
         function saveAbs() {
             let name = document.getElementById('g-name').value;
             let cls = document.getElementById('g-class').value;
@@ -341,4 +276,38 @@
             
             document.getElementById('s-name').value = ''; 
             gradeInput.value = ''; 
-            loadGrades(
+            loadGrades();
+        }
+
+        function loadGrades() {
+            if(!currSubj) return;
+            let list = JSON.parse(localStorage.getItem('grades') || '[]').filter(g => g.subj === currSubj.name);
+            let gradesListEl = document.getElementById('grades-list');
+            if(gradesListEl) {
+                gradesListEl.innerHTML = list.map((i, idx) => `
+                    <tr><td class="p-3 font-bold">${i.name}</td><td class="p-3 text-cyan-300">${i.cls}</td><td class="p-3">${i.subj}</td><td class="p-3 text-emerald-400 font-bold">${i.grade}</td><td class="p-3 no-print"><button onclick="delGrade(${idx})" class="text-red-400 text-xs cursor-pointer">حذف</button></td></tr>
+                `).join('');
+            }
+        }
+
+        function delGrade(idx) {
+            if(!currSubj) return;
+            let list = JSON.parse(localStorage.getItem('grades') || '[]');
+            let subList = list.filter(g => g.subj === currSubj.name); 
+            subList.splice(idx, 1);
+            let otherList = list.filter(g => g.subj !== currSubj.name);
+            localStorage.setItem('grades', JSON.stringify([...otherList, ...subList])); 
+            loadGrades();
+        }
+
+        function clearGrades() {
+            if(!currSubj) return;
+            if(confirm('مسح سجل درجات هذه المادة؟')) {
+                let list = JSON.parse(localStorage.getItem('grades') || '[]').filter(g => g.subj !== currSubj.name);
+                localStorage.setItem('grades', JSON.stringify(list)); 
+                loadGrades();
+            }
+        }
+    </script>
+</body>
+</html>
