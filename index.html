@@ -1,4 +1,3 @@
-cat << 'EOF' > index.html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -9,7 +8,8 @@ cat << 'EOF' > index.html
     <style>
         body { font-family: 'Cairo', sans-serif; background-color: #030712; color: #f3f4f6; }
         .cyber-card { background-color: #0b0f19; border: 1px solid rgba(0, 255, 102, 0.3); }
-        .student-card { background-color: #0b0f19; border: 1px solid rgba(14, 165, 233, 0.3); }
+        .cyber-card-blue { background-color: #0b0f19; border: 1px solid rgba(6, 182, 212, 0.3); }
+        .cyber-card-purple { background-color: #0b0f19; border: 1px solid rgba(168, 85, 247, 0.3); }
         @media print {
             body { background: white !important; color: black !important; }
             .no-print { display: none !important; }
@@ -20,73 +20,77 @@ cat << 'EOF' > index.html
 </head>
 <body class="min-h-screen flex flex-col justify-between p-4 sm:p-6 pb-16">
 
+    <!-- الهيدر العلوي المعدل -->
     <header class="flex justify-between items-center border-b border-emerald-500/30 pb-4 no-print">
         <div class="flex flex-col text-right">
             <h1 class="text-white font-bold text-base md:text-lg">إعدادية المعرفة المهنية الاهلية</h1>
             <span class="text-[11px] md:text-xs text-emerald-400 font-mono">برمجة: عباس محمد عزيز</span>
         </div>
-        <button onclick="nav('home')" class="bg-slate-900 text-emerald-400 px-4 py-2 rounded-lg border border-emerald-500/30 text-sm font-semibold hover:bg-slate-800 transition">الرئيسية</button>
+        <button onclick="nav('home')" class="bg-slate-900 text-emerald-400 px-4 py-2 rounded-lg border border-emerald-500/30 text-sm font-semibold">الرئيسية</button>
     </header>
 
     <main class="max-w-4xl mx-auto w-full my-6 flex-grow">
         
+        <!-- الرئيسية -->
         <div id="v-home" class="text-center py-10">
             <h2 class="text-3xl font-black text-white mb-4">نظام إدارة المدرسة الآمن</h2>
             <p class="text-slate-400 mb-8">اختر البوابة المطلوبة للمتابعة:</p>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <button onclick="nav('ast-login')" class="cyber-card p-6 rounded-2xl text-right hover:border-emerald-400 transition cursor-pointer">
+                <button onclick="nav('ast-login')" class="cyber-card p-8 rounded-2xl text-right hover:border-emerald-400 transition">
                     <div class="text-3xl mb-2">⚡</div>
                     <h3 class="text-xl font-bold text-white mb-1">بوابة المعاون</h3>
                     <p class="text-xs text-slate-400">إدارة الغيابات والشعب (منطقة آمنة ومحمية)</p>
                 </button>
-                <button onclick="nav('tch-select')" class="cyber-card p-6 rounded-2xl text-right hover:border-cyan-400 transition cursor-pointer" style="border-color: rgba(6, 182, 212, 0.3);">
+                <button onclick="nav('tch-select')" class="cyber-card-blue p-8 rounded-2xl text-right hover:border-cyan-400 transition">
                     <div class="text-3xl mb-2">💻</div>
                     <h3 class="text-xl font-bold text-white mb-1">بوابة المدرسين</h3>
                     <p class="text-xs text-slate-400">رصد درجات المواد عبر الرموز السرية</p>
                 </button>
-                <button onclick="nav('std-portal')" class="student-card p-6 rounded-2xl text-right hover:border-sky-400 transition cursor-pointer">
+                <button onclick="nav('stu-portal')" class="cyber-card-purple p-8 rounded-2xl text-right hover:border-purple-400 transition">
                     <div class="text-3xl mb-2">🎓</div>
                     <h3 class="text-xl font-bold text-white mb-1">بوابة الطلاب</h3>
-                    <p class="text-xs text-slate-400">الجداول الأسبوعية، الامتحانات، وتقييم الأداء</p>
+                    <p class="text-xs text-slate-400">الجداول، الامتحانات، ومتابعة الدرجات والغيابات</p>
                 </button>
             </div>
         </div>
 
+        <!-- دخول المعاون -->
         <div id="v-ast-login" class="hidden max-w-md mx-auto cyber-card p-6 rounded-2xl">
             <h3 class="text-xl text-emerald-400 font-bold mb-4 text-center">دخول المعاون</h3>
-            <input type="password" id="ast-pass" placeholder="أدخل رمز المرور السري" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center focus:outline-none focus:border-emerald-400">
+            <input type="password" id="ast-pass" placeholder="أدخل رمز المرور السري" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center">
             <div class="flex gap-2">
-                <button onclick="checkAst()" class="flex-1 bg-emerald-500 text-black font-bold p-3 rounded-lg hover:bg-emerald-400 transition">دخول</button>
-                <button onclick="nav('home')" class="bg-slate-800 px-4 rounded-lg text-slate-300 hover:bg-slate-700 transition">إلغاء</button>
+                <button onclick="checkAst()" class="flex-1 bg-emerald-500 text-black font-bold p-3 rounded-lg">دخول</button>
+                <button onclick="nav('home')" class="bg-slate-800 px-4 rounded-lg text-slate-300">إلغاء</button>
             </div>
         </div>
 
+        <!-- لوحة المعاون (الغيابات) -->
         <div id="v-ast-dash" class="hidden">
             <div class="flex justify-between items-center mb-6 flex-wrap gap-2 no-print">
                 <h3 class="text-xl font-bold text-emerald-400">سجل الغيابات والدوام</h3>
                 <div class="flex gap-2">
-                    <button onclick="window.print()" class="bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-emerald-500 transition">🖨️ طباعة PDF</button>
-                    <button onclick="clearData('abs')" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-red-500 transition">🗑️ مسح السجل</button>
+                    <button onclick="window.print()" class="bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold">🖨️ طباعة PDF</button>
+                    <button onclick="clearData('abs')" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold">🗑️ مسح السجل</button>
                 </div>
             </div>
             <div class="cyber-card p-4 rounded-xl mb-6 no-print">
                 <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 mb-3">
-                    <input type="text" id="g-name" placeholder="اسم الطالب" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm focus:outline-none focus:border-emerald-400">
-                    <select id="g-class" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm focus:outline-none focus:border-emerald-400">
+                    <input type="text" id="g-name" placeholder="اسم الطالب" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
+                    <select id="g-class" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
                         <option value="أول امن سيبراني A">أول امن سيبراني A</option>
                         <option value="أول امن سيبراني B">أول امن سيبراني B</option>
                         <option value="أول امن سيبراني C">أول امن سيبراني C</option>
                         <option value="أول تكرار نفط A">أول تكرار نفط A</option>
                         <option value="ثالث تجميع حاسوب A">ثالث تجميع حاسوب A</option>
                     </select>
-                    <select id="g-type" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm focus:outline-none focus:border-emerald-400">
+                    <select id="g-type" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
                         <option value="غياب">غياب</option>
                         <option value="إجازة">إجازة</option>
                         <option value="هروب">هروب</option>
                     </select>
-                    <input type="date" id="g-date" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm focus:outline-none focus:border-emerald-400">
+                    <input type="date" id="g-date" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
                 </div>
-                <button onclick="saveAbs()" class="bg-emerald-500 text-black font-bold px-4 py-2 rounded text-sm w-full hover:bg-emerald-400 transition">حفظ الغياب</button>
+                <button onclick="saveAbs()" class="bg-emerald-500 text-black font-bold px-4 py-2 rounded text-sm w-full">حفظ الغياب</button>
             </div>
             <div class="cyber-card rounded-xl overflow-hidden">
                 <table class="w-full text-right text-sm">
@@ -96,43 +100,46 @@ cat << 'EOF' > index.html
             </div>
         </div>
 
+        <!-- اختيار المادة للمدرس -->
         <div id="v-tch-select" class="hidden max-w-xl mx-auto">
             <h3 class="text-xl font-bold text-cyan-400 mb-4 text-center">اختر المادة الدراسية</h3>
             <div class="space-y-2" id="subj-box"></div>
         </div>
 
-        <div id="v-tch-login" class="hidden max-w-md mx-auto cyber-card p-6 rounded-2xl">
+        <!-- دخول المدرس -->
+        <div id="v-tch-login" class="hidden max-w-md mx-auto cyber-card-blue p-6 rounded-2xl">
             <h3 id="tch-title" class="text-xl text-cyan-400 font-bold mb-4 text-center">تسجيل دخول المدرس</h3>
-            <input type="password" id="tch-pass" placeholder="أدخل رمز المادة السري" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center focus:outline-none focus:border-cyan-400">
+            <input type="password" id="tch-pass" placeholder="أدخل رمز المادة السري" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center">
             <div class="flex gap-2">
-                <button onclick="verifyTch()" class="flex-1 bg-cyan-500 text-black font-bold p-3 rounded-lg hover:bg-cyan-400 transition">دخول</button>
-                <button onclick="nav('tch-select')" class="bg-slate-800 px-4 rounded-lg text-slate-300 hover:bg-slate-700 transition">رجوع</button>
+                <button onclick="verifyTch()" class="flex-1 bg-cyan-500 text-black font-bold p-3 rounded-lg">دخول</button>
+                <button onclick="nav('tch-select')" class="bg-slate-800 px-4 rounded-lg text-slate-300">رجوع</button>
             </div>
         </div>
 
+        <!-- لوحة درجات المدرس -->
         <div id="v-tch-dash" class="hidden">
             <div class="flex justify-between items-center mb-6 flex-wrap gap-2 no-print">
                 <h3 id="dash-title" class="text-xl font-bold text-cyan-400">رصد الدرجات</h3>
                 <div class="flex gap-2">
-                    <button onclick="window.print()" class="bg-cyan-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-cyan-500 transition">🖨️ طباعة PDF</button>
-                    <button onclick="clearGrades()" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-red-500 transition">🗑️ مسح السجل</button>
+                    <button onclick="window.print()" class="bg-cyan-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold">🖨️ طباعة PDF</button>
+                    <button onclick="clearGrades()" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold">🗑️ مسح السجل</button>
                 </div>
             </div>
-            <div class="cyber-card p-4 rounded-xl mb-6 no-print">
+            <div class="cyber-card-blue p-4 rounded-xl mb-6 no-print">
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
-                    <input type="text" id="s-name" placeholder="اسم الطالب" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm focus:outline-none focus:border-cyan-400">
-                    <select id="s-class" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm focus:outline-none focus:border-cyan-400">
+                    <input type="text" id="s-name" placeholder="اسم الطالب" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
+                    <select id="s-class" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
                         <option value="أول امن سيبراني A">أول امن سيبراني A</option>
                         <option value="أول امن سيبراني B">أول امن سيبراني B</option>
                         <option value="أول امن سيبراني C">أول امن سيبراني C</option>
                         <option value="أول تكرار نفط A">أول تكرار نفط A</option>
                         <option value="ثالث تجميع حاسوب A">ثالث تجميع حاسوب A</option>
                     </select>
-                    <input type="number" id="s-grade" min="0" max="100" placeholder="الدرجة (0-100)" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm focus:outline-none focus:border-cyan-400">
+                    <input type="number" id="s-grade" min="0" max="100" placeholder="الدرجة (0-100)" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
                 </div>
-                <button onclick="saveGrade()" class="bg-cyan-500 text-black font-bold px-4 py-2 rounded text-sm w-full hover:bg-cyan-400 transition">حفظ الدرجة</button>
+                <button onclick="saveGrade()" class="bg-cyan-500 text-black font-bold px-4 py-2 rounded text-sm w-full">حفظ الدرجة</button>
             </div>
-            <div class="cyber-card rounded-xl overflow-hidden">
+            <div class="cyber-card-blue rounded-xl overflow-hidden">
                 <table class="w-full text-right text-sm">
                     <thead class="bg-slate-950 text-cyan-400"><tr><th class="p-3">الطالب</th><th class="p-3">الصف</th><th class="p-3">المادة</th><th class="p-3">الدرجة</th><th class="p-3 no-print">إجراء</th></tr></thead>
                     <tbody id="grades-list" class="divide-y divide-slate-900"></tbody>
@@ -140,123 +147,110 @@ cat << 'EOF' > index.html
             </div>
         </div>
 
-        <div id="v-std-portal" class="hidden">
+        <!-- 🎓 بوابة الطلاب الجديدة -->
+        <div id="v-stu-portal" class="hidden max-w-3xl mx-auto">
             <div class="text-center mb-6">
-                <h3 class="text-2xl font-bold text-sky-400 mb-1">بوابة الطالب الإلكترونية</h3>
-                <p class="text-xs text-slate-400">متابعة الجداول الدراسية، الامتحانات، وبطاقة التقييم والأداء</p>
+                <h3 class="text-2xl font-bold text-purple-400 mb-2">بوابة الطالب المركزية</h3>
+                <p class="text-xs text-slate-400">اختر صفك الدراسي للاطلاع على الجداول والنتائج والغيابات المحدثة من قبل الإدارة</p>
             </div>
 
-            <div class="flex justify-center gap-2 mb-6 border-b border-slate-800 pb-4 flex-wrap">
-                <button onclick="switchStdTab('schedule')" id="btn-std-schedule" class="std-tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-sky-500 text-slate-950 transition cursor-pointer">الجدول الأسبوعي</button>
-                <button onclick="switchStdTab('exams')" id="btn-std-exams" class="std-tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 transition cursor-pointer">جدول الامتحانات</button>
-                <button onclick="switchStdTab('evaluation')" id="btn-std-evaluation" class="std-tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 transition cursor-pointer">تقييم الطلاب والأداء</button>
+            <!-- اختيار الصف الدراسي للطالب -->
+            <div class="cyber-card-purple p-4 rounded-xl mb-6">
+                <label class="block text-purple-300 text-sm font-bold mb-2">حدد صفك الدراسي:</label>
+                <div class="flex gap-2 flex-wrap">
+                    <select id="stu-class-select" class="flex-1 bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
+                        <option value="أول امن سيبراني A">أول امن سيبراني A</option>
+                        <option value="أول امن سيبراني B">أول امن سيبراني B</option>
+                        <option value="أول امن سيبراني C">أول امن سيبراني C</option>
+                        <option value="أول تكرار نفط A">أول تكرار نفط A</option>
+                        <option value="ثالث تجميع حاسوب A">ثالث تجميع حاسوب A</option>
+                    </select>
+                    <button onclick="loadStudentData()" class="bg-purple-600 text-white font-bold px-6 py-2 rounded text-sm">عرض البيانات</button>
+                </div>
             </div>
 
-            <section id="std-tab-schedule" class="std-content block">
-                <div class="flex justify-between items-center mb-4">
-                    <h4 class="text-lg font-bold text-sky-400">الجدول الأسبوعي للدروس</h4>
-                    <span class="text-xs bg-slate-800 text-sky-300 px-3 py-1 rounded-full border border-slate-700">قسم الأمن السيبراني</span>
+            <!-- قسم تبويبات معلومات الطالب -->
+            <div id="stu-content" class="hidden space-y-6">
+                <!-- أزرار التبويبات -->
+                <div class="flex gap-2 border-b border-purple-500/30 pb-3 no-print">
+                    <button onclick="switchStuTab('schedule')" id="btn-tab-schedule" class="bg-purple-600 text-white px-4 py-2 rounded-lg text-xs font-bold transition">📅 الجدول الأسبوعي</button>
+                    <button onclick="switchStuTab('exams')" id="btn-tab-exams" class="bg-slate-900 text-purple-300 px-4 py-2 rounded-lg text-xs font-bold transition">📝 جدول الامتحانات الشهرية</button>
+                    <button onclick="switchStuTab('mydata')" id="btn-tab-mydata" class="bg-slate-900 text-purple-300 px-4 py-2 rounded-lg text-xs font-bold transition">📊 درجاتي وغيابات</button>
                 </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div class="student-card rounded-2xl p-4">
-                        <h5 class="font-bold text-sky-400 mb-3 border-b border-slate-800 pb-2">الأحد</h5>
-                        <ul class="space-y-2 text-xs">
-                            <li class="flex justify-between bg-slate-950/60 p-2.5 rounded-lg"><span>الدرس 1: أساسيات أمن المعلومات</span><span class="text-slate-400">8:30 ص</span></li>
-                            <li class="flex justify-between bg-slate-950/60 p-2.5 rounded-lg"><span>الدرس 2: شبكات الحاسوب</span><span class="text-slate-400">9:30 ص</span></li>
-                            <li class="flex justify-between bg-slate-950/60 p-2.5 rounded-lg"><span>الدرس 3: البرمجة بلغة Python</span><span class="text-slate-400">10:30 ص</span></li>
-                        </ul>
-                    </div>
-                    <div class="student-card rounded-2xl p-4">
-                        <h5 class="font-bold text-sky-400 mb-3 border-b border-slate-800 pb-2">الإثنين</h5>
-                        <ul class="space-y-2 text-xs">
-                            <li class="flex justify-between bg-slate-950/60 p-2.5 rounded-lg"><span>الدرس 1: الرياضيات المهنية</span><span class="text-slate-400">8:30 ص</span></li>
-                            <li class="flex justify-between bg-slate-950/60 p-2.5 rounded-lg"><span>الدرس 2: أنظمة التشغيل (Linux)</span><span class="text-slate-400">9:30 ص</span></li>
-                            <li class="flex justify-between bg-slate-950/60 p-2.5 rounded-lg"><span>الدرس 3: اللغة الإنجليزية</span><span class="text-slate-400">10:30 ص</span></li>
-                        </ul>
-                    </div>
-                    <div class="student-card rounded-2xl p-4">
-                        <h5 class="font-bold text-sky-400 mb-3 border-b border-slate-800 pb-2">الثلاثاء</h5>
-                        <ul class="space-y-2 text-xs">
-                            <li class="flex justify-between bg-slate-950/60 p-2.5 rounded-lg"><span>الدرس 1: عملي - مختبر شبكات</span><span class="text-slate-400">8:30 ص</span></li>
-                            <li class="flex justify-between bg-slate-950/60 p-2.5 rounded-lg"><span>الدرس 2: عملي - صيانة حاسوب</span><span class="text-slate-400">10:00 ص</span></li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
 
-            <section id="std-tab-exams" class="std-content hidden">
-                <h4 class="text-lg font-bold text-sky-400 mb-4">جدول الامتحانات الشهرية</h4>
-                <div class="overflow-x-auto student-card rounded-2xl">
-                    <table class="w-full text-right text-sm text-slate-300">
-                        <thead class="bg-slate-950 text-sky-400 border-b border-slate-800">
-                            <tr>
-                                <th class="p-3">اليوم والتاريخ</th>
-                                <th class="p-3">المادة الدراسية</th>
-                                <th class="p-3">الوقت</th>
-                                <th class="p-3">القاعة الامتحانية</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-900">
-                            <tr>
-                                <td class="p-3 font-semibold text-white">الأحد 2026/11/22</td>
-                                <td class="p-3">أساسيات الأمن السيبراني</td>
-                                <td class="p-3">09:00 صباحاً</td>
-                                <td class="p-3">المختبر الرئيسي (قاعة 1)</td>
-                            </tr>
-                            <tr>
-                                <td class="p-3 font-semibold text-white">الثلاثاء 2026/11/24</td>
-                                <td class="p-3">أنظمة التشغيل والشبكات</td>
-                                <td class="p-3">09:00 صباحاً</td>
-                                <td class="p-3">قاعة 3</td>
-                            </tr>
-                            <tr>
-                                <td class="p-3 font-semibold text-white">الخميس 2026/11/26</td>
-                                <td class="p-3">تطبيقات وبرمجة الحاسوب</td>
-                                <td class="p-3">09:00 صباحاً</td>
-                                <td class="p-3">قاعة 2</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-            <section id="std-tab-evaluation" class="std-content hidden">
-                <h4 class="text-lg font-bold text-sky-400 mb-4">بطاقة التقييم ومتابعة الأداء</h4>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    <div class="student-card p-4 rounded-2xl text-center">
-                        <span class="text-slate-400 text-xs">نسبة الحضور والالتزام</span>
-                        <p class="text-2xl font-bold text-emerald-400 mt-1">96%</p>
-                    </div>
-                    <div class="student-card p-4 rounded-2xl text-center">
-                        <span class="text-slate-400 text-xs">التقييم السلوكي العام</span>
-                        <p class="text-2xl font-bold text-sky-400 mt-1">ممتاز (A)</p>
-                    </div>
-                    <div class="student-card p-4 rounded-2xl text-center">
-                        <span class="text-slate-400 text-xs">أيام الغياب المسجلة</span>
-                        <p class="text-2xl font-bold text-rose-400 mt-1">يومان</p>
+                <!-- 1. الجدول الأسبوعي -->
+                <div id="stu-tab-schedule" class="cyber-card-purple p-4 rounded-xl">
+                    <h4 class="text-lg font-bold text-purple-400 mb-3">الجدول الأسبوعي للحصص</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-right text-sm">
+                            <thead class="bg-slate-950 text-purple-300">
+                                <tr><th class="p-2">اليوم</th><th class="p-2">الحصة 1</th><th class="p-2">الحصة 2</th><th class="p-2">الحصة 3</th><th class="p-2">الحصة 4</th><th class="p-2">الحصة 5</th></tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-900 text-slate-300 text-xs">
+                                <tr><td class="p-2 font-bold text-purple-400">الأحد</td><td class="p-2">اسلامية</td><td class="p-2">عربي</td><td class="p-2">رياضيات</td><td class="p-2">حاسوب</td><td class="p-2">انجليزي</td></tr>
+                                <tr><td class="p-2 font-bold text-purple-400">الإثنين</td><td class="p-2">رياضيات</td><td class="p-2">حاسوب</td><td class="p-2">كهرباء</td><td class="p-2">عربي</td><td class="p-2">اسلامية</td></tr>
+                                <tr><td class="p-2 font-bold text-purple-400">الثلاثاء</td><td class="p-2">اتصالات</td><td class="p-2">شبكات</td><td class="p-2">رياضيات</td><td class="p-2">انجليزي</td><td class="p-2">حاسوب</td></tr>
+                                <tr><td class="p-2 font-bold text-purple-400">الأربعاء</td><td class="p-2">عربي</td><td class="p-2">اسلامية</td><td class="p-2">تجميع</td><td class="p-2">اتصالات</td><td class="p-2">رياضيات</td></tr>
+                                <tr><td class="p-2 font-bold text-purple-400">الخميس</td><td class="p-2">حاسوب</td><td class="p-2">انجليزي</td><td class="p-2">كهرباء</td><td class="p-2">عربي</td><td class="p-2">نشاط</td></tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
-                <div class="student-card rounded-2xl p-5">
-                    <h5 class="font-bold text-white mb-3 border-b border-slate-800 pb-2 text-sm">ملاحظات وتوصيات الكادر التدريسي:</h5>
-                    <ul class="space-y-3 text-xs">
-                        <li class="bg-slate-950/60 p-3 rounded-xl border-r-4 border-emerald-500">
-                            <span class="font-bold text-sky-400 block mb-1">مدرس مادة الأمن السيبراني:</span>
-                            مستوى عملي ممتاز وتفاعل عالي داخل المختبر.
-                        </li>
-                        <li class="bg-slate-950/60 p-3 rounded-xl border-r-4 border-sky-500">
-                            <span class="font-bold text-sky-400 block mb-1">مدرس مادة الشبكات:</span>
-                            التزام تام بالمواعيد وإنجاز للتمارين بشكل دقيق.
-                        </li>
-                    </ul>
+                <!-- 2. جدول الامتحانات الشهرية -->
+                <div id="stu-tab-exams" class="cyber-card-purple p-4 rounded-xl hidden">
+                    <h4 class="text-lg font-bold text-purple-400 mb-3">جدول الامتحانات الشهرية</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-right text-sm">
+                            <thead class="bg-slate-950 text-purple-300">
+                                <tr><th class="p-3">التاريخ</th><th class="p-3">المادة</th><th class="p-3">الصف المستهدف</th></tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-900 text-slate-300 text-xs">
+                                <tr><td class="p-3">2026/03/10</td><td class="p-3 font-bold text-white">التربية الإسلامية</td><td class="p-3">كافة الشعب</td></tr>
+                                <tr><td class="p-3">2026/03/12</td><td class="p-3 font-bold text-white">اللغة العربية</td><td class="p-3">كافة الشعب</td></tr>
+                                <tr><td class="p-3">2026/03/15</td><td class="p-3 font-bold text-white">الرياضيات</td><td class="p-3">كافة الشعب</td></tr>
+                                <tr><td class="p-3">2026/03/17</td><td class="p-3 font-bold text-white">تجميع الحاسوب / الأمن السيبراني</td><td class="p-3">تخصص حاسوب واقسام أمنية</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </section>
+
+                <!-- 3. درجات الطالب والغيابات الخاصة به -->
+                <div id="stu-tab-mydata" class="cyber-card-purple p-4 rounded-xl hidden space-y-4">
+                    <h4 class="text-lg font-bold text-purple-400 mb-2">استعلام عن اسم الطالب</h4>
+                    <div class="flex gap-2">
+                        <input type="text" id="stu-search-name" placeholder="اكتب اسمك الثلاثي بدقة..." class="flex-1 bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
+                        <button onclick="filterStudentResults()" class="bg-purple-600 text-white px-4 py-2 rounded text-sm font-bold">بحث</button>
+                    </div>
+
+                    <!-- نتائج الدرجات للبحث -->
+                    <div>
+                        <h5 class="text-sm font-bold text-cyan-400 mb-2">درجات المواد المرصودة:</h5>
+                        <div class="cyber-card rounded-xl overflow-hidden mb-4">
+                            <table class="w-full text-right text-xs">
+                                <thead class="bg-slate-950 text-cyan-400"><tr><th class="p-2">المادة</th><th class="p-2">الدرجة</th></tr></thead>
+                                <tbody id="stu-res-grades" class="divide-y divide-slate-900 text-slate-300">
+                                    <tr><td colspan="2" class="p-3 text-center text-slate-500">ابحث باسمك لإظهار الدرجات</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h5 class="text-sm font-bold text-emerald-400 mb-2">سجل الغيابات والإجازات:</h5>
+                        <div class="cyber-card rounded-xl overflow-hidden">
+                            <table class="w-full text-right text-xs">
+                                <thead class="bg-slate-950 text-emerald-400"><tr><th class="p-2">الحالة</th><th class="p-2">التاريخ</th></tr></thead>
+                                <tbody id="stu-res-abs" class="divide-y divide-slate-900 text-slate-300">
+                                    <tr><td colspan="2" class="p-3 text-center text-slate-500">ابحث باسمك لإظهار السجل</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
     </main>
 
+    <!-- بصمة الحقوق الثابتة السفيلة المعدلة -->
     <footer class="fixed bottom-0 left-0 w-full bg-slate-900/95 backdrop-blur-md border-t border-emerald-500/30 py-2.5 px-4 z-50 text-center shadow-lg no-print">
       <div class="flex items-center justify-center gap-2 text-xs md:text-sm font-mono dir-rtl">
         <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -280,8 +274,18 @@ cat << 'EOF' > index.html
         let currSubj = null;
 
         function nav(v) {
-            ['home', 'ast-login', 'ast-dash', 'tch-select', 'tch-login', 'tch-dash', 'std-portal'].forEach(id => {
+            ['home', 'ast-login', 'ast-dash', 'tch-select', 'tch-login', 'tch-dash', 'stu-portal'].forEach(id => {
                 let el = document.getElementById('v-' + id);
                 if(el) el.classList.add('hidden');
             });
-            let targe
+            let target = document.getElementById('v-' + v);
+            if(target) target.classList.remove('hidden');
+            if(v === 'tch-select') loadSubs();
+            window.scrollTo({top: 0});
+        }
+
+        function checkAst() {
+            if(document.getElementById('ast-pass').value === '2020') {
+                nav('ast-dash');
+                loadAbs();
+                document.getElementById('as
