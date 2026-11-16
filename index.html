@@ -6,10 +6,8 @@
     <title>ALPHA-SEC // النظام المدرسي المتكامل</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: 'Cairo', sans-serif; background-color: #030712; color: #f3f4f6; -webkit-user-select: none; user-select: none; }
+        body { font-family: 'Cairo', sans-serif; background-color: #030712; color: #f3f4f6; }
         .cyber-card { background-color: #0b0f19; border: 1px solid rgba(0, 255, 102, 0.3); }
-        .cyber-card-blue { background-color: #0b0f19; border: 1px solid rgba(6, 182, 212, 0.3); }
-        .cyber-card-purple { background-color: #0b0f19; border: 1px solid rgba(168, 85, 247, 0.3); }
         @media print {
             body { background: white !important; color: black !important; }
             .no-print { display: none !important; }
@@ -26,7 +24,7 @@
             <h1 class="text-white font-bold text-base md:text-lg">إعدادية المعرفة المهنية الاهلية</h1>
             <span class="text-[11px] md:text-xs text-emerald-400 font-mono">برمجة: عباس محمد عزيز</span>
         </div>
-        <button onclick="nav('home')" class="bg-slate-900 text-emerald-400 px-4 py-2 rounded-lg border border-emerald-500/30 text-sm font-semibold cursor-pointer">الرئيسية</button>
+        <button onclick="nav('home')" class="bg-slate-900 text-emerald-400 px-4 py-2 rounded-lg border border-emerald-500/30 text-sm font-semibold">الرئيسية</button>
     </header>
 
     <main class="max-w-4xl mx-auto w-full my-6 flex-grow">
@@ -35,21 +33,16 @@
         <div id="v-home" class="text-center py-10">
             <h2 class="text-3xl font-black text-white mb-4">نظام إدارة المدرسة الآمن</h2>
             <p class="text-slate-400 mb-8">اختر البوابة المطلوبة للمتابعة:</p>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <button onclick="nav('ast-login')" class="cyber-card p-8 rounded-2xl text-right hover:border-emerald-400 transition w-full cursor-pointer focus:outline-none">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <button onclick="nav('ast-login')" class="cyber-card p-8 rounded-2xl text-right hover:border-emerald-400 transition">
                     <div class="text-3xl mb-2">⚡</div>
                     <h3 class="text-xl font-bold text-white mb-1">بوابة المعاون</h3>
                     <p class="text-xs text-slate-400">إدارة الغيابات والشعب (منطقة آمنة ومحمية)</p>
                 </button>
-                <button onclick="nav('tch-select')" class="cyber-card-blue p-8 rounded-2xl text-right hover:border-cyan-400 transition w-full cursor-pointer focus:outline-none">
+                <button onclick="nav('tch-select')" class="cyber-card p-8 rounded-2xl text-right hover:border-cyan-400 transition" style="border-color: rgba(6, 182, 212, 0.3);">
                     <div class="text-3xl mb-2">💻</div>
                     <h3 class="text-xl font-bold text-white mb-1">بوابة المدرسين</h3>
                     <p class="text-xs text-slate-400">رصد درجات المواد عبر الرموز السرية</p>
-                </button>
-                <button onclick="nav('stu-portal')" class="cyber-card-purple p-8 rounded-2xl text-right hover:border-purple-400 transition w-full cursor-pointer focus:outline-none">
-                    <div class="text-3xl mb-2">🎓</div>
-                    <h3 class="text-xl font-bold text-white mb-1">بوابة الطلاب</h3>
-                    <p class="text-xs text-slate-400">الجداول، الامتحانات، ومتابعة الدرجات والغيابات</p>
                 </button>
             </div>
         </div>
@@ -59,8 +52,8 @@
             <h3 class="text-xl text-emerald-400 font-bold mb-4 text-center">دخول المعاون</h3>
             <input type="password" id="ast-pass" placeholder="أدخل رمز المرور السري" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center">
             <div class="flex gap-2">
-                <button onclick="checkAst()" class="flex-1 bg-emerald-500 text-black font-bold p-3 rounded-lg cursor-pointer">دخول</button>
-                <button onclick="nav('home')" class="bg-slate-800 px-4 rounded-lg text-slate-300 cursor-pointer">إلغاء</button>
+                <button onclick="checkAst()" class="flex-1 bg-emerald-500 text-black font-bold p-3 rounded-lg">دخول</button>
+                <button onclick="nav('home')" class="bg-slate-800 px-4 rounded-lg text-slate-300">إلغاء</button>
             </div>
         </div>
 
@@ -69,8 +62,8 @@
             <div class="flex justify-between items-center mb-6 flex-wrap gap-2 no-print">
                 <h3 class="text-xl font-bold text-emerald-400">سجل الغيابات والدوام</h3>
                 <div class="flex gap-2">
-                    <button onclick="window.print()" class="bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">🖨️ طباعة PDF</button>
-                    <button onclick="clearData('abs')" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">🗑️ مسح السجل</button>
+                    <button onclick="window.print()" class="bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold">🖨️ طباعة PDF</button>
+                    <button onclick="clearData('abs')" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold">🗑️ مسح السجل</button>
                 </div>
             </div>
             <div class="cyber-card p-4 rounded-xl mb-6 no-print">
@@ -90,7 +83,7 @@
                     </select>
                     <input type="date" id="g-date" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
                 </div>
-                <button onclick="saveAbs()" class="bg-emerald-500 text-black font-bold px-4 py-2 rounded text-sm w-full cursor-pointer">حفظ الغياب</button>
+                <button onclick="saveAbs()" class="bg-emerald-500 text-black font-bold px-4 py-2 rounded text-sm w-full">حفظ الغياب</button>
             </div>
             <div class="cyber-card rounded-xl overflow-hidden">
                 <table class="w-full text-right text-sm">
@@ -104,18 +97,15 @@
         <div id="v-tch-select" class="hidden max-w-xl mx-auto">
             <h3 class="text-xl font-bold text-cyan-400 mb-4 text-center">اختر المادة الدراسية</h3>
             <div class="space-y-2" id="subj-box"></div>
-            <div class="mt-4 text-center">
-                <button onclick="nav('home')" class="bg-slate-800 text-slate-300 px-4 py-2 rounded-lg text-sm cursor-pointer">رجوع للرئيسية</button>
-            </div>
         </div>
 
         <!-- دخول المدرس -->
-        <div id="v-tch-login" class="hidden max-w-md mx-auto cyber-card-blue p-6 rounded-2xl">
+        <div id="v-tch-login" class="hidden max-w-md mx-auto cyber-card p-6 rounded-2xl">
             <h3 id="tch-title" class="text-xl text-cyan-400 font-bold mb-4 text-center">تسجيل دخول المدرس</h3>
             <input type="password" id="tch-pass" placeholder="أدخل رمز المادة السري" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center">
             <div class="flex gap-2">
-                <button onclick="verifyTch()" class="flex-1 bg-cyan-500 text-black font-bold p-3 rounded-lg cursor-pointer">دخول</button>
-                <button onclick="nav('tch-select')" class="bg-slate-800 px-4 rounded-lg text-slate-300 cursor-pointer">رجوع</button>
+                <button onclick="verifyTch()" class="flex-1 bg-cyan-500 text-black font-bold p-3 rounded-lg">دخول</button>
+                <button onclick="nav('tch-select')" class="bg-slate-800 px-4 rounded-lg text-slate-300">رجوع</button>
             </div>
         </div>
 
@@ -124,11 +114,11 @@
             <div class="flex justify-between items-center mb-6 flex-wrap gap-2 no-print">
                 <h3 id="dash-title" class="text-xl font-bold text-cyan-400">رصد الدرجات</h3>
                 <div class="flex gap-2">
-                    <button onclick="window.print()" class="bg-cyan-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">🖨️ طباعة PDF</button>
-                    <button onclick="clearGrades()" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">🗑️ مسح السجل</button>
+                    <button onclick="window.print()" class="bg-cyan-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold">🖨️ طباعة PDF</button>
+                    <button onclick="clearGrades()" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold">🗑️ مسح السجل</button>
                 </div>
             </div>
-            <div class="cyber-card-blue p-4 rounded-xl mb-6 no-print">
+            <div class="cyber-card p-4 rounded-xl mb-6 no-print">
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
                     <input type="text" id="s-name" placeholder="اسم الطالب" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
                     <select id="s-class" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
@@ -140,115 +130,13 @@
                     </select>
                     <input type="number" id="s-grade" min="0" max="100" placeholder="الدرجة (0-100)" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
                 </div>
-                <button onclick="saveGrade()" class="bg-cyan-500 text-black font-bold px-4 py-2 rounded text-sm w-full cursor-pointer">حفظ الدرجة</button>
+                <button onclick="saveGrade()" class="bg-cyan-500 text-black font-bold px-4 py-2 rounded text-sm w-full">حفظ الدرجة</button>
             </div>
-            <div class="cyber-card-blue rounded-xl overflow-hidden">
+            <div class="cyber-card rounded-xl overflow-hidden">
                 <table class="w-full text-right text-sm">
                     <thead class="bg-slate-950 text-cyan-400"><tr><th class="p-3">الطالب</th><th class="p-3">الصف</th><th class="p-3">المادة</th><th class="p-3">الدرجة</th><th class="p-3 no-print">إجراء</th></tr></thead>
                     <tbody id="grades-list" class="divide-y divide-slate-900"></tbody>
                 </table>
-            </div>
-        </div>
-
-        <!-- 🎓 بوابة الطلاب الجديدة -->
-        <div id="v-stu-portal" class="hidden max-w-3xl mx-auto">
-            <div class="text-center mb-6">
-                <h3 class="text-2xl font-bold text-purple-400 mb-2">بوابة الطالب المركزية</h3>
-                <p class="text-xs text-slate-400">اختر صفك الدراسي للاطلاع على الجداول والنتائج والغيابات المحدثة من قبل الإدارة</p>
-            </div>
-
-            <!-- اختيار الصف الدراسي للطالب -->
-            <div class="cyber-card-purple p-4 rounded-xl mb-6">
-                <label class="block text-purple-300 text-sm font-bold mb-2">حدد صفك الدراسي:</label>
-                <div class="flex gap-2 flex-wrap">
-                    <select id="stu-class-select" class="flex-1 bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
-                        <option value="أول امن سيبراني A">أول امن سيبراني A</option>
-                        <option value="أول امن سيبراني B">أول امن سيبراني B</option>
-                        <option value="أول امن سيبراني C">أول امن سيبراني C</option>
-                        <option value="أول تكرار نفط A">أول تكرار نفط A</option>
-                        <option value="ثالث تجميع حاسوب A">ثالث تجميع حاسوب A</option>
-                    </select>
-                    <button onclick="loadStudentData()" class="bg-purple-600 text-white font-bold px-6 py-2 rounded text-sm cursor-pointer">عرض البيانات</button>
-                </div>
-            </div>
-
-            <!-- قسم تبويبات معلومات الطالب -->
-            <div id="stu-content" class="hidden space-y-6">
-                <!-- أزرار التبويبات -->
-                <div class="flex gap-2 border-b border-purple-500/30 pb-3 no-print">
-                    <button onclick="switchStuTab('schedule')" id="btn-tab-schedule" class="bg-purple-600 text-white px-4 py-2 rounded-lg text-xs font-bold transition cursor-pointer">📅 الجدول الأسبوعي</button>
-                    <button onclick="switchStuTab('exams')" id="btn-tab-exams" class="bg-slate-900 text-purple-300 px-4 py-2 rounded-lg text-xs font-bold transition cursor-pointer">📝 جدول الامتحانات الشهرية</button>
-                    <button onclick="switchStuTab('mydata')" id="btn-tab-mydata" class="bg-slate-900 text-purple-300 px-4 py-2 rounded-lg text-xs font-bold transition cursor-pointer">📊 درجاتي وغيابات</button>
-                </div>
-
-                <!-- 1. الجدول الأسبوعي -->
-                <div id="stu-tab-schedule" class="cyber-card-purple p-4 rounded-xl">
-                    <h4 class="text-lg font-bold text-purple-400 mb-3">الجدول الأسبوعي للحصص</h4>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-right text-sm">
-                            <thead class="bg-slate-950 text-purple-300">
-                                <tr><th class="p-2">اليوم</th><th class="p-2">الحصة 1</th><th class="p-2">الحصة 2</th><th class="p-2">الحصة 3</th><th class="p-2">الحصة 4</th><th class="p-2">الحصة 5</th></tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-900 text-slate-300 text-xs">
-                                <tr><td class="p-2 font-bold text-purple-400">الأحد</td><td class="p-2">اسلامية</td><td class="p-2">عربي</td><td class="p-2">رياضيات</td><td class="p-2">حاسوب</td><td class="p-2">انجليزي</td></tr>
-                                <tr><td class="p-2 font-bold text-purple-400">الإثنين</td><td class="p-2">رياضيات</td><td class="p-2">حاسوب</td><td class="p-2">كهرباء</td><td class="p-2">عربي</td><td class="p-2">اسلامية</td></tr>
-                                <tr><td class="p-2 font-bold text-purple-400">الثلاثاء</td><td class="p-2">اتصالات</td><td class="p-2">شبكات</td><td class="p-2">رياضيات</td><td class="p-2">انجليزي</td><td class="p-2">حاسوب</td></tr>
-                                <tr><td class="p-2 font-bold text-purple-400">الأربعاء</td><td class="p-2">عربي</td><td class="p-2">اسلامية</td><td class="p-2">تجميع</td><td class="p-2">اتصالات</td><td class="p-2">رياضيات</td></tr>
-                                <tr><td class="p-2 font-bold text-purple-400">الخميس</td><td class="p-2">حاسوب</td><td class="p-2">انجليزي</td><td class="p-2">كهرباء</td><td class="p-2">عربي</td><td class="p-2">نشاط</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- 2. جدول الامتحانات الشهرية -->
-                <div id="stu-tab-exams" class="cyber-card-purple p-4 rounded-xl hidden">
-                    <h4 class="text-lg font-bold text-purple-400 mb-3">جدول الامتحانات الشهرية</h4>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-right text-sm">
-                            <thead class="bg-slate-950 text-purple-300">
-                                <tr><th class="p-3">التاريخ</th><th class="p-3">المادة</th><th class="p-3">الصف المستهدف</th></tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-900 text-slate-300 text-xs">
-                                <tr><td class="p-3">2026/03/10</td><td class="p-3 font-bold text-white">التربية الإسلامية</td><td class="p-3">كافة الشعب</td></tr>
-                                <tr><td class="p-3">2026/03/12</td><td class="p-3 font-bold text-white">اللغة العربية</td><td class="p-3">كافة الشعب</td></tr>
-                                <tr><td class="p-3">2026/03/15</td><td class="p-3 font-bold text-white">الرياضيات</td><td class="p-3">كافة الشعب</td></tr>
-                                <tr><td class="p-3">2026/03/17</td><td class="p-3 font-bold text-white">تجميع الحاسوب / الأمن السيبراني</td><td class="p-3">تخصص حاسوب واقسام أمنية</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- 3. درجات الطالب والغيابات الخاصة به -->
-                <div id="stu-tab-mydata" class="cyber-card-purple p-4 rounded-xl hidden space-y-4">
-                    <h4 class="text-lg font-bold text-purple-400 mb-2">استعلام عن اسم الطالب</h4>
-                    <div class="flex gap-2">
-                        <input type="text" id="stu-search-name" placeholder="اكتب اسمك الثلاثي بدقة..." class="flex-1 bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
-                        <button onclick="filterStudentResults()" class="bg-purple-600 text-white px-4 py-2 rounded text-sm font-bold cursor-pointer">بحث</button>
-                    </div>
-
-                    <!-- نتائج الدرجات للبحث -->
-                    <div>
-                        <h5 class="text-sm font-bold text-cyan-400 mb-2">درجات المواد المرصودة:</h5>
-                        <div class="cyber-card rounded-xl overflow-hidden mb-4">
-                            <table class="w-full text-right text-xs">
-                                <thead class="bg-slate-950 text-cyan-400"><tr><th class="p-2">المادة</th><th class="p-2">الدرجة</th></tr></thead>
-                                <tbody id="stu-res-grades" class="divide-y divide-slate-900 text-slate-300">
-                                    <tr><td colspan="2" class="p-3 text-center text-slate-500">ابحث باسمك لإظهار الدرجات</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <h5 class="text-sm font-bold text-emerald-400 mb-2">سجل الغيابات والإجازات:</h5>
-                        <div class="cyber-card rounded-xl overflow-hidden">
-                            <table class="w-full text-right text-xs">
-                                <thead class="bg-slate-950 text-emerald-400"><tr><th class="p-2">الحالة</th><th class="p-2">التاريخ</th></tr></thead>
-                                <tbody id="stu-res-abs" class="divide-y divide-slate-900 text-slate-300">
-                                    <tr><td colspan="2" class="p-3 text-center text-slate-500">ابحث باسمك لإظهار السجل</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </main>
@@ -277,4 +165,119 @@
         let currSubj = null;
 
         function nav(v) {
-            ['home', 'ast-login', 'ast-das
+            ['home', 'ast-login', 'ast-dash', 'tch-select', 'tch-login', 'tch-dash'].forEach(id => {
+                let el = document.getElementById('v-' + id);
+                if(el) el.classList.add('hidden');
+            });
+            let target = document.getElementById('v-' + v);
+            if(target) target.classList.remove('hidden');
+            if(v === 'tch-select') loadSubs();
+            window.scrollTo({top: 0});
+        }
+
+        function checkAst() {
+            if(document.getElementById('ast-pass').value === '2020') {
+                nav('ast-dash');
+                loadAbs();
+                document.getElementById('ast-pass').value = '';
+            } else { alert('رمز المعاون خطأ!'); }
+        }
+
+        function saveAbs() {
+            let name = document.getElementById('g-name').value;
+            let cls = document.getElementById('g-class').value;
+            let type = document.getElementById('g-type').value;
+            let date = document.getElementById('g-date').value;
+            if(!name || !date) { alert('املأ الحقول المطلوبة'); return; }
+            let list = JSON.parse(localStorage.getItem('abs') || '[]');
+            list.push({name, cls, type, date});
+            localStorage.setItem('abs', JSON.stringify(list));
+            document.getElementById('g-name').value = '';
+            loadAbs();
+        }
+
+        function loadAbs() {
+            let list = JSON.parse(localStorage.getItem('abs') || '[]');
+            document.getElementById('abs-list').innerHTML = list.map((i, idx) => `
+                <tr><td class="p-3 font-bold">${i.name}</td><td class="p-3 text-emerald-400">${i.cls}</td><td class="p-3">${i.type}</td><td class="p-3">${i.date}</td><td class="p-3 no-print"><button onclick="delAbs(${idx})" class="text-red-400 text-xs">حذف</button></td></tr>
+            `).join('');
+        }
+
+        function delAbs(idx) {
+            let list = JSON.parse(localStorage.getItem('abs') || '[]');
+            list.splice(idx, 1);
+            localStorage.setItem('abs', JSON.stringify(list));
+            loadAbs();
+        }
+
+        function clearData(key) {
+            if(confirm('هل تريد مسح السجل بالكامل؟')) { localStorage.removeItem(key); loadAbs(); }
+        }
+
+        function loadSubs() {
+            document.getElementById('subj-box').innerHTML = subs.map(s => `
+                <div onclick="selectSubj('${s.name}')" class="cyber-card p-4 rounded-xl text-right cursor-pointer hover:border-cyan-400 transition flex justify-between items-center">
+                    <span class="font-bold text-cyan-300">${s.name}</span>
+                    <span class="text-xs bg-slate-950 px-3 py-1 rounded text-slate-400">دخول 🔒</span>
+                </div>
+            `).join('');
+        }
+
+        function selectSubj(name) {
+            currSubj = subs.find(s => s.name === name);
+            nav('tch-login');
+            document.getElementById('tch-title').innerText = `دخول: ${currSubj.name}`;
+            document.getElementById('tch-pass').value = '';
+        }
+
+        function verifyTch() {
+            if(document.getElementById('tch-pass').value === currSubj.code) {
+                nav('tch-dash');
+                document.getElementById('dash-title').innerText = `رصد درجات - ${currSubj.name}`;
+                loadGrades();
+            } else { alert('رمز المادة خطأ!'); }
+        }
+
+        function saveGrade() {
+            let name = document.getElementById('s-name').value;
+            let cls = document.getElementById('s-class').value;
+            let grade = Number(document.getElementById('s-grade').value);
+            if(!name || document.getElementById('s-grade').value === '') { alert('املأ الحقول'); return; }
+            if(grade < 0 || grade > 100) { alert('الدرجة يجب أن تكون بين 0 و 100 فقط!'); return; }
+            
+            let list = JSON.parse(localStorage.getItem('grades') || '[]');
+            list.push({name, cls, subj: currSubj.name, grade});
+            localStorage.setItem('grades', JSON.stringify(list));
+            document.getElementById('s-name').value = '';
+            document.getElementById('s-grade').value = '';
+            loadGrades();
+        }
+
+        function loadGrades() {
+            let list = JSON.parse(localStorage.getItem('grades') || '[]').filter(g => g.subj === currSubj.name);
+            document.getElementById('grades-list').innerHTML = list.map((i, idx) => `
+                <tr><td class="p-3 font-bold">${i.name}</td><td class="p-3 text-cyan-300">${i.cls}</td><td class="p-3">${i.subj}</td><td class="p-3 text-emerald-400 font-bold">${i.grade}</td><td class="p-3 no-print"><button onclick="delGrade(${idx})" class="text-red-400 text-xs">حذف</button></td></tr>
+            `).join('');
+        }
+
+        function delGrade(idx) {
+            let list = JSON.parse(localStorage.getItem('grades') || '[]');
+            let subList = list.filter(g => g.subj === currSubj.name);
+            subList.splice(idx, 1);
+            let otherList = list.filter(g => g.subj !== currSubj.name);
+            localStorage.setItem('grades', JSON.stringify([...otherList, ...subList]));
+            loadGrades();
+        }
+
+        function clearGrades() {
+            if(confirm('هل تريد مسح سجل درجات هذه المادة بالكامل؟')) {
+                let list = JSON.parse(localStorage.getItem('grades') || '[]');
+                list = list.filter(g => g.subj !== currSubj.name);
+                localStorage.setItem('grades', JSON.stringify(list));
+                loadGrades();
+            }
+        }
+    </script>
+</body>
+</html>
+
