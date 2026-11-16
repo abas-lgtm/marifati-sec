@@ -8,11 +8,18 @@
     <style>
         body { font-family: 'Cairo', sans-serif; background-color: #030712; color: #f3f4f6; -webkit-user-select: none; user-select: none; }
         .cyber-card-purple { background-color: #0b0f19; border: 1px solid rgba(168, 85, 247, 0.3); }
+        @media print {
+            body { background: white !important; color: black !important; }
+            .no-print { display: none !important; }
+            table { width: 100%; border-collapse: collapse; }
+            th, td { border: 1px solid #333; padding: 8px; color: black !important; }
+            .cyber-card-purple { border: 1px solid #ccc !important; background: white !important; }
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between p-4 sm:p-6 pb-16">
 
-    <header class="flex justify-between items-center border-b border-purple-500/30 pb-4">
+    <header class="flex justify-between items-center border-b border-purple-500/30 pb-4 no-print">
         <div class="flex flex-col text-right">
             <h1 class="text-white font-bold text-base md:text-lg">بوابة الطالب المركزية</h1>
             <span class="text-[11px] md:text-xs text-purple-400 font-mono">إعدادية المعرفة المهنية الاهلية</span>
@@ -21,28 +28,84 @@
     </header>
 
     <main class="max-w-3xl mx-auto w-full my-6 flex-grow">
-        <h3 class="text-2xl font-bold text-purple-400 mb-4 text-center">خدمات الطلاب والتقييم</h3>
+        <h3 class="text-2xl font-bold text-purple-400 mb-4 text-center no-print">خدمات الطلاب والجداول</h3>
         
-        <div class="flex gap-2 border-b border-purple-500/30 pb-3 mb-4 justify-center">
+        <!-- أزرار التنقل بين التبويبات -->
+        <div class="flex gap-2 border-b border-purple-500/30 pb-3 mb-4 justify-center no-print flex-wrap">
             <button onclick="switchStuTab('tab-sch')" id="btn-tab-sch" class="bg-purple-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer">📅 الجدول الأسبوعي</button>
-            <button onclick="switchStuTab('tab-exm')" id="btn-tab-exm" class="bg-slate-900 text-purple-300 px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer">📝 الامتحانات الشهرية</button>
+            <button onclick="switchStuTab('tab-edit-sch')" id="btn-tab-edit-sch" class="bg-slate-900 text-purple-300 px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer">⚙️ تعديل الجداول</button>
+            <button onclick="switchStuTab('tab-exm')" id="btn-tab-exm" class="bg-slate-900 text-purple-300 px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer">📝 الامتحانات</button>
             <button onclick="switchStuTab('tab-src')" id="btn-tab-src" class="bg-slate-900 text-purple-300 px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer">📊 درجاتي والغيابات</button>
         </div>
 
-        <!-- الجدول الأسبوعي (الديناميكي الذي يتحدث من لوحة المعاون) -->
-        <div id="tab-sch" class="cyber-card-purple p-4 rounded-xl overflow-x-auto">
-            <h4 class="text-sm font-bold text-purple-400 mb-3">الجدول الأسبوعي للحصص الدراسية (معتمد من الإدارة)</h4>
-            <table class="w-full text-right text-xs">
-                <thead class="bg-slate-950 text-purple-300">
-                    <tr><th class="p-2">اليوم</th><th class="p-2">الحصة الأولى</th><th class="p-2">الحصة الثانية</th><th class="p-2">الحصة الثالثة</th><th class="p-2">الحصة الرابعة</th></tr>
-                </thead>
-                <tbody id="student-schedule-body" class="divide-y divide-slate-900 text-slate-300">
-                    <!-- سيتم تعبئتها تلقائياً من إدخال المعاون -->
-                </tbody>
-            </table>
+        <!-- 1. تبويب الجدول الأسبوعي وعرضه مع زر الطباعة -->
+        <div id="tab-sch" class="cyber-card-purple p-4 rounded-xl">
+            <div class="flex justify-between items-center mb-3">
+                <h4 class="text-sm font-bold text-purple-400">الجدول الأسبوعي للحصص الدراسية</h4>
+                <button onclick="window.print()" class="bg-purple-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer no-print">🖨️ طباعة الجدول PDF</button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-right text-xs">
+                    <thead class="bg-slate-950 text-purple-300">
+                        <tr>
+                            <th class="p-2">اليوم</th>
+                            <th class="p-2">1</th>
+                            <th class="p-2">2</th>
+                            <th class="p-2">3</th>
+                            <th class="p-2">4</th>
+                            <th class="p-2">5</th>
+                            <th class="p-2">6</th>
+                            <th class="p-2">7</th>
+                        </tr>
+                    </thead>
+                    <tbody id="student-schedule-body" class="divide-y divide-slate-900 text-slate-300">
+                        <!-- تعبئة تلقائية -->
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-        <!-- الامتحانات الشهرية -->
+        <!-- 2. تبويب تعديل الجدول (اختيار الحصة والمادة بدقة) -->
+        <div id="tab-edit-sch" class="cyber-card-purple p-4 rounded-xl hidden">
+            <h4 class="text-sm font-bold text-purple-400 mb-3">📌 تخصيص وتعديل الجدول الأسبوعي</h4>
+            <div class="space-y-3 mb-3">
+                <select id="sch-day" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded text-white text-xs">
+                    <option value="الأحد">الأحد</option>
+                    <option value="الإثنين">الإثنين</option>
+                    <option value="الثلاثاء">الثلاثاء</option>
+                    <option value="الأربعاء">الأربعاء</option>
+                    <option value="الخميس">الخميس</option>
+                </select>
+
+                <select id="sch-slot" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded text-white text-xs">
+                    <option value="0">الحصة الأولى</option>
+                    <option value="1">الحصة الثانية</option>
+                    <option value="2">الحصة الثالثة</option>
+                    <option value="3">الحصة الرابعة</option>
+                    <option value="4">الحصة الخامسة</option>
+                    <option value="5">الحصة السادسة</option>
+                    <option value="6">الحصة السابعة</option>
+                </select>
+
+                <select id="sch-subject" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded text-white text-xs">
+                    <option value="التربية الاسلامية">التربية الاسلامية</option>
+                    <option value="اللغة العربية">اللغة العربية</option>
+                    <option value="الانجليزي">الانجليزي</option>
+                    <option value="الرياضيات">الرياضيات</option>
+                    <option value="الطبيعيات">الطبيعيات</option>
+                    <option value="اساسيات الكهرباء">اساسيات الكهرباء</option>
+                    <option value="تجميع الحاسوب">تجميع الحاسوب</option>
+                    <option value="اتصالات">اتصالات</option>
+                    <option value="مبادى الحاسوب">مبادى الحاسوب</option>
+                    <option value="تطبيقات الحاسوب">تطبيقات الحاسوب</option>
+                    <option value="الرياضة">الرياضة</option>
+                    <option value="كردي">كردي</option>
+                </select>
+            </div>
+            <button onclick="saveStudentScheduleSlot()" class="bg-purple-600 text-white font-bold px-4 py-2 rounded text-xs w-full cursor-pointer">حفظ وتحديث الجدول فوراً</button>
+        </div>
+
+        <!-- 3. الامتحانات الشهرية -->
         <div id="tab-exm" class="cyber-card-purple p-4 rounded-xl overflow-x-auto hidden">
             <h4 class="text-sm font-bold text-purple-400 mb-3">جدول الامتحانات الشهرية</h4>
             <table class="w-full text-right text-xs">
@@ -57,7 +120,7 @@
             </table>
         </div>
 
-        <!-- الاستعلام عن النتائج والغيابات -->
+        <!-- 4. الاستعلام عن النتائج والغيابات -->
         <div id="tab-src" class="cyber-card-purple p-4 rounded-xl hidden space-y-4">
             <h4 class="text-sm font-bold text-purple-400 mb-1">الاستعلام عن النتائج والغيابات</h4>
             <div class="flex gap-2">
@@ -70,7 +133,7 @@
         </div>
     </main>
 
-    <footer class="fixed bottom-0 left-0 w-full bg-slate-900/95 backdrop-blur-md border-t border-purple-500/30 py-2.5 px-4 z-50 text-center shadow-lg">
+    <footer class="fixed bottom-0 left-0 w-full bg-slate-900/95 backdrop-blur-md border-t border-purple-500/30 py-2.5 px-4 z-50 text-center shadow-lg no-print">
       <div class="flex items-center justify-center gap-2 text-xs md:text-sm font-mono dir-rtl">
         <span class="inline-block w-2 h-2 rounded-full bg-purple-500 animate-pulse"></span>
         <span class="text-slate-300">تم التطوير والبرمجة بواسطة:</span>
@@ -87,37 +150,67 @@
         function loadStudentSchedule() {
             let schedule = JSON.parse(localStorage.getItem('school_schedule') || null);
             
-            // جدول افتراضي أساسي في حال المعاون ما مدخل شي بعد
             if (!schedule) {
                 schedule = {
-                    "الأحد": ["اسلامية", "عربي", "رياضيات", "أمن سيبراني"],
-                    "الإثنين": ["رياضيات", "شبكات", "كهرباء", "عربي"],
-                    "الثلاثاء": ["اتصالات", "حاسوب", "انجليزي", "رياضيات"],
-                    "الأربعاء": ["عربي", "اسلامية", "تجميع حاسوب", "اتصالات"],
-                    "الخميس": ["حاسوب", "انجليزي", "كهرباء", "نشاط مدرسي"]
+                    "الأحد": ["التربية الاسلامية", "اللغة العربية", "الرياضيات", "الانجليزي", "الطبيعيات", "اساسيات الكهرباء", "الرياضة"],
+                    "الإثنين": ["الرياضيات", "اتصالات", "تجميع الحاسوب", "اللغة العربية", "مبادى الحاسوب", "تطبيقات الحاسوب", "كردي"],
+                    "الثلاثاء": ["اتصالات", "تجميع الحاسوب", "الانجليزي", "الرياضيات", "التربية الاسلامية", "الطبيعيات", "الرياضة"],
+                    "الأربعاء": ["اللغة العربية", "التربية الاسلامية", "تجميع الحاسوب", "اتصالات", "اساسيات الكهرباء", "كردي", "مبادى الحاسوب"],
+                    "الخميس": ["تطبيقات الحاسوب", "الانجليزي", "اساسيات الكهرباء", "الرياضة", "الطبيعيات", "الرياضيات", "كردي"]
                 };
             }
 
             let tbody = document.getElementById('student-schedule-body');
-            tbody.innerHTML = '';
-
-            for (let day in schedule) {
-                let row = `<tr><td class="p-2 font-bold text-purple-400">${day}</td>`;
-                schedule[day].forEach(lesson => {
-                    row += `<td class="p-2">${lesson}</td>`;
-                });
-                row += `</tr>`;
-                tbody.innerHTML += row;
+            if(tbody) {
+                tbody.innerHTML = '';
+                for (let day in schedule) {
+                    let row = `<tr><td class="p-2 font-bold text-purple-400">${day}</td>`;
+                    for(let i = 0; i < 7; i++) {
+                        let lesson = schedule[day][i] || "-";
+                        row += `<td class="p-2">${lesson}</td>`;
+                    }
+                    row += `</tr>`;
+                    tbody.innerHTML += row;
+                }
             }
         }
 
+        function saveStudentScheduleSlot() {
+            let day = document.getElementById('sch-day').value;
+            let slotIndex = parseInt(document.getElementById('sch-slot').value);
+            let subject = document.getElementById('sch-subject').value;
+            
+            let schedule = JSON.parse(localStorage.getItem('school_schedule') || JSON.stringify({
+                "الأحد": ["-", "-", "-", "-", "-", "-", "-"],
+                "الإثنين": ["-", "-", "-", "-", "-", "-", "-"],
+                "الثلاثاء": ["-", "-", "-", "-", "-", "-", "-"],
+                "الأربعاء": ["-", "-", "-", "-", "-", "-", "-"],
+                "الخميس": ["-", "-", "-", "-", "-", "-", "-"]
+            }));
+
+            if (!schedule[day]) {
+                schedule[day] = ["-", "-", "-", "-", "-", "-", "-"];
+            }
+
+            schedule[day][slotIndex] = subject;
+            localStorage.setItem('school_schedule', JSON.stringify(schedule));
+            
+            alert(`تم تحديث الجدول بنجاح! تم وضع (${subject}) في الحصة المحددة.`);
+            loadStudentSchedule();
+            switchStuTab('tab-sch');
+        }
+
         function switchStuTab(tabId) {
-            ['tab-sch', 'tab-exm', 'tab-src'].forEach(id => {
-                document.getElementById(id).classList.add('hidden');
-                document.getElementById('btn-' + id).className = "bg-slate-900 text-purple-300 px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer";
+            ['tab-sch', 'tab-edit-sch', 'tab-exm', 'tab-src'].forEach(id => {
+                let el = document.getElementById(id);
+                let btn = document.getElementById('btn-' + id);
+                if(el) el.classList.add('hidden');
+                if(btn) btn.className = "bg-slate-900 text-purple-300 px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer";
             });
-            document.getElementById(tabId).classList.remove('hidden');
-            document.getElementById('btn-' + tabId).className = "bg-purple-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer";
+            let targetEl = document.getElementById(tabId);
+            let targetBtn = document.getElementById('btn-' + tabId);
+            if(targetEl) targetEl.classList.remove('hidden');
+            if(targetBtn) targetBtn.className = "bg-purple-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer";
         }
 
         function searchStu() {
@@ -135,8 +228,10 @@
             resHtml += abs.length ? abs.map(i => `<p class="border-b border-slate-900 py-1 flex justify-between"><span>${i.date} - ${i.cls}</span> <span class="text-amber-400 font-bold">${i.type}</span></p>`).join('') : `<p class="text-slate-500">سجل الدوام نظيف، لا توجد غيابات مسجلة</p>`;
             resHtml += `</div>`;
 
-            document.getElementById('stu-results').innerHTML = resHtml;
+            let resultsEl = document.getElementById('stu-results');
+            if(resultsEl) resultsEl.innerHTML = resHtml;
         }
     </script>
 </body>
-</html>
+                        </html>
+    
