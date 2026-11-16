@@ -20,6 +20,7 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between p-4 sm:p-6 pb-16">
 
+    <!-- الهيدر العلوي المعدل -->
     <header class="flex justify-between items-center border-b border-emerald-500/30 pb-4 no-print">
         <div class="flex flex-col text-right">
             <h1 class="text-white font-bold text-base md:text-lg">إعدادية المعرفة المهنية الاهلية</h1>
@@ -30,21 +31,20 @@
 
     <main class="max-w-4xl mx-auto w-full my-6 flex-grow">
         
-        <!-- الرئيسية (البوابات الثلاث) -->
+        <!-- الرئيسية -->
         <div id="v-home" class="text-center py-10">
             <h2 class="text-3xl font-black text-white mb-4">نظام إدارة المدرسة الآمن</h2>
             <p class="text-slate-400 mb-8">اختر البوابة المطلوبة للمتابعة:</p>
-            
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <button onclick="nav('ast-login')" class="cyber-card p-6 rounded-2xl text-right hover:border-emerald-400 transition w-full cursor-pointer focus:outline-none">
                     <div class="text-3xl mb-2">⚡</div>
                     <h3 class="text-lg font-bold text-white mb-1">بوابة المعاون</h3>
-                    <p class="text-xs text-slate-400">إدارة الغيابات والشعب (منطقة محمية)</p>
+                    <p class="text-xs text-slate-400">إدارة الغيابات والشعب (منطقة آمنة ومحمية)</p>
                 </button>
                 <button onclick="nav('tch-select')" class="cyber-card-blue p-6 rounded-2xl text-right hover:border-cyan-400 transition w-full cursor-pointer focus:outline-none">
                     <div class="text-3xl mb-2">💻</div>
                     <h3 class="text-lg font-bold text-white mb-1">بوابة المدرسين</h3>
-                    <p class="text-xs text-slate-400">رصد الدرجات عبر الرموز السرية</p>
+                    <p class="text-xs text-slate-400">رصد درجات المواد عبر الرموز السرية</p>
                 </button>
                 <button onclick="nav('stu-portal')" class="cyber-card-purple p-6 rounded-2xl text-right hover:border-purple-400 transition w-full cursor-pointer focus:outline-none">
                     <div class="text-3xl mb-2">🎓</div>
@@ -147,7 +147,7 @@
             </div>
         </div>
 
-        <!-- بوابة الطلاب الكاملة -->
+        <!-- بوابة الطلاب المدمجة -->
         <div id="v-stu-portal" class="hidden max-w-3xl mx-auto">
             <h3 class="text-2xl font-bold text-purple-400 mb-4 text-center">بوابة الطالب المركزية</h3>
             <div class="flex gap-2 border-b border-purple-500/30 pb-3 mb-4 no-print justify-center">
@@ -156,6 +156,7 @@
                 <button onclick="switchStuTab('tab-src')" id="btn-tab-src" class="bg-slate-900 text-purple-300 px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer">📊 درجاتي والغيابات</button>
             </div>
 
+            <!-- الجدول الأسبوعي -->
             <div id="tab-sch" class="cyber-card-purple p-4 rounded-xl overflow-x-auto">
                 <h4 class="text-sm font-bold text-purple-400 mb-3">الجدول الأسبوعي للحصص الدراسية</h4>
                 <table class="w-full text-right text-xs">
@@ -172,6 +173,7 @@
                 </table>
             </div>
 
+            <!-- الامتحانات الشهرية -->
             <div id="tab-exm" class="cyber-card-purple p-4 rounded-xl overflow-x-auto hidden">
                 <h4 class="text-sm font-bold text-purple-400 mb-3">جدول الامتحانات الشهرية</h4>
                 <table class="w-full text-right text-xs">
@@ -186,6 +188,7 @@
                 </table>
             </div>
 
+            <!-- الاستعلام عن النتائج والغيابات -->
             <div id="tab-src" class="cyber-card-purple p-4 rounded-xl hidden space-y-4">
                 <h4 class="text-sm font-bold text-purple-400 mb-1">الاستعلام عن النتائج والغيابات</h4>
                 <div class="flex gap-2">
@@ -197,8 +200,10 @@
                 </div>
             </div>
         </div>
+
     </main>
 
+    <!-- بصمة الحقوق الثابتة السفيلة المعدلة -->
     <footer class="fixed bottom-0 left-0 w-full bg-slate-900/95 backdrop-blur-md border-t border-emerald-500/30 py-2.5 px-4 z-50 text-center shadow-lg no-print">
       <div class="flex items-center justify-center gap-2 text-xs md:text-sm font-mono dir-rtl">
         <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -305,10 +310,4 @@
             let list = JSON.parse(localStorage.getItem('grades') || '[]');
             list.push({name, cls, subj: currSubj.name, grade});
             localStorage.setItem('grades', JSON.stringify(list));
-            document.getElementById('s-name').value = '';
-            document.getElementById('s-grade').value = '';
-            loadGrades();
-        }
-
-        function loadGrades() {
-            let list = JSON.p
+            document.g
