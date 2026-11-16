@@ -72,10 +72,11 @@
                 </div>
             </div>
 
-            <!-- لوحة التحكم بالجدول الأسبوعي للطلاب (التي طلبت إضافتها) -->
+            <!-- لوحة إعداد الجدول الأسبوعي (اختيار الحصة والمادة مباشرة) -->
             <div class="cyber-card p-4 rounded-xl mb-6 no-print">
-                <h4 class="text-emerald-400 font-bold mb-3">📌 إعداد وتعديل الجدول الأسبوعي للطلاب</h4>
+                <h4 class="text-emerald-400 font-bold mb-3">📌 إعداد الجدول الأسبوعي (اختر الحصة والمادة)</h4>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
+                    <!-- اختيار اليوم -->
                     <select id="sch-day" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
                         <option value="الأحد">الأحد</option>
                         <option value="الإثنين">الإثنين</option>
@@ -83,9 +84,35 @@
                         <option value="الأربعاء">الأربعاء</option>
                         <option value="الخميس">الخميس</option>
                     </select>
-                    <input type="text" id="sch-classes" placeholder="الحصص مفصولة بفاصلة (مثال: اسلامية, عربي, رياضيات)" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm sm:col-span-2">
+
+                    <!-- اختيار رقم الحصة (من 1 إلى 7) -->
+                    <select id="sch-slot" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
+                        <option value="0">الحصة الأولى</option>
+                        <option value="1">الحصة الثانية</option>
+                        <option value="2">الحصة الثالثة</option>
+                        <option value="3">الحصة الرابعة</option>
+                        <option value="4">الحصة الخامسة</option>
+                        <option value="5">الحصة السادسة</option>
+                        <option value="6">الحصة السابعة</option>
+                    </select>
+
+                    <!-- اختيار المادة الدراسية حصرياً -->
+                    <select id="sch-subject" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm sm:col-span-3">
+                        <option value="التربية الاسلامية">التربية الاسلامية</option>
+                        <option value="اللغة العربية">اللغة العربية</option>
+                        <option value="الانجليزي">الانجليزي</option>
+                        <option value="الرياضيات">الرياضيات</option>
+                        <option value="الطبيعيات">الطبيعيات</option>
+                        <option value="اساسيات الكهرباء">اساسيات الكهرباء</option>
+                        <option value="تجميع الحاسوب">تجميع الحاسوب</option>
+                        <option value="اتصالات">اتصالات</option>
+                        <option value="مبادى الحاسوب">مبادى الحاسوب</option>
+                        <option value="تطبيقات الحاسوب">تطبيقات الحاسوب</option>
+                        <option value="الرياضة">الرياضة</option>
+                        <option value="كردي">كردي</option>
+                    </select>
                 </div>
-                <button onclick="saveSchedule()" class="bg-emerald-500 text-black font-bold px-4 py-2 rounded text-sm w-full cursor-pointer">حفظ وتحديث الجدول للطلاب</button>
+                <button onclick="saveScheduleSlot()" class="bg-emerald-500 text-black font-bold px-4 py-2 rounded text-sm w-full cursor-pointer">حفظ المادة في الحصة المحددة</button>
             </div>
 
             <!-- إدخال الغيابات -->
@@ -201,95 +228,26 @@
             } else { alert('رمز المعاون خطأ!'); }
         }
 
-        // دالة حفظ الجدول الأسبوعي (التي ترسل البيانات لـ localStorage ليراها الطلاب)
-        function saveSchedule() {
+        // دالة حفظ المادة في الحصة المحددة للجدول الأسبوعي
+        function saveScheduleSlot() {
             let day = document.getElementById('sch-day').value;
-            let classesText = document.getElementById('sch-classes').value.trim();
-            if(!classesText) { alert('الرجاء كتابة الحصص!'); return; }
+            let slotIndex = parseInt(document.getElementById('sch-slot').value);
+            let subject = document.getElementById('sch-subject').value;
             
-            let lessons = classesText.split(',').map(item => item.trim());
-            let schedule = JSON.parse(localStorage.getItem('school_schedule') || '{}');
-            schedule[day] = lessons;
+            let schedule = JSON.parse(localStorage.getItem('school_schedule') || JSON.stringify({
+                "الأحد": ["-", "-", "-", "-", "-", "-", "-"],
+                "الإثنين": ["-", "-", "-", "-", "-", "-", "-"],
+                "الثلاثاء": ["-", "-", "-", "-", "-", "-", "-"],
+                "الأربعاء": ["-", "-", "-", "-", "-", "-", "-"],
+                "الخميس": ["-", "-", "-", "-", "-", "-", "-"]
+            }));
+
+            if (!schedule[day]) {
+                schedule[day] = ["-", "-", "-", "-", "-", "-", "-"];
+            }
+
+            schedule[day][slotIndex] = subject;
             localStorage.setItem('school_schedule', JSON.stringify(schedule));
             
-            alert(`تم تحديث وحفظ جدول يوم (${day}) بنجاح للطلاب!`);
-            document.getElementById('sch-classes').value = '';
-        }
-
-        function saveAbs() {
-            let name = document.getElementById('g-name').value, cls = document.getElementById('g-class').value;
-            let type = document.getElementById('g-type').value, date = document.getElementById('g-date').value;
-            if(!name || !date) { alert('املأ الحقول'); return; }
-            let list = JSON.parse(localStorage.getItem('abs') || '[]');
-            list.push({name, cls, type, date});
-            localStorage.setItem('abs', JSON.stringify(list));
-            document.getElementById('g-name').value = ''; loadAbs();
-        }
-
-        function loadAbs() {
-            let list = JSON.parse(localStorage.getItem('abs') || '[]');
-            document.getElementById('abs-list').innerHTML = list.map((i, idx) => `
-                <tr><td class="p-3 font-bold">${i.name}</td><td class="p-3 text-emerald-400">${i.cls}</td><td class="p-3">${i.type}</td><td class="p-3">${i.date}</td><td class="p-3 no-print"><button onclick="delAbs(${idx})" class="text-red-400 text-xs cursor-pointer">حذف</button></td></tr>
-            `).join('');
-        }
-
-        function delAbs(idx) {
-            let list = JSON.parse(localStorage.getItem('abs') || '[]');
-            list.splice(idx, 1); localStorage.setItem('abs', JSON.stringify(list)); loadAbs();
-        }
-
-        function clearData(key) { if(confirm('هل تريد مسح السجل؟')) { localStorage.removeItem(key); loadAbs(); } }
-
-        function loadSubs() {
-            document.getElementById('subj-box').innerHTML = subs.map(s => `
-                <div onclick="selectSubj('${s.name}')" class="cyber-card-blue p-4 rounded-xl text-right cursor-pointer hover:border-cyan-400 transition flex justify-between items-center">
-                    <span class="font-bold text-cyan-300">${s.name}</span><span class="text-xs bg-slate-950 px-3 py-1 rounded text-slate-400">دخول 🔒</span>
-                </div>
-            `).join('');
-        }
-
-        function selectSubj(name) {
-            currSubj = subs.find(s => s.name === name); nav('tch-login');
-            document.getElementById('tch-title').innerText = `دخول: ${currSubj.name}`; document.getElementById('tch-pass').value = '';
-        }
-
-        function verifyTch() {
-            if(document.getElementById('tch-pass').value === currSubj.code) {
-                nav('tch-dash'); document.getElementById('dash-title').innerText = `رصد درجات - ${currSubj.name}`; loadGrades();
-            } else { alert('رمز المادة خطأ!'); }
-        }
-
-        function saveGrade() {
-            let name = document.getElementById('s-name').value, cls = document.getElementById('s-class').value;
-            let grade = Number(document.getElementById('s-grade').value);
-            if(!name || document.getElementById('s-grade').value === '') { alert('املأ الحقول'); return; }
-            if(grade < 0 || grade > 100) { alert('الدرجة بين 0 و 100 فقط!'); return; }
-            let list = JSON.parse(localStorage.getItem('grades') || '[]');
-            list.push({name, cls, subj: currSubj.name, grade});
-            localStorage.setItem('grades', JSON.stringify(list));
-            document.getElementById('s-name').value = ''; document.getElementById('s-grade').value = ''; loadGrades();
-        }
-
-        function loadGrades() {
-            let list = JSON.parse(localStorage.getItem('grades') || '[]').filter(g => g.subj === currSubj.name);
-            document.getElementById('grades-list').innerHTML = list.map((i, idx) => `
-                <tr><td class="p-3 font-bold">${i.name}</td><td class="p-3 text-cyan-300">${i.cls}</td><td class="p-3">${i.subj}</td><td class="p-3 text-emerald-400 font-bold">${i.grade}</td><td class="p-3 no-print"><button onclick="delGrade(${idx})" class="text-red-400 text-xs cursor-pointer">حذف</button></td></tr>
-            `).join('');
-        }
-
-        function delGrade(idx) {
-            let list = JSON.parse(localStorage.getItem('grades') || '[]');
-            let subList = list.filter(g => g.subj === currSubj.name); subList.splice(idx, 1);
-            let otherList = list.filter(g => g.subj !== currSubj.name);
-            localStorage.setItem('grades', JSON.stringify([...otherList, ...subList])); loadGrades();
-        }
-
-        function clearGrades() {
-            if(confirm('مسح سجل درجات هذه المادة؟')) {
-                let list = JSON.parse(localStorage.getItem('grades') || '[]').filter(g => g.subj !== currSubj.name);
-                localStorage.setItem('grades', JSON.stringify(list)); loadGrades();
-            }
-        }
-    </script>
-</body>
-</html>
+            alert(`تم تعيين (${subject}) في الحصة المطلوبة ليوم ${day} بنجاح!`);
+    
