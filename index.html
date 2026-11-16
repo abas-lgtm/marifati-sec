@@ -72,11 +72,10 @@
                 </div>
             </div>
 
-            <!-- لوحة إعداد الجدول الأسبوعي (اختيار الحصة والمادة مباشرة) -->
+            <!-- لوحة إعداد الجدول الأسبوعي -->
             <div class="cyber-card p-4 rounded-xl mb-6 no-print">
                 <h4 class="text-emerald-400 font-bold mb-3">📌 إعداد الجدول الأسبوعي (اختر الحصة والمادة)</h4>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
-                    <!-- اختيار اليوم -->
                     <select id="sch-day" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
                         <option value="الأحد">الأحد</option>
                         <option value="الإثنين">الإثنين</option>
@@ -85,7 +84,6 @@
                         <option value="الخميس">الخميس</option>
                     </select>
 
-                    <!-- اختيار رقم الحصة (من 1 إلى 7) -->
                     <select id="sch-slot" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
                         <option value="0">الحصة الأولى</option>
                         <option value="1">الحصة الثانية</option>
@@ -96,7 +94,6 @@
                         <option value="6">الحصة السابعة</option>
                     </select>
 
-                    <!-- اختيار المادة الدراسية حصرياً -->
                     <select id="sch-subject" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm sm:col-span-3">
                         <option value="التربية الاسلامية">التربية الاسلامية</option>
                         <option value="اللغة العربية">اللغة العربية</option>
@@ -203,10 +200,14 @@
 
     <script>
         const subs = [
-            { name: "التربية الإسلامية", code: "1090" }, { name: "اللغة العربية", code: "202500" },
-            { name: "الرياضيات", code: "12300" }, { name: "الانجليزي", code: "0005" },
-            { name: "اساسيات الكهرباء", code: "9000" }, { name: "تجميع الحاسوب", code: "6200" },
-            { name: "تطبيقات الحاسوب", code: "1999" }, { name: "الاتصالات والشبكات", code: "6100" },
+            { name: "التربية الإسلامية", code: "1090" },
+            { name: "اللغة العربية", code: "202500" },
+            { name: "الرياضيات", code: "12300" },
+            { name: "الانجليزي", code: "0005" },
+            { name: "اساسيات الكهرباء", code: "9000" },
+            { name: "تجميع الحاسوب", code: "6200" },
+            { name: "تطبيقات الحاسوب", code: "1999" },
+            { name: "الاتصالات والشبكات", code: "6100" },
             { name: "مبادى الحاسوب", code: "1998" }
         ];
         let currSubj = null;
@@ -223,12 +224,16 @@
         }
 
         function checkAst() {
-            if(document.getElementById('ast-pass').value === '2020') {
-                nav('ast-dash'); loadAbs(); document.getElementById('ast-pass').value = '';
-            } else { alert('رمز المعاون خطأ!'); }
+            let passInput = document.getElementById('ast-pass');
+            if(passInput && passInput.value === '2020') {
+                nav('ast-dash'); 
+                loadAbs(); 
+                passInput.value = '';
+            } else { 
+                alert('رمز المعاون خطأ!'); 
+            }
         }
 
-        // دالة حفظ المادة في الحصة المحددة للجدول الأسبوعي
         function saveScheduleSlot() {
             let day = document.getElementById('sch-day').value;
             let slotIndex = parseInt(document.getElementById('sch-slot').value);
@@ -250,4 +255,90 @@
             localStorage.setItem('school_schedule', JSON.stringify(schedule));
             
             alert(`تم تعيين (${subject}) في الحصة المطلوبة ليوم ${day} بنجاح!`);
-    
+        }
+
+        function saveAbs() {
+            let name = document.getElementById('g-name').value;
+            let cls = document.getElementById('g-class').value;
+            let type = document.getElementById('g-type').value;
+            let date = document.getElementById('g-date').value;
+            if(!name || !date) { alert('املأ الحقول المطلوبة'); return; }
+            let list = JSON.parse(localStorage.getItem('abs') || '[]');
+            list.push({name, cls, type, date});
+            localStorage.setItem('abs', JSON.stringify(list));
+            document.getElementById('g-name').value = ''; 
+            loadAbs();
+        }
+
+        function loadAbs() {
+            let list = JSON.parse(localStorage.getItem('abs') || '[]');
+            let absListEl = document.getElementById('abs-list');
+            if(absListEl) {
+                absListEl.innerHTML = list.map((i, idx) => `
+                    <tr><td class="p-3 font-bold">${i.name}</td><td class="p-3 text-emerald-400">${i.cls}</td><td class="p-3">${i.type}</td><td class="p-3">${i.date}</td><td class="p-3 no-print"><button onclick="delAbs(${idx})" class="text-red-400 text-xs cursor-pointer">حذف</button></td></tr>
+                `).join('');
+            }
+        }
+
+        function delAbs(idx) {
+            let list = JSON.parse(localStorage.getItem('abs') || '[]');
+            list.splice(idx, 1); 
+            localStorage.setItem('abs', JSON.stringify(list)); 
+            loadAbs();
+        }
+
+        function clearData(key) { 
+            if(confirm('هل تريد مسح السجل؟')) { 
+                localStorage.removeItem(key); 
+                loadAbs(); 
+            } 
+        }
+
+        function loadSubs() {
+            let subjBox = document.getElementById('subj-box');
+            if(subjBox) {
+                subjBox.innerHTML = subs.map(s => `
+                    <div onclick="selectSubj('${s.name}')" class="cyber-card-blue p-4 rounded-xl text-right cursor-pointer hover:border-cyan-400 transition flex justify-between items-center">
+                        <span class="font-bold text-cyan-300">${s.name}</span><span class="text-xs bg-slate-950 px-3 py-1 rounded text-slate-400">دخول 🔒</span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function selectSubj(name) {
+            currSubj = subs.find(s => s.name === name); 
+            nav('tch-login');
+            let titleEl = document.getElementById('tch-title');
+            let passEl = document.getElementById('tch-pass');
+            if(titleEl) titleEl.innerText = `دخول: ${currSubj.name}`; 
+            if(passEl) passEl.value = '';
+        }
+
+        function verifyTch() {
+            let passInput = document.getElementById('tch-pass');
+            if(passInput && currSubj && passInput.value === currSubj.code) {
+                nav('tch-dash'); 
+                let dashTitle = document.getElementById('dash-title');
+                if(dashTitle) dashTitle.innerText = `رصد درجات - ${currSubj.name}`; 
+                loadGrades();
+            } else { 
+                alert('رمز المادة خطأ!'); 
+            }
+        }
+
+        function saveGrade() {
+            let name = document.getElementById('s-name').value;
+            let cls = document.getElementById('s-class').value;
+            let gradeInput = document.getElementById('s-grade');
+            let grade = Number(gradeInput.value);
+            
+            if(!name || gradeInput.value === '') { alert('املأ الحقول'); return; }
+            if(grade < 0 || grade > 100) { alert('الدرجة بين 0 و 100 فقط!'); return; }
+            
+            let list = JSON.parse(localStorage.getItem('grades') || '[]');
+            list.push({name, cls, subj: currSubj.name, grade});
+            localStorage.setItem('grades', JSON.stringify(list));
+            
+            document.getElementById('s-name').value = ''; 
+            gradeInput.value = ''; 
+            loadGrades(
