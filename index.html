@@ -8,6 +8,7 @@
     <style>
         body { font-family: 'Cairo', sans-serif; background-color: #030712; color: #f3f4f6; }
         .cyber-card { background-color: #0b0f19; border: 1px solid rgba(0, 255, 102, 0.3); }
+        .student-card { background-color: #0b0f19; border: 1px solid rgba(14, 165, 233, 0.3); }
         @media print {
             body { background: white !important; color: black !important; }
             .no-print { display: none !important; }
@@ -33,16 +34,21 @@
         <div id="v-home" class="text-center py-10">
             <h2 class="text-3xl font-black text-white mb-4">نظام إدارة المدرسة الآمن</h2>
             <p class="text-slate-400 mb-8">اختر البوابة المطلوبة للمتابعة:</p>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <button onclick="nav('ast-login')" class="cyber-card p-8 rounded-2xl text-right hover:border-emerald-400 transition">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <button onclick="nav('ast-login')" class="cyber-card p-6 rounded-2xl text-right hover:border-emerald-400 transition">
                     <div class="text-3xl mb-2">⚡</div>
                     <h3 class="text-xl font-bold text-white mb-1">بوابة المعاون</h3>
                     <p class="text-xs text-slate-400">إدارة الغيابات والشعب (منطقة آمنة ومحمية)</p>
                 </button>
-                <button onclick="nav('tch-select')" class="cyber-card p-8 rounded-2xl text-right hover:border-cyan-400 transition" style="border-color: rgba(6, 182, 212, 0.3);">
+                <button onclick="nav('tch-select')" class="cyber-card p-6 rounded-2xl text-right hover:border-cyan-400 transition" style="border-color: rgba(6, 182, 212, 0.3);">
                     <div class="text-3xl mb-2">💻</div>
                     <h3 class="text-xl font-bold text-white mb-1">بوابة المدرسين</h3>
                     <p class="text-xs text-slate-400">رصد درجات المواد عبر الرموز السرية</p>
+                </button>
+                <button onclick="nav('std-portal')" class="student-card p-6 rounded-2xl text-right hover:border-sky-400 transition">
+                    <div class="text-3xl mb-2">🎓</div>
+                    <h3 class="text-xl font-bold text-white mb-1">بوابة الطلاب</h3>
+                    <p class="text-xs text-slate-400">الجداول الأسبوعية، الامتحانات، وتقييم الأداء</p>
                 </button>
             </div>
         </div>
@@ -139,6 +145,131 @@
                 </table>
             </div>
         </div>
+
+        <!-- 🎓 بوابة الطلاب الجديدة المتكاملة -->
+        <div id="v-std-portal" class="hidden">
+            <div class="text-center mb-6">
+                <h3 class="text-2xl font-bold text-sky-400 mb-1">بوابة الطالب الإلكترونية</h3>
+                <p class="text-xs text-slate-400">متابعة الجداول الدراسية، الامتحانات، وبطاقة التقييم والأداء</p>
+            </div>
+
+            <!-- أزرار التنقل الفرعية داخل بوابة الطالب -->
+            <div class="flex justify-center gap-2 mb-6 border-b border-slate-800 pb-4 flex-wrap">
+                <button onclick="switchStdTab('schedule')" id="btn-std-schedule" class="std-tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-sky-500 text-slate-950 transition">الجدول الأسبوعي</button>
+                <button onclick="switchStdTab('exams')" id="btn-std-exams" class="std-tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">جدول الامتحانات</button>
+                <button onclick="switchStdTab('evaluation')" id="btn-std-evaluation" class="std-tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">تقييم الطلاب والأداء</button>
+            </div>
+
+            <!-- 1. قسم الجدول الأسبوعي -->
+            <section id="std-tab-schedule" class="std-content block">
+                <div class="flex justify-between items-center mb-4">
+                    <h4 class="text-lg font-bold text-sky-400">الجدول الأسبوعي للدروس</h4>
+                    <span class="text-xs bg-slate-800 text-sky-300 px-3 py-1 rounded-full border border-slate-700">قسم الأمن السيبراني</span>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- الأحد -->
+                    <div class="student-card rounded-2xl p-4">
+                        <h5 class="font-bold text-sky-400 mb-3 border-b border-slate-800 pb-2">الأحد</h5>
+                        <ul class="space-y-2 text-xs">
+                            <li class="flex justify-between bg-slate-950/60 p-2.5 rounded-lg"><span>الدرس 1: أساسيات أمن المعلومات</span><span class="text-slate-400">8:30 ص</span></li>
+                            <li class="flex justify-between bg-slate-950/60 p-2.5 rounded-lg"><span>الدرس 2: شبكات الحاسوب</span><span class="text-slate-400">9:30 ص</span></li>
+                            <li class="flex justify-between bg-slate-950/60 p-2.5 rounded-lg"><span>الدرس 3: البرمجة بلغة Python</span><span class="text-slate-400">10:30 ص</span></li>
+                        </ul>
+                    </div>
+                    <!-- الإثنين -->
+                    <div class="student-card rounded-2xl p-4">
+                        <h5 class="font-bold text-sky-400 mb-3 border-b border-slate-800 pb-2">الإثنين</h5>
+                        <ul class="space-y-2 text-xs">
+                            <li class="flex justify-between bg-slate-950/60 p-2.5 rounded-lg"><span>الدرس 1: الرياضيات المهنية</span><span class="text-slate-400">8:30 ص</span></li>
+                            <li class="flex justify-between bg-slate-950/60 p-2.5 rounded-lg"><span>الدرس 2: أنظمة التشغيل (Linux)</span><span class="text-slate-400">9:30 ص</span></li>
+                            <li class="flex justify-between bg-slate-950/60 p-2.5 rounded-lg"><span>الدرس 3: اللغة الإنجليزية</span><span class="text-slate-400">10:30 ص</span></li>
+                        </ul>
+                    </div>
+                    <!-- الثلاثاء -->
+                    <div class="student-card rounded-2xl p-4">
+                        <h5 class="font-bold text-sky-400 mb-3 border-b border-slate-800 pb-2">الثلاثاء</h5>
+                        <ul class="space-y-2 text-xs">
+                            <li class="flex justify-between bg-slate-950/60 p-2.5 rounded-lg"><span>الدرس 1: عملي - مختبر شبكات</span><span class="text-slate-400">8:30 ص</span></li>
+                            <li class="flex justify-between bg-slate-950/60 p-2.5 rounded-lg"><span>الدرس 2: عملي - صيانة حاسوب</span><span class="text-slate-400">10:00 ص</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. قسم جدول الامتحانات -->
+            <section id="std-tab-exams" class="std-content hidden">
+                <h4 class="text-lg font-bold text-sky-400 mb-4">جدول الامتحانات الشهرية</h4>
+                <div class="overflow-x-auto student-card rounded-2xl">
+                    <table class="w-full text-right text-sm text-slate-300">
+                        <thead class="bg-slate-950 text-sky-400 border-b border-slate-800">
+                            <tr>
+                                <th class="p-3">اليوم والتاريخ</th>
+                                <th class="p-3">المادة الدراسية</th>
+                                <th class="p-3">الوقت</th>
+                                <th class="p-3">القاعة الامتحانية</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-900">
+                            <tr>
+                                <td class="p-3 font-semibold text-white">الأحد 2026/11/22</td>
+                                <td class="p-3">أساسيات الأمن السيبراني</td>
+                                <td class="p-3">09:00 صباحاً</td>
+                                <td class="p-3">المختبر الرئيسي (قاعة 1)</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-semibold text-white">الثلاثاء 2026/11/24</td>
+                                <td class="p-3">أنظمة التشغيل والشبكات</td>
+                                <td class="p-3">09:00 صباحاً</td>
+                                <td class="p-3">قاعة 3</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-semibold text-white">الخميس 2026/11/26</td>
+                                <td class="p-3">تطبيقات وبرمجة الحاسوب</td>
+                                <td class="p-3">09:00 صباحاً</td>
+                                <td class="p-3">قاعة 2</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 3. قسم تقييم الطلاب -->
+            <section id="std-tab-evaluation" class="std-content hidden">
+                <h4 class="text-lg font-bold text-sky-400 mb-4">بطاقة التقييم ومتابعة الأداء</h4>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="student-card p-4 rounded-2xl text-center">
+                        <span class="text-slate-400 text-xs">نسبة الحضور والالتزام</span>
+                        <p class="text-2xl font-bold text-emerald-400 mt-1">96%</p>
+                    </div>
+                    <div class="student-card p-4 rounded-2xl text-center">
+                        <span class="text-slate-400 text-xs">التقييم السلوكي العام</span>
+                        <p class="text-2xl font-bold text-sky-400 mt-1">ممتاز (A)</p>
+                    </div>
+                    <div class="student-card p-4 rounded-2xl text-center">
+                        <span class="text-slate-400 text-xs">أيام الغياب المسجلة</span>
+                        <p class="text-2xl font-bold text-rose-400 mt-1">يومان</p>
+                    </div>
+                </div>
+
+                <!-- ملاحظات وتوصيات المدرسين -->
+                <div class="student-card rounded-2xl p-5">
+                    <h5 class="font-bold text-white mb-3 border-b border-slate-800 pb-2 text-sm">ملاحظات وتوصيات الكادر التدريسي:</h5>
+                    <ul class="space-y-3 text-xs">
+                        <li class="bg-slate-950/60 p-3 rounded-xl border-r-4 border-emerald-500">
+                            <span class="font-bold text-sky-400 block mb-1">مدرس مادة الأمن السيبراني:</span>
+                            مستوى عملي ممتاز وتفاعل عالي داخل المختبر.
+                        </li>
+                        <li class="bg-slate-950/60 p-3 rounded-xl border-r-4 border-sky-500">
+                            <span class="font-bold text-sky-400 block mb-1">مدرس مادة الشبكات:</span>
+                            التزام تام بالمواعيد وإنجاز للتمارين بشكل دقيق.
+                        </li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+
     </main>
 
     <!-- بصمة الحقوق الثابتة السفيلة المعدلة -->
@@ -165,119 +296,11 @@
         let currSubj = null;
 
         function nav(v) {
-            ['home', 'ast-login', 'ast-dash', 'tch-select', 'tch-login', 'tch-dash'].forEach(id => {
+            ['home', 'ast-login', 'ast-dash', 'tch-select', 'tch-login', 'tch-dash', 'std-portal'].forEach(id => {
                 let el = document.getElementById('v-' + id);
                 if(el) el.classList.add('hidden');
             });
             let target = document.getElementById('v-' + v);
             if(target) target.classList.remove('hidden');
             if(v === 'tch-select') loadSubs();
-            window.scrollTo({top: 0});
-        }
-
-        function checkAst() {
-            if(document.getElementById('ast-pass').value === '2020') {
-                nav('ast-dash');
-                loadAbs();
-                document.getElementById('ast-pass').value = '';
-            } else { alert('رمز المعاون خطأ!'); }
-        }
-
-        function saveAbs() {
-            let name = document.getElementById('g-name').value;
-            let cls = document.getElementById('g-class').value;
-            let type = document.getElementById('g-type').value;
-            let date = document.getElementById('g-date').value;
-            if(!name || !date) { alert('املأ الحقول المطلوبة'); return; }
-            let list = JSON.parse(localStorage.getItem('abs') || '[]');
-            list.push({name, cls, type, date});
-            localStorage.setItem('abs', JSON.stringify(list));
-            document.getElementById('g-name').value = '';
-            loadAbs();
-        }
-
-        function loadAbs() {
-            let list = JSON.parse(localStorage.getItem('abs') || '[]');
-            document.getElementById('abs-list').innerHTML = list.map((i, idx) => `
-                <tr><td class="p-3 font-bold">${i.name}</td><td class="p-3 text-emerald-400">${i.cls}</td><td class="p-3">${i.type}</td><td class="p-3">${i.date}</td><td class="p-3 no-print"><button onclick="delAbs(${idx})" class="text-red-400 text-xs">حذف</button></td></tr>
-            `).join('');
-        }
-
-        function delAbs(idx) {
-            let list = JSON.parse(localStorage.getItem('abs') || '[]');
-            list.splice(idx, 1);
-            localStorage.setItem('abs', JSON.stringify(list));
-            loadAbs();
-        }
-
-        function clearData(key) {
-            if(confirm('هل تريد مسح السجل بالكامل؟')) { localStorage.removeItem(key); loadAbs(); }
-        }
-
-        function loadSubs() {
-            document.getElementById('subj-box').innerHTML = subs.map(s => `
-                <div onclick="selectSubj('${s.name}')" class="cyber-card p-4 rounded-xl text-right cursor-pointer hover:border-cyan-400 transition flex justify-between items-center">
-                    <span class="font-bold text-cyan-300">${s.name}</span>
-                    <span class="text-xs bg-slate-950 px-3 py-1 rounded text-slate-400">دخول 🔒</span>
-                </div>
-            `).join('');
-        }
-
-        function selectSubj(name) {
-            currSubj = subs.find(s => s.name === name);
-            nav('tch-login');
-            document.getElementById('tch-title').innerText = `دخول: ${currSubj.name}`;
-            document.getElementById('tch-pass').value = '';
-        }
-
-        function verifyTch() {
-            if(document.getElementById('tch-pass').value === currSubj.code) {
-                nav('tch-dash');
-                document.getElementById('dash-title').innerText = `رصد درجات - ${currSubj.name}`;
-                loadGrades();
-            } else { alert('رمز المادة خطأ!'); }
-        }
-
-        function saveGrade() {
-            let name = document.getElementById('s-name').value;
-            let cls = document.getElementById('s-class').value;
-            let grade = Number(document.getElementById('s-grade').value);
-            if(!name || document.getElementById('s-grade').value === '') { alert('املأ الحقول'); return; }
-            if(grade < 0 || grade > 100) { alert('الدرجة يجب أن تكون بين 0 و 100 فقط!'); return; }
-            
-            let list = JSON.parse(localStorage.getItem('grades') || '[]');
-            list.push({name, cls, subj: currSubj.name, grade});
-            localStorage.setItem('grades', JSON.stringify(list));
-            document.getElementById('s-name').value = '';
-            document.getElementById('s-grade').value = '';
-            loadGrades();
-        }
-
-        function loadGrades() {
-            let list = JSON.parse(localStorage.getItem('grades') || '[]').filter(g => g.subj === currSubj.name);
-            document.getElementById('grades-list').innerHTML = list.map((i, idx) => `
-                <tr><td class="p-3 font-bold">${i.name}</td><td class="p-3 text-cyan-300">${i.cls}</td><td class="p-3">${i.subj}</td><td class="p-3 text-emerald-400 font-bold">${i.grade}</td><td class="p-3 no-print"><button onclick="delGrade(${idx})" class="text-red-400 text-xs">حذف</button></td></tr>
-            `).join('');
-        }
-
-        function delGrade(idx) {
-            let list = JSON.parse(localStorage.getItem('grades') || '[]');
-            let subList = list.filter(g => g.subj === currSubj.name);
-            subList.splice(idx, 1);
-            let otherList = list.filter(g => g.subj !== currSubj.name);
-            localStorage.setItem('grades', JSON.stringify([...otherList, ...subList]));
-            loadGrades();
-        }
-
-        function clearGrades() {
-            if(confirm('هل تريد مسح سجل درجات هذه المادة بالكامل؟')) {
-                let list = JSON.parse(localStorage.getItem('grades') || '[]');
-                list = list.filter(g => g.subj !== currSubj.name);
-                localStorage.setItem('grades', JSON.stringify(list));
-                loadGrades();
-            }
-        }
-    </script>
-</body>
-    </html>
-                        
+   
