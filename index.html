@@ -6,10 +6,8 @@
     <title>ALPHA-SEC // النظام المدرسي المتكامل</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: 'Cairo', sans-serif; background-color: #030712; color: #f3f4f6; -webkit-user-select: none; user-select: none; }
+        body { font-family: 'Cairo', sans-serif; background-color: #030712; color: #f3f4f6; }
         .cyber-card { background-color: #0b0f19; border: 1px solid rgba(0, 255, 102, 0.3); }
-        .cyber-card-blue { background-color: #0b0f19; border: 1px solid rgba(6, 182, 212, 0.3); }
-        .cyber-card-purple { background-color: #0b0f19; border: 1px solid rgba(168, 85, 247, 0.3); }
         @media print {
             body { background: white !important; color: black !important; }
             .no-print { display: none !important; }
@@ -20,36 +18,31 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between p-4 sm:p-6 pb-16">
 
+    <!-- الهيدر العلوي المعدل -->
     <header class="flex justify-between items-center border-b border-emerald-500/30 pb-4 no-print">
         <div class="flex flex-col text-right">
             <h1 class="text-white font-bold text-base md:text-lg">إعدادية المعرفة المهنية الاهلية</h1>
             <span class="text-[11px] md:text-xs text-emerald-400 font-mono">برمجة: عباس محمد عزيز</span>
         </div>
-        <button onclick="nav('home')" class="bg-slate-900 text-emerald-400 px-4 py-2 rounded-lg border border-emerald-500/30 text-sm font-semibold cursor-pointer">الرئيسية</button>
+        <button onclick="nav('home')" class="bg-slate-900 text-emerald-400 px-4 py-2 rounded-lg border border-emerald-500/30 text-sm font-semibold">الرئيسية</button>
     </header>
 
     <main class="max-w-4xl mx-auto w-full my-6 flex-grow">
+        
         <!-- الرئيسية -->
         <div id="v-home" class="text-center py-10">
             <h2 class="text-3xl font-black text-white mb-4">نظام إدارة المدرسة الآمن</h2>
             <p class="text-slate-400 mb-8">اختر البوابة المطلوبة للمتابعة:</p>
-            
-            <!-- أزرار البوابات الثلاثة مرتبة بشكل مثالي -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <button onclick="nav('ast-login')" class="cyber-card p-6 rounded-2xl text-right hover:border-emerald-400 transition w-full cursor-pointer focus:outline-none">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <button onclick="nav('ast-login')" class="cyber-card p-8 rounded-2xl text-right hover:border-emerald-400 transition">
                     <div class="text-3xl mb-2">⚡</div>
-                    <h3 class="text-lg font-bold text-white mb-1">بوابة المعاون</h3>
-                    <p class="text-xs text-slate-400">إدارة الغيابات والشعب (منطقة محمية)</p>
+                    <h3 class="text-xl font-bold text-white mb-1">بوابة المعاون</h3>
+                    <p class="text-xs text-slate-400">إدارة الغيابات والشعب (منطقة آمنة ومحمية)</p>
                 </button>
-                <button onclick="nav('tch-select')" class="cyber-card-blue p-6 rounded-2xl text-right hover:border-cyan-400 transition w-full cursor-pointer focus:outline-none">
+                <button onclick="nav('tch-select')" class="cyber-card p-8 rounded-2xl text-right hover:border-cyan-400 transition" style="border-color: rgba(6, 182, 212, 0.3);">
                     <div class="text-3xl mb-2">💻</div>
-                    <h3 class="text-lg font-bold text-white mb-1">بوابة المدرسين</h3>
-                    <p class="text-xs text-slate-400">رصد الدرجات عبر الرموز السرية</p>
-                </button>
-                <button onclick="window.location.href='students.html'" class="cyber-card-purple p-6 rounded-2xl text-right hover:border-purple-400 transition w-full cursor-pointer focus:outline-none">
-                    <div class="text-3xl mb-2">🎓</div>
-                    <h3 class="text-lg font-bold text-white mb-1">بوابة الطلاب</h3>
-                    <p class="text-xs text-slate-400">الجداول، الامتحانات، ومتابعة النتائج</p>
+                    <h3 class="text-xl font-bold text-white mb-1">بوابة المدرسين</h3>
+                    <p class="text-xs text-slate-400">رصد درجات المواد عبر الرموز السرية</p>
                 </button>
             </div>
         </div>
@@ -59,8 +52,8 @@
             <h3 class="text-xl text-emerald-400 font-bold mb-4 text-center">دخول المعاون</h3>
             <input type="password" id="ast-pass" placeholder="أدخل رمز المرور السري" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center">
             <div class="flex gap-2">
-                <button onclick="checkAst()" class="flex-1 bg-emerald-500 text-black font-bold p-3 rounded-lg cursor-pointer">دخول</button>
-                <button onclick="nav('home')" class="bg-slate-800 px-4 rounded-lg text-slate-300 cursor-pointer">إلغاء</button>
+                <button onclick="checkAst()" class="flex-1 bg-emerald-500 text-black font-bold p-3 rounded-lg">دخول</button>
+                <button onclick="nav('home')" class="bg-slate-800 px-4 rounded-lg text-slate-300">إلغاء</button>
             </div>
         </div>
 
@@ -69,8 +62,8 @@
             <div class="flex justify-between items-center mb-6 flex-wrap gap-2 no-print">
                 <h3 class="text-xl font-bold text-emerald-400">سجل الغيابات والدوام</h3>
                 <div class="flex gap-2">
-                    <button onclick="window.print()" class="bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">🖨️ طباعة PDF</button>
-                    <button onclick="clearData('abs')" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">🗑️ مسح السجل</button>
+                    <button onclick="window.print()" class="bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold">🖨️ طباعة PDF</button>
+                    <button onclick="clearData('abs')" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold">🗑️ مسح السجل</button>
                 </div>
             </div>
             <div class="cyber-card p-4 rounded-xl mb-6 no-print">
@@ -90,7 +83,7 @@
                     </select>
                     <input type="date" id="g-date" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
                 </div>
-                <button onclick="saveAbs()" class="bg-emerald-500 text-black font-bold px-4 py-2 rounded text-sm w-full cursor-pointer">حفظ الغياب</button>
+                <button onclick="saveAbs()" class="bg-emerald-500 text-black font-bold px-4 py-2 rounded text-sm w-full">حفظ الغياب</button>
             </div>
             <div class="cyber-card rounded-xl overflow-hidden">
                 <table class="w-full text-right text-sm">
@@ -111,8 +104,8 @@
             <h3 id="tch-title" class="text-xl text-cyan-400 font-bold mb-4 text-center">تسجيل دخول المدرس</h3>
             <input type="password" id="tch-pass" placeholder="أدخل رمز المادة السري" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center">
             <div class="flex gap-2">
-                <button onclick="verifyTch()" class="flex-1 bg-cyan-500 text-black font-bold p-3 rounded-lg cursor-pointer">دخول</button>
-                <button onclick="nav('tch-select')" class="bg-slate-800 px-4 rounded-lg text-slate-300 cursor-pointer">رجوع</button>
+                <button onclick="verifyTch()" class="flex-1 bg-cyan-500 text-black font-bold p-3 rounded-lg">دخول</button>
+                <button onclick="nav('tch-select')" class="bg-slate-800 px-4 rounded-lg text-slate-300">رجوع</button>
             </div>
         </div>
 
@@ -121,8 +114,8 @@
             <div class="flex justify-between items-center mb-6 flex-wrap gap-2 no-print">
                 <h3 id="dash-title" class="text-xl font-bold text-cyan-400">رصد الدرجات</h3>
                 <div class="flex gap-2">
-                    <button onclick="window.print()" class="bg-cyan-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">🖨️ طباعة PDF</button>
-                    <button onclick="clearGrades()" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">🗑️ مسح السجل</button>
+                    <button onclick="window.print()" class="bg-cyan-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold">🖨️ طباعة PDF</button>
+                    <button onclick="clearGrades()" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold">🗑️ مسح السجل</button>
                 </div>
             </div>
             <div class="cyber-card p-4 rounded-xl mb-6 no-print">
@@ -137,7 +130,7 @@
                     </select>
                     <input type="number" id="s-grade" min="0" max="100" placeholder="الدرجة (0-100)" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
                 </div>
-                <button onclick="saveGrade()" class="bg-cyan-500 text-black font-bold px-4 py-2 rounded text-sm w-full cursor-pointer">حفظ الدرجة</button>
+                <button onclick="saveGrade()" class="bg-cyan-500 text-black font-bold px-4 py-2 rounded text-sm w-full">حفظ الدرجة</button>
             </div>
             <div class="cyber-card rounded-xl overflow-hidden">
                 <table class="w-full text-right text-sm">
@@ -148,6 +141,7 @@
         </div>
     </main>
 
+    <!-- بصمة الحقوق الثابتة السفيلة المعدلة -->
     <footer class="fixed bottom-0 left-0 w-full bg-slate-900/95 backdrop-blur-md border-t border-emerald-500/30 py-2.5 px-4 z-50 text-center shadow-lg no-print">
       <div class="flex items-center justify-center gap-2 text-xs md:text-sm font-mono dir-rtl">
         <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -158,10 +152,14 @@
 
     <script>
         const subs = [
-            { name: "التربية الإسلامية", code: "1090" }, { name: "اللغة العربية", code: "202500" },
-            { name: "الرياضيات", code: "12300" }, { name: "الانجليزي", code: "0005" },
-            { name: "اساسيات الكهرباء", code: "9000" }, { name: "تجميع الحاسوب", code: "6200" },
-            { name: "تطبيقات الحاسوب", code: "1999" }, { name: "الاتصالات والشبكات", code: "6100" },
+            { name: "التربية الإسلامية", code: "1090" },
+            { name: "اللغة العربية", code: "202500" },
+            { name: "الرياضيات", code: "12300" },
+            { name: "الانجليزي", code: "0005" },
+            { name: "اساسيات الكهرباء", code: "9000" },
+            { name: "تجميع الحاسوب", code: "6200" },
+            { name: "تطبيقات الحاسوب", code: "1999" },
+            { name: "الاتصالات والشبكات", code: "6100" },
             { name: "مبادى الحاسوب", code: "1998" }
         ];
         let currSubj = null;
@@ -179,84 +177,109 @@
 
         function checkAst() {
             if(document.getElementById('ast-pass').value === '2020') {
-                nav('ast-dash'); loadAbs(); document.getElementById('ast-pass').value = '';
+                nav('ast-dash');
+                loadAbs();
+                document.getElementById('ast-pass').value = '';
             } else { alert('رمز المعاون خطأ!'); }
         }
 
         function saveAbs() {
-            let name = document.getElementById('g-name').value, cls = document.getElementById('g-class').value;
-            let type = document.getElementById('g-type').value, date = document.getElementById('g-date').value;
-            if(!name || !date) { alert('املأ الحقول'); return; }
+            let name = document.getElementById('g-name').value;
+            let cls = document.getElementById('g-class').value;
+            let type = document.getElementById('g-type').value;
+            let date = document.getElementById('g-date').value;
+            if(!name || !date) { alert('املأ الحقول المطلوبة'); return; }
             let list = JSON.parse(localStorage.getItem('abs') || '[]');
             list.push({name, cls, type, date});
             localStorage.setItem('abs', JSON.stringify(list));
-            document.getElementById('g-name').value = ''; loadAbs();
+            document.getElementById('g-name').value = '';
+            loadAbs();
         }
 
         function loadAbs() {
             let list = JSON.parse(localStorage.getItem('abs') || '[]');
             document.getElementById('abs-list').innerHTML = list.map((i, idx) => `
-                <tr><td class="p-3 font-bold">${i.name}</td><td class="p-3 text-emerald-400">${i.cls}</td><td class="p-3">${i.type}</td><td class="p-3">${i.date}</td><td class="p-3 no-print"><button onclick="delAbs(${idx})" class="text-red-400 text-xs cursor-pointer">حذف</button></td></tr>
+                <tr><td class="p-3 font-bold">${i.name}</td><td class="p-3 text-emerald-400">${i.cls}</td><td class="p-3">${i.type}</td><td class="p-3">${i.date}</td><td class="p-3 no-print"><button onclick="delAbs(${idx})" class="text-red-400 text-xs">حذف</button></td></tr>
             `).join('');
         }
 
         function delAbs(idx) {
             let list = JSON.parse(localStorage.getItem('abs') || '[]');
-            list.splice(idx, 1); localStorage.setItem('abs', JSON.stringify(list)); loadAbs();
+            list.splice(idx, 1);
+            localStorage.setItem('abs', JSON.stringify(list));
+            loadAbs();
         }
 
-        function clearData(key) { if(confirm('هل تريد مسح السجل؟')) { localStorage.removeItem(key); loadAbs(); } }
+        function clearData(key) {
+            if(confirm('هل تريد مسح السجل بالكامل؟')) { localStorage.removeItem(key); loadAbs(); }
+        }
 
         function loadSubs() {
             document.getElementById('subj-box').innerHTML = subs.map(s => `
-                <button onclick="selectSubj('${s.name}')" class="cyber-card-blue p-4 rounded-xl text-right cursor-pointer hover:border-cyan-400 transition flex justify-between items-center w-full focus:outline-none">
-                    <span class="font-bold text-cyan-300">${s.name}</span><span class="text-xs bg-slate-950 px-3 py-1 rounded text-slate-400">دخول 🔒</span>
-                </button>
+                <div onclick="selectSubj('${s.name}')" class="cyber-card p-4 rounded-xl text-right cursor-pointer hover:border-cyan-400 transition flex justify-between items-center">
+                    <span class="font-bold text-cyan-300">${s.name}</span>
+                    <span class="text-xs bg-slate-950 px-3 py-1 rounded text-slate-400">دخول 🔒</span>
+                </div>
             `).join('');
         }
 
         function selectSubj(name) {
-            currSubj = subs.find(s => s.name === name); nav('tch-login');
-            document.getElementById('tch-title').innerText = `دخول: ${currSubj.name}`; document.getElementById('tch-pass').value = '';
+            currSubj = subs.find(s => s.name === name);
+            nav('tch-login');
+            document.getElementById('tch-title').innerText = `دخول: ${currSubj.name}`;
+            document.getElementById('tch-pass').value = '';
         }
 
         function verifyTch() {
             if(document.getElementById('tch-pass').value === currSubj.code) {
-                nav('tch-dash'); document.getElementById('dash-title').innerText = `رصد درجات - ${currSubj.name}`; loadGrades();
+                nav('tch-dash');
+                document.getElementById('dash-title').innerText = `رصد درجات - ${currSubj.name}`;
+                loadGrades();
             } else { alert('رمز المادة خطأ!'); }
         }
 
         function saveGrade() {
-            let name = document.getElementById('s-name').value, cls = document.getElementById('s-class').value;
+            let name = document.getElementById('s-name').value;
+            let cls = document.getElementById('s-class').value;
             let grade = Number(document.getElementById('s-grade').value);
             if(!name || document.getElementById('s-grade').value === '') { alert('املأ الحقول'); return; }
-            if(grade < 0 || grade > 100) { alert('الدرجة بين 0 و 100 فقط!'); return; }
-            let list = JSON.parse(localStorage.InvalidArgument || '[]');
+            if(grade < 0 || grade > 100) { alert('الدرجة يجب أن تكون بين 0 و 100 فقط!'); return; }
+            
+            let list = JSON.parse(localStorage.getItem('grades') || '[]');
             list.push({name, cls, subj: currSubj.name, grade});
             localStorage.setItem('grades', JSON.stringify(list));
-            document.getElementById('s-name').value = ''; document.getElementById('s-grade').value = ''; loadGrades();
+            document.getElementById('s-name').value = '';
+            document.getElementById('s-grade').value = '';
+            loadGrades();
         }
 
         function loadGrades() {
             let list = JSON.parse(localStorage.getItem('grades') || '[]').filter(g => g.subj === currSubj.name);
             document.getElementById('grades-list').innerHTML = list.map((i, idx) => `
-                <tr><td class="p-3 font-bold">${i.name}</td><td class="p-3 text-cyan-300">${i.cls}</td><td class="p-3">${i.subj}</td><td class="p-3 text-emerald-400 font-bold">${i.grade}</td><td class="p-3 no-print"><button onclick="delGrade(${idx})" class="text-red-400 text-xs cursor-pointer">حذف</button></td></tr>
+                <tr><td class="p-3 font-bold">${i.name}</td><td class="p-3 text-cyan-300">${i.cls}</td><td class="p-3">${i.subj}</td><td class="p-3 text-emerald-400 font-bold">${i.grade}</td><td class="p-3 no-print"><button onclick="delGrade(${idx})" class="text-red-400 text-xs">حذف</button></td></tr>
             `).join('');
         }
 
         function delGrade(idx) {
             let list = JSON.parse(localStorage.getItem('grades') || '[]');
-            let subList = list.filter(g => g.subj === currSubj.name); subList.splice(idx, 1);
+            let subList = list.filter(g => g.subj === currSubj.name);
+            subList.splice(idx, 1);
             let otherList = list.filter(g => g.subj !== currSubj.name);
-            localStorage.setItem('grades', JSON.stringify([...otherList, ...subList])); loadGrades();
+            localStorage.setItem('grades', JSON.stringify([...otherList, ...subList]));
+            loadGrades();
         }
 
         function clearGrades() {
-            if(confirm('مسح سجل درجات هذه المادة؟')) {
-                let list = JSON.parse(localStorage.getItem('grades') || '[]').filter(g => g.subj !== currSubj.name);
-                localStorage.setItem('grades', JSON.stringify(list)); loadGrades();
+            if(confirm('هل تريد مسح سجل درجات هذه المادة بالكامل؟')) {
+                let list = JSON.parse(localStorage.getItem('grades') || '[]');
+                list = list.filter(g => g.subj !== currSubj.name);
+                localStorage.setItem('grades', JSON.stringify(list));
+                loadGrades();
             }
         }
     </script>
 </body>
 </html>
+
+
+
