@@ -1,3 +1,4 @@
+cat << 'EOF' > index.html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -19,7 +20,6 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between p-4 sm:p-6 pb-16">
 
-    <!-- الهيدر العلوي المعدل -->
     <header class="flex justify-between items-center border-b border-emerald-500/30 pb-4 no-print">
         <div class="flex flex-col text-right">
             <h1 class="text-white font-bold text-base md:text-lg">إعدادية المعرفة المهنية الاهلية</h1>
@@ -30,7 +30,6 @@
 
     <main class="max-w-4xl mx-auto w-full my-6 flex-grow">
         
-        <!-- الرئيسية -->
         <div id="v-home" class="text-center py-10">
             <h2 class="text-3xl font-black text-white mb-4">نظام إدارة المدرسة الآمن</h2>
             <p class="text-slate-400 mb-8">اختر البوابة المطلوبة للمتابعة:</p>
@@ -53,7 +52,6 @@
             </div>
         </div>
 
-        <!-- دخول المعاون -->
         <div id="v-ast-login" class="hidden max-w-md mx-auto cyber-card p-6 rounded-2xl">
             <h3 class="text-xl text-emerald-400 font-bold mb-4 text-center">دخول المعاون</h3>
             <input type="password" id="ast-pass" placeholder="أدخل رمز المرور السري" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center focus:outline-none focus:border-emerald-400">
@@ -63,7 +61,6 @@
             </div>
         </div>
 
-        <!-- لوحة المعاون (الغيابات) -->
         <div id="v-ast-dash" class="hidden">
             <div class="flex justify-between items-center mb-6 flex-wrap gap-2 no-print">
                 <h3 class="text-xl font-bold text-emerald-400">سجل الغيابات والدوام</h3>
@@ -99,13 +96,11 @@
             </div>
         </div>
 
-        <!-- اختيار المادة للمدرس -->
         <div id="v-tch-select" class="hidden max-w-xl mx-auto">
             <h3 class="text-xl font-bold text-cyan-400 mb-4 text-center">اختر المادة الدراسية</h3>
             <div class="space-y-2" id="subj-box"></div>
         </div>
 
-        <!-- دخول المدرس -->
         <div id="v-tch-login" class="hidden max-w-md mx-auto cyber-card p-6 rounded-2xl">
             <h3 id="tch-title" class="text-xl text-cyan-400 font-bold mb-4 text-center">تسجيل دخول المدرس</h3>
             <input type="password" id="tch-pass" placeholder="أدخل رمز المادة السري" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center focus:outline-none focus:border-cyan-400">
@@ -115,7 +110,6 @@
             </div>
         </div>
 
-        <!-- لوحة درجات المدرس -->
         <div id="v-tch-dash" class="hidden">
             <div class="flex justify-between items-center mb-6 flex-wrap gap-2 no-print">
                 <h3 id="dash-title" class="text-xl font-bold text-cyan-400">رصد الدرجات</h3>
@@ -146,21 +140,18 @@
             </div>
         </div>
 
-        <!-- 🎓 بوابة الطلاب المتكاملة -->
         <div id="v-std-portal" class="hidden">
             <div class="text-center mb-6">
                 <h3 class="text-2xl font-bold text-sky-400 mb-1">بوابة الطالب الإلكترونية</h3>
                 <p class="text-xs text-slate-400">متابعة الجداول الدراسية، الامتحانات، وبطاقة التقييم والأداء</p>
             </div>
 
-            <!-- أزرار التنقل الفرعية داخل بوابة الطالب -->
             <div class="flex justify-center gap-2 mb-6 border-b border-slate-800 pb-4 flex-wrap">
                 <button onclick="switchStdTab('schedule')" id="btn-std-schedule" class="std-tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-sky-500 text-slate-950 transition cursor-pointer">الجدول الأسبوعي</button>
                 <button onclick="switchStdTab('exams')" id="btn-std-exams" class="std-tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 transition cursor-pointer">جدول الامتحانات</button>
                 <button onclick="switchStdTab('evaluation')" id="btn-std-evaluation" class="std-tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 transition cursor-pointer">تقييم الطلاب والأداء</button>
             </div>
 
-            <!-- 1. قسم الجدول الأسبوعي -->
             <section id="std-tab-schedule" class="std-content block">
                 <div class="flex justify-between items-center mb-4">
                     <h4 class="text-lg font-bold text-sky-400">الجدول الأسبوعي للدروس</h4>
@@ -168,7 +159,6 @@
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <!-- الأحد -->
                     <div class="student-card rounded-2xl p-4">
                         <h5 class="font-bold text-sky-400 mb-3 border-b border-slate-800 pb-2">الأحد</h5>
                         <ul class="space-y-2 text-xs">
@@ -177,7 +167,6 @@
                             <li class="flex justify-between bg-slate-950/60 p-2.5 rounded-lg"><span>الدرس 3: البرمجة بلغة Python</span><span class="text-slate-400">10:30 ص</span></li>
                         </ul>
                     </div>
-                    <!-- الإثنين -->
                     <div class="student-card rounded-2xl p-4">
                         <h5 class="font-bold text-sky-400 mb-3 border-b border-slate-800 pb-2">الإثنين</h5>
                         <ul class="space-y-2 text-xs">
@@ -186,7 +175,6 @@
                             <li class="flex justify-between bg-slate-950/60 p-2.5 rounded-lg"><span>الدرس 3: اللغة الإنجليزية</span><span class="text-slate-400">10:30 ص</span></li>
                         </ul>
                     </div>
-                    <!-- الثلاثاء -->
                     <div class="student-card rounded-2xl p-4">
                         <h5 class="font-bold text-sky-400 mb-3 border-b border-slate-800 pb-2">الثلاثاء</h5>
                         <ul class="space-y-2 text-xs">
@@ -197,7 +185,6 @@
                 </div>
             </section>
 
-            <!-- 2. قسم جدول الامتحانات -->
             <section id="std-tab-exams" class="std-content hidden">
                 <h4 class="text-lg font-bold text-sky-400 mb-4">جدول الامتحانات الشهرية</h4>
                 <div class="overflow-x-auto student-card rounded-2xl">
@@ -234,7 +221,6 @@
                 </div>
             </section>
 
-            <!-- 3. قسم تقييم الطلاب -->
             <section id="std-tab-evaluation" class="std-content hidden">
                 <h4 class="text-lg font-bold text-sky-400 mb-4">بطاقة التقييم ومتابعة الأداء</h4>
                 
@@ -253,7 +239,6 @@
                     </div>
                 </div>
 
-                <!-- ملاحظات وتوصيات المدرسين -->
                 <div class="student-card rounded-2xl p-5">
                     <h5 class="font-bold text-white mb-3 border-b border-slate-800 pb-2 text-sm">ملاحظات وتوصيات الكادر التدريسي:</h5>
                     <ul class="space-y-3 text-xs">
@@ -272,7 +257,6 @@
 
     </main>
 
-    <!-- بصمة الحقوق الثابتة السفلى -->
     <footer class="fixed bottom-0 left-0 w-full bg-slate-900/95 backdrop-blur-md border-t border-emerald-500/30 py-2.5 px-4 z-50 text-center shadow-lg no-print">
       <div class="flex items-center justify-center gap-2 text-xs md:text-sm font-mono dir-rtl">
         <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -286,4 +270,18 @@
             { name: "التربية الإسلامية", code: "1090" },
             { name: "اللغة العربية", code: "202500" },
             { name: "الرياضيات", code: "12300" },
-            { n
+            { name: "الانجليزي", code: "0005" },
+            { name: "اساسيات الكهرباء", code: "9000" },
+            { name: "تجميع الحاسوب", code: "6200" },
+            { name: "تطبيقات الحاسوب", code: "1999" },
+            { name: "الاتصالات والشبكات", code: "6100" },
+            { name: "مبادى الحاسوب", code: "1998" }
+        ];
+        let currSubj = null;
+
+        function nav(v) {
+            ['home', 'ast-login', 'ast-dash', 'tch-select', 'tch-login', 'tch-dash', 'std-portal'].forEach(id => {
+                let el = document.getElementById('v-' + id);
+                if(el) el.classList.add('hidden');
+            });
+            let targe
