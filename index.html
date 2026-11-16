@@ -36,21 +36,21 @@
             <h2 class="text-3xl font-black text-white mb-4">نظام إدارة المدرسة الآمن</h2>
             <p class="text-slate-400 mb-8">اختر البوابة المطلوبة للمتابعة:</p>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <button onclick="nav('ast-login')" class="cyber-card p-8 rounded-2xl text-right hover:border-emerald-400 transition">
+                <div onclick="nav('ast-login')" class="cyber-card p-8 rounded-2xl text-right hover:border-emerald-400 transition cursor-pointer">
                     <div class="text-3xl mb-2">⚡</div>
                     <h3 class="text-xl font-bold text-white mb-1">بوابة المعاون</h3>
                     <p class="text-xs text-slate-400">إدارة الغيابات والشعب (منطقة آمنة ومحمية)</p>
-                </button>
-                <button onclick="nav('tch-select')" class="cyber-card-blue p-8 rounded-2xl text-right hover:border-cyan-400 transition">
+                </div>
+                <div onclick="nav('tch-select')" class="cyber-card-blue p-8 rounded-2xl text-right hover:border-cyan-400 transition cursor-pointer">
                     <div class="text-3xl mb-2">💻</div>
                     <h3 class="text-xl font-bold text-white mb-1">بوابة المدرسين</h3>
                     <p class="text-xs text-slate-400">رصد درجات المواد عبر الرموز السرية</p>
-                </button>
-                <button onclick="nav('stu-portal')" class="cyber-card-purple p-8 rounded-2xl text-right hover:border-purple-400 transition">
+                </div>
+                <div onclick="nav('stu-portal')" class="cyber-card-purple p-8 rounded-2xl text-right hover:border-purple-400 transition cursor-pointer">
                     <div class="text-3xl mb-2">🎓</div>
                     <h3 class="text-xl font-bold text-white mb-1">بوابة الطلاب</h3>
                     <p class="text-xs text-slate-400">الجداول، الامتحانات، ومتابعة الدرجات والغيابات</p>
-                </button>
+                </div>
             </div>
         </div>
 
@@ -104,6 +104,9 @@
         <div id="v-tch-select" class="hidden max-w-xl mx-auto">
             <h3 class="text-xl font-bold text-cyan-400 mb-4 text-center">اختر المادة الدراسية</h3>
             <div class="space-y-2" id="subj-box"></div>
+            <div class="mt-4 text-center">
+                <button onclick="nav('home')" class="bg-slate-800 text-slate-300 px-4 py-2 rounded-lg text-sm">رجوع للرئيسية</button>
+            </div>
         </div>
 
         <!-- دخول المدرس -->
@@ -281,11 +284,4 @@
             let target = document.getElementById('v-' + v);
             if(target) target.classList.remove('hidden');
             if(v === 'tch-select') loadSubs();
-            window.scrollTo({top: 0});
-        }
-
-        function checkAst() {
-            if(document.getElementById('ast-pass').value === '2020') {
-                nav('ast-dash');
-                loadAbs();
-                document.getElementById('as
+            window.scrollTo({to
