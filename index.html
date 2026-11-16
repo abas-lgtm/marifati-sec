@@ -140,7 +140,26 @@
             </div>
         </div>
     </main>
-
+<!-- أزرار البوابات في الصفحة الرئيسية index.html -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <button onclick="nav('ast-login')" class="cyber-card p-6 rounded-2xl text-right hover:border-emerald-400 transition w-full cursor-pointer focus:outline-none">
+        <div class="text-3xl mb-2">⚡</div>
+        <h3 class="text-lg font-bold text-white mb-1">بوابة المعاون</h3>
+        <p class="text-xs text-slate-400">إدارة الغيابات والشعب (منطقة محمية)</p>
+    </button>
+    <button onclick="nav('tch-select')" class="cyber-card-blue p-6 rounded-2xl text-right hover:border-cyan-400 transition w-full cursor-pointer focus:outline-none">
+        <div class="text-3xl mb-2">💻</div>
+        <h3 class="text-lg font-bold text-white mb-1">بوابة المدرسين</h3>
+        <p class="text-xs text-slate-400">رصد الدرجات عبر الرموز السرية</p>
+    </button>
+    <!-- زر الانتقال إلى بوابة الطلاب المستقلة -->
+    <button onclick="window.location.href='students.html'" class="cyber-card-purple p-6 rounded-2xl text-right hover:border-purple-400 transition w-full cursor-pointer focus:outline-none">
+        <div class="text-3xl mb-2">🎓</div>
+        <h3 class="text-lg font-bold text-white mb-1">بوابة الطلاب</h3>
+        <p class="text-xs text-slate-400">الجداول، الامتحانات، ومتابعة النتائج</p>
+    </button>
+</div>
+    
     <!-- بصمة الحقوق الثابتة السفيلة المعدلة -->
     <footer class="fixed bottom-0 left-0 w-full bg-slate-900/95 backdrop-blur-md border-t border-emerald-500/30 py-2.5 px-4 z-50 text-center shadow-lg no-print">
       <div class="flex items-center justify-center gap-2 text-xs md:text-sm font-mono dir-rtl">
