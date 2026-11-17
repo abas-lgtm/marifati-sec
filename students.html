@@ -118,13 +118,20 @@
                     if (studentGrades.length > 0) {
                         cardHTML += `<div class="space-y-2">`;
                         studentGrades.forEach(g => {
+                            let gradeNum = Number(g.grade);
+                            // الشرط: إذا الدرجة أقل من 50 تكون باللون الأحمر، وإذا 50 فما فوق تكون باللون الأخضر
+                            let isFail = gradeNum <= 49;
+                            let gradeColorClass = isFail 
+                                ? "text-red-400 bg-red-950/50 border-red-500/30" 
+                                : "text-emerald-400 bg-emerald-950/50 border-emerald-500/30";
+
                             cardHTML += `
                                 <div class="flex justify-between items-center bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-xs">
                                     <div>
                                         <span class="font-bold text-white">${g.subj}</span>
                                         <span class="text-slate-400 block text-[10px]">${g.cls}</span>
                                     </div>
-                                    <span class="text-emerald-400 font-black text-sm bg-emerald-950/50 px-2.5 py-1 rounded-lg border border-emerald-500/30">${g.grade} / 100</span>
+                                    <span class="font-black text-sm px-2.5 py-1 rounded-lg border ${gradeColorClass}">${g.grade} / 100</span>
                                 </div>
                             `;
                         });
