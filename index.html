@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALPHA-SEC // النظام المدرسي المتكامل</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
     <style>
         body { font-family: 'Cairo', sans-serif; background-color: #030712; color: #f3f4f6; -webkit-user-select: none; user-select: none; }
         .cyber-card { background-color: #0b0f19; border: 1px solid rgba(0, 255, 102, 0.3); }
@@ -65,7 +68,7 @@
         <!-- لوحة المعاون (الغيابات فقط) -->
         <div id="v-ast-dash" class="hidden">
             <div class="flex justify-between items-center mb-6 flex-wrap gap-2 no-print">
-                <h3 class="text-xl font-bold text-emerald-400">سجل الغيابات والدوام</h3>
+                <h3 class="text-xl font-bold text-emerald-400">سجل الغيابات والدوام (سحابي ☁️)</h3>
                 <div class="flex gap-2">
                     <button onclick="window.print()" class="bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">🖨️ طباعة PDF</button>
                     <button onclick="clearData('abs')" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">🗑️ مسح السجل</button>
@@ -157,6 +160,21 @@
     </footer>
 
     <script>
+        // إعدادات قاعدة بيانات Firebase السحابية
+        const firebaseConfig = {
+          apiKey: "AIzaSyB6jzXTFRW6h3r7E5s8aWd0Ry5ixvBG-Do",
+          authDomain: "al-maarefa-school.firebaseapp.com",
+          databaseURL: "https://al-maarefa-school-default-rtdb.firebaseio.com",
+          projectId: "al-maarefa-school",
+          storageBucket: "al-maarefa-school.appspot.com",
+          messagingSenderId: "922687511699",
+          appId: "1:922687511699:web:5b77f972833cf9bb984166"
+        };
+
+        // تهيئة فايربيس
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
         const subs = [
             { name: "التربية الإسلامية", code: "1090" },
             { name: "اللغة العربية", code: "202500" },
@@ -192,40 +210,49 @@
             }
         }
 
+        // حفظ الغيابات سحابياً
         function saveAbs() {
             let name = document.getElementById('g-name').value;
             let cls = document.getElementById('g-class').value;
             let type = document.getElementById('g-type').value;
             let date = document.getElementById('g-date').value;
             if(!name || !date) { alert('املأ الحقول المطلوبة'); return; }
-            let list = JSON.parse(localStorage.getItem('abs') || '[]');
-            list.push({name, cls, type, date});
-            localStorage.setItem('abs', JSON.stringify(list));
-            document.getElementById('g-name').value = ''; 
-            loadAbs();
+            
+            db.ref('abs').push({name, cls, type, date}, (error) => {
+                if (error) {
+                    alert('فشل حفظ البيانات سحابياً!');
+                } else {
+                    document.getElementById('g-name').value = ''; 
+                    loadAbs();
+                }
+            });
         }
 
+        // قراءة الغيابات سحابياً بالوقت الحقيقي
         function loadAbs() {
-            let list = JSON.parse(localStorage.getItem('abs') || '[]');
-            let absListEl = document.getElementById('abs-list');
-            if(absListEl) {
-                absListEl.innerHTML = list.map((i, idx) => `
-                    <tr><td class="p-3 font-bold">${i.name}</td><td class="p-3 text-emerald-400">${i.cls}</td><td class="p-3">${i.type}</td><td class="p-3">${i.date}</td><td class="p-3 no-print"><button onclick="delAbs(${idx})" class="text-red-400 text-xs cursor-pointer">حذف</button></td></tr>
-                `).join('');
-            }
+            db.ref('abs').on('value', (snapshot) => {
+                let data = snapshot.val();
+                let absListEl = document.getElementById('abs-list');
+                if(absListEl) {
+                    if (!data) {
+                        absListEl.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-500">لا توجد سجلات غياب حالياً</td></tr>`;
+                        return;
+                    }
+                    let list = Object.entries(data);
+                    absListEl.innerHTML = list.map(([id, i]) => `
+                        <tr><td class="p-3 font-bold">${i.name}</td><td class="p-3 text-emerald-400">${i.cls}</td><td class="p-3">${i.type}</td><td class="p-3">${i.date}</td><td class="p-3 no-print"><button onclick="delAbs('${id}')" class="text-red-400 text-xs cursor-pointer">حذف</button></td></tr>
+                    `).join('');
+                }
+            });
         }
 
-        function delAbs(idx) {
-            let list = JSON.parse(localStorage.getItem('abs') || '[]');
-            list.splice(idx, 1); 
-            localStorage.setItem('abs', JSON.stringify(list)); 
-            loadAbs();
+        function delAbs(id) {
+            db.ref('abs/' + id).remove();
         }
 
         function clearData(key) { 
-            if(confirm('هل تريد مسح السجل؟')) { 
-                localStorage.removeItem(key); 
-                loadAbs(); 
+            if(confirm('هل تريد مسح سجل الغيابات بالكامل من السحابة؟')) { 
+                db.ref(key).remove(); 
             } 
         }
 
@@ -261,6 +288,7 @@
             }
         }
 
+        // حفظ الدرجات سحابياً
         function saveGrade() {
             let name = document.getElementById('s-name').value;
             let cls = document.getElementById('s-class').value;
@@ -270,44 +298,55 @@
             if(!name || gradeInput.value === '') { alert('املأ الحقول'); return; }
             if(grade < 0 || grade > 100) { alert('الدرجة بين 0 و 100 فقط!'); return; }
             
-            let list = JSON.parse(localStorage.getItem('grades') || '[]');
-            list.push({name, cls, subj: currSubj.name, grade});
-            localStorage.setItem('grades', JSON.stringify(list));
-            
-            document.getElementById('s-name').value = ''; 
-            gradeInput.value = ''; 
-            loadGrades();
+            db.ref('grades').push({name, cls, subj: currSubj.name, grade}, (error) => {
+                if (error) {
+                    alert('فشل حفظ الدرجة سحابياً!');
+                } else {
+                    document.getElementById('s-name').value = ''; 
+                    gradeInput.value = ''; 
+                }
+            });
         }
 
+        // قراءة الدرجات سحابياً بحسب المادة
         function loadGrades() {
             if(!currSubj) return;
-            let list = JSON.parse(localStorage.getItem('grades') || '[]').filter(g => g.subj === currSubj.name);
-            let gradesListEl = document.getElementById('grades-list');
-            if(gradesListEl) {
-                gradesListEl.innerHTML = list.map((i, idx) => `
-                    <tr><td class="p-3 font-bold">${i.name}</td><td class="p-3 text-cyan-300">${i.cls}</td><td class="p-3">${i.subj}</td><td class="p-3 text-emerald-400 font-bold">${i.grade}</td><td class="p-3 no-print"><button onclick="delGrade(${idx})" class="text-red-400 text-xs cursor-pointer">حذف</button></td></tr>
-                `).join('');
-            }
+            db.ref('grades').on('value', (snapshot) => {
+                let data = snapshot.val();
+                let gradesListEl = document.getElementById('grades-list');
+                if(gradesListEl) {
+                    if (!data) {
+                        gradesListEl.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-500">لا توجد درجات مرصودة لهذه المادة حالياً</td></tr>`;
+                        return;
+                    }
+                    let list = Object.entries(data).filter(([id, g]) => g.subj === currSubj.name);
+                    gradesListEl.innerHTML = list.map(([id, i]) => `
+                        <tr><td class="p-3 font-bold">${i.name}</td><td class="p-3 text-cyan-300">${i.cls}</td><td class="p-3">${i.subj}</td><td class="p-3 text-emerald-400 font-bold">${i.grade}</td><td class="p-3 no-print"><button onclick="delGrade('${id}')" class="text-red-400 text-xs cursor-pointer">حذف</button></td></tr>
+                    `).join('');
+                }
+            });
         }
 
-        function delGrade(idx) {
-            if(!currSubj) return;
-            let list = JSON.parse(localStorage.getItem('grades') || '[]');
-            let subList = list.filter(g => g.subj === currSubj.name); 
-            subList.splice(idx, 1);
-            let otherList = list.filter(g => g.subj !== currSubj.name);
-            localStorage.setItem('grades', JSON.stringify([...otherList, ...subList])); 
-            loadGrades();
+        function delGrade(id) {
+            db.ref('grades/' + id).remove();
         }
 
         function clearGrades() {
             if(!currSubj) return;
-            if(confirm('مسح سجل درجات هذه المادة؟')) {
-                let list = JSON.parse(localStorage.getItem('grades') || '[]').filter(g => g.subj !== currSubj.name);
-                localStorage.setItem('grades', JSON.stringify(list)); 
-                loadGrades();
+            if(confirm('مسح سجل درجات هذه المادة من السحابة؟')) {
+                db.ref('grades').once('value', (snapshot) => {
+                    let data = snapshot.val();
+                    if(data) {
+                        Object.entries(data).forEach(([id, g]) => {
+                            if(g.subj === currSubj.name) {
+                                db.ref('grades/' + id).remove();
+                            }
+                        });
+                    }
+                });
             }
         }
     </script>
 </body>
-</html>
+                </html>
+                        
