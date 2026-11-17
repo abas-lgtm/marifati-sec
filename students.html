@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALPHA-SEC // بوابة درجات الطلاب</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
     <style>
         body { font-family: 'Cairo', sans-serif; background-color: #030712; color: #f3f4f6; }
         .cyber-card { background-color: #0b0f19; border: 1px solid rgba(168, 85, 247, 0.4); }
@@ -19,7 +22,7 @@
 
     <header class="flex justify-between items-center border-b border-purple-500/30 pb-4 no-print">
         <div class="flex flex-col text-right">
-            <h1 class="text-white font-bold text-base md:text-lg">بوابة درجات الطلاب الرقمية</h1>
+            <h1 class="text-white font-bold text-base md:text-lg">بوابة درجات الطلاب الرقمية (سحابي ☁️)</h1>
             <span class="text-[11px] md:text-xs text-purple-400 font-mono">إعدادية المعرفة المهنية الاهلية</span>
         </div>
         <button onclick="window.location.href='index.html'" class="bg-slate-900 text-purple-400 px-4 py-2 rounded-lg border border-purple-500/30 text-sm font-semibold cursor-pointer">الرئيسية 🏠</button>
@@ -31,7 +34,7 @@
         <div class="cyber-card p-6 rounded-2xl shadow-xl space-y-4">
             <div class="text-center">
                 <h2 class="text-xl font-bold text-white mb-1">استعلام عن الدرجات</h2>
-                <p class="text-xs text-slate-400">اكتب اسمك الثلاثي لعرض بطاقتك الرقمية ودرجاتك فوراً</p>
+                <p class="text-xs text-slate-400">اكتب اسمك الثلاثي لعرض بطاقتك الرقمية ودرجاتك فوراً من السحابة</p>
             </div>
 
             <div class="flex gap-2 no-print">
@@ -54,6 +57,23 @@
     </footer>
 
     <script>
+        // إعدادات قاعدة بيانات Firebase السحابية
+        const firebaseConfig = {
+          apiKey: "AIzaSyB6jzXTFRW6h3r7E5s8aWd0Ry5ixvBG-Do",
+          authDomain: "al-maarefa-school.firebaseapp.com",
+          databaseURL: "https://al-maarefa-school-default-rtdb.firebaseio.com",
+          projectId: "al-maarefa-school",
+          storageBucket: "al-maarefa-school.appspot.com",
+          messagingSenderId: "922687511699",
+          appId: "1:922687511699:web:5b77f972833cf9bb984166"
+        };
+
+        // تهيئة فايربيس
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.database();
+
         function searchStudentGrades() {
             let nameInput = document.getElementById('student-name-input').value.trim();
             let cardContainer = document.getElementById('digital-student-card');
@@ -63,82 +83,90 @@
                 return;
             }
 
-            // جلب الدرجات والغيابات المخزنة من الـ localStorage
-            let allGrades = JSON.parse(localStorage.getItem('grades') || '[]');
-            let allAbsences = JSON.parse(localStorage.getItem('abs') || '[]');
+            cardContainer.innerHTML = `<p class="text-center text-purple-400 text-xs py-4 animate-pulse">جاري البحث في السحابة...</p>`;
 
-            // تصفية البيانات حسب الاسم المدخل
-            let studentGrades = allGrades.filter(item => item.name.includes(nameInput));
-            let studentAbsences = allAbsences.filter(item => item.name.includes(nameInput));
+            // جلب البيانات من قاعدة بيانات Firebase سحابياً
+            db.ref('grades').once('value', (gradesSnapshot) => {
+                db.ref('abs').once('value', (absSnapshot) => {
+                    let gradesData = gradesSnapshot.val() || {};
+                    let absData = absSnapshot.val() || {};
 
-            // تصميم بطاقة الطالب الرقمية
-            let cardHTML = `
-                <div class="cyber-card p-6 rounded-2xl shadow-2xl relative bg-slate-950 border-2 border-purple-500/50">
-                    <!-- رأس البطاقة -->
-                    <div class="flex justify-between items-center border-b border-purple-500/30 pb-4 mb-4">
-                        <div>
-                            <span class="text-[10px] uppercase tracking-wider text-purple-400 font-mono">Digital Student ID // بطاقة رسمية</span>
-                            <h3 class="text-lg font-black text-white mt-0.5">${nameInput}</h3>
-                        </div>
-                        <button onclick="window.print()" class="bg-purple-600/80 hover:bg-purple-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer no-print shadow">🖨️ طباعة البطاقة</button>
-                    </div>
+                    let allGrades = Object.values(gradesData);
+                    let allAbsences = Object.values(absData);
 
-                    <!-- درجات المواد -->
-                    <div class="mb-4">
-                        <h4 class="text-xs font-bold text-cyan-400 mb-2">📊 درجات المواد الدراسية المرصودة:</h4>
-            `;
+                    // تصفية البيانات حسب الاسم المدخل
+                    let studentGrades = allGrades.filter(item => item.name && item.name.includes(nameInput));
+                    let studentAbsences = allAbsences.filter(item => item.name && item.name.includes(nameInput));
 
-            if (studentGrades.length > 0) {
-                cardHTML += `<div class="space-y-2">`;
-                studentGrades.forEach(g => {
-                    cardHTML += `
-                        <div class="flex justify-between items-center bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-xs">
-                            <div>
-                                <span class="font-bold text-white">${g.subj}</span>
-                                <span class="text-slate-400 block text-[10px]">${g.cls}</span>
+                    // تصميم بطاقة الطالب الرقمية
+                    let cardHTML = `
+                        <div class="cyber-card p-6 rounded-2xl shadow-2xl relative bg-slate-950 border-2 border-purple-500/50">
+                            <!-- رأس البطاقة -->
+                            <div class="flex justify-between items-center border-b border-purple-500/30 pb-4 mb-4">
+                                <div>
+                                    <span class="text-[10px] uppercase tracking-wider text-purple-400 font-mono">Digital Student ID // بطاقة رسمية سحابية</span>
+                                    <h3 class="text-lg font-black text-white mt-0.5">${nameInput}</h3>
+                                </div>
+                                <button onclick="window.print()" class="bg-purple-600/80 hover:bg-purple-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer no-print shadow">🖨️ طباعة البطاقة</button>
                             </div>
-                            <span class="text-emerald-400 font-black text-sm bg-emerald-950/50 px-2.5 py-1 rounded-lg border border-emerald-500/30">${g.grade} / 100</span>
-                        </div>
+
+                            <!-- درجات المواد -->
+                            <div class="mb-4">
+                                <h4 class="text-xs font-bold text-cyan-400 mb-2">📊 درجات المواد الدراسية المرصودة:</h4>
                     `;
-                });
-                cardHTML += `</div>`;
-            } else {
-                cardHTML += `<p class="text-slate-500 text-xs bg-slate-900/40 p-3 rounded-xl text-center">لا توجد درجات مرصودة لهذا الاسم حالياً.</p>`;
-            }
 
-            // سجل الغيابات داخل البطاقة
-            cardHTML += `
-                    </div>
-                    <div>
-                        <h4 class="text-xs font-bold text-amber-400 mb-2">📋 سجل الغيابات والدوام:</h4>
-            `;
+                    if (studentGrades.length > 0) {
+                        cardHTML += `<div class="space-y-2">`;
+                        studentGrades.forEach(g => {
+                            cardHTML += `
+                                <div class="flex justify-between items-center bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-xs">
+                                    <div>
+                                        <span class="font-bold text-white">${g.subj}</span>
+                                        <span class="text-slate-400 block text-[10px]">${g.cls}</span>
+                                    </div>
+                                    <span class="text-emerald-400 font-black text-sm bg-emerald-950/50 px-2.5 py-1 rounded-lg border border-emerald-500/30">${g.grade} / 100</span>
+                                </div>
+                            `;
+                        });
+                        cardHTML += `</div>`;
+                    } else {
+                        cardHTML += `<p class="text-slate-500 text-xs bg-slate-900/40 p-3 rounded-xl text-center">لا توجد درجات مرصودة لهذا الاسم حالياً.</p>`;
+                    }
 
-            if (studentAbsences.length > 0) {
-                cardHTML += `<div class="space-y-2">`;
-                studentAbsences.forEach(a => {
+                    // سجل الغيابات داخل البطاقة
                     cardHTML += `
-                        <div class="flex justify-between items-center bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-xs">
-                            <span class="text-slate-300">${a.date} <span class="text-slate-500">(${a.cls})</span></span>
-                            <span class="text-amber-400 font-bold bg-amber-950/50 px-2.5 py-0.5 rounded-lg border border-amber-500/30">${a.type}</span>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-amber-400 mb-2">📋 سجل الغيابات والدوام:</h4>
+                    `;
+
+                    if (studentAbsences.length > 0) {
+                        cardHTML += `<div class="space-y-2">`;
+                        studentAbsences.forEach(a => {
+                            cardHTML += `
+                                <div class="flex justify-between items-center bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-xs">
+                                    <span class="text-slate-300">${a.date} <span class="text-slate-500">(${a.cls})</span></span>
+                                    <span class="text-amber-400 font-bold bg-amber-950/50 px-2.5 py-0.5 rounded-lg border border-amber-500/30">${a.type}</span>
+                                </div>
+                            `;
+                        });
+                        cardHTML += `</div>`;
+                    } else {
+                        cardHTML += `<p class="text-slate-500 text-xs bg-slate-900/40 p-3 rounded-xl text-center">سجل الدوام نظيف، لا توجد غيابات مسجلة.</p>`;
+                    }
+
+                    cardHTML += `
+                            </div>
+                            <div class="mt-5 pt-3 border-t border-slate-900 text-center text-[10px] text-slate-500">
+                                إعدادية المعرفة المهنية الاهلية - نظام إدارة الطلاب الآمن
+                            </div>
                         </div>
                     `;
+
+                    cardContainer.innerHTML = cardHTML;
                 });
-                cardHTML += `</div>`;
-            } else {
-                cardHTML += `<p class="text-slate-500 text-xs bg-slate-900/40 p-3 rounded-xl text-center">سجل الدوام نظيف، لا توجد غيابات مسجلة.</p>`;
-            }
-
-            cardHTML += `
-                    </div>
-                    <div class="mt-5 pt-3 border-t border-slate-900 text-center text-[10px] text-slate-500">
-                        إعدادية المعرفة المهنية الاهلية - نظام إدارة الطلاب الآمن
-                    </div>
-                </div>
-            `;
-
-            cardContainer.innerHTML = cardHTML;
+            });
         }
     </script>
 </body>
-    </html>
-    
+</html>
