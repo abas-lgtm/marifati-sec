@@ -65,13 +65,27 @@
             </div>
         </div>
 
-        <!-- لوحة المعاون (الغيابات فقط) -->
+        <!-- لوحة المعاون (الغيابات والتنبيهات) -->
         <div id="v-ast-dash" class="hidden">
             <div class="flex justify-between items-center mb-6 flex-wrap gap-2 no-print">
                 <h3 class="text-xl font-bold text-emerald-400">سجل الغيابات والدوام (سحابي ☁️)</h3>
                 <div class="flex gap-2">
                     <button onclick="window.print()" class="bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">🖨️ طباعة PDF</button>
                     <button onclick="clearData('abs')" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">🗑️ مسح السجل</button>
+                </div>
+            </div>
+
+            <!-- قسم تنبيهات الغياب والهروب المتكرر -->
+            <div id="alerts-panel" class="mb-6 no-print hidden">
+                <div class="bg-red-950/30 border border-red-500/40 rounded-2xl p-4">
+                    <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-lg">🚨</span>
+                            <h4 class="text-sm font-black text-red-400">تنبيهات الغياب والهروب المتكرر (إجراء مبكر)</h4>
+                        </div>
+                        <span id="alerts-count" class="text-[11px] bg-red-500/20 text-red-300 border border-red-500/30 px-2.5 py-0.5 rounded-full font-bold">0 تنبيه</span>
+                    </div>
+                    <div id="alerts-list" class="space-y-2.5"></div>
                 </div>
             </div>
             
@@ -151,6 +165,21 @@
         </div>
     </main>
 
+    <!-- نافذة نص إشعار / استدعاء ولي الأمر -->
+    <div id="summons-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4 no-print">
+        <div class="bg-slate-950 border border-emerald-500/40 rounded-2xl max-w-lg w-full p-5 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h4 class="text-base font-bold text-emerald-400">📨 إشعار / استدعاء ولي أمر</h4>
+                <button onclick="closeSummonsModal()" class="text-slate-400 hover:text-white text-sm cursor-pointer">✕</button>
+            </div>
+            <textarea id="summons-text" rows="8" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs sm:text-sm text-slate-200 leading-relaxed focus:outline-none focus:border-emerald-500"></textarea>
+            <div class="flex gap-2">
+                <button onclick="copySummonsText()" class="flex-1 bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-2.5 rounded-xl text-xs sm:text-sm cursor-pointer transition">📋 نسخ النص</button>
+                <button onclick="closeSummonsModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2.5 rounded-xl text-xs sm:text-sm cursor-pointer transition">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
     <footer class="fixed bottom-0 left-0 w-full bg-slate-900/95 backdrop-blur-md border-t border-emerald-500/30 py-2.5 px-4 z-50 text-center shadow-lg no-print">
       <div class="flex items-center justify-center gap-2 text-xs md:text-sm font-mono dir-rtl">
         <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -187,6 +216,7 @@
             { name: "مبادى الحاسوب", code: "1998" }
         ];
         let currSubj = null;
+        let currentAlertsMap = {};
 
         function nav(v) {
             ['home', 'ast-login', 'ast-dash', 'tch-select', 'tch-login', 'tch-dash'].forEach(id => {
@@ -212,7 +242,7 @@
 
         // حفظ الغيابات سحابياً
         function saveAbs() {
-            let name = document.getElementById('g-name').value;
+            let name = document.getElementById('g-name').value.trim();
             let cls = document.getElementById('g-class').value;
             let type = document.getElementById('g-type').value;
             let date = document.getElementById('g-date').value;
@@ -222,131 +252,99 @@
                 if (error) {
                     alert('فشل حفظ البيانات سحابياً!');
                 } else {
-                    document.getElementById('g-name').value = ''; 
-                    loadAbs();
+                    document.getElementById('g-name').value = '';
                 }
             });
         }
 
-        // قراءة الغيابات سحابياً بالوقت الحقيقي
-        function loadAbs() {
-            db.ref('abs').on('value', (snapshot) => {
-                let data = snapshot.val();
-                let absListEl = document.getElementById('abs-list');
-                if(absListEl) {
-                    if (!data) {
-                        absListEl.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-500">لا توجد سجلات غياب حالياً</td></tr>`;
-                        return;
-                    }
-                    let list = Object.entries(data);
-                    absListEl.innerHTML = list.map(([id, i]) => `
-                        <tr><td class="p-3 font-bold">${i.name}</td><td class="p-3 text-emerald-400">${i.cls}</td><td class="p-3">${i.type}</td><td class="p-3">${i.date}</td><td class="p-3 no-print"><button onclick="delAbs('${id}')" class="text-red-400 text-xs cursor-pointer">حذف</button></td></tr>
-                    `).join('');
+        // بناء تنبيهات الغياب (3 فأكثر) والهروب (2 فأكثر)
+        function renderAbsenceAlerts(records) {
+            let panel = document.getElementById('alerts-panel');
+            let listEl = document.getElementById('alerts-list');
+            let countEl = document.getElementById('alerts-count');
+            if (!panel || !listEl || !countEl) return;
+
+            let grouped = {};
+            records.forEach((item) => {
+                let cleanName = (item.name || '').trim();
+                let cleanClass = (item.cls || '').trim();
+                if (!cleanName) return;
+
+                let key = `${cleanName}__${cleanClass}`;
+                if (!grouped[key]) {
+                    grouped[key] = {
+                        name: cleanName,
+                        cls: cleanClass,
+                        absences: [],
+                        escapes: []
+                    };
+                }
+                if (item.type === 'غياب') {
+                    grouped[key].absences.push(item.date || 'بدون تاريخ');
+                } else if (item.type === 'هروب') {
+                    grouped[key].escapes.push(item.date || 'بدون تاريخ');
                 }
             });
-        }
 
-        function delAbs(id) {
-            db.ref('abs/' + id).remove();
-        }
+            let alerts = [];
+            Object.entries(grouped).forEach(([key, g]) => {
+                let reasons = [];
+                if (g.absences.length >= 3) {
+                    reasons.push(`غياب متكرر (${g.absences.length} أيام: ${g.absences.join('، ')})`);
+                }
+                if (g.escapes.length >= 2) {
+                    reasons.push(`هروب متكرر (${g.escapes.length} مرات: ${g.escapes.join('، ')})`);
+                }
 
-        function clearData(key) { 
-            if(confirm('هل تريد مسح سجل الغيابات بالكامل من السحابة؟')) { 
-                db.ref(key).remove(); 
-            } 
-        }
+                if (reasons.length > 0) {
+                    alerts.push({
+                        key,
+                        name: g.name,
+                        cls: g.cls,
+                        absCount: g.absences.length,
+                        escCount: g.escapes.length,
+                        absDates: g.absences,
+                        escDates: g.escapes,
+                        reasonsText: reasons.join(' + ')
+                    });
+                }
+            });
 
-        function loadSubs() {
-            let subjBox = document.getElementById('subj-box');
-            if(subjBox) {
-                subjBox.innerHTML = subs.map(s => `
-                    <div onclick="selectSubj('${s.name}')" class="cyber-card-blue p-4 rounded-xl text-right cursor-pointer hover:border-cyan-400 transition flex justify-between items-center">
-                        <span class="font-bold text-cyan-300">${s.name}</span><span class="text-xs bg-slate-950 px-3 py-1 rounded text-slate-400">دخول 🔒</span>
+            currentAlertsMap = {};
+            alerts.forEach((a) => {
+                currentAlertsMap[a.key] = a;
+            });
+
+            if (alerts.length === 0) {
+                panel.classList.add('hidden');
+                listEl.innerHTML = '';
+                countEl.innerText = '0 تنبيه';
+                return;
+            }
+
+            panel.classList.remove('hidden');
+            countEl.innerText = `${alerts.length} تنبيه`;
+            listEl.innerHTML = alerts.map((a) => `
+                <div class="bg-slate-950/90 border border-red-500/30 rounded-xl p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span class="font-bold text-white text-sm">${a.name}</span>
+                            <span class="text-xs text-emerald-400 bg-emerald-950/60 border border-emerald-500/20 px-2 py-0.5 rounded">${a.cls}</span>
+                        </div>
+                        <p class="text-xs text-red-300">${a.reasonsText}</p>
                     </div>
-                `).join('');
-            }
+                    <button onclick="openSummonsModal('${encodeURIComponent(a.key)}')" class="bg-amber-500 hover:bg-amber-400 text-black font-bold px-3 py-2 rounded-lg text-xs cursor-pointer shrink-0 transition">
+                        📩 إشعار / استدعاء ولي أمر
+                    </button>
+                </div>
+            `).join('');
         }
 
-        function selectSubj(name) {
-            currSubj = subs.find(s => s.name === name); 
-            nav('tch-login');
-            let titleEl = document.getElementById('tch-title');
-            let passEl = document.getElementById('tch-pass');
-            if(titleEl) titleEl.innerText = `دخول: ${currSubj.name}`; 
-            if(passEl) passEl.value = '';
-        }
+        function openSummonsModal(encodedKey) {
+            let key = decodeURIComponent(encodedKey);
+            let alertItem = currentAlertsMap[key];
+            if (!alertItem) return;
 
-        function verifyTch() {
-            let passInput = document.getElementById('tch-pass');
-            if(passInput && currSubj && passInput.value === currSubj.code) {
-                nav('tch-dash'); 
-                let dashTitle = document.getElementById('dash-title');
-                if(dashTitle) dashTitle.innerText = `رصد درجات - ${currSubj.name}`; 
-                loadGrades();
-            } else { 
-                alert('رمز المادة خطأ!'); 
-            }
-        }
-
-        // حفظ الدرجات سحابياً
-        function saveGrade() {
-            let name = document.getElementById('s-name').value;
-            let cls = document.getElementById('s-class').value;
-            let gradeInput = document.getElementById('s-grade');
-            let grade = Number(gradeInput.value);
-            
-            if(!name || gradeInput.value === '') { alert('املأ الحقول'); return; }
-            if(grade < 0 || grade > 100) { alert('الدرجة بين 0 و 100 فقط!'); return; }
-            
-            db.ref('grades').push({name, cls, subj: currSubj.name, grade}, (error) => {
-                if (error) {
-                    alert('فشل حفظ الدرجة سحابياً!');
-                } else {
-                    document.getElementById('s-name').value = ''; 
-                    gradeInput.value = ''; 
-                }
-            });
-        }
-
-        // قراءة الدرجات سحابياً بحسب المادة
-        function loadGrades() {
-            if(!currSubj) return;
-            db.ref('grades').on('value', (snapshot) => {
-                let data = snapshot.val();
-                let gradesListEl = document.getElementById('grades-list');
-                if(gradesListEl) {
-                    if (!data) {
-                        gradesListEl.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-500">لا توجد درجات مرصودة لهذه المادة حالياً</td></tr>`;
-                        return;
-                    }
-                    let list = Object.entries(data).filter(([id, g]) => g.subj === currSubj.name);
-                    gradesListEl.innerHTML = list.map(([id, i]) => `
-                        <tr><td class="p-3 font-bold">${i.name}</td><td class="p-3 text-cyan-300">${i.cls}</td><td class="p-3">${i.subj}</td><td class="p-3 text-emerald-400 font-bold">${i.grade}</td><td class="p-3 no-print"><button onclick="delGrade('${id}')" class="text-red-400 text-xs cursor-pointer">حذف</button></td></tr>
-                    `).join('');
-                }
-            });
-        }
-
-        function delGrade(id) {
-            db.ref('grades/' + id).remove();
-        }
-
-        function clearGrades() {
-            if(!currSubj) return;
-            if(confirm('مسح سجل درجات هذه المادة من السحابة؟')) {
-                db.ref('grades').once('value', (snapshot) => {
-                    let data = snapshot.val();
-                    if(data) {
-                        Object.entries(data).forEach(([id, g]) => {
-                            if(g.subj === currSubj.name) {
-                                db.ref('grades/' + id).remove();
-                            }
-                        });
-                    }
-                });
-            }
-        }
-    </script>
-</body>
-                </html>
-                        
+            let detailsLines = [];
+            if (alertItem.absCount >= 3) {
+                detailsLin
