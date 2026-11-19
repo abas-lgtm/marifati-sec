@@ -75,13 +75,13 @@
                 </div>
             </div>
 
-            <!-- قسم تنبيهات الغياب والهروب المتكرر -->
+            <!-- قسم تنبيهات الغياب والهروب التلقائية -->
             <div id="alerts-panel" class="mb-6 no-print hidden">
                 <div class="bg-red-950/30 border border-red-500/40 rounded-2xl p-4">
                     <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
                         <div class="flex items-center gap-2">
                             <span class="text-lg">🚨</span>
-                            <h4 class="text-sm font-black text-red-400">تنبيهات الغياب والهروب المتكرر (إجراء مبكر)</h4>
+                            <h4 class="text-sm font-black text-red-400">تنبيهات الغياب والهروب التلقائية (7 / 14 / 21 يوم)</h4>
                         </div>
                         <span id="alerts-count" class="text-[11px] bg-red-500/20 text-red-300 border border-red-500/30 px-2.5 py-0.5 rounded-full font-bold">0 تنبيه</span>
                     </div>
@@ -172,7 +172,7 @@
                 <h4 class="text-base font-bold text-emerald-400">📨 إشعار / استدعاء ولي أمر</h4>
                 <button onclick="closeSummonsModal()" class="text-slate-400 hover:text-white text-sm cursor-pointer">✕</button>
             </div>
-            <textarea id="summons-text" rows="8" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs sm:text-sm text-slate-200 leading-relaxed focus:outline-none focus:border-emerald-500"></textarea>
+            <textarea id="summons-text" rows="9" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs sm:text-sm text-slate-200 leading-relaxed focus:outline-none focus:border-emerald-500"></textarea>
             <div class="flex gap-2">
                 <button onclick="copySummonsText()" class="flex-1 bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-2.5 rounded-xl text-xs sm:text-sm cursor-pointer transition">📋 نسخ النص</button>
                 <button onclick="closeSummonsModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2.5 rounded-xl text-xs sm:text-sm cursor-pointer transition">إغلاق</button>
@@ -257,7 +257,33 @@
             });
         }
 
-        // بناء تنبيهات الغياب (3 فأكثر) والهروب (2 فأكثر)
+        // تحديد مرحلة الغياب التلقائية: 7 أيام إنذار أول، 14 يوم إنذار ثاني لتوقيع تعهد، 21 يوم فصل نهائي
+        function getAbsenceStage(absCount) {
+            if (absCount >= 21) {
+                return {
+                    level: 'فصل نهائي',
+                    actionText: 'فصل نهائي حسب الضوابط',
+                    badgeStyle: 'bg-red-600/30 text-red-200 border-red-500/50'
+                };
+            }
+            if (absCount >= 14) {
+                return {
+                    level: 'إنذار ثاني',
+                    actionText: 'إنذار ثاني مع استدعاء ولي أمر لتوقيع تعهد',
+                    badgeStyle: 'bg-orange-500/25 text-orange-200 border-orange-500/40'
+                };
+            }
+            if (absCount >= 7) {
+                return {
+                    level: 'إنذار أول',
+                    actionText: 'إنذار أول مع استدعاء ولي أمر',
+                    badgeStyle: 'bg-amber-500/25 text-amber-200 border-amber-500/40'
+                };
+            }
+            return null;
+        }
+
+        // بناء تنبيهات الغياب التلقائية والهروب
         function renderAbsenceAlerts(records) {
             let panel = document.getElementById('alerts-panel');
             let listEl = document.getElementById('alerts-list');
@@ -288,12 +314,16 @@
 
             let alerts = [];
             Object.entries(grouped).forEach(([key, g]) => {
+                let absCount = g.absences.length;
+                let escCount = g.escapes.length;
+                let stage = getAbsenceStage(absCount);
                 let reasons = [];
-                if (g.absences.length >= 3) {
-                    reasons.push(`غياب متكرر (${g.absences.length} أيام: ${g.absences.join('، ')})`);
+
+                if (stage) {
+                    reasons.push(`${stage.actionText} (${absCount} أيام غياب: ${g.absences.join('، ')})`);
                 }
-                if (g.escapes.length >= 2) {
-                    reasons.push(`هروب متكرر (${g.escapes.length} مرات: ${g.escapes.join('، ')})`);
+                if (escCount >= 2) {
+                    reasons.push(`هروب متكرر (${escCount} مرات: ${g.escapes.join('، ')})`);
                 }
 
                 if (reasons.length > 0) {
@@ -301,11 +331,12 @@
                         key,
                         name: g.name,
                         cls: g.cls,
-                        absCount: g.absences.length,
-                        escCount: g.escapes.length,
+                        absCount,
+                        escCount,
                         absDates: g.absences,
                         escDates: g.escapes,
-                        reasonsText: reasons.join(' + ')
+                        stage,
+                        reasonsText: reasons.join(' | ')
                     });
                 }
             });
@@ -324,27 +355,6 @@
 
             panel.classList.remove('hidden');
             countEl.innerText = `${alerts.length} تنبيه`;
-            listEl.innerHTML = alerts.map((a) => `
-                <div class="bg-slate-950/90 border border-red-500/30 rounded-xl p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                    <div class="space-y-1">
-                        <div class="flex items-center gap-2 flex-wrap">
-                            <span class="font-bold text-white text-sm">${a.name}</span>
-                            <span class="text-xs text-emerald-400 bg-emerald-950/60 border border-emerald-500/20 px-2 py-0.5 rounded">${a.cls}</span>
-                        </div>
-                        <p class="text-xs text-red-300">${a.reasonsText}</p>
-                    </div>
-                    <button onclick="openSummonsModal('${encodeURIComponent(a.key)}')" class="bg-amber-500 hover:bg-amber-400 text-black font-bold px-3 py-2 rounded-lg text-xs cursor-pointer shrink-0 transition">
-                        📩 إشعار / استدعاء ولي أمر
-                    </button>
-                </div>
-            `).join('');
-        }
-
-        function openSummonsModal(encodedKey) {
-            let key = decodeURIComponent(encodedKey);
-            let alertItem = currentAlertsMap[key];
-            if (!alertItem) return;
-
-            let detailsLines = [];
-            if (alertItem.absCount >= 3) {
-                detailsLin
+            listEl.innerHTML = alerts.map((a) => {
+                let tagHtml = a.stage
+                    ? `<span class="text-[11px] px-2 py-0.5 rounded border font-bold ${a.stage
