@@ -2,112 +2,81 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>ALPHA-SEC // Index 2</title>
 <style>
-  *{box-sizing:border-box;font-family:Tahoma,Arial,sans-serif}
-  body{margin:0;padding:16px 16px 60px;background:#030712;color:#f3f4f6}
-  header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #10b98155;padding-bottom:10px;margin-bottom:18px}
-  h1{margin:0;font-size:16px;color:#fff}.sub{font-size:11px;color:#34d399}
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;max-width:860px;margin:0 auto}
-  .card,.link{background:#0b0f19;border:1px solid #10b98155;border-radius:12px;padding:14px;color:#fff;text-align:right;cursor:pointer;display:block;text-decoration:none;width:100%}
-  .panel{display:none;max-width:760px;margin:0 auto;background:#0b0f19;border:1px solid #10b98155;border-radius:12px;padding:16px}
-  input,select{width:100%;padding:9px;margin-bottom:8px;border-radius:8px;border:1px solid #334155;background:#020617;color:#fff;font-size:13px}
-  .btn{background:#10b981;color:#000;border:0;padding:9px 12px;border-radius:8px;font-weight:700;cursor:pointer;font-size:13px}
-  .btn-b{background:#06b6d4;color:#000;border:0;padding:9px 12px;border-radius:8px;font-weight:700;cursor:pointer;font-size:13px}
-  .btn-g{background:#1e293b;color:#e2e8f0;border:1px solid #334155;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:12px}
-  .btn-r{background:#dc2626;color:#fff;border:0;padding:6px 10px;border-radius:7px;cursor:pointer;font-size:11px}
-  table{width:100%;border-collapse:collapse;margin-top:12px;font-size:12px}
-  th,td{border:1px solid #1e293b;padding:7px;text-align:right}th{background:#020617;color:#34d399}
-  .bar{display:flex;gap:6px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:10px}
-  footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1px solid #10b98155;padding:9px;text-align:center;font-size:12px;color:#cbd5e1}
-  @media print{body{background:#fff;color:#000;padding:0}.no-print,footer{display:none!important}th,td{border:1px solid #000;color:#000}}
+body{margin:0;padding:14px 14px 60px;background:#030712;color:#f3f4f6;font-family:Tahoma,Arial,sans-serif}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.b,.l{display:block;width:100%;text-align:right;background:#0b0f19;color:#fff;border:1px solid #10b98166;border-radius:10px;padding:12px;text-decoration:none;cursor:pointer;box-sizing:border-box}
+.p{display:none;background:#0b0f19;border:1px solid #10b98166;border-radius:10px;padding:14px;max-width:760px;margin:12px auto}
+input,select{width:100%;padding:8px;margin-bottom:8px;border-radius:7px;border:1px solid #334155;background:#020617;color:#fff;box-sizing:border-box}
+button{cursor:pointer;border-radius:7px;border:0;padding:8px 12px;font-weight:700}
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:12px}
+th,td{border:1px solid #1e293b;padding:6px;text-align:right}
+th{background:#020617;color:#34d399}
+.bar{display:flex;gap:6px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:8px}
+footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1px solid #10b98155;padding:9px;text-align:center;font-size:12px;color:#cbd5e1}
+@media print{body{background:#fff;color:#000;padding:0}.np,footer{display:none!important}th,td{border:1px solid #000;color:#000}}
 </style>
 </head>
 <body>
-<header class="no-print">
-  <div><h1>إعدادية المعرفة المهنية الاهلية</h1><div class="sub">برمجة: عباس محمد عزيز</div></div>
-  <button type="button" class="btn-g" onclick="openBox('home')">الرئيسية</button>
-</header>
-
-<div id="box-home" class="grid">
-  <button type="button" class="card" onclick="openBox('ast-l')"><div class="sub">01</div><b>بوابة المعاون</b><div class="sub" style="color:#94a3b8">الغيابات، الهروب، والإجازات</div></button>
-  <button type="button" class="card" onclick="openBox('tch-s')"><div class="sub" style="color:#22d3ee">02</div><b>بوابة المدرسين</b><div class="sub" style="color:#94a3b8">رصد الدرجات من 100</div></button>
-  <a href="students.html" class="link"><div class="sub" style="color:#c084fc">03</div><b>بوابة الطلاب</b><div class="sub" style="color:#94a3b8">الجداول والنتائج</div></a>
-  <a href="counselor.html" class="link"><div class="sub" style="color:#fbbf24">04</div><b>بوابة المرشد</b><div class="sub" style="color:#94a3b8">الحالات والملفات التربوية</div></a>
-  <a href="admin.html" class="link"><div class="sub" style="color:#fb7185">05</div><b>بوابة الإدارة</b><div class="sub" style="color:#94a3b8">الإحصائيات والصلاحيات</div></a>
-  <a href="evaluations.html" class="link"><div class="sub" style="color:#2dd4bf">06</div><b>بوابة التقييم</b><div class="sub" style="color:#94a3b8">تقييم الطلاب والشُعب</div></a>
-  <a href="accounts.html" class="link"><div class="sub" style="color:#38bdf8">07</div><b>بوابة الحسابات</b><div class="sub" style="color:#94a3b8">الأقساط والوصولات</div></a>
+<div class="np bar" style="border-bottom:1px solid #10b98144;padding-bottom:10px">
+  <div><b>إعدادية المعرفة المهنية الاهلية</b><div style="font-size:11px;color:#34d399">عباس محمد عزيز</div></div>
+  <button onclick="sw('home')" style="background:#1e293b;color:#fff">الرئيسية</button>
 </div>
 
-<div id="box-ast-l" class="panel" style="max-width:400px">
-  <h3 style="text-align:center;color:#34d399;margin-top:0">دخول المعاون</h3>
-  <div id="ast-m" style="text-align:center;font-size:12px;color:#94a3b8;margin-bottom:10px">المحاولات المتبقية: 10 من 10</div>
-  <input type="password" id="ast-p" placeholder="أدخل الرمز السري">
-  <div class="bar"><button type="button" class="btn" style="flex:1" onclick="authAst()">دخول</button><button type="button" class="btn-g" onclick="openBox('home')">إلغاء</button></div>
+<div id="v-home" class="g">
+  <button class="b" onclick="sw('al')">01 — بوابة المعاون</button>
+  <button class="b" onclick="sw('ts')">02 — بوابة المدرسين</button>
+  <a class="l" href="students.html">03 — بوابة الطلاب</a>
+  <a class="l" href="counselor.html">04 — بوابة المرشد</a>
+  <a class="l" href="admin.html">05 — بوابة الإدارة</a>
+  <a class="l" href="evaluations.html">06 — بوابة التقييم</a>
+  <a class="l" href="accounts.html">07 — بوابة الحسابات</a>
 </div>
 
-<div id="box-ast-d" class="panel">
-  <div class="bar no-print">
-    <h3 style="color:#34d399;margin:0">سجل المعاون</h3>
-    <div style="display:flex;gap:6px"><button type="button" class="btn" onclick="window.print()">طباعة PDF</button><button type="button" class="btn-r" onclick="clearTbl('abs-t')">مسح</button><button type="button" class="btn-g" onclick="openBox('home')">رجوع</button></div>
+<!-- دخول المعاون -->
+<div id="v-al" class="p" style="max-width:380px">
+  <h3 style="margin-top:0;color:#34d399">دخول المعاون</h3>
+  <div id="am" style="font-size:12px;color:#94a3b8;margin-bottom:8px">المحاولات المتبقية: 10 من 10</div>
+  <input type="password" id="ap" placeholder="الرمز السري">
+  <div class="bar"><button onclick="la()" style="background:#10b981;color:#000;flex:1">دخول</button><button onclick="sw('home')" style="background:#1e293b;color:#fff">رجوع</button></div>
+</div>
+
+<!-- لوحة المعاون -->
+<div id="v-ad" class="p">
+  <div class="np bar">
+    <b style="color:#34d399">سجل الغيابات، الهروب، والإجازات</b>
+    <div style="display:flex;gap:6px">
+      <button onclick="print()" style="background:#10b981;color:#000">PDF</button>
+      <button onclick="clrData('abs')" style="background:#dc2626;color:#fff">مسح الكل</button>
+      <button onclick="sw('home')" style="background:#1e293b;color:#fff">رجوع</button>
+    </div>
   </div>
-  <div class="no-print">
-    <input type="text" id="a-n" placeholder="اسم الطالب">
-    <select id="a-c"><option>اول امن سيبراني A</option><option>اول امن سيبراني B</option><option>اول امن سيبراني C</option><option>اول تكرير نفط A</option><option>اول تجميع حاسوب A</option><option>اول اجهزه طبية A</option></select>
-    <select id="a-t"><option>غياب</option><option>هروب</option><option>اجازة</option></select>
-    <input type="date" id="a-d">
-    <button type="button" class="btn" style="width:100%" onclick="addAbs()">حفظ السجل</button>
+  <div class="np">
+    <input id="an" placeholder="اسم الطالب">
+    <select id="ac">
+      <option>اول امن سيبراني A</option><option>اول امن سيبراني B</option><option>اول امن سيبراني C</option>
+      <option>اول تكرير نفط A</option><option>اول تجميع حاسوب A</option><option>اول اجهزه طبية A</option>
+    </select>
+    <select id="at"><option>غياب</option><option>هروب</option><option>اجازة</option></select>
+    <input type="date" id="ad">
+    <button onclick="aa()" style="background:#10b981;color:#000;width:100%;margin-bottom:8px">حفظ السجل</button>
+    <input id="af" oninput="drawAbs()" placeholder="بحث باسم الطالب أو الصف...">
   </div>
-  <table><thead><tr><th>الطالب</th><th>الصف</th><th>الحالة</th><th>التاريخ</th><th class="no-print">حذف</th></tr></thead><tbody id="abs-t"></tbody></table>
+  <table><thead><tr><th>الطالب</th><th>الصف</th><th>الحالة</th><th>التاريخ</th><th class="np">حذف</th></tr></thead><tbody id="ab"></tbody></table>
 </div>
 
-<div id="box-tch-s" class="panel" style="max-width:420px">
-  <h3 style="text-align:center;color:#22d3ee;margin-top:0">اختر المادة</h3>
-  <div id="sub-box"></div>
-  <div style="text-align:center;margin-top:10px"><button type="button" class="btn-g" onclick="openBox('home')">رجوع</button></div>
+<!-- اختيار المادة -->
+<div id="v-ts" class="p" style="max-width:380px">
+  <h3 style="margin-top:0;color:#22d3ee">اختر المادة</h3>
+  <div id="sl"></div>
+  <button onclick="sw('home')" style="background:#1e293b;color:#fff;width:100%;margin-top:6px">رجوع</button>
 </div>
 
-<div id="box-tch-l" class="panel" style="max-width:400px">
-  <h3 id="tch-h" style="text-align:center;color:#22d3ee;margin-top:0">دخول المدرس</h3>
-  <div id="tch-m" style="text-align:center;font-size:12px;color:#94a3b8;margin-bottom:10px">المحاولات المتبقية: 10 من 10</div>
-  <input type="password" id="tch-p" placeholder="أدخل رمز المادة">
-  <div class="bar"><button type="button" class="btn-b" style="flex:1" onclick="authTch()">دخول</button><button type="button" class="btn-g" onclick="openBox('tch-s')">رجوع</button></div>
-</div>
-
-<div id="box-tch-d" class="panel">
-  <div class="bar no-print">
-    <h3 id="tch-dh" style="color:#22d3ee;margin:0">رصد الدرجات (من 100)</h3>
-    <div style="display:flex;gap:6px"><button type="button" class="btn-b" onclick="window.print()">طباعة PDF</button><button type="button" class="btn-r" onclick="clearTbl('gr-t')">مسح</button><button type="button" class="btn-g" onclick="openBox('home')">رجوع</button></div>
-  </div>
-  <div class="no-print">
-    <input type="text" id="t-n" placeholder="اسم الطالب">
-    <select id="t-c"><option>اول امن سيبراني A</option><option>اول امن سيبراني B</option><option>اول امن سيبراني C</option><option>اول تكرير نفط A</option><option>اول تجميع حاسوب A</option><option>اول اجهزه طبية A</option></select>
-    <input type="number" id="t-g" min="0" max="100" placeholder="الدرجة من 100">
-    <button type="button" class="btn-b" style="width:100%" onclick="addGr()">حفظ الدرجة</button>
-  </div>
-  <table><thead><tr><th>الطالب</th><th>الصف</th><th>المادة</th><th>الدرجة</th><th class="no-print">حذف</th></tr></thead><tbody id="gr-t"></tbody></table>
-</div>
-
-<footer>برمجة وتطوير: <strong style="color:#34d399">عباس محمد عزيز</strong></footer>
-
-<script>
-var MAX=10, AST="55100", cur=null;
-var SUBS=[{n:"التربية الإسلامية",c:"1090"},{n:"اللغة العربية",c:"202500"},{n:"الرياضيات",c:"12300"},{n:"الانجليزي",c:"0005"},{n:"اساسيات الكهرباء",c:"9000"},{n:"تجميع الحاسوب",c:"6200"},{n:"تطبيقات الحاسوب",c:"1999"},{n:"الاتصالات والشبكات",c:"6100"},{n:"مبادى الحاسوب",c:"1998"}];
-function banH(g,s){g=String(g||"").trim();s=String(s||"").trim();var d=Math.abs(g.length-s.length),m=0,p=s.split("");for(var i=0;i<g.length;i++){var x=p.indexOf(g[i]);if(x>-1){m++;p.splice(x,1)}}var r=m/Math.max(g.length,s.length,1),a=Number(g),b=Number(s);if((!isNaN(a)&&!isNaN(b)&&b>0&&Math.abs(a-b)/b<=.25)||(r>=.6&&d<=1))return 72;if(r>=.35&&d<=2)return 96;return 120}
-function getL(k){try{var o=JSON.parse(localStorage.getItem("i2_"+k)||"{}");if(o.u&&Date.now()>=+o.u){var z={t:0,u:0,h:0};localStorage.setItem("i2_"+k,JSON.stringify(z));return z}return{t:+o.t||0,u:+o.u||0,h:+o.h||0}}catch(e){return{t:0,u:0,h:0}}}
-function setL(k,v){try{localStorage.setItem("i2_"+k,JSON.stringify(v))}catch(e){}}
-function rem(ms){var h=Math.max(1,Math.ceil(ms/36e5));return Math.floor(h/24)+" يوم و "+(h%24)+" ساعة ("+h+" ساعة)"}
-function paint(k,id){var el=document.getElementById(id);if(!el)return;var s=getL(k);if(s.u&&Date.now()<s.u){el.style.color="#fb7185";el.innerText="محظور "+s.h+" ساعة — المتبقي: "+rem(s.u-Date.now())}else{el.style.color="#94a3b8";el.innerText="المحاولات المتبقية: "+Math.max(0,MAX-s.t)+" من "+MAX}}
-function openBox(v){var all=["home","ast-l","ast-d","tch-s","tch-l","tch-d"];for(var i=0;i<all.length;i++){var e=document.getElementById("box-"+all[i]);if(e)e.style.display="none"}var t=document.getElementById("box-"+v);if(t)t.style.display=(v==="home"?"grid":"block");if(v==="ast-l")paint("ast","ast-m");if(v==="tch-s")drawS();if(v==="tch-l"&&cur)paint("tch_"+cur.n,"tch-m")}
-function authAst(){var s=getL("ast");if(s.u&&Date.now()<s.u)return alert("محظور "+s.h+" ساعة.\nالمتبقي: "+rem(s.u-Date.now()));var i=document.getElementById("ast-p"),v=i?i.value.trim():"";if(v===AST){setL("ast",{t:0,u:0,h:0});i.value="";openBox("ast-d")}else{s.t++;if(s.t>MAX){var h=banH(v,AST);setL("ast",{t:s.t,u:Date.now()+h*36e5,h:h});paint("ast","ast-m");alert("تجاوزت 10 محاولات! حظر "+h+" ساعة")}else{setL("ast",s);paint("ast","ast-m");alert("الرمز خطأ! المتبقي: "+(MAX-s.t))}}}
-function addAbs(){var n=document.getElementById("a-n").value.trim(),c=document.getElementById("a-c").value,t=document.getElementById("a-t").value,d=document.getElementById("a-d").value||new Date().toISOString().slice(0,10);if(!n)return alert("أدخل اسم الطالب");var r=document.createElement("tr");r.innerHTML="<td>"+n+"</td><td>"+c+"</td><td>"+t+"</td><td>"+d+"</td><td class='no-print'><button type='button' class='btn-r' onclick='this.closest(\"tr\").remove()'>حذف</button></td>";document.getElementById("abs-t").appendChild(r);document.getElementById("a-n").value=""}
-function drawS(){var h="";for(var i=0;i<SUBS.length;i++)h+="<button type='button' class='card' style='margin-bottom:7px' onclick=\"pickS('"+SUBS[i].n+"')\"><b>"+SUBS[i].n+"</b></button>";document.getElementById("sub-box").innerHTML=h}
-function pickS(n){cur=SUBS.find(function(x){return x.n===n})||null;if(!cur)return;document.getElementById("tch-h").innerText="دخول: "+cur.n;document.getElementById("tch-p").value="";openBox("tch-l")}
-function authTch(){if(!cur)return;var k="tch_"+cur.n,s=getL(k);if(s.u&&Date.now()<s.u)return alert("محظور "+s.h+" ساعة.\nالمتبقي: "+rem(s.u-Date.now()));var i=document.getElementById("tch-p"),v=i?i.value.trim():"";if(v===cur.c){setL(k,{t:0,u:0,h:0});i.value="";document.getElementById("tch-dh").innerText="رصد درجات - "+cur.n+" (من 100)";openBox("tch-d")}else{s.t++;if(s.t>MAX){var h=banH(v,cur.c);setL(k,{t:s.t,u:Date.now()+h*36e5,h:h});paint(k,"tch-m");alert("تجاوزت 10 محاولات! حظر "+h+" ساعة")}else{setL(k,s);paint(k,"tch-m");alert("الرمز خطأ! المتبقي: "+(MAX-s.t))}}}
-function addGr(){if(!cur)return;var n=document.getElementById("t-n").value.trim(),c=document.getElementById("t-c").value,gi=document.getElementById("t-g"),g=Number(gi.value);if(!n||gi.value==="")return alert("أدخل اسم الطالب والدرجة");if(g<0||g>100)return alert("الدرجة بين 0 و 100");var r=document.createElement("tr");r.innerHTML="<td>"+n+"</td><td>"+c+"</td><td>"+cur.n+"</td><td><b>"+g+" / 100</b></td><td class='no-print'><button type='button' class='btn-r' onclick='this.closest(\"tr\").remove()'>حذف</button></td>";document.getElementById("gr-t").appendChild(r);document.getElementById("t-n").value="";gi.value=""}
-function clearTbl(id){if(confirm("مسح السجل؟"))document.getElementById(id).innerHTML=""}
-</script>
-</body>
-                                                                  </html>
-      
+<!-- دخول المدرس -->
+<div id="v-tl" class="p" style="max-width:380px">
+  <h3 id="th" style="margin-top:0;color:#22d3ee">دخول المدرس</h3>
+  <div id="tm" style="font-size:12px;color:#94a3b8;margin-bottom:8px">المحاولات المتبقية: 10 من 10</div>
+  <input type="password" id="tp" placeholder="رمز المادة">
+  
