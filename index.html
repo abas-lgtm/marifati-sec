@@ -31,7 +31,7 @@
             <h1 class="text-white font-bold text-base md:text-lg">إعدادية المعرفة المهنية الاهلية</h1>
             <span class="text-[11px] md:text-xs text-emerald-400 font-mono">برمجة: عباس محمد عزيز</span>
         </div>
-        <button type="button" onclick="showView('home')" class="bg-slate-900 text-emerald-400 px-4 py-2 rounded-lg border border-emerald-500/30 text-sm font-semibold cursor-pointer">الرئيسية</button>
+        <button type="button" onclick="nav('home')" class="bg-slate-900 text-emerald-400 px-4 py-2 rounded-lg border border-emerald-500/30 text-sm font-semibold cursor-pointer">الرئيسية</button>
     </header>
 
     <main class="max-w-4xl mx-auto w-full my-6 flex-grow">
@@ -40,37 +40,37 @@
             <h2 class="text-3xl font-black text-white mb-3">نظام إدارة المدرسة الآمن</h2>
             <p class="text-slate-400 mb-8">اختر البوابة المطلوبة للمتابعة:</p>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <button type="button" onclick="showView('ast-login')" class="cyber-card p-6 rounded-2xl text-right hover:border-emerald-400 transition w-full cursor-pointer">
+                <button type="button" onclick="nav('ast-login')" class="cyber-card p-6 rounded-2xl text-right hover:border-emerald-400 transition w-full cursor-pointer">
                     <span class="inline-block text-[11px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded mb-3">01</span>
                     <h3 class="text-lg font-bold text-white mb-1">بوابة المعاون</h3>
                     <p class="text-xs text-slate-400">إدارة الغيابات والشعب (منطقة آمنة)</p>
                 </button>
-                <button type="button" onclick="showView('tch-select')" class="cyber-card-blue p-6 rounded-2xl text-right hover:border-cyan-400 transition w-full cursor-pointer">
+                <button type="button" onclick="nav('tch-select')" class="cyber-card-blue p-6 rounded-2xl text-right hover:border-cyan-400 transition w-full cursor-pointer">
                     <span class="inline-block text-[11px] font-mono text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2.5 py-0.5 rounded mb-3">02</span>
                     <h3 class="text-lg font-bold text-white mb-1">بوابة المدرسين</h3>
                     <p class="text-xs text-slate-400">رصد درجات المواد عبر الرموز السرية</p>
                 </button>
-                <button type="button" onclick="openGate('students', 'students.html')" class="cyber-card-purple p-6 rounded-2xl text-right hover:border-purple-400 transition w-full cursor-pointer">
+                <button type="button" onclick="goPage('students', 'students.html')" class="cyber-card-purple p-6 rounded-2xl text-right hover:border-purple-400 transition w-full cursor-pointer">
                     <span class="inline-block text-[11px] font-mono text-purple-400 bg-purple-500/10 border border-purple-500/20 px-2.5 py-0.5 rounded mb-3">03</span>
                     <h3 class="text-lg font-bold text-white mb-1">بوابة الطلاب</h3>
                     <p class="text-xs text-slate-400">الجداول، الامتحانات، ومتابعة النتائج</p>
                 </button>
-                <button type="button" onclick="openGate('counselor', 'counselor.html')" class="cyber-card-amber p-6 rounded-2xl text-right hover:border-amber-400 transition w-full cursor-pointer">
+                <button type="button" onclick="goPage('counselor', 'counselor.html')" class="cyber-card-amber p-6 rounded-2xl text-right hover:border-amber-400 transition w-full cursor-pointer">
                     <span class="inline-block text-[11px] font-mono text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 rounded mb-3">04</span>
                     <h3 class="text-lg font-bold text-white mb-1">بوابة المشرف التربوي / المرشد</h3>
                     <p class="text-xs text-slate-400">الحالات السلوكية، الغياب المتكرر، والملفات التربوية</p>
                 </button>
-                <button type="button" onclick="openGate('admin', 'admin.html')" class="cyber-card-rose p-6 rounded-2xl text-right hover:border-rose-400 transition w-full cursor-pointer">
+                <button type="button" onclick="goPage('admin', 'admin.html')" class="cyber-card-rose p-6 rounded-2xl text-right hover:border-rose-400 transition w-full cursor-pointer">
                     <span class="inline-block text-[11px] font-mono text-rose-400 bg-rose-500/10 border border-rose-500/20 px-2.5 py-0.5 rounded mb-3">05</span>
                     <h3 class="text-lg font-bold text-white mb-1">بوابة الإدارة / المدير</h3>
                     <p class="text-xs text-slate-400">إحصائيات شاملة، متابعة الإنجاز، والصلاحيات الإشرافية</p>
                 </button>
-                <button type="button" onclick="openGate('evaluations', 'evaluations.html')" class="cyber-card-teal p-6 rounded-2xl text-right hover:border-teal-400 transition w-full cursor-pointer">
+                <button type="button" onclick="goPage('evaluations', 'evaluations.html')" class="cyber-card-teal p-6 rounded-2xl text-right hover:border-teal-400 transition w-full cursor-pointer">
                     <span class="inline-block text-[11px] font-mono text-teal-400 bg-teal-500/10 border border-teal-500/20 px-2.5 py-0.5 rounded mb-3">06</span>
                     <h3 class="text-lg font-bold text-white mb-1">بوابة التقييم</h3>
                     <p class="text-xs text-slate-400">تقييم الطلاب والشُعب بالمعايير والوسوم وترتيب الأبرز</p>
                 </button>
-                <button type="button" onclick="openGate('accounts', 'accounts.html')" class="cyber-card-sky p-6 rounded-2xl text-right hover:border-sky-400 transition w-full cursor-pointer">
+                <button type="button" onclick="goPage('accounts', 'accounts.html')" class="cyber-card-sky p-6 rounded-2xl text-right hover:border-sky-400 transition w-full cursor-pointer">
                     <span class="inline-block text-[11px] font-mono text-sky-400 bg-sky-500/10 border border-sky-500/20 px-2.5 py-0.5 rounded mb-3">07</span>
                     <h3 class="text-lg font-bold text-white mb-1">بوابة الحسابات</h3>
                     <p class="text-xs text-slate-400">إدارة أقساط الطلبة، الخصومات، الوصولات، والتقارير</p>
@@ -81,11 +81,11 @@
         <!-- دخول المعاون -->
         <div id="v-ast-login" class="hidden max-w-md mx-auto cyber-card p-6 rounded-2xl">
             <h3 class="text-xl text-emerald-400 font-bold mb-2 text-center">دخول المعاون</h3>
-            <p id="ast-security-msg" class="text-xs text-slate-400 mb-4 text-center">المحاولات المتبقية: 10 من 10</p>
+            <p id="ast-attempts-txt" class="text-xs text-slate-400 mb-4 text-center">المحاولات المتبقية: 10 من 10</p>
             <input type="password" id="ast-pass" placeholder="أدخل رمز المرور السري" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center">
             <div class="flex gap-2">
-                <button type="button" onclick="handleAstLogin()" class="flex-1 bg-emerald-500 text-black font-bold p-3 rounded-lg cursor-pointer">دخول</button>
-                <button type="button" onclick="showView('home')" class="bg-slate-800 px-4 rounded-lg text-slate-300 cursor-pointer">إلغاء</button>
+                <button type="button" onclick="checkAst()" class="flex-1 bg-emerald-500 text-black font-bold p-3 rounded-lg cursor-pointer">دخول</button>
+                <button type="button" onclick="nav('home')" class="bg-slate-800 px-4 rounded-lg text-slate-300 cursor-pointer">إلغاء</button>
             </div>
         </div>
 
@@ -95,7 +95,7 @@
                 <h3 class="text-xl font-bold text-emerald-400">سجل الغيابات والدوام (سحابي)</h3>
                 <div class="flex gap-2">
                     <button type="button" onclick="window.print()" class="bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">طباعة PDF</button>
-                    <button type="button" onclick="clearAbsAll()" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">مسح السجل</button>
+                    <button type="button" onclick="clearAbs()" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">مسح السجل</button>
                 </div>
             </div>
 
@@ -132,18 +132,18 @@
             <h3 class="text-xl font-bold text-cyan-400 mb-4 text-center">اختر المادة الدراسية</h3>
             <div class="space-y-2" id="subj-box"></div>
             <div class="mt-4 text-center">
-                <button type="button" onclick="showView('home')" class="bg-slate-800 px-4 py-2 rounded-lg text-slate-300 text-sm cursor-pointer">رجوع للرئيسية</button>
+                <button type="button" onclick="nav('home')" class="bg-slate-800 px-4 py-2 rounded-lg text-slate-300 text-sm cursor-pointer">رجوع للرئيسية</button>
             </div>
         </div>
 
         <!-- دخول المدرس -->
         <div id="v-tch-login" class="hidden max-w-md mx-auto cyber-card p-6 rounded-2xl">
             <h3 id="tch-title" class="text-xl text-cyan-400 font-bold mb-2 text-center">تسجيل دخول المدرس</h3>
-            <p id="tch-security-msg" class="text-xs text-slate-400 mb-4 text-center">المحاولات المتبقية: 10 من 10</p>
+            <p id="tch-attempts-txt" class="text-xs text-slate-400 mb-4 text-center">المحاولات المتبقية: 10 من 10</p>
             <input type="password" id="tch-pass" placeholder="أدخل رمز المادة السري" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center">
             <div class="flex gap-2">
-                <button type="button" onclick="handleTchLogin()" class="flex-1 bg-cyan-500 text-black font-bold p-3 rounded-lg cursor-pointer">دخول</button>
-                <button type="button" onclick="showView('tch-select')" class="bg-slate-800 px-4 rounded-lg text-slate-300 cursor-pointer">رجوع</button>
+                <button type="button" onclick="verifyTch()" class="flex-1 bg-cyan-500 text-black font-bold p-3 rounded-lg cursor-pointer">دخول</button>
+                <button type="button" onclick="nav('tch-select')" class="bg-slate-800 px-4 rounded-lg text-slate-300 cursor-pointer">رجوع</button>
             </div>
         </div>
 
@@ -205,93 +205,83 @@
             }
         } catch (e) {}
 
-        var MAX_ATTEMPTS = 10;
+        var MAX_TRIES = 10;
 
-        function getDeviceId() {
-            var id = localStorage.getItem("alpha_sec_dev");
-            if (!id) {
-                id = "dev_" + Math.random().toString(36).slice(2, 10);
-                localStorage.setItem("alpha_sec_dev", id);
-            }
-            return id;
-        }
-
-        function estimateBanHours(attemptVal, correctVal) {
-            var a = String(attemptVal || "").trim();
-            var c = String(correctVal || "").trim();
-            var lenDiff = Math.abs(a.length - c.length);
-            var common = 0;
-            var arr = c.split("");
-            for (var i = 0; i < a.length; i++) {
-                var idx = arr.indexOf(a[i]);
-                if (idx !== -1) {
-                    common++;
-                    arr.splice(idx, 1);
+        function calcBanHours(guess, secret) {
+            var g = String(guess || "").trim();
+            var s = String(secret || "").trim();
+            var lenDiff = Math.abs(g.length - s.length);
+            var sameChars = 0;
+            var arr = s.split("");
+            for (var i = 0; i < g.length; i++) {
+                var pos = arr.indexOf(g[i]);
+                if (pos !== -1) {
+                    sameChars++;
+                    arr.splice(pos, 1);
                 }
             }
-            var sim = common / Math.max(a.length, c.length, 1);
-            var numA = Number(a);
-            var numC = Number(c);
-            var closeNum = !isNaN(numA) && !isNaN(numC) && numC > 0 && (Math.abs(numA - numC) / numC) <= 0.25;
-            if (closeNum || (sim >= 0.6 && lenDiff <= 1)) return 72;
-            if (sim >= 0.35 && lenDiff <= 2) return 96;
+            var ratio = sameChars / Math.max(g.length, s.length, 1);
+            var n1 = Number(g);
+            var n2 = Number(s);
+            var closeVal = !isNaN(n1) && !isNaN(n2) && n2 > 0 && (Math.abs(n1 - n2) / n2) <= 0.25;
+            if (closeVal || (ratio >= 0.6 && lenDiff <= 1)) return 72;
+            if (ratio >= 0.35 && lenDiff <= 2) return 96;
             return 120;
         }
 
-        function getGateSec(gateKey) {
-            var raw = localStorage.getItem("sec_" + getDeviceId() + "_" + gateKey);
-            if (!raw) return { fails: 0, until: 0, hours: 0 };
+        function readLock(key) {
             try {
-                var obj = JSON.parse(raw);
-                if (obj.until && Date.now() >= Number(obj.until)) {
-                    var fresh = { fails: 0, until: 0, hours: 0 };
-                    localStorage.setItem("sec_" + getDeviceId() + "_" + gateKey, JSON.stringify(fresh));
-                    return fresh;
+                var raw = localStorage.getItem("lock_" + key);
+                if (!raw) return { tries: 0, until: 0, hrs: 0 };
+                var st = JSON.parse(raw);
+                if (st.until && Date.now() >= Number(st.until)) {
+                    var reset = { tries: 0, until: 0, hrs: 0 };
+                    localStorage.setItem("lock_" + key, JSON.stringify(reset));
+                    return reset;
                 }
-                return obj;
+                return st;
             } catch (e) {
-                return { fails: 0, until: 0, hours: 0 };
+                return { tries: 0, until: 0, hrs: 0 };
             }
         }
 
-        function setGateSec(gateKey, obj) {
-            localStorage.setItem("sec_" + getDeviceId() + "_" + gateKey, JSON.stringify(obj));
-            if (db) {
-                try {
-                    db.ref("security_locks/" + getDeviceId() + "__" + gateKey).set({
-                        gateKey: gateKey,
-                        fails: obj.fails,
-                        until: obj.until,
-                        hours: obj.hours,
+        function writeLock(key, st) {
+            try {
+                localStorage.setItem("lock_" + key, JSON.stringify(st));
+                if (db) {
+                    db.ref("security_locks/" + key.replace(/[.#$[\]/]/g, "_")).set({
+                        tries: st.tries,
+                        until: st.until,
+                        hrs: st.hrs,
                         updatedAt: Date.now()
                     });
-                } catch (e) {}
-            }
+                }
+            } catch (e) {}
         }
 
-        function fmtRem(ms) {
+        function remText(ms) {
             var h = Math.max(1, Math.ceil(ms / 3600000));
             return Math.floor(h / 24) + " يوم و " + (h % 24) + " ساعة (" + h + " ساعة)";
         }
 
-        function updateSecLabel(gateKey, elId) {
+        function updateTriesText(key, elId) {
             var el = document.getElementById(elId);
             if (!el) return;
-            var st = getGateSec(gateKey);
+            var st = readLock(key);
             if (st.until && Date.now() < Number(st.until)) {
-                el.innerText = "محظور لمدة " + st.hours + " ساعة — المتبقي: " + fmtRem(Number(st.until) - Date.now());
+                el.innerText = "محظور لمدة " + st.hrs + " ساعة — المتبقي: " + remText(Number(st.until) - Date.now());
                 el.className = "text-xs text-rose-400 font-bold mb-4 text-center";
             } else {
-                var rem = Math.max(0, MAX_ATTEMPTS - Number(st.fails || 0));
-                el.innerText = "المحاولات المتبقية: " + rem + " من " + MAX_ATTEMPTS;
+                var rem = Math.max(0, MAX_TRIES - Number(st.tries || 0));
+                el.innerText = "المحاولات المتبقية: " + rem + " من " + MAX_TRIES;
                 el.className = "text-xs text-slate-400 mb-4 text-center";
             }
         }
 
-        function openGate(gateKey, url) {
-            var st = getGateSec(gateKey);
+        function goPage(key, url) {
+            var st = readLock(key);
             if (st.until && Date.now() < Number(st.until)) {
-                alert("تم حظر الوصول لهذه البوابة مؤقتاً (" + st.hours + " ساعة).\nالمتبقي: " + fmtRem(Number(st.until) - Date.now()));
+                alert("تم حظر الوصول لهذه البوابة مؤقتاً (" + st.hrs + " ساعة).\nالمتبقي: " + remText(Number(st.until) - Date.now()));
                 return;
             }
             window.location.href = url;
@@ -310,7 +300,19 @@
         ];
         var currSubj = null;
 
-        function showView(v) {
-            var list = ["home", "ast-login", "ast-dash", "tch-select", "tch-login", "tch-dash"];
-            for (var i = 0; i < list.length; i++) {
-                var el = document.getElementById("v-" 
+        function nav(v) {
+            var views = ["home", "ast-login", "ast-dash", "tch-select", "tch-login", "tch-dash"];
+            for (var i = 0; i < views.length; i++) {
+                var el = document.getElementById("v-" + views[i]);
+                if (el) el.classList.add("hidden");
+            }
+            var active = document.getElementById("v-" + v);
+            if (active) active.classList.remove("hidden");
+            if (v === "ast-login") updateTriesText("assistant", "ast-attempts-txt");
+            if (v === "tch-select") loadSubs();
+            if (v === "tch-login" && currSubj) updateTriesText("tch_" + currSubj.name, "tch-attempts-txt");
+            window.scrollTo(0, 0);
+        }
+
+        function checkAst() {
+            var key = "as
