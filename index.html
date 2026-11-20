@@ -5,291 +5,82 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ALPHA-SEC // النظام المدرسي</title>
 <style>
-  * { box-sizing: border-box; font-family: Tahoma, Arial, sans-serif; }
-  body { margin: 0; padding: 16px 16px 65px 16px; background: #030712; color: #f3f4f6; }
-  header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #10b98155; padding-bottom: 12px; margin-bottom: 20px; }
-  h1 { margin: 0; font-size: 17px; color: #fff; }
-  .sub { font-size: 12px; color: #34d399; }
-  .btn { background: #10b981; color: #000; border: none; padding: 10px 14px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px; }
-  .btn-blue { background: #06b6d4; color: #000; border: none; padding: 10px 14px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px; }
-  .btn-gray { background: #1e293b; color: #e2e8f0; border: 1px solid #334155; padding: 10px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; text-decoration: none; display: block; }
-  .btn-red { background: #dc2626; color: #fff; border: none; padding: 8px 12px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 12px; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
-  .card { background: #0b0f19; border: 1px solid #10b98155; border-radius: 14px; padding: 16px; text-align: right; cursor: pointer; width: 100%; color: #fff; }
-  .card:hover { border-color: #34d399; }
-  .panel { max-width: 780px; margin: 0 auto; background: #0b0f19; border: 1px solid #10b98155; border-radius: 14px; padding: 18px; }
-  .box-sm { max-width: 420px; margin: 0 auto; background: #0b0f19; border: 1px solid #10b98155; border-radius: 14px; padding: 18px; }
-  input, select { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #334155; background: #020617; color: #fff; font-size: 14px; }
-  table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 13px; }
-  th, td { border: 1px solid #1e293b; padding: 8px; text-align: right; }
-  th { background: #020617; color: #34d399; }
-  .row-flex { display: flex; gap: 8px; flex-wrap: wrap; justify-content: space-between; align-items: center; }
-  footer { position: fixed; bottom: 0; left: 0; width: 100%; background: #0f172a; border-top: 1px solid #10b98155; padding: 10px; text-align: center; font-size: 12px; color: #cbd5e1; }
-  @media print {
-    body { background: #fff; color: #000; padding: 0; }
-    .no-print, footer { display: none !important; }
-    th, td { border: 1px solid #000; color: #000; }
-  }
+  *{box-sizing:border-box;font-family:Tahoma,Arial,sans-serif}
+  body{margin:0;padding:16px 16px 60px;background:#030712;color:#f3f4f6}
+  header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #10b98155;padding-bottom:10px;margin-bottom:18px}
+  h1{margin:0;font-size:16px;color:#fff}.sub{font-size:11px;color:#34d399}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;max-width:860px;margin:0 auto}
+  .card,.link{background:#0b0f19;border:1px solid #10b98155;border-radius:12px;padding:14px;color:#fff;text-align:right;cursor:pointer;display:block;text-decoration:none;width:100%}
+  .panel{display:none;max-width:760px;margin:0 auto;background:#0b0f19;border:1px solid #10b98155;border-radius:12px;padding:16px}
+  input,select{width:100%;padding:9px;margin-bottom:8px;border-radius:8px;border:1px solid #334155;background:#020617;color:#fff;font-size:13px}
+  .btn{background:#10b981;color:#000;border:0;padding:9px 12px;border-radius:8px;font-weight:700;cursor:pointer;font-size:13px}
+  .btn-b{background:#06b6d4;color:#000;border:0;padding:9px 12px;border-radius:8px;font-weight:700;cursor:pointer;font-size:13px}
+  .btn-g{background:#1e293b;color:#e2e8f0;border:1px solid #334155;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:12px}
+  .btn-r{background:#dc2626;color:#fff;border:0;padding:6px 10px;border-radius:7px;cursor:pointer;font-size:11px}
+  table{width:100%;border-collapse:collapse;margin-top:12px;font-size:12px}
+  th,td{border:1px solid #1e293b;padding:7px;text-align:right}th{background:#020617;color:#34d399}
+  .bar{display:flex;gap:6px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:10px}
+  footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1px solid #10b98155;padding:9px;text-align:center;font-size:12px;color:#cbd5e1}
+  @media print{body{background:#fff;color:#000;padding:0}.no-print,footer{display:none!important}th,td{border:1px solid #000;color:#000}}
 </style>
 </head>
 <body>
-
 <header class="no-print">
-  <div>
-    <h1>إعدادية المعرفة المهنية الاهلية</h1>
-    <div class="sub">برمجة: عباس محمد عزيز</div>
-  </div>
-  <button type="button" class="btn-gray" onclick="goSec('home')">الرئيسية</button>
+  <div><h1>إعدادية المعرفة المهنية الاهلية</h1><div class="sub">برمجة: عباس محمد عزيز</div></div>
+  <button type="button" class="btn-g" onclick="openBox('home')">الرئيسية</button>
 </header>
 
-<!-- الرئيسية -->
-<div id="sec-home" style="display:block; max-width:860px; margin:0 auto;">
-  <h2 style="text-align:center; margin:6px 0;">نظام إدارة المدرسة الآمن</h2>
-  <p style="text-align:center; color:#94a3b8; font-size:13px; margin-bottom:18px;">اختر البوابة المطلوبة للمتابعة:</p>
-
-  <div class="grid">
-    <button type="button" class="card" onclick="goSec('ast-login')">
-      <div class="sub">01</div>
-      <div style="font-weight:bold; font-size:16px; margin:4px 0;">بوابة المعاون</div>
-      <div style="font-size:12px; color:#94a3b8;">الغيابات، الهروب، والإجازات</div>
-    </button>
-
-    <button type="button" class="card" onclick="goSec('tch-select')">
-      <div class="sub" style="color:#22d3ee;">02</div>
-      <div style="font-weight:bold; font-size:16px; margin:4px 0;">بوابة المدرسين</div>
-      <div style="font-size:12px; color:#94a3b8;">رصد درجات المواد من 100</div>
-    </button>
-
-    <a href="students.html" class="card">
-      <div class="sub" style="color:#c084fc;">03</div>
-      <div style="font-weight:bold; font-size:16px; margin:4px 0;">بوابة الطلاب</div>
-      <div style="font-size:12px; color:#94a3b8;">الجداول والنتائج</div>
-    </a>
-
-    <a href="counselor.html" class="card">
-      <div class="sub" style="color:#fbbf24;">04</div>
-      <div style="font-weight:bold; font-size:16px; margin:4px 0;">بوابة المشرف التربوي / المرشد</div>
-      <div style="font-size:12px; color:#94a3b8;">الحالات السلوكية والملفات</div>
-    </a>
-
-    <a href="admin.html" class="card">
-      <div class="sub" style="color:#fb7185;">05</div>
-      <div style="font-weight:bold; font-size:16px; margin:4px 0;">بوابة الإدارة / المدير</div>
-      <div style="font-size:12px; color:#94a3b8;">الإحصائيات والصلاحيات</div>
-    </a>
-
-    <a href="evaluations.html" class="card">
-      <div class="sub" style="color:#2dd4bf;">06</div>
-      <div style="font-weight:bold; font-size:16px; margin:4px 0;">بوابة التقييم</div>
-      <div style="font-size:12px; color:#94a3b8;">تقييم الطلاب والشُعب</div>
-    </a>
-
-    <a href="accounts.html" class="card">
-      <div class="sub" style="color:#38bdf8;">07</div>
-      <div style="font-weight:bold; font-size:16px; margin:4px 0;">بوابة الحسابات</div>
-      <div style="font-size:12px; color:#94a3b8;">الأقساط والخصومات والوصولات</div>
-    </a>
-  </div>
+<div id="box-home" class="grid">
+  <button type="button" class="card" onclick="openBox('ast-l')"><div class="sub">01</div><b>بوابة المعاون</b><div class="sub" style="color:#94a3b8">الغيابات، الهروب، والإجازات</div></button>
+  <button type="button" class="card" onclick="openBox('tch-s')"><div class="sub" style="color:#22d3ee">02</div><b>بوابة المدرسين</b><div class="sub" style="color:#94a3b8">رصد الدرجات من 100</div></button>
+  <a href="students.html" class="link"><div class="sub" style="color:#c084fc">03</div><b>بوابة الطلاب</b><div class="sub" style="color:#94a3b8">الجداول والنتائج</div></a>
+  <a href="counselor.html" class="link"><div class="sub" style="color:#fbbf24">04</div><b>بوابة المرشد</b><div class="sub" style="color:#94a3b8">الحالات والملفات التربوية</div></a>
+  <a href="admin.html" class="link"><div class="sub" style="color:#fb7185">05</div><b>بوابة الإدارة</b><div class="sub" style="color:#94a3b8">الإحصائيات والصلاحيات</div></a>
+  <a href="evaluations.html" class="link"><div class="sub" style="color:#2dd4bf">06</div><b>بوابة التقييم</b><div class="sub" style="color:#94a3b8">تقييم الطلاب والشُعب</div></a>
+  <a href="accounts.html" class="link"><div class="sub" style="color:#38bdf8">07</div><b>بوابة الحسابات</b><div class="sub" style="color:#94a3b8">الأقساط والوصولات</div></a>
 </div>
 
-<!-- دخول المعاون -->
-<div id="sec-ast-login" style="display:none;" class="box-sm">
-  <h3 style="text-align:center; color:#34d399; margin-top:0;">دخول بوابة المعاون</h3>
-  <div id="ast-msg" style="text-align:center; font-size:12px; color:#94a3b8; margin-bottom:12px;">المحاولات المتبقية: 10 من 10</div>
-  <input type="password" id="ast-pass" placeholder="أدخل الرمز السري">
-  <div class="row-flex">
-    <button type="button" class="btn" style="flex:1;" onclick="loginAst()">دخول</button>
-    <button type="button" class="btn-gray" onclick="goSec('home')">إلغاء</button>
-  </div>
+<div id="box-ast-l" class="panel" style="max-width:400px">
+  <h3 style="text-align:center;color:#34d399;margin-top:0">دخول المعاون</h3>
+  <div id="ast-m" style="text-align:center;font-size:12px;color:#94a3b8;margin-bottom:10px">المحاولات المتبقية: 10 من 10</div>
+  <input type="password" id="ast-p" placeholder="أدخل الرمز السري">
+  <div class="bar"><button type="button" class="btn" style="flex:1" onclick="authAst()">دخول</button><button type="button" class="btn-g" onclick="openBox('home')">إلغاء</button></div>
 </div>
 
-<!-- لوحة المعاون -->
-<div id="sec-ast-dash" style="display:none;" class="panel">
-  <div class="row-flex no-print" style="margin-bottom:14px;">
-    <h3 style="color:#34d399; margin:0;">سجل الغيابات، الهروب، والإجازات</h3>
-    <div class="row-flex">
-      <button type="button" class="btn" onclick="window.print()">طباعة PDF</button>
-      <button type="button" class="btn-red" onclick="clearRows('abs-body')">مسح السجل</button>
-      <button type="button" class="btn-gray" onclick="goSec('home')">رجوع</button>
-    </div>
+<div id="box-ast-d" class="panel">
+  <div class="bar no-print">
+    <h3 style="color:#34d399;margin:0">سجل المعاون</h3>
+    <div style="display:flex;gap:6px"><button type="button" class="btn" onclick="window.print()">طباعة PDF</button><button type="button" class="btn-r" onclick="clearTbl('abs-t')">مسح</button><button type="button" class="btn-g" onclick="openBox('home')">رجوع</button></div>
   </div>
-
   <div class="no-print">
-    <input type="text" id="a-name" placeholder="اسم الطالب">
-    <select id="a-class">
-      <option value="اول امن سيبراني A">اول امن سيبراني A</option>
-      <option value="اول امن سيبراني B">اول امن سيبراني B</option>
-      <option value="اول امن سيبراني C">اول امن سيبراني C</option>
-      <option value="اول تكرير نفط A">اول تكرير نفط A</option>
-      <option value="اول تجميع حاسوب A">اول تجميع حاسوب A</option>
-      <option value="اول اجهزه طبية A">اول اجهزه طبية A</option>
-    </select>
-    <select id="a-type">
-      <option value="غياب">غياب</option>
-      <option value="هروب">هروب</option>
-      <option value="اجازة">اجازة</option>
-    </select>
-    <input type="date" id="a-date">
-    <button type="button" class="btn" style="width:100%;" onclick="addAbs()">حفظ الغياب</button>
+    <input type="text" id="a-n" placeholder="اسم الطالب">
+    <select id="a-c"><option>اول امن سيبراني A</option><option>اول امن سيبراني B</option><option>اول امن سيبراني C</option><option>اول تكرير نفط A</option><option>اول تجميع حاسوب A</option><option>اول اجهزه طبية A</option></select>
+    <select id="a-t"><option>غياب</option><option>هروب</option><option>اجازة</option></select>
+    <input type="date" id="a-d">
+    <button type="button" class="btn" style="width:100%" onclick="addAbs()">حفظ السجل</button>
   </div>
-
-  <table>
-    <thead>
-      <tr>
-        <th>اسم الطالب</th>
-        <th>الصف</th>
-        <th>الحالة</th>
-        <th>التاريخ</th>
-        <th class="no-print">حذف</th>
-      </tr>
-    </thead>
-    <tbody id="abs-body"></tbody>
-  </table>
+  <table><thead><tr><th>الطالب</th><th>الصف</th><th>الحالة</th><th>التاريخ</th><th class="no-print">حذف</th></tr></thead><tbody id="abs-t"></tbody></table>
 </div>
 
-<!-- اختيار مادة المدرس -->
-<div id="sec-tch-select" style="display:none;" class="box-sm">
-  <h3 style="text-align:center; color:#22d3ee; margin-top:0;">اختر المادة الدراسية</h3>
-  <div id="subj-list"></div>
-  <div style="text-align:center; margin-top:12px;">
-    <button type="button" class="btn-gray" style="display:inline-block;" onclick="goSec('home')">رجوع</button>
-  </div>
+<div id="box-tch-s" class="panel" style="max-width:420px">
+  <h3 style="text-align:center;color:#22d3ee;margin-top:0">اختر المادة</h3>
+  <div id="sub-box"></div>
+  <div style="text-align:center;margin-top:10px"><button type="button" class="btn-g" onclick="openBox('home')">رجوع</button></div>
 </div>
 
-<!-- دخول المدرس -->
-<div id="sec-tch-login" style="display:none;" class="box-sm">
-  <h3 id="tch-title" style="text-align:center; color:#22d3ee; margin-top:0;">دخول المدرس</h3>
-  <div id="tch-msg" style="text-align:center; font-size:12px; color:#94a3b8; margin-bottom:12px;">المحاولات المتبقية: 10 من 10</div>
-  <input type="password" id="tch-pass" placeholder="أدخل رمز المادة السري">
-  <div class="row-flex">
-    <button type="button" class="btn-blue" style="flex:1;" onclick="loginTch()">دخول</button>
-    <button type="button" class="btn-gray" onclick="goSec('tch-select')">رجوع</button>
-  </div>
+<div id="box-tch-l" class="panel" style="max-width:400px">
+  <h3 id="tch-h" style="text-align:center;color:#22d3ee;margin-top:0">دخول المدرس</h3>
+  <div id="tch-m" style="text-align:center;font-size:12px;color:#94a3b8;margin-bottom:10px">المحاولات المتبقية: 10 من 10</div>
+  <input type="password" id="tch-p" placeholder="أدخل رمز المادة">
+  <div class="bar"><button type="button" class="btn-b" style="flex:1" onclick="authTch()">دخول</button><button type="button" class="btn-g" onclick="openBox('tch-s')">رجوع</button></div>
 </div>
 
-<!-- لوحة المدرس -->
-<div id="sec-tch-dash" style="display:none;" class="panel">
-  <div class="row-flex no-print" style="margin-bottom:14px;">
-    <h3 id="tch-dash-title" style="color:#22d3ee; margin:0;">رصد الدرجات (من 100)</h3>
-    <div class="row-flex">
-      <button type="button" class="btn-blue" onclick="window.print()">طباعة PDF</button>
-      <button type="button" class="btn-red" onclick="clearRows('gr-body')">مسح السجل</button>
-      <button type="button" class="btn-gray" onclick="goSec('home')">رجوع</button>
-    </div>
+<div id="box-tch-d" class="panel">
+  <div class="bar no-print">
+    <h3 id="tch-dh" style="color:#22d3ee;margin:0">رصد الدرجات (من 100)</h3>
+    <div style="display:flex;gap:6px"><button type="button" class="btn-b" onclick="window.print()">طباعة PDF</button><button type="button" class="btn-r" onclick="clearTbl('gr-t')">مسح</button><button type="button" class="btn-g" onclick="openBox('home')">رجوع</button></div>
   </div>
-
   <div class="no-print">
-    <input type="text" id="t-name" placeholder="اسم الطالب">
-    <select id="t-class">
-      <option value="اول امن سيبراني A">اول امن سيبراني A</option>
-      <option value="اول امن سيبراني B">اول امن سيبراني B</option>
-      <option value="اول امن سيبراني C">اول امن سيبراني C</option>
-      <option value="اول تكرير نفط A">اول تكرير نفط A</option>
-      <option value="اول تجميع حاسوب A">اول تجميع حاسوب A</option>
-      <option value="اول اجهزه طبية A">اول اجهزه طبية A</option>
-    </select>
-    <input type="number" id="t-grade" min="0" max="100" placeholder="الدرجة من 100">
-    <button type="button" class="btn-blue" style="width:100%;" onclick="addGrade()">حفظ الدرجة</button>
-  </div>
-
-  <table>
-    <thead>
-      <tr>
-        <th>اسم الطالب</th>
-        <th>الصف</th>
-        <th>المادة</th>
-        <th>الدرجة (من 100)</th>
-        <th class="no-print">حذف</th>
-      </tr>
-    </thead>
-    <tbody id="gr-body"></tbody>
-  </table>
-</div>
-
-<footer>برمجة وتطوير: <strong style="color:#34d399;">عباس محمد عزيز</strong></footer>
-
-<script>
-var MAX_T = 10;
-var AST_CODE = "55100";
-var SUBJS = [
-  { name: "التربية الإسلامية", code: "1090" },
-  { name: "اللغة العربية", code: "202500" },
-  { name: "الرياضيات", code: "12300" },
-  { name: "الانجليزي", code: "0005" },
-  { name: "اساسيات الكهرباء", code: "9000" },
-  { name: "تجميع الحاسوب", code: "6200" },
-  { name: "تطبيقات الحاسوب", code: "1999" },
-  { name: "الاتصالات والشبكات", code: "6100" },
-  { name: "مبادى الحاسوب", code: "1998" }
-];
-var curS = null;
-
-function calcBan(g, s) {
-  g = String(g || "").trim(); s = String(s || "").trim();
-  var diff = Math.abs(g.length - s.length), same = 0, pool = s.split("");
-  for (var i = 0; i < g.length; i++) {
-    var idx = pool.indexOf(g[i]);
-    if (idx !== -1) { same++; pool.splice(idx, 1); }
-  }
-  var sim = same / Math.max(g.length, s.length, 1);
-  var n1 = Number(g), n2 = Number(s);
-  var close = !isNaN(n1) && !isNaN(n2) && n2 > 0 && (Math.abs(n1 - n2) / n2) <= 0.25;
-  if (close || (sim >= 0.6 && diff <= 1)) return 72;
-  if (sim >= 0.35 && diff <= 2) return 96;
-  return 120;
-}
-
-function getLk(k) {
-  try {
-    var d = JSON.parse(localStorage.getItem("sec_" + k) || "{}");
-    if (d.until && Date.now() >= Number(d.until)) {
-      var clean = { tries: 0, until: 0, hrs: 0 };
-      localStorage.setItem("sec_" + k, JSON.stringify(clean));
-      return clean;
-    }
-    return { tries: Number(d.tries || 0), until: Number(d.until || 0), hrs: Number(d.hrs || 0) };
-  } catch (e) { return { tries: 0, until: 0, hrs: 0 }; }
-}
-
-function saveLk(k, st) {
-  try { localStorage.setItem("sec_" + k, JSON.stringify(st)); } catch (e) {}
-}
-
-function fmtLeft(ms) {
-  var h = Math.max(1, Math.ceil(ms / 3600000));
-  return Math.floor(h / 24) + " يوم و " + (h % 24) + " ساعة (" + h + " ساعة)";
-}
-
-function paintMsg(k, id) {
-  var el = document.getElementById(id);
-  if (!el) return;
-  var st = getLk(k);
-  if (st.until && Date.now() < st.until) {
-    el.style.color = "#fb7185";
-    el.innerHTML = "محظور لمدة " + st.hrs + " ساعة — المتبقي: " + fmtLeft(st.until - Date.now());
-  } else {
-    el.style.color = "#94a3b8";
-    el.innerHTML = "المحاولات المتبقية: " + Math.max(0, MAX_T - st.tries) + " من " + MAX_T;
-  }
-}
-
-function goSec(name) {
-  var list = ["home", "ast-login", "ast-dash", "tch-select", "tch-login", "tch-dash"];
-  for (var i = 0; i < list.length; i++) {
-    var el = document.getElementById("sec-" + list[i]);
-    if (el) el.style.display = "none";
-  }
-  var target = document.getElementById("sec-" + name);
-  if (target) target.style.display = "block";
-  if (name === "ast-login") paintMsg("ast", "ast-msg");
-  if (name === "tch-select") drawSubjs();
-  if (name === "tch-login" && curS) paintMsg("tch_" + curS.name, "tch-msg");
-}
-
-function loginAst() {
-  var st = getLk("ast");
-  if (st.until && Date.now() < st.until) {
-    alert("بوابة المعاون محظورة لمدة " + st.hrs + " ساعة.\nالمتبقي: " + fmtLeft(st.until - Date.now()));
-    return;
-  }
-        
+    <input type="text" id="t-n" placeholder="اسم الطالب">
+    <select id="t-c"><option>اول امن سيبراني A</option><option>اول امن سيبراني B</option><option>اول امن سيبراني C</option><option>اول تكرير نفط A</option><option>اول تجميع ح
+     
