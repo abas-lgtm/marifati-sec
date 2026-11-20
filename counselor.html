@@ -37,8 +37,8 @@
             <p class="text-xs text-slate-400 mb-4 text-center">متابعة الحالات السلوكية، الغياب المتكرر، والملفات التربوية</p>
             <input type="password" id="c-pass" placeholder="أدخل رمز المرشد السري" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center">
             <div class="flex gap-2">
-                <button onclick="checkCounselor()" class="flex-1 bg-amber-500 hover:bg-amber-400 text-black font-bold p-3 rounded-lg cursor-pointer transition">دخول</button>
-                <button onclick="window.location.href='index.html'" class="bg-slate-800 px-4 rounded-lg text-slate-300 cursor-pointer">رجوع</button>
+                <button type="button" onclick="checkCounselor()" class="flex-1 bg-amber-500 hover:bg-amber-400 text-black font-bold p-3 rounded-lg cursor-pointer transition">دخول</button>
+                <button type="button" onclick="window.location.href='index.html'" class="bg-slate-800 px-4 rounded-lg text-slate-300 cursor-pointer">رجوع</button>
             </div>
         </div>
 
@@ -46,10 +46,10 @@
         <div id="c-dash" class="hidden space-y-6">
 
             <div class="flex justify-between items-center flex-wrap gap-2 no-print">
-                <h2 class="text-xl font-bold text-amber-400">الملفات التربوية والحالات السلوكية (سحابي ☁️)</h2>
+                <h2 class="text-xl font-bold text-amber-400">الملفات التربوية والحالات السلوكية (سحابي)</h2>
                 <div class="flex gap-2">
-                    <button onclick="window.print()" class="bg-amber-600 hover:bg-amber-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">🖨️ طباعة PDF</button>
-                    <button onclick="clearGuidance()" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">🗑️ مسح الملفات</button>
+                    <button type="button" onclick="window.print()" class="bg-amber-600 hover:bg-amber-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">طباعة PDF</button>
+                    <button type="button" onclick="clearGuidance()" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">مسح الملفات</button>
                 </div>
             </div>
 
@@ -74,7 +74,7 @@
                     <input type="date" id="c-date" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
                 </div>
                 <input type="text" id="c-note" placeholder="وصف الحالة أو الإجراء التربوي المتخذ..." class="w-full bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm mb-3">
-                <button onclick="saveGuidance()" class="bg-amber-500 hover:bg-amber-400 text-black font-bold px-4 py-2 rounded text-sm w-full cursor-pointer transition">حفظ في الملف التربوي</button>
+                <button type="button" onclick="saveGuidance()" class="bg-amber-500 hover:bg-amber-400 text-black font-bold px-4 py-2 rounded text-sm w-full cursor-pointer transition">حفظ في الملف التربوي</button>
             </div>
 
             <!-- جدول الحالات السلوكية والملفات التربوية -->
@@ -96,7 +96,7 @@
 
             <!-- متابعة الغياب المتكرر من سجل الغيابات -->
             <div class="cyber-card-amber p-4 rounded-xl">
-                <h3 class="text-sm font-bold text-amber-300 mb-3">📋 متابعة الغياب المتكرر للطلاب (من سجل الغيابات)</h3>
+                <h3 class="text-sm font-bold text-amber-300 mb-3">متابعة الغياب المتكرر للطلاب (من سجل الغيابات)</h3>
                 <div class="overflow-x-auto">
                     <table class="w-full text-right text-sm">
                         <thead class="bg-slate-950 text-amber-400">
@@ -140,9 +140,14 @@
         }
         const db = firebase.database();
 
+        let counselorPassCode = "3030";
+        db.ref('settings/counselorPass').on('value', (snap) => {
+            if (snap.val()) counselorPassCode = String(snap.val());
+        });
+
         function checkCounselor() {
-            let passInput = document.getElementById('c-pass');
-            if (passInput && passInput.value === '3030') {
+            const passInput = document.getElementById('c-pass');
+            if (passInput && passInput.value.trim() === String(counselorPassCode).trim()) {
                 document.getElementById('c-login').classList.add('hidden');
                 document.getElementById('c-dash').classList.remove('hidden');
                 passInput.value = '';
@@ -154,11 +159,11 @@
         }
 
         function saveGuidance() {
-            let name = document.getElementById('c-name').value.trim();
-            let cls = document.getElementById('c-class').value;
-            let type = document.getElementById('c-type').value;
-            let date = document.getElementById('c-date').value;
-            let note = document.getElementById('c-note').value.trim();
+            const name = document.getElementById('c-name').value.trim();
+            const cls = document.getElementById('c-class').value;
+            const type = document.getElementById('c-type').value;
+            const date = document.getElementById('c-date').value;
+            const note = document.getElementById('c-note').value.trim();
 
             if (!name || !date || !note) {
                 alert('يرجى إدخال اسم الطالب والتاريخ ووصف الحالة');
@@ -177,8 +182,8 @@
 
         function loadGuidance() {
             db.ref('guidance').on('value', (snapshot) => {
-                let data = snapshot.val();
-                let listEl = document.getElementById('guidance-list');
+                const data = snapshot.val();
+                const listEl = document.getElementById('guidance-list');
                 if (!listEl) return;
 
                 if (!data) {
@@ -193,7 +198,7 @@
                         <td class="p-3">${item.type}</td>
                         <td class="p-3 text-slate-300">${item.note}</td>
                         <td class="p-3">${item.date}</td>
-                        <td class="p-3 no-print"><button onclick="delGuidance('${id}')" class="text-red-400 text-xs cursor-pointer">حذف</button></td>
+                        <td class="p-3 no-print"><button type="button" onclick="delGuidance('${id}')" class="text-red-400 text-xs cursor-pointer">حذف</button></td>
                     </tr>
                 `).join('');
             });
@@ -211,8 +216,8 @@
 
         function loadRepeatAbsences() {
             db.ref('abs').on('value', (snapshot) => {
-                let data = snapshot.val();
-                let tbody = document.getElementById('repeat-abs-list');
+                const data = snapshot.val();
+                const tbody = document.getElementById('repeat-abs-list');
                 if (!tbody) return;
 
                 if (!data) {
@@ -220,12 +225,12 @@
                     return;
                 }
 
-                let map = {};
+                const map = {};
                 Object.values(data).forEach((item) => {
-                    let name = (item.name || '').trim();
-                    let cls = (item.cls || '').trim();
+                    const name = (item.name || '').trim();
+                    const cls = (item.cls || '').trim();
                     if (!name) return;
-                    let key = `${name}__${cls}`;
+                    const key = `${name}__${cls}`;
                     if (!map[key]) {
                         map[key] = { name, cls, absCount: 0, escCount: 0, dates: [] };
                     }
@@ -234,7 +239,7 @@
                     if (item.date) map[key].dates.push(`${item.date} (${item.type})`);
                 });
 
-                let repeated = Object.values(map).filter(s => s.absCount >= 2 || s.escCount >= 1);
+                const repeated = Object.values(map).filter(s => s.absCount >= 2 || s.escCount >= 1);
                 if (repeated.length === 0) {
                     tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-500">لا توجد حالات غياب متكرر مسجلة حالياً</td></tr>`;
                     return;
@@ -253,5 +258,5 @@
         }
     </script>
 </body>
-  </html>
-                              
+    </html>
+    
