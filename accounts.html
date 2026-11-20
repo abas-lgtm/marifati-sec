@@ -33,7 +33,7 @@
         <!-- دخول موظف الحسابات -->
         <div id="acc-login" class="max-w-md mx-auto cyber-card p-6 rounded-2xl mt-8">
             <h2 class="text-xl text-emerald-400 font-bold mb-2 text-center">دخول بوابة الحسابات</h2>
-            <p class="text-xs text-slate-400 mb-4 text-center">إدارة الأقساط، الخصومات، الوصولات، وتقارير التحصيل</p>
+            <p id="acc-sec-msg" class="text-xs text-slate-400 mb-4 text-center">المحاولات المتبقية: 10 من 10</p>
             <input type="password" id="acc-pass" placeholder="أدخل رمز الحسابات السري" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center">
             <div class="flex gap-2">
                 <button type="button" onclick="checkAccountsLogin()" class="flex-1 bg-emerald-500 hover:bg-emerald-400 text-black font-bold p-3 rounded-lg cursor-pointer transition">دخول</button>
@@ -241,95 +241,92 @@
     </footer>
 
     <script>
-        const firebaseConfig = {
-          apiKey: "AIzaSyB6jzXTFRW6h3r7E5s8aWd0Ry5ixvBG-Do",
-          authDomain: "al-maarefa-school.firebaseapp.com",
-          databaseURL: "https://al-maarefa-school-default-rtdb.firebaseio.com",
-          projectId: "al-maarefa-school",
-          storageBucket: "al-maarefa-school.appspot.com",
-          messagingSenderId: "922687511699",
-          appId: "1:922687511699:web:5b77f972833cf9bb984166"
-        };
-
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-        const db = firebase.database();
-
-        let accountsPassCode = "5050";
-        let isAccountingLocked = false;
-        let studentsMap = {};
-        let paymentsList = [];
-        let accInitialized = false;
-
-        db.ref('settings/accountsPass').once('value').then((snap) => {
-            if (snap && snap.val()) accountsPassCode = String(snap.val());
-        }).catch(() => {});
-
-        function logAccountingAction(action, details) {
-            try {
-                db.ref('accounting_logs').push({
-                    action,
-                    details,
-                    time: new Date().toLocaleString('ar-IQ')
-                });
-            } catch (e) {}
-        }
-
-        function checkAccountsLogin() {
-            const input = document.getElementById('acc-pass');
-            const val = input ? input.value.trim() : '';
-            if (val === String(accountsPassCode).trim() || val === '5050') {
-                document.getElementById('acc-login').classList.add('hidden');
-                document.getElementById('acc-dash').classList.remove('hidden');
-                input.value = '';
-                initAccountingDashboard();
-                logAccountingAction('دخول الحسابات', 'تم تسجيل الدخول إلى بوابة الحسابات');
-            } else {
-                alert('رمز بوابة الحسابات خطأ!');
+        var db = null;
+        try {
+            var firebaseConfig = {
+                apiKey: "AIzaSyB6jzXTFRW6h3r7E5s8aWd0Ry5ixvBG-Do",
+                authDomain: "al-maarefa-school.firebaseapp.com",
+                databaseURL: "https://al-maarefa-school-default-rtdb.firebaseio.com",
+                projectId: "al-maarefa-school",
+                storageBucket: "al-maarefa-school.appspot.com",
+                messagingSenderId: "922687511699",
+                appId: "1:922687511699:web:5b77f972833cf9bb984166"
+            };
+            if (typeof firebase !== "undefined") {
+                if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+                db = firebase.database();
             }
+        } catch (e) {}
+
+        var ACC_PASS = "20750";
+        var GATE_KEY = "accounts";
+        var MAX_ATTEMPTS = 10;
+        var isAccountingLocked = false;
+        var studentsMap = {};
+        var paymentsList = [];
+        var accInitialized = false;
+
+        function getDevId() {
+            var id = localStorage.getItem("alpha_sec_dev");
+            if (!id) {
+                id = "dev_" + Math.random().toString(36).slice(2, 10);
+                localStorage.setItem("alpha_sec_dev", id);
+            }
+            return id;
         }
 
-        function updateLockBannerUI() {
-            const statusEl = document.getElementById('acc-lock-status');
-            const btnEl = document.getElementById('acc-lock-btn');
-            if (statusEl) {
-                statusEl.innerText = isAccountingLocked
-                    ? 'حالة السجلات المالية: معتمد ومقفل ضد التعديل والحذف'
-                    : 'حالة السجلات المالية: مفتوح للتعديل';
-                statusEl.className = isAccountingLocked
-                    ? 'text-xs text-rose-400 font-bold mt-0.5'
-                    : 'text-xs text-emerald-300 mt-0.5';
-            }
-            if (btnEl) {
-                btnEl.innerText = isAccountingLocked ? 'فك الاعتماد والقفل' : 'اعتماد وقفل التعديل';
-            }
-        }
-
-        function toggleAccountingLock() {
-            const nextState = !isAccountingLocked;
-            db.ref('settings/accountsLocked').set(nextState, (err) => {
-                if (err) {
-                    alert('تعذر تحديث حالة الاعتماد والقفل');
-                } else {
-                    logAccountingAction(
-                        nextState ? 'اعتماد وقفل الحسابات' : 'فك قفل الحسابات',
-                        nextState ? 'تم اعتماد وقفل تعديل وحذف السجلات المالية' : 'تم فك قفل التعديل على السجلات المالية'
-                    );
+        function calcBanHours(attemptVal, correctVal) {
+            var a = String(attemptVal || "").trim();
+            var c = String(correctVal || "").trim();
+            var lenDiff = Math.abs(a.length - c.length);
+            var common = 0;
+            var arr = c.split("");
+            for (var i = 0; i < a.length; i++) {
+                var idx = arr.indexOf(a[i]);
+                if (idx !== -1) {
+                    common++;
+                    arr.splice(idx, 1);
                 }
-            });
+            }
+            var sim = common / Math.max(a.length, c.length, 1);
+            var numA = Number(a);
+            var numC = Number(c);
+            var closeNum = !isNaN(numA) && !isNaN(numC) && numC > 0 && (Math.abs(numA - numC) / numC) <= 0.25;
+            if (closeNum || (sim >= 0.6 && lenDiff <= 1)) return 72;
+            if (sim >= 0.35 && lenDiff <= 2) return 96;
+            return 120;
         }
 
-        function calcInstallmentAmount(netTuition, plan) {
-            const divisors = { 'سنوية': 1, 'فصلية': 2, 'شهرية': 10 };
-            const div = divisors[plan] || 10;
-            return Math.round(netTuition / div);
-            if (val === '20750' || val === String(accountsPassCode).trim()) {
-                saveSecurityState(gateKey, { failedAttempts: 0, bannedUntil: 0, banHours: 0 });
-                document.getElementById('acc-login').classList.add('hidden');
-                document.getElementById('acc-dash').classList.remove('hidden');
-                if (input) input.value = '';
-                initAccountingDashboard();
-                logAccountingAction('دخول الحسابات', 'تم تسجيل الدخول إلى بوابة الحسابات');
+        function getSec() {
+            var raw = localStorage.getItem("sec_" + getDevId() + "_" + GATE_KEY);
+            if (!raw) return { fails: 0, until: 0, hours: 0 };
+            try {
+                var o = JSON.parse(raw);
+                if (o.until && Date.now() >= Number(o.until)) {
+                    var clean = { fails: 0, until: 0, hours: 0 };
+                    localStorage.setItem("sec_" + getDevId() + "_" + GATE_KEY, JSON.stringify(clean));
+                    return clean;
+                }
+                return o;
+            } catch (e) {
+                return { fails: 0, until: 0, hours: 0 };
             }
-            
+        }
+
+        function setSec(o) {
+            localStorage.setItem("sec_" + getDevId() + "_" + GATE_KEY, JSON.stringify(o));
+            if (db) {
+                try {
+                    db.ref("security_locks/" + getDevId() + "__" + GATE_KEY).set({
+                        gateKey: GATE_KEY,
+                        fails: o.fails,
+                        until: o.until,
+                        hours: o.hours,
+                        updatedAt: Date.now()
+                    });
+                } catch (e) {}
+            }
+        }
+
+        function fmtRem(ms) {
+            var h = Math.max(1, Math.ceil(ms / 3600000)
