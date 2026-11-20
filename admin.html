@@ -1,75 +1,341 @@
-        const MAX_ATTEMPTS = 10;
-        let clientIp = 'unknown-ip';
-        fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => { if (d && d.ip) clientIp = d.ip; }).catch(() => {});
-        function getDeviceId() {
-            let id = localStorage.getItem('alpha_sec_device_id');
-            if (!id) { id = 'dev_' + Math.random().toString(36).slice(2, 12); localStorage.setItem('alpha_sec_device_id', id); }
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALPHA-SEC // بوابة الإدارة والمدير</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+    <style>
+        body { font-family: 'Cairo', sans-serif; background-color: #030712; color: #f3f4f6; }
+        .cyber-card { background-color: #0b0f19; border: 1px solid rgba(244, 63, 94, 0.35); }
+        @media print {
+            body { background: white !important; color: black !important; }
+            .no-print { display: none !important; }
+            table { width: 100%; border-collapse: collapse; }
+            th, td { border: 1px solid #333; padding: 6px; color: black !important; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-4 sm:p-6 pb-16">
+
+    <header class="flex justify-between items-center border-b border-rose-500/30 pb-4 no-print">
+        <div class="flex flex-col text-right">
+            <h1 class="text-white font-bold text-base md:text-lg">بوابة الإدارة والمدير</h1>
+            <span class="text-[11px] md:text-xs text-rose-400 font-mono">إعدادية المعرفة المهنية الاهلية</span>
+        </div>
+        <button type="button" onclick="window.location.href='index.html'" class="bg-slate-900 text-rose-400 px-4 py-2 rounded-lg border border-rose-500/30 text-sm font-semibold cursor-pointer">الرئيسية</button>
+    </header>
+
+    <main class="max-w-6xl mx-auto w-full my-6 flex-grow">
+
+        <!-- دخول المدير -->
+        <div id="m-login" class="max-w-md mx-auto cyber-card p-6 rounded-2xl mt-8">
+            <h2 class="text-xl text-rose-400 font-bold mb-2 text-center">دخول بوابة الإدارة / المدير</h2>
+            <p id="m-sec-msg" class="text-xs text-slate-400 mb-4 text-center">المحاولات المتبقية: 10 من 10</p>
+            <input type="password" id="m-pass" placeholder="أدخل رمز الإدارة السري" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center">
+            <div class="flex gap-2">
+                <button type="button" onclick="checkAdminLogin()" class="flex-1 bg-rose-500 hover:bg-rose-400 text-white font-bold p-3 rounded-lg cursor-pointer transition">دخول</button>
+                <button type="button" onclick="window.location.href='index.html'" class="bg-slate-800 px-4 rounded-lg text-slate-300 cursor-pointer">رجوع</button>
+            </div>
+        </div>
+
+        <!-- لوحة الإدارة -->
+        <div id="m-dash" class="hidden space-y-6">
+
+            <div class="flex justify-between items-center flex-wrap gap-2 no-print">
+                <h2 class="text-xl font-black text-rose-400">لوحة المتابعة والإحصائيات الشاملة</h2>
+                <button type="button" onclick="window.print()" class="bg-rose-600 hover:bg-rose-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">طباعة التقرير</button>
+            </div>
+
+            <!-- إحصائيات سريعة -->
+            <section class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                <div class="cyber-card p-4 rounded-xl">
+                    <span class="text-xs text-slate-400 block">سجلات الغياب</span>
+                    <span id="stat-abs" class="text-2xl font-black text-emerald-400 mt-1 block font-mono">0</span>
+                </div>
+                <div class="cyber-card p-4 rounded-xl">
+                    <span class="text-xs text-slate-400 block">الدرجات المرصودة</span>
+                    <span id="stat-grades" class="text-2xl font-black text-cyan-400 mt-1 block font-mono">0</span>
+                </div>
+                <div class="cyber-card p-4 rounded-xl">
+                    <span class="text-xs text-slate-400 block">المحصّل المالي</span>
+                    <span id="stat-collected" class="text-2xl font-black text-amber-400 mt-1 block font-mono">0</span>
+                </div>
+                <div class="cyber-card p-4 rounded-xl">
+                    <span class="text-xs text-slate-400 block">المتبقي من الأقساط</span>
+                    <span id="stat-remaining" class="text-2xl font-black text-rose-400 mt-1 block font-mono">0</span>
+                </div>
+            </section>
+
+            <!-- التحكم بقفل رصد الدرجات -->
+            <section class="cyber-card p-5 rounded-2xl no-print space-y-3">
+                <h3 class="text-base font-bold text-rose-300">التحكم بقفل رصد وتعديل الدرجات</h3>
+                <div class="flex flex-wrap items-center gap-3">
+                    <button type="button" onclick="toggleGradesLock()" id="btn-grades-lock" class="bg-amber-500 hover:bg-amber-400 text-black font-bold px-4 py-2 rounded-lg text-sm cursor-pointer">تبديل حالة القفل</button>
+                    <span id="grades-lock-label" class="text-xs text-slate-300">الحالة: غير مقفل</span>
+                </div>
+            </section>
+
+            <!-- سجل التدقيق الإداري -->
+            <section class="cyber-card rounded-2xl overflow-hidden">
+                <div class="p-4 border-b border-slate-800">
+                    <h3 class="text-sm font-bold text-rose-400">سجل الحركات والتدقيق</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-right text-xs sm:text-sm">
+                        <thead class="bg-slate-950 text-rose-400">
+                            <tr><th class="p-3">الإجراء</th><th class="p-3">التفاصيل</th><th class="p-3">الوقت</th></tr>
+                        </thead>
+                        <tbody id="admin-logs-tbody" class="divide-y divide-slate-900"></tbody>
+                    </table>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="fixed bottom-0 left-0 w-full bg-slate-900/95 backdrop-blur-md border-t border-emerald-500/30 py-2.5 px-4 z-50 text-center shadow-lg no-print">
+      <div class="flex items-center justify-center gap-2 text-xs md:text-sm font-mono dir-rtl">
+        <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="text-slate-300">تم التطوير والبرمجة بواسطة:</span>
+        <span class="font-bold text-emerald-400 tracking-wide border-b border-emerald-500/40 pb-0.5">عباس محمد عزيز</span>
+      </div>
+    </footer>
+
+    <script>
+        var db = null;
+        try {
+            var firebaseConfig = {
+                apiKey: "AIzaSyB6jzXTFRW6h3r7E5s8aWd0Ry5ixvBG-Do",
+                authDomain: "al-maarefa-school.firebaseapp.com",
+                databaseURL: "https://al-maarefa-school-default-rtdb.firebaseio.com",
+                projectId: "al-maarefa-school",
+                storageBucket: "al-maarefa-school.appspot.com",
+                messagingSenderId: "922687511699",
+                appId: "1:922687511699:web:5b77f972833cf9bb984166"
+            };
+            if (typeof firebase !== "undefined") {
+                if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+                db = firebase.database();
+            }
+        } catch (e) {}
+
+        var ADMIN_PASS = "20130";
+        var GATE_KEY = "admin";
+        var MAX_ATTEMPTS = 10;
+        var gradesManualLocked = false;
+        var adminReady = false;
+
+        function getDevId() {
+            var id = localStorage.getItem("alpha_sec_dev");
+            if (!id) {
+                id = "dev_" + Math.random().toString(36).slice(2, 10);
+                localStorage.setItem("alpha_sec_dev", id);
+            }
             return id;
         }
-        function getClientKey(gateKey) { return `${getDeviceId()}__${String(clientIp).replace(/[.#$[\]/]/g, '_')}__${gateKey}`; }
-        function estimateBanHours(a, c) {
-            a = String(a || '').trim(); c = String(c || '').trim();
-            const lenDiff = Math.abs(a.length - c.length);
-            let common = 0; const arr = c.split('');
-            a.split('').forEach(ch => { const idx = arr.indexOf(ch); if (idx !== -1) { common++; arr.splice(idx, 1); } });
-            const sim = common / Math.max(a.length, c.length, 1);
-            const numA = Number(a), numC = Number(c);
-            const closeNum = !isNaN(numA) && !isNaN(numC) && numC > 0 && (Math.abs(numA - numC) / numC) <= 0.25;
+
+        function calcBanHours(attemptVal, correctVal) {
+            var a = String(attemptVal || "").trim();
+            var c = String(correctVal || "").trim();
+            var lenDiff = Math.abs(a.length - c.length);
+            var common = 0;
+            var arr = c.split("");
+            for (var i = 0; i < a.length; i++) {
+                var idx = arr.indexOf(a[i]);
+                if (idx !== -1) {
+                    common++;
+                    arr.splice(idx, 1);
+                }
+            }
+            var sim = common / Math.max(a.length, c.length, 1);
+            var numA = Number(a);
+            var numC = Number(c);
+            var closeNum = !isNaN(numA) && !isNaN(numC) && numC > 0 && (Math.abs(numA - numC) / numC) <= 0.25;
             if (closeNum || (sim >= 0.6 && lenDiff <= 1)) return 72;
             if (sim >= 0.35 && lenDiff <= 2) return 96;
             return 120;
         }
-        function getSecurityState(gateKey) {
-            const raw = localStorage.getItem('alpha_sec_state_' + getClientKey(gateKey));
-            if (!raw) return { failedAttempts: 0, bannedUntil: 0, banHours: 0 };
+
+        function getSec() {
+            var raw = localStorage.getItem("sec_" + getDevId() + "_" + GATE_KEY);
+            if (!raw) return { fails: 0, until: 0, hours: 0 };
             try {
-                const p = JSON.parse(raw);
-                if (p.bannedUntil && Date.now() >= Number(p.bannedUntil)) {
-                    const reset = { failedAttempts: 0, bannedUntil: 0, banHours: 0 };
-                    localStorage.setItem('alpha_sec_state_' + getClientKey(gateKey), JSON.stringify(reset));
-                    return reset;
+                var o = JSON.parse(raw);
+                if (o.until && Date.now() >= Number(o.until)) {
+                    var clean = { fails: 0, until: 0, hours: 0 };
+                    localStorage.setItem("sec_" + getDevId() + "_" + GATE_KEY, JSON.stringify(clean));
+                    return clean;
                 }
-                return p;
-            } catch (e) { return { failedAttempts: 0, bannedUntil: 0, banHours: 0 }; }
-        }
-        function saveSecurityState(gateKey, st) {
-            localStorage.setItem('alpha_sec_state_' + getClientKey(gateKey), JSON.stringify(st));
-            try { db.ref(`security_locks/${getClientKey(gateKey)}`).set({ gateKey, deviceId: getDeviceId(), ip: clientIp, ...st, updatedAt: Date.now() }); } catch (e) {}
-        }
-        function formatRemainingTime(ms) {
-            const h = Math.max(1, Math.ceil(ms / 3600000));
-            return `${Math.floor(h / 24)} يوم و ${h % 24} ساعة (${h} ساعة)`;
+                return o;
+            } catch (e) {
+                return { fails: 0, until: 0, hours: 0 };
+            }
         }
 
-        function checkAdmin() {
-            const gateKey = 'admin';
-            const st = getSecurityState(gateKey);
-            if (st.bannedUntil && Date.now() < Number(st.bannedUntil)) {
-                alert(`بوابة الإدارة محظورة لمدة ${st.banHours} ساعة.\nالمتبقي: ${formatRemainingTime(Number(st.bannedUntil) - Date.now())}`);
+        function setSec(o) {
+            localStorage.setItem("sec_" + getDevId() + "_" + GATE_KEY, JSON.stringify(o));
+            if (db) {
+                try {
+                    db.ref("security_locks/" + getDevId() + "__" + GATE_KEY).set({
+                        gateKey: GATE_KEY,
+                        fails: o.fails,
+                        until: o.until,
+                        hours: o.hours,
+                        updatedAt: Date.now()
+                    });
+                } catch (e) {}
+            }
+        }
+
+        function fmtRem(ms) {
+            var h = Math.max(1, Math.ceil(ms / 3600000));
+            return Math.floor(h / 24) + " يوم و " + (h % 24) + " ساعة (" + h + " ساعة)";
+        }
+
+        function refreshSecLabel() {
+            var el = document.getElementById("m-sec-msg");
+            if (!el) return;
+            var st = getSec();
+            if (st.until && Date.now() < Number(st.until)) {
+                el.innerText = "محظور لمدة " + st.hours + " ساعة — المتبقي: " + fmtRem(Number(st.until) - Date.now());
+                el.className = "text-xs text-rose-400 font-bold mb-4 text-center";
+            } else {
+                var rem = Math.max(0, MAX_ATTEMPTS - Number(st.fails || 0));
+                el.innerText = "المحاولات المتبقية: " + rem + " من " + MAX_ATTEMPTS;
+                el.className = "text-xs text-slate-400 mb-4 text-center";
+            }
+        }
+
+        function logAdmin(action, details) {
+            if (!db) return;
+            try {
+                db.ref("audit_logs").push({
+                    action: action,
+                    details: details,
+                    time: new Date().toLocaleString("ar-IQ")
+                });
+            } catch (e) {}
+        }
+
+        function checkAdminLogin() {
+            var st = getSec();
+            if (st.until && Date.now() < Number(st.until)) {
+                alert("بوابة الإدارة محظورة لمدة " + st.hours + " ساعة.\nالمتبقي: " + fmtRem(Number(st.until) - Date.now()));
                 return;
             }
-            const input = document.getElementById('m-pass');
-            const val = input ? input.value.trim() : '';
-            const expected = adminPassCode || '20130';
-            if (val === '20130' || val === String(adminPassCode).trim()) {
-                saveSecurityState(gateKey, { failedAttempts: 0, bannedUntil: 0, banHours: 0 });
-                document.getElementById('m-login').classList.add('hidden');
-                document.getElementById('m-dash').classList.remove('hidden');
-                if (input) input.value = '';
+            var inp = document.getElementById("m-pass");
+            var val = inp ? inp.value.trim() : "";
+            if (val === ADMIN_PASS) {
+                setSec({ fails: 0, until: 0, hours: 0 });
+                document.getElementById("m-login").classList.add("hidden");
+                document.getElementById("m-dash").classList.remove("hidden");
+                if (inp) inp.value = "";
                 initAdminDashboard();
-                logAudit('دخول الإدارة', 'تم تسجيل الدخول إلى بوابة المدير');
+                logAdmin("دخول الإدارة", "تم فتح بوابة المدير بنجاح");
             } else {
-                st.failedAttempts = Number(st.failedAttempts || 0) + 1;
-                if (st.failedAttempts > MAX_ATTEMPTS) {
-                    const banHours = estimateBanHours(val, expected);
-                    st.banHours = banHours;
-                    st.bannedUntil = Date.now() + (banHours * 3600000);
-                    saveSecurityState(gateKey, st);
-                    alert(`تم تجاوز 10 محاولات! تم حظر الوصول لمدة ${banHours} ساعة.`);
+                st.fails = Number(st.fails || 0) + 1;
+                if (st.fails > MAX_ATTEMPTS) {
+                    var hrs = calcBanHours(val, ADMIN_PASS);
+                    st.hours = hrs;
+                    st.until = Date.now() + (hrs * 3600000);
+                    setSec(st);
+                    refreshSecLabel();
+                    alert("تجاوزت 10 محاولات! تم حظر الوصول لمدة " + hrs + " ساعة.");
                 } else {
-                    saveSecurityState(gateKey, st);
-                    alert(`رمز المدير خطأ! المحاولات المتبقية: ${MAX_ATTEMPTS - st.failedAttempts} من ${MAX_ATTEMPTS}`);
+                    setSec(st);
+                    refreshSecLabel();
+                    alert("رمز الإدارة خطأ! المحاولات المتبقية: " + (MAX_ATTEMPTS - st.fails) + " من " + MAX_ATTEMPTS);
                 }
             }
         }
-                
+
+        function toggleGradesLock() {
+            if (!db) return;
+            gradesManualLocked = !gradesManualLocked;
+            db.ref("settings/gradesLock").update({ manualLocked: gradesManualLocked });
+            logAdmin("قفل الدرجات", gradesManualLocked ? "تم قفل رصد الدرجات" : "تم فتح رصد الدرجات");
+        }
+
+        function initAdminDashboard() {
+            if (adminReady || !db) return;
+            adminReady = true;
+
+            db.ref("abs").on("value", function(snap) {
+                var d = snap.val() || {};
+                document.getElementById("stat-abs").innerText = Object.keys(d).length;
+            });
+
+            db.ref("grades").on("value", function(snap) {
+                var d = snap.val() || {};
+                document.getElementById("stat-grades").innerText = Object.keys(d).length;
+            });
+
+            var students = {};
+            var payments = {};
+
+            function recalcFinance() {
+                var totalNet = 0;
+                var paidBySt = {};
+                Object.keys(payments).forEach(function(pid) {
+                    var p = payments[pid];
+                    if (p && p.studentId) {
+                        paidBySt[p.studentId] = (paidBySt[p.studentId] || 0) + Number(p.amount || 0);
+                    }
+                });
+                var totalPaid = 0;
+                var totalRem = 0;
+                Object.keys(students).forEach(function(sid) {
+                    var s = students[sid];
+                    var net = Number(s.netTuition || 0);
+                    var paid = Number(paidBySt[sid] || 0);
+                    totalNet += net;
+                    totalPaid += paid;
+                    totalRem += Math.max(0, net - paid);
+                });
+                document.getElementById("stat-collected").innerText = totalPaid.toLocaleString();
+                document.getElementById("stat-remaining").innerText = totalRem.toLocaleString();
+            }
+
+            db.ref("tuition_students").on("value", function(snap) {
+                students = snap.val() || {};
+                recalcFinance();
+            });
+
+            db.ref("tuition_payments").on("value", function(snap) {
+                payments = snap.val() || {};
+                recalcFinance();
+            });
+
+            db.ref("settings/gradesLock").on("value", function(snap) {
+                var v = snap.val() || {};
+                gradesManualLocked = Boolean(v.manualLocked);
+                var lbl = document.getElementById("grades-lock-label");
+                if (lbl) {
+                    lbl.innerText = gradesManualLocked ? "الحالة: مقفل حالياً" : "الحالة: مفتوح لرصد الدرجات";
+                    lbl.className = gradesManualLocked ? "text-xs text-rose-400 font-bold" : "text-xs text-emerald-400 font-bold";
+                }
+            });
+
+            db.ref("audit_logs").on("value", function(snap) {
+                var d = snap.val() || {};
+                var list = Object.values(d).reverse().slice(0, 40);
+                var tbody = document.getElementById("admin-logs-tbody");
+                if (!tbody) return;
+                if (!list.length) {
+                    tbody.innerHTML = "<tr><td colspan='3' class='p-4 text-center text-slate-500'>لا توجد سجلات تدقيق</td></tr>";
+                    return;
+                }
+                tbody.innerHTML = list.map(function(l) {
+                    return "<tr><td class='p-3 font-bold text-rose-300'>" + (l.action || "") + "</td><td class='p-3 text-slate-200'>" + (l.details || "") + "</td><td class='p-3 font-mono text-xs text-slate-400'>" + (l.time || "") + "</td></tr>";
+                }).join("");
+            });
+        }
+
+        refreshSecLabel();
+    </script>
+</body>
+        </html>
+        
