@@ -1,0 +1,361 @@
+        function calcInstallmentAmount(netTuition, plan) {
+            const divisors = { 'سنوية': 1, 'فصلية': 2, 'شهرية': 10 };
+            const div = divisors[plan] || 10;
+            return Math.round(netTuition / div);
+        }
+
+        function addStudentTuition() {
+            if (isAccountingLocked) {
+                alert('السجلات المالية مقفلة بعد الاعتماد. قم بفك القفل أولاً.');
+                return;
+            }
+            const name = document.getElementById('st-name').value.trim();
+            const className = document.getElementById('st-class').value;
+            const totalTuition = Number(document.getElementById('st-total').value || 0);
+            const discountAmount = Number(document.getElementById('st-discount').value || 0);
+            const installmentPlan = document.getElementById('st-plan').value;
+
+            if (!name || totalTuition <= 0) {
+                alert('يرجى إدخال اسم الطالب والقسط الكلي بشكل صحيح');
+                return;
+            }
+            if (discountAmount < 0 || discountAmount > totalTuition) {
+                alert('قيمة الخصم أو المنحة غير صحيحة');
+                return;
+            }
+
+            const netTuition = totalTuition - discountAmount;
+            const installmentAmount = calcInstallmentAmount(netTuition, installmentPlan);
+
+            db.ref('tuition_students').push({
+                name,
+                className,
+                totalTuition,
+                discountAmount,
+                netTuition,
+                installmentPlan,
+                installmentAmount,
+                createdAt: Date.now()
+            }, (err) => {
+                if (err) {
+                    alert('فشل حفظ قسط الطالب سحابياً');
+                } else {
+                    document.getElementById('st-name').value = '';
+                    document.getElementById('st-total').value = '';
+                    document.getElementById('st-discount').value = '';
+                    logAccountingAction('إضافة قسط طالب', `الطالب: ${name} (${className}) | الصافي: ${netTuition} | النظام: ${installmentPlan}`);
+                }
+            });
+        }
+
+        function deleteStudentTuition(studentId) {
+            if (isAccountingLocked) {
+                alert('السجلات المالية مقفلة بعد الاعتماد.');
+                return;
+            }
+            const st = studentsMap[studentId];
+            if (!st) return;
+            if (confirm(`حذف ملف قسط الطالب (${st.name})؟`)) {
+                db.ref('tuition_students/' + studentId).remove();
+                logAccountingAction('حذف ملف قسط', `تم حذف ملف الطالب: ${st.name} (${st.className})`);
+            }
+        }
+
+        function savePayment() {
+            if (isAccountingLocked) {
+                alert('السجلات المالية مقفلة بعد الاعتماد. قم بفك القفل أولاً.');
+                return;
+            }
+            const studentId = document.getElementById('pay-student-select').value;
+            const amount = Number(document.getElementById('pay-amount').value || 0);
+            const date = document.getElementById('pay-date').value || new Date().toISOString().slice(0, 10);
+            const receiptNo = document.getElementById('pay-receipt').value.trim() || `RCP-${Date.now().toString().slice(-6)}`;
+            const method = document.getElementById('pay-method').value;
+            const note = document.getElementById('pay-note').value.trim();
+
+            if (!studentId || !studentsMap[studentId]) {
+                alert('يرجى اختيار الطالب');
+                return;
+            }
+            if (amount <= 0) {
+                alert('يرجى إدخال مبلغ صحيح أكبر من صفر');
+                return;
+            }
+
+            const st = studentsMap[studentId];
+            db.ref('tuition_payments').push({
+                studentId,
+                studentName: st.name,
+                className: st.className,
+                amount,
+                date,
+                receiptNo,
+                method,
+                note,
+                timestamp: Date.now()
+            }, (err) => {
+                if (err) {
+                    alert('فشل تسجيل الدفعة سحابياً');
+                } else {
+                    document.getElementById('pay-amount').value = '';
+                    document.getElementById('pay-receipt').value = '';
+                    document.getElementById('pay-note').value = '';
+                    logAccountingAction('تسجيل دفعة', `وصل رقم ${receiptNo} | الطالب: ${st.name} | المبلغ: ${amount} (${method})`);
+                }
+            });
+        }
+
+        function deletePayment(paymentId) {
+            if (isAccountingLocked) {
+                alert('السجلات المالية مقفلة بعد الاعتماد.');
+                return;
+            }
+            const pay = paymentsList.find(p => p.id === paymentId);
+            if (confirm('حذف هذا الوصل والدفعة من السجل؟')) {
+                db.ref('tuition_payments/' + paymentId).remove();
+                logAccountingAction('حذف دفعة', `وصل رقم: ${pay ? pay.receiptNo : paymentId} | الطالب: ${pay ? pay.studentName : ''} | المبلغ: ${pay ? pay.amount : ''}`);
+            }
+        }
+
+        function getPaidByStudent() {
+            const paidMap = {};
+            paymentsList.forEach(p => {
+                if (!p.studentId) return;
+                paidMap[p.studentId] = (paidMap[p.studentId] || 0) + Number(p.amount || 0);
+            });
+            return paidMap;
+        }
+
+        function refreshStudentSelect() {
+            const sel = document.getElementById('pay-student-select');
+            if (!sel) return;
+            const currentVal = sel.value;
+            const entries = Object.values(studentsMap);
+            sel.innerHTML = `<option value="">اختر الطالب...</option>` + entries.map(s =>
+                `<option value="${s.id}">${s.name} — ${s.className}</option>`
+            ).join('');
+            if (currentVal && studentsMap[currentVal]) sel.value = currentVal;
+        }
+
+        function updateKPIsAndTables() {
+            const paidMap = getPaidByStudent();
+            const students = Object.values(studentsMap);
+
+            let totalNet = 0;
+            let totalCollected = 0;
+            let totalRemaining = 0;
+
+            students.forEach(s => {
+                const net = Number(s.netTuition || 0);
+                const paid = Number(paidMap[s.id] || 0);
+                const rem = Math.max(0, net - paid);
+                totalNet += net;
+                totalCollected += paid;
+                totalRemaining += rem;
+            });
+
+            const rate = totalNet > 0 ? ((totalCollected / totalNet) * 100).toFixed(1) : '0.0';
+
+            document.getElementById('kpi-net-tuition').innerText = totalNet.toLocaleString();
+            document.getElementById('kpi-collected').innerText = totalCollected.toLocaleString();
+            document.getElementById('kpi-remaining').innerText = totalRemaining.toLocaleString();
+            document.getElementById('kpi-collection-rate').innerText = `${rate}%`;
+
+            renderStudentsTable(paidMap);
+            renderPaymentsTable();
+        }
+
+        function renderStudentsTable(paidMap = getPaidByStudent()) {
+            const clsFilter = document.getElementById('acc-filter-class').value;
+            const statusFilter = document.getElementById('acc-filter-status').value;
+            const search = document.getElementById('acc-filter-search').value.trim().toLowerCase();
+            const tbody = document.getElementById('students-tuition-tbody');
+            const badge = document.getElementById('students-count-badge');
+
+            const rows = Object.values(studentsMap).filter(s => {
+                const paid = Number(paidMap[s.id] || 0);
+                const net = Number(s.netTuition || 0);
+                const rem = Math.max(0, net - paid);
+                const hasDiscount = Number(s.discountAmount || 0) > 0;
+
+                if (clsFilter !== 'ALL' && s.className !== clsFilter) return false;
+                if (statusFilter === 'DUE' && rem <= 0) return false;
+                if (statusFilter === 'PAID' && rem > 0) return false;
+                if (statusFilter === 'DISCOUNTED' && !hasDiscount) return false;
+                if (search && !`${s.name} ${s.className}`.toLowerCase().includes(search)) return false;
+                return true;
+            });
+
+            if (badge) badge.innerText = `${rows.length} طالب`;
+
+            if (!rows.length) {
+                tbody.innerHTML = `<tr><td colspan="8" class="p-5 text-center text-slate-500">لا توجد سجلات مطابقة</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = rows.map(s => {
+                const paid = Number(paidMap[s.id] || 0);
+                const net = Number(s.netTuition || 0);
+                const rem = Math.max(0, net - paid);
+                const statusBadge = rem <= 0
+                    ? `<span class="text-[11px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-500/30 font-bold">مسدد</span>`
+                    : `<span class="text-[11px] px-2 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-500/30 font-bold">متبقي</span>`;
+
+                return `
+                    <tr>
+                        <td class="p-3 font-bold text-white">${s.name}</td>
+                        <td class="p-3 text-slate-300">${s.className}</td>
+                        <td class="p-3 font-mono text-xs">
+                            <div>كلي: ${Number(s.totalTuition || 0).toLocaleString()}</div>
+                            <div class="text-amber-300">خصم: ${Number(s.discountAmount || 0).toLocaleString()}</div>
+                        </td>
+                        <td class="p-3 font-mono text-xs">
+                            <div class="text-white font-bold">صافي: ${net.toLocaleString()}</div>
+                            <div class="text-slate-400">${s.installmentPlan}: ${Number(s.installmentAmount || 0).toLocaleString()}</div>
+                        </td>
+                        <td class="p-3 font-mono text-emerald-400 font-bold">${paid.toLocaleString()}</td>
+                        <td class="p-3 font-mono text-rose-400 font-bold">${rem.toLocaleString()}</td>
+                        <td class="p-3">${statusBadge}</td>
+                        <td class="p-3 no-print space-x-2 space-x-reverse">
+                            <button type="button" onclick="showGuardianSummary('${s.id}')" class="text-cyan-400 hover:text-cyan-300 text-xs cursor-pointer">ملخص</button>
+                            <button type="button" onclick="deleteStudentTuition('${s.id}')" class="text-red-400 hover:text-red-300 text-xs cursor-pointer">حذف</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function showGuardianSummary(studentId) {
+            const s = studentsMap[studentId];
+            if (!s) return;
+            const paidMap = getPaidByStudent();
+            const paid = Number(paidMap[studentId] || 0);
+            const net = Number(s.netTuition || 0);
+            const rem = Math.max(0, net - paid);
+
+            document.getElementById('guardian-summary-card').classList.remove('hidden');
+            document.getElementById('guardian-summary-content').innerHTML = `
+                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                    <span class="text-xs text-slate-400 block">الطالب / الشعبة</span>
+                    <span class="font-bold text-white">${s.name} (${s.className})</span>
+                </div>
+                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                    <span class="text-xs text-slate-400 block">القسط الكلي والخصم</span>
+                    <span class="font-mono font-bold text-amber-300">${Number(s.totalTuition || 0).toLocaleString()} / خصم ${Number(s.discountAmount || 0).toLocaleString()}</span>
+                </div>
+                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                    <span class="text-xs text-slate-400 block">الصافي المطلوب</span>
+                    <span class="font-mono font-bold text-white">${net.toLocaleString()}</span>
+                </div>
+                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                    <span class="text-xs text-slate-400 block">المدفوع</span>
+                    <span class="font-mono font-bold text-emerald-400">${paid.toLocaleString()}</span>
+                </div>
+                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                    <span class="text-xs text-slate-400 block">المتبقي</span>
+                    <span class="font-mono font-bold text-rose-400">${rem.toLocaleString()}</span>
+                </div>
+            `;
+        }
+
+        function closeGuardianSummary() {
+            document.getElementById('guardian-summary-card').classList.add('hidden');
+        }
+
+        function renderPaymentsTable() {
+            const tbody = document.getElementById('payments-tbody');
+            const badge = document.getElementById('payments-count-badge');
+            if (badge) badge.innerText = `${paymentsList.length} وصل`;
+
+            if (!paymentsList.length) {
+                tbody.innerHTML = `<tr><td colspan="7" class="p-5 text-center text-slate-500">لا توجد دفعات مسجلة حالياً</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = paymentsList.map(p => `
+                <tr>
+                    <td class="p-3 font-mono text-cyan-300 font-bold">${p.receiptNo || '—'}</td>
+                    <td class="p-3 font-bold text-white">${p.studentName || '—'}</td>
+                    <td class="p-3 text-slate-300">${p.className || '—'}</td>
+                    <td class="p-3 font-mono text-emerald-400 font-bold">${Number(p.amount || 0).toLocaleString()}</td>
+                    <td class="p-3 text-slate-200">${p.method || 'نقداً'}</td>
+                    <td class="p-3 font-mono text-xs text-slate-400">${p.date || ''}</td>
+                    <td class="p-3 no-print">
+                        <button type="button" onclick="deletePayment('${p.id}')" class="text-red-400 hover:text-red-300 text-xs cursor-pointer">حذف</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function exportPaymentsCSV() {
+            const headers = ['رقم الوصل', 'اسم الطالب', 'الشعبة', 'المبلغ', 'طريقة الدفع', 'التاريخ', 'ملاحظة'];
+            const lines = [headers.join(',')];
+            paymentsList.forEach(p => {
+                const row = [
+                    p.receiptNo || '',
+                    p.studentName || '',
+                    p.className || '',
+                    p.amount || 0,
+                    p.method || '',
+                    p.date || '',
+                    (p.note || '').replace(/,/g, ' ')
+                ].map(v => `"${String(v).replace(/"/g, '""')}"`);
+                lines.push(row.join(','));
+            });
+            const blob = new Blob(['\uFEFF' + lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `tuition_payments_${new Date().toISOString().slice(0, 10)}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function initAccountingDashboard() {
+            if (accInitialized) return;
+            accInitialized = true;
+
+            db.ref('settings/accountsLocked').on('value', (snap) => {
+                isAccountingLocked = Boolean(snap.val());
+                updateLockBannerUI();
+            });
+
+            db.ref('tuition_students').on('value', (snap) => {
+                const data = snap.val() || {};
+                studentsMap = {};
+                Object.entries(data).forEach(([id, val]) => {
+                    studentsMap[id] = { id, ...val };
+                });
+                refreshStudentSelect();
+                updateKPIsAndTables();
+            });
+
+            db.ref('tuition_payments').on('value', (snap) => {
+                const data = snap.val() || {};
+                paymentsList = Object.entries(data)
+                    .map(([id, val]) => ({ id, ...val }))
+                    .sort((a, b) => Number(b.timestamp || 0) - Number(a.timestamp || 0));
+                updateKPIsAndTables();
+            });
+
+            db.ref('accounting_logs').on('value', (snap) => {
+                const data = snap.val() || {};
+                const logs = Object.values(data).reverse().slice(0, 50);
+                const tbody = document.getElementById('acc-logs-tbody');
+                if (!logs.length) {
+                    tbody.innerHTML = `<tr><td colspan="3" class="p-4 text-center text-slate-500">لا توجد حركات مسجلة</td></tr>`;
+                    return;
+                }
+                tbody.innerHTML = logs.map(l => `
+                    <tr>
+                        <td class="p-3 font-bold text-amber-300">${l.action || ''}</td>
+                        <td class="p-3 text-slate-200">${l.details || ''}</td>
+                        <td class="p-3 font-mono text-xs text-slate-400">${l.time || ''}</td>
+                    </tr>
+                `).join('');
+            });
+        }
+    </script>
+</body>
+              </html>
+                              
