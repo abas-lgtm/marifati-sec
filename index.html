@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALPHA-SEC // النظام المدرسي المتكامل</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
     <style>
-        body { font-family: 'Cairo', sans-serif; background-color: #030712; color: #f3f4f6; -webkit-user-select: none; user-select: none; }
+        body { font-family: 'Cairo', sans-serif; background-color: #030712; color: #f3f4f6; }
         .cyber-card { background-color: #0b0f19; border: 1px solid rgba(0, 255, 102, 0.3); }
         .cyber-card-blue { background-color: #0b0f19; border: 1px solid rgba(6, 182, 212, 0.3); }
         .cyber-card-purple { background-color: #0b0f19; border: 1px solid rgba(168, 85, 247, 0.3); }
@@ -32,46 +31,46 @@
             <h1 class="text-white font-bold text-base md:text-lg">إعدادية المعرفة المهنية الاهلية</h1>
             <span class="text-[11px] md:text-xs text-emerald-400 font-mono">برمجة: عباس محمد عزيز</span>
         </div>
-        <button type="button" onclick="nav('home')" class="bg-slate-900 text-emerald-400 px-4 py-2 rounded-lg border border-emerald-500/30 text-sm font-semibold cursor-pointer">الرئيسية</button>
+        <button id="btn-top-home" type="button" class="bg-slate-900 text-emerald-400 px-4 py-2 rounded-lg border border-emerald-500/30 text-sm font-semibold cursor-pointer">الرئيسية</button>
     </header>
 
     <main class="max-w-4xl mx-auto w-full my-6 flex-grow">
         <!-- الرئيسية -->
-        <div id="v-home" class="text-center py-10">
-            <h2 class="text-3xl font-black text-white mb-4">نظام إدارة المدرسة الآمن</h2>
+        <div id="v-home" class="text-center py-8">
+            <h2 class="text-3xl font-black text-white mb-3">نظام إدارة المدرسة الآمن</h2>
             <p class="text-slate-400 mb-8">اختر البوابة المطلوبة للمتابعة:</p>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <button type="button" onclick="nav('ast-login')" class="cyber-card p-6 rounded-2xl text-right hover:border-emerald-400 transition w-full cursor-pointer focus:outline-none">
+                <button id="btn-open-ast" type="button" class="cyber-card p-6 rounded-2xl text-right hover:border-emerald-400 transition w-full cursor-pointer">
                     <span class="inline-block text-[11px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded mb-3">01</span>
                     <h3 class="text-lg font-bold text-white mb-1">بوابة المعاون</h3>
                     <p class="text-xs text-slate-400">إدارة الغيابات والشعب (منطقة آمنة)</p>
                 </button>
-                <button type="button" onclick="nav('tch-select')" class="cyber-card-blue p-6 rounded-2xl text-right hover:border-cyan-400 transition w-full cursor-pointer focus:outline-none">
+                <button id="btn-open-tch" type="button" class="cyber-card-blue p-6 rounded-2xl text-right hover:border-cyan-400 transition w-full cursor-pointer">
                     <span class="inline-block text-[11px] font-mono text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2.5 py-0.5 rounded mb-3">02</span>
                     <h3 class="text-lg font-bold text-white mb-1">بوابة المدرسين</h3>
                     <p class="text-xs text-slate-400">رصد درجات المواد عبر الرموز السرية</p>
                 </button>
-                <button type="button" onclick="window.location.href='students.html'" class="cyber-card-purple p-6 rounded-2xl text-right hover:border-purple-400 transition w-full cursor-pointer focus:outline-none">
+                <button id="btn-open-stu" type="button" class="cyber-card-purple p-6 rounded-2xl text-right hover:border-purple-400 transition w-full cursor-pointer">
                     <span class="inline-block text-[11px] font-mono text-purple-400 bg-purple-500/10 border border-purple-500/20 px-2.5 py-0.5 rounded mb-3">03</span>
                     <h3 class="text-lg font-bold text-white mb-1">بوابة الطلاب</h3>
                     <p class="text-xs text-slate-400">الجداول، الامتحانات، ومتابعة النتائج</p>
                 </button>
-                <button type="button" onclick="window.location.href='counselor.html'" class="cyber-card-amber p-6 rounded-2xl text-right hover:border-amber-400 transition w-full cursor-pointer focus:outline-none">
+                <button id="btn-open-cou" type="button" class="cyber-card-amber p-6 rounded-2xl text-right hover:border-amber-400 transition w-full cursor-pointer">
                     <span class="inline-block text-[11px] font-mono text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 rounded mb-3">04</span>
                     <h3 class="text-lg font-bold text-white mb-1">بوابة المشرف التربوي / المرشد</h3>
                     <p class="text-xs text-slate-400">الحالات السلوكية، الغياب المتكرر، والملفات التربوية</p>
                 </button>
-                <button type="button" onclick="window.location.href='admin.html'" class="cyber-card-rose p-6 rounded-2xl text-right hover:border-rose-400 transition w-full cursor-pointer focus:outline-none">
+                <button id="btn-open-adm" type="button" class="cyber-card-rose p-6 rounded-2xl text-right hover:border-rose-400 transition w-full cursor-pointer">
                     <span class="inline-block text-[11px] font-mono text-rose-400 bg-rose-500/10 border border-rose-500/20 px-2.5 py-0.5 rounded mb-3">05</span>
                     <h3 class="text-lg font-bold text-white mb-1">بوابة الإدارة / المدير</h3>
                     <p class="text-xs text-slate-400">إحصائيات شاملة، متابعة الإنجاز، والصلاحيات الإشرافية</p>
                 </button>
-                <button type="button" onclick="window.location.href='evaluations.html'" class="cyber-card-teal p-6 rounded-2xl text-right hover:border-teal-400 transition w-full cursor-pointer focus:outline-none">
+                <button id="btn-open-eva" type="button" class="cyber-card-teal p-6 rounded-2xl text-right hover:border-teal-400 transition w-full cursor-pointer">
                     <span class="inline-block text-[11px] font-mono text-teal-400 bg-teal-500/10 border border-teal-500/20 px-2.5 py-0.5 rounded mb-3">06</span>
                     <h3 class="text-lg font-bold text-white mb-1">بوابة التقييم</h3>
                     <p class="text-xs text-slate-400">تقييم الطلاب والشُعب بالمعايير والوسوم وترتيب الأبرز</p>
                 </button>
-                <button type="button" onclick="window.location.href='accounts.html'" class="cyber-card-sky p-6 rounded-2xl text-right hover:border-sky-400 transition w-full cursor-pointer focus:outline-none">
+                <button id="btn-open-acc" type="button" class="cyber-card-sky p-6 rounded-2xl text-right hover:border-sky-400 transition w-full cursor-pointer">
                     <span class="inline-block text-[11px] font-mono text-sky-400 bg-sky-500/10 border border-sky-500/20 px-2.5 py-0.5 rounded mb-3">07</span>
                     <h3 class="text-lg font-bold text-white mb-1">بوابة الحسابات</h3>
                     <p class="text-xs text-slate-400">إدارة أقساط الطلبة، الخصومات، الوصولات، والتقارير</p>
@@ -81,11 +80,12 @@
 
         <!-- دخول المعاون -->
         <div id="v-ast-login" class="hidden max-w-md mx-auto cyber-card p-6 rounded-2xl">
-            <h3 class="text-xl text-emerald-400 font-bold mb-4 text-center">دخول المعاون</h3>
+            <h3 class="text-xl text-emerald-400 font-bold mb-2 text-center">دخول المعاون</h3>
+            <p id="ast-security-msg" class="text-xs text-slate-400 mb-4 text-center">المحاولات المتبقية: 10 من 10</p>
             <input type="password" id="ast-pass" placeholder="أدخل رمز المرور السري" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center">
             <div class="flex gap-2">
-                <button type="button" onclick="checkAst()" class="flex-1 bg-emerald-500 text-black font-bold p-3 rounded-lg cursor-pointer">دخول</button>
-                <button type="button" onclick="nav('home')" class="bg-slate-800 px-4 rounded-lg text-slate-300 cursor-pointer">إلغاء</button>
+                <button id="btn-ast-submit" type="button" class="flex-1 bg-emerald-500 text-black font-bold p-3 rounded-lg cursor-pointer">دخول</button>
+                <button type="button" onclick="showView('home')" class="bg-slate-800 px-4 rounded-lg text-slate-300 cursor-pointer">إلغاء</button>
             </div>
         </div>
 
@@ -95,10 +95,10 @@
                 <h3 class="text-xl font-bold text-emerald-400">سجل الغيابات والدوام (سحابي)</h3>
                 <div class="flex gap-2">
                     <button type="button" onclick="window.print()" class="bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">طباعة PDF</button>
-                    <button type="button" onclick="clearData('abs')" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">مسح السجل</button>
+                    <button type="button" onclick="clearAbsAll()" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">مسح السجل</button>
                 </div>
             </div>
-            
+
             <div class="cyber-card p-4 rounded-xl mb-6 no-print">
                 <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 mb-3">
                     <input type="text" id="g-name" placeholder="اسم الطالب" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
@@ -118,7 +118,7 @@
                 </div>
                 <button type="button" onclick="saveAbs()" class="bg-emerald-500 text-black font-bold px-4 py-2 rounded text-sm w-full cursor-pointer">حفظ الغياب</button>
             </div>
-            
+
             <div class="cyber-card rounded-xl overflow-hidden">
                 <table class="w-full text-right text-sm">
                     <thead class="bg-slate-950 text-emerald-400"><tr><th class="p-3">الطالب</th><th class="p-3">الصف</th><th class="p-3">الحالة</th><th class="p-3">التاريخ</th><th class="p-3 no-print">إجراء</th></tr></thead>
@@ -131,15 +131,19 @@
         <div id="v-tch-select" class="hidden max-w-xl mx-auto">
             <h3 class="text-xl font-bold text-cyan-400 mb-4 text-center">اختر المادة الدراسية</h3>
             <div class="space-y-2" id="subj-box"></div>
+            <div class="mt-4 text-center">
+                <button type="button" onclick="showView('home')" class="bg-slate-800 px-4 py-2 rounded-lg text-slate-300 text-sm cursor-pointer">رجوع للرئيسية</button>
+            </div>
         </div>
 
         <!-- دخول المدرس -->
         <div id="v-tch-login" class="hidden max-w-md mx-auto cyber-card p-6 rounded-2xl">
-            <h3 id="tch-title" class="text-xl text-cyan-400 font-bold mb-4 text-center">تسجيل دخول المدرس</h3>
+            <h3 id="tch-title" class="text-xl text-cyan-400 font-bold mb-2 text-center">تسجيل دخول المدرس</h3>
+            <p id="tch-security-msg" class="text-xs text-slate-400 mb-4 text-center">المحاولات المتبقية: 10 من 10</p>
             <input type="password" id="tch-pass" placeholder="أدخل رمز المادة السري" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center">
             <div class="flex gap-2">
-                <button type="button" onclick="verifyTch()" class="flex-1 bg-cyan-500 text-black font-bold p-3 rounded-lg cursor-pointer">دخول</button>
-                <button type="button" onclick="nav('tch-select')" class="bg-slate-800 px-4 rounded-lg text-slate-300 cursor-pointer">رجوع</button>
+                <button id="btn-tch-submit" type="button" class="flex-1 bg-cyan-500 text-black font-bold p-3 rounded-lg cursor-pointer">دخول</button>
+                <button type="button" onclick="showView('tch-select')" class="bg-slate-800 px-4 rounded-lg text-slate-300 cursor-pointer">رجوع</button>
             </div>
         </div>
 
@@ -159,5 +163,163 @@
                         <option value="أول امن سيبراني A">أول امن سيبراني A</option>
                         <option value="أول امن سيبراني B">أول امن سيبراني B</option>
                         <option value="أول امن سيبراني C">أول امن سيبراني C</option>
-                        <option value="أول تكرار نفط A
-    
+                        <option value="أول تكرار نفط A">أول تكرار نفط A</option>
+                        <option value="ثالث تجميع حاسوب A">ثالث تجميع حاسوب A</option>
+                    </select>
+                    <input type="number" id="s-grade" min="0" max="100" placeholder="الدرجة (0-100)" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
+                </div>
+                <button type="button" onclick="saveGrade()" class="bg-cyan-500 text-black font-bold px-4 py-2 rounded text-sm w-full cursor-pointer">حفظ الدرجة</button>
+            </div>
+            <div class="cyber-card rounded-xl overflow-hidden">
+                <table class="w-full text-right text-sm">
+                    <thead class="bg-slate-950 text-cyan-400"><tr><th class="p-3">الطالب</th><th class="p-3">الصف</th><th class="p-3">المادة</th><th class="p-3">الدرجة</th><th class="p-3 no-print">إجراء</th></tr></thead>
+                    <tbody id="grades-list" class="divide-y divide-slate-900"></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer class="fixed bottom-0 left-0 w-full bg-slate-900/95 backdrop-blur-md border-t border-emerald-500/30 py-2.5 px-4 z-50 text-center shadow-lg no-print">
+      <div class="flex items-center justify-center gap-2 text-xs md:text-sm font-mono dir-rtl">
+        <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="text-slate-300">تم التطوير والبرمجة بواسطة:</span>
+        <span class="font-bold text-emerald-400 tracking-wide border-b border-emerald-500/40 pb-0.5">عباس محمد عزيز</span>
+      </div>
+    </footer>
+
+    <script>
+        const firebaseConfig = {
+          apiKey: "AIzaSyB6jzXTFRW6h3r7E5s8aWd0Ry5ixvBG-Do",
+          authDomain: "al-maarefa-school.firebaseapp.com",
+          databaseURL: "https://al-maarefa-school-default-rtdb.firebaseio.com",
+          projectId: "al-maarefa-school",
+          storageBucket: "al-maarefa-school.appspot.com",
+          messagingSenderId: "922687511699",
+          appId: "1:922687511699:web:5b77f972833cf9bb984166"
+        };
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.database();
+
+        const MAX_ATTEMPTS = 10;
+        let clientIp = 'unknown-ip';
+
+        function getDeviceId() {
+            let id = localStorage.getItem('alpha_sec_device_id');
+            if (!id) {
+                id = 'dev_' + Math.random().toString(36).slice(2, 12);
+                localStorage.setItem('alpha_sec_device_id', id);
+            }
+            return id;
+        }
+
+        function getClientKey(gateKey) {
+            const safeIp = String(clientIp).replace(/[.#$[\]/]/g, '_');
+            return `${getDeviceId()}__${safeIp}__${gateKey}`;
+        }
+
+        // محاولة جلب IP العام لتوثيق الحظر مع معرف الجهاز
+        fetch('https://api.ipify.org?format=json')
+            .then(r => r.json())
+            .then(d => { if (d && d.ip) clientIp = d.ip; })
+            .catch(() => {});
+
+        function estimateBanHours(attemptValue, correctValue) {
+            const a = String(attemptValue || '').trim();
+            const c = String(correctValue || '').trim();
+            if (!a || !c) return 120;
+
+            const lenDiff = Math.abs(a.length - c.length);
+            let commonChars = 0;
+            const cChars = c.split('');
+            a.split('').forEach(ch => {
+                const idx = cChars.indexOf(ch);
+                if (idx !== -1) {
+                    commonChars++;
+                    cChars.splice(idx, 1);
+                }
+            });
+            const similarity = commonChars / Math.max(a.length, c.length, 1);
+
+            const numA = Number(a);
+            const numC = Number(c);
+            const isNumericClose = !isNaN(numA) && !isNaN(numC) && numC > 0 && (Math.abs(numA - numC) / numC) <= 0.25;
+
+            // قريب من التخمين: حد أدنى 72 ساعة
+            if (isNumericClose || (similarity >= 0.6 && lenDiff <= 1)) {
+                return 72;
+            }
+            // متوسط القرب: 96 ساعة
+            if (similarity >= 0.35 && lenDiff <= 2) {
+                return 96;
+            }
+            // بعيد عن التخمين: 120 ساعة
+            return 120;
+        }
+
+        function getSecurityState(gateKey) {
+            const raw = localStorage.getItem('alpha_sec_state_' + getClientKey(gateKey));
+            if (!raw) return { failedAttempts: 0, bannedUntil: 0, banHours: 0 };
+            try {
+                const parsed = JSON.parse(raw);
+                if (parsed.bannedUntil && Date.now() >= Number(parsed.bannedUntil)) {
+                    const reset = { failedAttempts: 0, bannedUntil: 0, banHours: 0 };
+                    localStorage.setItem('alpha_sec_state_' + getClientKey(gateKey), JSON.stringify(reset));
+                    return reset;
+                }
+                return parsed;
+            } catch (e) {
+                return { failedAttempts: 0, bannedUntil: 0, banHours: 0 };
+            }
+        }
+
+        function saveSecurityState(gateKey, state) {
+            localStorage.setItem('alpha_sec_state_' + getClientKey(gateKey), JSON.stringify(state));
+            try {
+                db.ref(`security_locks/${getClientKey(gateKey)}`).set({
+                    gateKey,
+                    deviceId: getDeviceId(),
+                    ip: clientIp,
+                    failedAttempts: state.failedAttempts,
+                    bannedUntil: state.bannedUntil,
+                    banHours: state.banHours,
+                    updatedAt: Date.now()
+                });
+            } catch (e) {}
+        }
+
+        function formatRemainingTime(ms) {
+            const totalHours = Math.max(1, Math.ceil(ms / (1000 * 60 * 60)));
+            const days = Math.floor(totalHours / 24);
+            const hours = totalHours % 24;
+            if (days > 0) return `${days} يوم و ${hours} ساعة (${totalHours} ساعة إجمالية)`;
+            return `${totalHours} ساعة`;
+        }
+
+        function registerFailedAttempt(gateKey, enteredVal, correctVal, labelEl) {
+            const st = getSecurityState(gateKey);
+            st.failedAttempts = Number(st.failedAttempts || 0) + 1;
+
+            if (st.failedAttempts > MAX_ATTEMPTS) {
+                const banHours = estimateBanHours(enteredVal, correctVal);
+                st.banHours = banHours;
+                st.bannedUntil = Date.now() + (banHours * 60 * 60 * 1000);
+                saveSecurityState(gateKey, st);
+                const msg = `تم تجاوز 10 محاولات في (${gateKey}). الحظر مفعل لمدة ${banHours} ساعة.`;
+                if (labelEl) labelEl.innerText = msg;
+                alert(msg);
+                return;
+            }
+
+            saveSecurityState(gateKey, st);
+            const rem = MAX_ATTEMPTS - st.failedAttempts;
+            const msg = `رمز خطأ! المحاولات المتبقية: ${rem} من ${MAX_ATTEMPTS}`;
+            if (labelEl) labelEl.innerText = msg;
+            alert(msg);
+        }
+
+        function resetAttemptsOnSuccess(gateKey) {
+            saveSecurityState(gateKey, { failedAttempts: 0, bannedUntil: 0, banHours: 0 });
+        }
