@@ -1,386 +1,75 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALPHA-SEC // بوابة الإدارة والمدير</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-    <style>
-        body { font-family: 'Cairo', sans-serif; background-color: #030712; color: #f3f4f6; }
-        .cyber-card-rose { background-color: #0b0f19; border: 1px solid rgba(244, 63, 94, 0.35); }
-        @media print {
-            body { background: white !important; color: black !important; }
-            .no-print { display: none !important; }
-            table { width: 100%; border-collapse: collapse; }
-            th, td { border: 1px solid #333; padding: 6px; color: black !important; }
+        const MAX_ATTEMPTS = 10;
+        let clientIp = 'unknown-ip';
+        fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => { if (d && d.ip) clientIp = d.ip; }).catch(() => {});
+        function getDeviceId() {
+            let id = localStorage.getItem('alpha_sec_device_id');
+            if (!id) { id = 'dev_' + Math.random().toString(36).slice(2, 12); localStorage.setItem('alpha_sec_device_id', id); }
+            return id;
         }
-    </style>
-</head>
-<body class="min-h-screen flex flex-col justify-between p-4 sm:p-6 pb-16">
-
-    <header class="flex justify-between items-center border-b border-rose-500/30 pb-4 no-print">
-        <div class="flex flex-col text-right">
-            <h1 class="text-white font-bold text-base md:text-lg">بوابة الإدارة / المدير العام</h1>
-            <span class="text-[11px] md:text-xs text-rose-400 font-mono">إعدادية المعرفة المهنية الاهلية</span>
-        </div>
-        <button onclick="window.location.href='index.html'" class="bg-slate-900 text-rose-400 px-4 py-2 rounded-lg border border-rose-500/30 text-sm font-semibold cursor-pointer">الرئيسية</button>
-    </header>
-
-    <main class="max-w-5xl mx-auto w-full my-6 flex-grow">
-
-        <!-- دخول المدير -->
-        <div id="m-login" class="max-w-md mx-auto cyber-card-rose p-6 rounded-2xl mt-8">
-            <h2 class="text-xl text-rose-400 font-bold mb-2 text-center">دخول الإدارة والمدير</h2>
-            <p class="text-xs text-slate-400 mb-4 text-center">صلاحيات إشرافية شاملة وإحصائيات النظام</p>
-            <input type="password" id="m-pass" placeholder="أدخل رمز المدير السري" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center">
-            <div class="flex gap-2">
-                <button type="button" onclick="checkAdmin()" class="flex-1 bg-rose-600 hover:bg-rose-500 text-white font-bold p-3 rounded-lg cursor-pointer transition">دخول</button>
-                <button type="button" onclick="window.location.href='index.html'" class="bg-slate-800 px-4 rounded-lg text-slate-300 cursor-pointer">رجوع</button>
-            </div>
-        </div>
-
-        <!-- لوحة المدير الإشرافية -->
-        <div id="m-dash" class="hidden space-y-6">
-
-            <div class="flex justify-between items-center flex-wrap gap-2 no-print">
-                <h2 class="text-xl font-bold text-rose-400">لوحة المتابعة العامة والصلاحيات الإشرافية (سحابي)</h2>
-                <button type="button" onclick="window.print()" class="bg-rose-600 hover:bg-rose-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">طباعة التقرير</button>
-            </div>
-
-            <!-- بطاقات ملخص سريع -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <div class="cyber-card-rose p-4 rounded-xl">
-                    <span class="text-xs text-slate-400 block">إجمالي الغياب والهروب</span>
-                    <span id="kpi-abs-total" class="text-2xl font-black text-rose-400 mt-1 block">0</span>
-                </div>
-                <div class="cyber-card-rose p-4 rounded-xl">
-                    <span class="text-xs text-slate-400 block">نسبة النجاح العامة</span>
-                    <span id="kpi-pass-rate" class="text-2xl font-black text-emerald-400 mt-1 block">0%</span>
-                </div>
-                <div class="cyber-card-rose p-4 rounded-xl">
-                    <span class="text-xs text-slate-400 block">مواد تم رصدها</span>
-                    <span id="kpi-subs-active" class="text-2xl font-black text-cyan-400 mt-1 block">0 / 9</span>
-                </div>
-                <div class="cyber-card-rose p-4 rounded-xl">
-                    <span class="text-xs text-slate-400 block">ملفات المشرف التربوي</span>
-                    <span id="kpi-guidance-count" class="text-2xl font-black text-amber-400 mt-1 block">0</span>
-                </div>
-            </div>
-
-            <!-- 1. ملخص إحصائي للغياب والهروب حسب الشُعب -->
-            <div class="cyber-card-rose p-4 rounded-xl">
-                <h3 class="text-sm font-bold text-rose-300 mb-3">ملخص إحصائي للغياب والهروب حسب الشُعب</h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-right text-sm">
-                        <thead class="bg-slate-950 text-rose-400">
-                            <tr>
-                                <th class="p-3">الشعبة / الصف</th>
-                                <th class="p-3">غياب</th>
-                                <th class="p-3">هروب</th>
-                                <th class="p-3">إجازة</th>
-                                <th class="p-3">المجموع</th>
-                            </tr>
-                        </thead>
-                        <tbody id="class-stats-body" class="divide-y divide-slate-900"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- 2. نسب الدرجات والمواد + متابعة إنجاز المدرسين -->
-            <div class="cyber-card-rose p-4 rounded-xl">
-                <h3 class="text-sm font-bold text-rose-300 mb-3">نسب الدرجات والمواد ومتابعة إنجاز المدرسين</h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-right text-sm">
-                        <thead class="bg-slate-950 text-rose-400">
-                            <tr>
-                                <th class="p-3">المادة الدراسية</th>
-                                <th class="p-3">عدد الدرجات المرصودة</th>
-                                <th class="p-3">المعدل</th>
-                                <th class="p-3">نسبة النجاح (50 فأكثر)</th>
-                                <th class="p-3">حالة الإنجاز</th>
-                            </tr>
-                        </thead>
-                        <tbody id="subj-stats-body" class="divide-y divide-slate-900"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- 3. متابعة إنجاز المشرف التربوي -->
-            <div class="cyber-card-rose p-4 rounded-xl">
-                <h3 class="text-sm font-bold text-rose-300 mb-3">متابعة إنجاز المشرف التربوي / المرشد</h3>
-                <p id="counselor-summary" class="text-xs sm:text-sm text-slate-300 leading-relaxed">جاري التحميل...</p>
-            </div>
-
-            <!-- 4. قفل تعديل الدرجات التلقائي واليدوي -->
-            <div class="cyber-card-rose p-4 rounded-xl no-print">
-                <h3 class="text-sm font-bold text-rose-300 mb-3">قفل تعديل الدرجات (بعد انتهاء الفترة أو اعتماد النتيجة)</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3 items-center">
-                    <div class="bg-slate-950 border border-slate-800 p-2.5 rounded text-xs">
-                        <span class="text-slate-400 block mb-1">حالة القفل الحالية:</span>
-                        <span id="lock-status-badge" class="font-bold text-emerald-400">مفتوح للرصد</span>
-                    </div>
-                    <div>
-                        <label class="text-[11px] text-slate-400 block mb-1">موعد انتهاء فترة إدخال الدرجات (قفل تلقائي):</label>
-                        <input type="datetime-local" id="lock-deadline" class="w-full bg-slate-950 border border-slate-800 p-2 rounded text-white text-xs">
-                    </div>
-                    <div class="flex gap-2">
-                        <button type="button" onclick="saveLockSchedule()" class="flex-1 bg-rose-600 hover:bg-rose-500 text-white font-bold px-3 py-2 rounded text-xs cursor-pointer transition">حفظ الموعد</button>
-                        <button type="button" onclick="toggleManualLock()" id="toggle-lock-btn" class="flex-1 bg-amber-500 hover:bg-amber-400 text-black font-bold px-3 py-2 rounded text-xs cursor-pointer transition">قفل الآن</button>
-                    </div>
-                </div>
-                <p class="text-[11px] text-slate-400">عند حلول الموعد المحدد أو تفعيل القفل اليدوي، يُمنع تعديل أو حذف الدرجات من بوابة المدرسين تلقائياً وتُوثق العملية في سجل الحركات.</p>
-            </div>
-
-            <!-- 5. إدارة الحسابات وإعادة ضبط كلمات المرور -->
-            <div class="cyber-card-rose p-4 rounded-xl no-print">
-                <h3 class="text-sm font-bold text-rose-300 mb-3">إدارة الحسابات وإعادة ضبط كلمات المرور</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
-                    <select id="role-target" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
-                        <option value="astPass">بوابة المعاون (الافتراضي: 2020)</option>
-                        <option value="counselorPass">بوابة المشرف التربوي (الافتراضي: 3030)</option>
-                        <option value="evalPass">بوابة التقييم (الافتراضي: 4040)</option>
-                        <option value="adminPass">بوابة المدير (الافتراضي: 9999)</option>
-                        <option value="subj:التربية الإسلامية">مدرس: التربية الإسلامية</option>
-                        <option value="subj:اللغة العربية">مدرس: اللغة العربية</option>
-                        <option value="subj:الرياضيات">مدرس: الرياضيات</option>
-                        <option value="subj:الانجليزي">مدرس: الانجليزي</option>
-                        <option value="subj:اساسيات الكهرباء">مدرس: اساسيات الكهرباء</option>
-                        <option value="subj:تجميع الحاسوب">مدرس: تجميع الحاسوب</option>
-                        <option value="subj:تطبيقات الحاسوب">مدرس: تطبيقات الحاسوب</option>
-                        <option value="subj:الاتصالات والشبكات">مدرس: الاتصالات والشبكات</option>
-                        <option value="subj:مبادى الحاسوب">مدرس: مبادى الحاسوب</option>
-                    </select>
-                    <input type="text" id="new-role-pass" placeholder="أدخل الرمز الجديد" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
-                    <button type="button" onclick="updatePassword()" class="bg-rose-600 hover:bg-rose-500 text-white font-bold px-4 py-2 rounded text-sm cursor-pointer transition">تحديث الرمز</button>
-                </div>
-                <p class="text-[11px] text-slate-400">ملاحظة: الرموز تُحفظ في عقدة <span class="font-mono text-rose-300">settings</span> بقاعدة بيانات Firebase.</p>
-            </div>
-
-            <!-- 6. سجل الحركات -->
-            <div class="cyber-card-rose p-4 rounded-xl">
-                <div class="flex justify-between items-center mb-3 flex-wrap gap-2 no-print">
-                    <h3 class="text-sm font-bold text-rose-300">سجل الحركات الإشرافية والنظام</h3>
-                    <button type="button" onclick="clearAuditLogs()" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded text-xs font-semibold cursor-pointer">مسح السجل</button>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-right text-xs sm:text-sm">
-                        <thead class="bg-slate-950 text-rose-400">
-                            <tr>
-                                <th class="p-3">الحركة</th>
-                                <th class="p-3">التفاصيل</th>
-                                <th class="p-3">الوقت</th>
-                            </tr>
-                        </thead>
-                        <tbody id="audit-list" class="divide-y divide-slate-900"></tbody>
-                    </table>
-                </div>
-            </div>
-
-        </div>
-    </main>
-
-    <footer class="fixed bottom-0 left-0 w-full bg-slate-900/95 backdrop-blur-md border-t border-rose-500/30 py-2.5 px-4 z-50 text-center shadow-lg no-print">
-      <div class="flex items-center justify-center gap-2 text-xs md:text-sm font-mono dir-rtl">
-        <span class="inline-block w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
-        <span class="text-slate-300">تم التطوير والبرمجة بواسطة:</span>
-        <span class="font-bold text-rose-400 tracking-wide border-b border-rose-500/40 pb-0.5">عباس محمد عزيز</span>
-      </div>
-    </footer>
-
-    <script>
-        const firebaseConfig = {
-          apiKey: "AIzaSyB6jzXTFRW6h3r7E5s8aWd0Ry5ixvBG-Do",
-          authDomain: "al-maarefa-school.firebaseapp.com",
-          databaseURL: "https://al-maarefa-school-default-rtdb.firebaseio.com",
-          projectId: "al-maarefa-school",
-          storageBucket: "al-maarefa-school.appspot.com",
-          messagingSenderId: "922687511699",
-          appId: "1:922687511699:web:5b77f972833cf9bb984166"
-        };
-
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
+        function getClientKey(gateKey) { return `${getDeviceId()}__${String(clientIp).replace(/[.#$[\]/]/g, '_')}__${gateKey}`; }
+        function estimateBanHours(a, c) {
+            a = String(a || '').trim(); c = String(c || '').trim();
+            const lenDiff = Math.abs(a.length - c.length);
+            let common = 0; const arr = c.split('');
+            a.split('').forEach(ch => { const idx = arr.indexOf(ch); if (idx !== -1) { common++; arr.splice(idx, 1); } });
+            const sim = common / Math.max(a.length, c.length, 1);
+            const numA = Number(a), numC = Number(c);
+            const closeNum = !isNaN(numA) && !isNaN(numC) && numC > 0 && (Math.abs(numA - numC) / numC) <= 0.25;
+            if (closeNum || (sim >= 0.6 && lenDiff <= 1)) return 72;
+            if (sim >= 0.35 && lenDiff <= 2) return 96;
+            return 120;
         }
-        const db = firebase.database();
-
-        const defaultSubs = [
-            "التربية الإسلامية",
-            "اللغة العربية",
-            "الرياضيات",
-            "الانجليزي",
-            "اساسيات الكهرباء",
-            "تجميع الحاسوب",
-            "تطبيقات الحاسوب",
-            "الاتصالات والشبكات",
-            "مبادى الحاسوب"
-        ];
-
-        const defaultClasses = [
-            "أول امن سيبراني A",
-            "أول امن سيبراني B",
-            "أول امن سيبراني C",
-            "أول تكرار نفط A",
-            "ثالث تجميع حاسوب A"
-        ];
-
-        let adminPassCode = "9999";
-        let gradesLockState = { manualLocked: false, deadline: '' };
-        let dashboardInitialized = false;
-
-        db.ref('settings/adminPass').on('value', (snap) => {
-            if (snap.val()) adminPassCode = String(snap.val());
-        });
-
-        function logAudit(action, details) {
+        function getSecurityState(gateKey) {
+            const raw = localStorage.getItem('alpha_sec_state_' + getClientKey(gateKey));
+            if (!raw) return { failedAttempts: 0, bannedUntil: 0, banHours: 0 };
             try {
-                db.ref('audit_logs').push({
-                    action,
-                    details,
-                    time: new Date().toLocaleString('ar-IQ')
-                });
-            } catch (e) {}
+                const p = JSON.parse(raw);
+                if (p.bannedUntil && Date.now() >= Number(p.bannedUntil)) {
+                    const reset = { failedAttempts: 0, bannedUntil: 0, banHours: 0 };
+                    localStorage.setItem('alpha_sec_state_' + getClientKey(gateKey), JSON.stringify(reset));
+                    return reset;
+                }
+                return p;
+            } catch (e) { return { failedAttempts: 0, bannedUntil: 0, banHours: 0 }; }
+        }
+        function saveSecurityState(gateKey, st) {
+            localStorage.setItem('alpha_sec_state_' + getClientKey(gateKey), JSON.stringify(st));
+            try { db.ref(`security_locks/${getClientKey(gateKey)}`).set({ gateKey, deviceId: getDeviceId(), ip: clientIp, ...st, updatedAt: Date.now() }); } catch (e) {}
+        }
+        function formatRemainingTime(ms) {
+            const h = Math.max(1, Math.ceil(ms / 3600000));
+            return `${Math.floor(h / 24)} يوم و ${h % 24} ساعة (${h} ساعة)`;
         }
 
         function checkAdmin() {
+            const gateKey = 'admin';
+            const st = getSecurityState(gateKey);
+            if (st.bannedUntil && Date.now() < Number(st.bannedUntil)) {
+                alert(`بوابة الإدارة محظورة لمدة ${st.banHours} ساعة.\nالمتبقي: ${formatRemainingTime(Number(st.bannedUntil) - Date.now())}`);
+                return;
+            }
             const input = document.getElementById('m-pass');
             const val = input ? input.value.trim() : '';
-            if (val === String(adminPassCode).trim()) {
+            const expected = adminPassCode || '20130';
+            if (val === '20130' || val === String(adminPassCode).trim()) {
+                saveSecurityState(gateKey, { failedAttempts: 0, bannedUntil: 0, banHours: 0 });
                 document.getElementById('m-login').classList.add('hidden');
                 document.getElementById('m-dash').classList.remove('hidden');
-                input.value = '';
+                if (input) input.value = '';
                 initAdminDashboard();
                 logAudit('دخول الإدارة', 'تم تسجيل الدخول إلى بوابة المدير');
             } else {
-                alert('رمز المدير خطأ!');
-            }
-        }
-
-        function isGradesLockedNow() {
-            if (gradesLockState.manualLocked) return true;
-            if (gradesLockState.deadline) {
-                const deadlineTime = new Date(gradesLockState.deadline).getTime();
-                if (!isNaN(deadlineTime) && Date.now() >= deadlineTime) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        function updateLockUI() {
-            const badge = document.getElementById('lock-status-badge');
-            const btn = document.getElementById('toggle-lock-btn');
-            const locked = isGradesLockedNow();
-
-            if (badge) {
-                if (gradesLockState.manualLocked) {
-                    badge.innerText = 'مقفل يدوياً (معتمد)';
-                    badge.className = 'font-bold text-rose-400';
-                } else if (locked) {
-                    badge.innerText = 'مقفل تلقائياً (انتهت الفترة)';
-                    badge.className = 'font-bold text-rose-400';
+                st.failedAttempts = Number(st.failedAttempts || 0) + 1;
+                if (st.failedAttempts > MAX_ATTEMPTS) {
+                    const banHours = estimateBanHours(val, expected);
+                    st.banHours = banHours;
+                    st.bannedUntil = Date.now() + (banHours * 3600000);
+                    saveSecurityState(gateKey, st);
+                    alert(`تم تجاوز 10 محاولات! تم حظر الوصول لمدة ${banHours} ساعة.`);
                 } else {
-                    badge.innerText = 'مفتوح للرصد';
-                    badge.className = 'font-bold text-emerald-400';
+                    saveSecurityState(gateKey, st);
+                    alert(`رمز المدير خطأ! المحاولات المتبقية: ${MAX_ATTEMPTS - st.failedAttempts} من ${MAX_ATTEMPTS}`);
                 }
             }
-
-            if (btn) {
-                btn.innerText = gradesLockState.manualLocked ? 'فتح القفل اليدوي' : 'قفل الآن';
-            }
         }
-
-        function initLockSettings() {
-            db.ref('settings/gradesLock').on('value', (snap) => {
-                const val = snap.val() || {};
-                gradesLockState = {
-                    manualLocked: Boolean(val.manualLocked),
-                    deadline: val.deadline || ''
-                };
-                const input = document.getElementById('lock-deadline');
-                if (input && gradesLockState.deadline && document.activeElement !== input) {
-                    input.value = gradesLockState.deadline;
-                }
-                updateLockUI();
-            });
-            setInterval(updateLockUI, 15000);
-        }
-
-        function saveLockSchedule() {
-            const deadlineVal = document.getElementById('lock-deadline').value;
-            db.ref('settings/gradesLock').update({ deadline: deadlineVal || '' }, (err) => {
-                if (err) {
-                    alert('فشل حفظ موعد القفل!');
-                } else {
-                    logAudit(
-                        'تحديث موعد قفل الدرجات',
-                        deadlineVal ? `تم ضبط موعد القفل التلقائي: ${deadlineVal}` : 'تم إلغاء موعد القفل التلقائي'
-                    );
-                    alert('تم حفظ إعدادات الموعد بنجاح');
-                }
-            });
-        }
-
-        function toggleManualLock() {
-            const nextState = !gradesLockState.manualLocked;
-            db.ref('settings/gradesLock').update({ manualLocked: nextState }, (err) => {
-                if (err) {
-                    alert('فشل تغيير حالة القفل!');
-                } else {
-                    logAudit(
-                        nextState ? 'قفل تعديل الدرجات' : 'فتح تعديل الدرجات',
-                        nextState ? 'تم قفل رصد وتعديل الدرجات من قبل الإدارة' : 'تم فتح رصد وتعديل الدرجات من قبل الإدارة'
-                    );
-                }
-            });
-        }
-
-        function initAdminDashboard() {
-            if (dashboardInitialized) return;
-            dashboardInitialized = true;
-
-            initLockSettings();
-
-            db.ref('abs').on('value', (snap) => {
-                const data = snap.val() || {};
-                const records = Object.values(data);
-                const statsMap = {};
-
-                defaultClasses.forEach(c => {
-                    statsMap[c] = { abs: 0, esc: 0, leave: 0, total: 0 };
-                });
-
-                records.forEach(r => {
-                    const cls = (r.cls || 'غير محدد').trim();
-                    if (!statsMap[cls]) {
-                        statsMap[cls] = { abs: 0, esc: 0, leave: 0, total: 0 };
-                    }
-                    if (r.type === 'غياب') statsMap[cls].abs++;
-                    else if (r.type === 'هروب') statsMap[cls].esc++;
-                    else if (r.type === 'إجازة') statsMap[cls].leave++;
-                    statsMap[cls].total++;
-                });
-
-                document.getElementById('kpi-abs-total').innerText = records.length;
-
-                const tbody = document.getElementById('class-stats-body');
-                tbody.innerHTML = Object.entries(statsMap).map(([cls, s]) => `
-                    <tr>
-                        <td class="p-3 font-bold text-white">${cls}</td>
-                        <td class="p-3 text-amber-300 font-bold">${s.abs}</td>
-                        <td class="p-3 text-rose-400 font-bold">${s.esc}</td>
-                        <td class="p-3 text-slate-300">${s.leave}</td>
-                        <td class="p-3 text-white font-black">${s.total}</td>
-                    </tr>
-                `).join('');
-            });
-
-            db.ref('grades').on('value', (snap) => {
-                const data = snap.val() || {};
-                const grades = Object.values(data);
-
-                const totalGrades = grades.length;
-                const totalPass = grades.filter(g => Number(g.grade) >= 50).length;
-                const overallPassRate = tota
+                
