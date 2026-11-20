@@ -10,8 +10,8 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
     <style>
         body { font-family: 'Cairo', sans-serif; background-color: #030712; color: #f3f4f6; }
-        .cyber-card { background-color: #0b0f19; border: 1px solid rgba(16, 185, 129, 0.3); }
-        .tag-btn.active { background-color: #10b981; color: #030712; border-color: #10b981; font-weight: 700; }
+        .cyber-card { background-color: #0b0f19; border: 1px solid rgba(20, 184, 166, 0.35); }
+        .tag-btn.active { background-color: #14b8a6; color: #030712; border-color: #14b8a6; font-weight: 700; }
         @media print {
             body { background: white !important; color: black !important; }
             .no-print { display: none !important; }
@@ -22,221 +22,233 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between p-4 sm:p-6 pb-16">
 
-    <header class="flex justify-between items-center border-b border-emerald-500/30 pb-4 no-print">
+    <header class="flex justify-between items-center border-b border-teal-500/30 pb-4 no-print">
         <div class="flex flex-col text-right">
             <h1 class="text-white font-bold text-base md:text-lg">بوابة التقييم المتكاملة</h1>
-            <span class="text-[11px] md:text-xs text-emerald-400 font-mono">إعدادية المعرفة المهنية الاهلية</span>
+            <span class="text-[11px] md:text-xs text-teal-400 font-mono">إعدادية المعرفة المهنية الاهلية</span>
         </div>
         <div class="flex gap-2">
-            <button onclick="window.print()" class="bg-slate-900 text-emerald-400 px-3 py-2 rounded-lg border border-emerald-500/30 text-xs font-semibold cursor-pointer">🖨️ طباعة</button>
-            <button onclick="window.location.href='index.html'" class="bg-slate-900 text-emerald-400 px-4 py-2 rounded-lg border border-emerald-500/30 text-sm font-semibold cursor-pointer">الرئيسية</button>
+            <button type="button" onclick="window.print()" class="bg-slate-900 text-teal-400 px-3 py-2 rounded-lg border border-teal-500/30 text-xs font-semibold cursor-pointer">طباعة</button>
+            <button type="button" onclick="window.location.href='index.html'" class="bg-slate-900 text-teal-400 px-4 py-2 rounded-lg border border-teal-500/30 text-sm font-semibold cursor-pointer">الرئيسية</button>
         </div>
     </header>
 
-    <main class="max-w-5xl mx-auto w-full my-6 flex-grow space-y-6">
+    <main class="max-w-5xl mx-auto w-full my-6 flex-grow">
 
-        <!-- نموذج التقييم السريع -->
-        <section class="cyber-card p-5 rounded-2xl no-print space-y-5">
-            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
-                <div>
-                    <h2 class="text-lg font-black text-emerald-400">إضافة تقييم سريع (فردي أو شعبة)</h2>
-                    <p id="role-scope-hint" class="text-xs text-slate-400 mt-0.5">المدرس يقيّم التفاعل والواجبات والنشاط والمشاركة للطالب أو الشعبة.</p>
-                </div>
-                <span id="live-avg-preview" class="text-xs bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 px-3 py-1 rounded-full font-bold">المتوسط: 4.0 / 5</span>
+        <!-- شاشة دخول بوابة التقييم -->
+        <div id="e-login" class="max-w-md mx-auto cyber-card p-6 rounded-2xl mt-8">
+            <h2 class="text-xl text-teal-400 font-bold mb-2 text-center">دخول بوابة التقييم</h2>
+            <p class="text-xs text-slate-400 mb-4 text-center">أدخل الرمز السري المعتمد للتقييم والاطلاع على النتائج</p>
+            <input type="password" id="e-pass" placeholder="أدخل رمز التقييم السري" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center">
+            <div class="flex gap-2">
+                <button type="button" onclick="checkEvalAccess()" class="flex-1 bg-teal-500 hover:bg-teal-400 text-black font-bold p-3 rounded-lg cursor-pointer transition">دخول</button>
+                <button type="button" onclick="window.location.href='index.html'" class="bg-slate-800 px-4 rounded-lg text-slate-300 cursor-pointer">رجوع</button>
             </div>
+        </div>
 
-            <!-- 1. الجهة المقيّمة ونطاق التقييم -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                <div>
-                    <label class="text-xs text-slate-400 block mb-1">الجهة المقيّمة</label>
-                    <select id="eval-role" onchange="updateRoleScopeHint()" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-white text-sm">
-                        <option value="المدرس">المدرس</option>
-                        <option value="المعاون">المعاون</option>
-                        <option value="المشرف التربوي">المشرف التربوي</option>
-                        <option value="المدير">المدير</option>
-                    </select>
+        <!-- محتوى بوابة التقييم -->
+        <div id="e-dash" class="hidden space-y-6">
+
+            <!-- نموذج التقييم السريع -->
+            <section class="cyber-card p-5 rounded-2xl no-print space-y-5">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                    <div>
+                        <h2 class="text-lg font-black text-teal-400">إضافة تقييم سريع (فردي أو شعبة)</h2>
+                        <p id="role-scope-hint" class="text-xs text-slate-400 mt-0.5">المدرس يقيّم التفاعل والواجبات والنشاط والمشاركة للطالب أو الشعبة.</p>
+                    </div>
+                    <span id="live-avg-preview" class="text-xs bg-teal-500/15 text-teal-300 border border-teal-500/30 px-3 py-1 rounded-full font-bold">المتوسط: 4.0 / 5</span>
                 </div>
 
-                <div>
-                    <label class="text-xs text-slate-400 block mb-1">نطاق التقييم</label>
-                    <select id="eval-scope" onchange="toggleTargetStudentInput()" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-white text-sm">
-                        <option value="طالب">طالب فردي</option>
-                        <option value="شعبة">شعبة كاملة</option>
-                    </select>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                    <div>
+                        <label class="text-xs text-slate-400 block mb-1">الجهة المقيّمة</label>
+                        <select id="eval-role" onchange="updateRoleScopeHint()" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-white text-sm">
+                            <option value="المدرس">المدرس</option>
+                            <option value="المعاون">المعاون</option>
+                            <option value="المشرف التربوي">المشرف التربوي</option>
+                            <option value="المدير">المدير</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-xs text-slate-400 block mb-1">نطاق التقييم</label>
+                        <select id="eval-scope" onchange="toggleTargetStudentInput()" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-white text-sm">
+                            <option value="طالب">طالب فردي</option>
+                            <option value="شعبة">شعبة كاملة</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-xs text-slate-400 block mb-1">الصف / الشعبة</label>
+                        <select id="eval-class" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-white text-sm">
+                            <option value="أول امن سيبراني A">أول امن سيبراني A</option>
+                            <option value="أول امن سيبراني B">أول امن سيبراني B</option>
+                            <option value="أول امن سيبراني C">أول امن سيبراني C</option>
+                            <option value="أول تكرار نفط A">أول تكرار نفط A</option>
+                            <option value="ثالث تجميع حاسوب A">ثالث تجميع حاسوب A</option>
+                        </select>
+                    </div>
+
+                    <div id="student-name-wrapper">
+                        <label class="text-xs text-slate-400 block mb-1">اسم الطالب</label>
+                        <input type="text" id="eval-student" placeholder="مثال: علي حسن" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-white text-sm">
+                    </div>
                 </div>
 
-                <div>
-                    <label class="text-xs text-slate-400 block mb-1">الصف / الشعبة</label>
-                    <select id="eval-class" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-white text-sm">
-                        <option value="أول امن سيبراني A">أول امن سيبراني A</option>
-                        <option value="أول امن سيبراني B">أول امن سيبراني B</option>
-                        <option value="أول امن سيبراني C">أول امن سيبراني C</option>
-                        <option value="أول تكرار نفط A">أول تكرار نفط A</option>
-                        <option value="ثالث تجميع حاسوب A">ثالث تجميع حاسوب A</option>
-                    </select>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-slate-950/70 border border-slate-800/80 p-4 rounded-xl">
+                    <div>
+                        <label class="text-xs text-teal-300 font-bold block mb-1">التفاعل (1 - 5)</label>
+                        <select id="score-interaction" onchange="updateLiveAvg()" class="w-full bg-slate-900 border border-slate-700 p-2 rounded-lg text-white text-sm">
+                            <option value="5">5 - ممتاز</option>
+                            <option value="4" selected>4 - جيد جداً</option>
+                            <option value="3">3 - جيد</option>
+                            <option value="2">2 - مقبول</option>
+                            <option value="1">1 - ضعيف</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-xs text-teal-300 font-bold block mb-1">الالتزام (1 - 5)</label>
+                        <select id="score-commitment" onchange="updateLiveAvg()" class="w-full bg-slate-900 border border-slate-700 p-2 rounded-lg text-white text-sm">
+                            <option value="5">5 - ممتاز</option>
+                            <option value="4" selected>4 - جيد جداً</option>
+                            <option value="3">3 - جيد</option>
+                            <option value="2">2 - مقبول</option>
+                            <option value="1">1 - ضعيف</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-xs text-teal-300 font-bold block mb-1">الواجبات (1 - 5)</label>
+                        <select id="score-homework" onchange="updateLiveAvg()" class="w-full bg-slate-900 border border-slate-700 p-2 rounded-lg text-white text-sm">
+                            <option value="5">5 - ممتاز</option>
+                            <option value="4" selected>4 - جيد جداً</option>
+                            <option value="3">3 - جيد</option>
+                            <option value="2">2 - مقبول</option>
+                            <option value="1">1 - ضعيف</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-xs text-teal-300 font-bold block mb-1">النشاط والانضباط (1 - 5)</label>
+                        <select id="score-activity" onchange="updateLiveAvg()" class="w-full bg-slate-900 border border-slate-700 p-2 rounded-lg text-white text-sm">
+                            <option value="5">5 - ممتاز</option>
+                            <option value="4" selected>4 - جيد جداً</option>
+                            <option value="3">3 - جيد</option>
+                            <option value="2">2 - مقبول</option>
+                            <option value="1">1 - ضعيف</option>
+                        </select>
+                    </div>
                 </div>
 
-                <div id="student-name-wrapper">
-                    <label class="text-xs text-slate-400 block mb-1">اسم الطالب</label>
-                    <input type="text" id="eval-student" placeholder="مثال: علي حسن" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-white text-sm">
-                </div>
-            </div>
-
-            <!-- 2. معايير التقييم (1 إلى 5) -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-slate-950/70 border border-slate-800/80 p-4 rounded-xl">
-                <div>
-                    <label class="text-xs text-emerald-300 font-bold block mb-1">التفاعل (1 - 5)</label>
-                    <select id="score-interaction" onchange="updateLiveAvg()" class="w-full bg-slate-900 border border-slate-700 p-2 rounded-lg text-white text-sm">
-                        <option value="5">5 نجوم - ممتاز</option>
-                        <option value="4" selected>4 نجوم - جيد جداً</option>
-                        <option value="3">3 نجوم - جيد</option>
-                        <option value="2">2 نجوم - مقبول</option>
-                        <option value="1">1 نجمة - ضعيف</option>
-                    </select>
+                <div class="space-y-2">
+                    <label class="text-xs text-slate-400 block">وسوم سريعة (اختياري)</label>
+                    <div id="tags-container" class="flex flex-wrap gap-2">
+                        <button type="button" onclick="toggleTag(this)" data-tag="متميز جداً" class="tag-btn text-xs px-3 py-1.5 rounded-full bg-slate-900 border border-slate-700 text-slate-300 cursor-pointer transition">متميز جداً</button>
+                        <button type="button" onclick="toggleTag(this)" data-tag="مشارك نشط" class="tag-btn text-xs px-3 py-1.5 rounded-full bg-slate-900 border border-slate-700 text-slate-300 cursor-pointer transition">مشارك نشط</button>
+                        <button type="button" onclick="toggleTag(this)" data-tag="ملتزم بالدوام" class="tag-btn text-xs px-3 py-1.5 rounded-full bg-slate-900 border border-slate-700 text-slate-300 cursor-pointer transition">ملتزم بالدوام</button>
+                        <button type="button" onclick="toggleTag(this)" data-tag="منجز للواجبات" class="tag-btn text-xs px-3 py-1.5 rounded-full bg-slate-900 border border-slate-700 text-slate-300 cursor-pointer transition">منجز للواجبات</button>
+                        <button type="button" onclick="toggleTag(this)" data-tag="تطور ملحوظ" class="tag-btn text-xs px-3 py-1.5 rounded-full bg-slate-900 border border-slate-700 text-slate-300 cursor-pointer transition">تطور ملحوظ</button>
+                        <button type="button" onclick="toggleTag(this)" data-tag="يحتاج متابعة" class="tag-btn text-xs px-3 py-1.5 rounded-full bg-slate-900 border border-slate-700 text-slate-300 cursor-pointer transition">يحتاج متابعة</button>
+                    </div>
                 </div>
 
-                <div>
-                    <label class="text-xs text-emerald-300 font-bold block mb-1">الالتزام (1 - 5)</label>
-                    <select id="score-commitment" onchange="updateLiveAvg()" class="w-full bg-slate-900 border border-slate-700 p-2 rounded-lg text-white text-sm">
-                        <option value="5">5 نجوم - ممتاز</option>
-                        <option value="4" selected>4 نجوم - جيد جداً</option>
-                        <option value="3">3 نجوم - جيد</option>
-                        <option value="2">2 نجوم - مقبول</option>
-                        <option value="1">1 نجمة - ضعيف</option>
-                    </select>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-center">
+                    <div class="sm:col-span-2">
+                        <input type="text" id="eval-note" placeholder="ملاحظة قصيرة اختيارية..." class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-white text-sm">
+                    </div>
+                    <button type="button" onclick="saveEvaluation()" class="bg-teal-500 hover:bg-teal-400 text-black font-bold py-2.5 px-4 rounded-lg text-sm cursor-pointer transition">حفظ التقييم</button>
+                </div>
+            </section>
+
+            <!-- الفلاتر -->
+            <section class="cyber-card p-4 rounded-2xl no-print">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                    <div>
+                        <label class="text-xs text-slate-400 block mb-1">فلترة حسب الشعبة</label>
+                        <select id="filter-class" onchange="renderAll()" class="w-full bg-slate-950 border border-slate-800 p-2 rounded-lg text-white text-xs sm:text-sm">
+                            <option value="ALL">كل الشُعب</option>
+                            <option value="أول امن سيبراني A">أول امن سيبراني A</option>
+                            <option value="أول امن سيبراني B">أول امن سيبراني B</option>
+                            <option value="أول امن سيبراني C">أول امن سيبراني C</option>
+                            <option value="أول تكرار نفط A">أول تكرار نفط A</option>
+                            <option value="ثالث تجميع حاسوب A">ثالث تجميع حاسوب A</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-xs text-slate-400 block mb-1">فلترة حسب المعيار</label>
+                        <select id="filter-criterion" onchange="renderAll()" class="w-full bg-slate-950 border border-slate-800 p-2 rounded-lg text-white text-xs sm:text-sm">
+                            <option value="avg">المتوسط العام</option>
+                            <option value="interaction">التفاعل</option>
+                            <option value="commitment">الالتزام</option>
+                            <option value="homework">الواجبات</option>
+                            <option value="activity">النشاط والانضباط</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-xs text-slate-400 block mb-1">الفترة الزمنية</label>
+                        <select id="filter-period" onchange="renderAll()" class="w-full bg-slate-950 border border-slate-800 p-2 rounded-lg text-white text-xs sm:text-sm">
+                            <option value="ALL">كل الفترات</option>
+                            <option value="TODAY">اليوم</option>
+                            <option value="7D">آخر 7 أيام</option>
+                            <option value="30D">آخر 30 يوماً</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-xs text-slate-400 block mb-1">بحث باسم طالب أو شعبة</label>
+                        <input type="text" id="filter-search" oninput="renderAll()" placeholder="اكتب اسم الطالب..." class="w-full bg-slate-950 border border-slate-800 p-2 rounded-lg text-white text-xs sm:text-sm">
+                    </div>
+                </div>
+            </section>
+
+            <!-- ترتيب الأبرز والأكثر نشاطاً -->
+            <section class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div class="cyber-card p-4 rounded-2xl">
+                    <h3 class="text-sm font-bold text-teal-400 mb-3">ترتيب الأبرز تقييماً</h3>
+                    <div id="top-rated-list" class="space-y-2 text-xs sm:text-sm"></div>
                 </div>
 
-                <div>
-                    <label class="text-xs text-emerald-300 font-bold block mb-1">الواجبات (1 - 5)</label>
-                    <select id="score-homework" onchange="updateLiveAvg()" class="w-full bg-slate-900 border border-slate-700 p-2 rounded-lg text-white text-sm">
-                        <option value="5">5 نجوم - ممتاز</option>
-                        <option value="4" selected>4 نجوم - جيد جداً</option>
-                        <option value="3">3 نجوم - جيد</option>
-                        <option value="2">2 نجوم - مقبول</option>
-                        <option value="1">1 نجمة - ضعيف</option>
-                    </select>
+                <div class="cyber-card p-4 rounded-2xl">
+                    <h3 class="text-sm font-bold text-cyan-400 mb-3">الأكثر نشاطاً وتفاعلاً</h3>
+                    <div id="most-active-list" class="space-y-2 text-xs sm:text-sm"></div>
                 </div>
+            </section>
 
-                <div>
-                    <label class="text-xs text-emerald-300 font-bold block mb-1">النشاط والانضباط (1 - 5)</label>
-                    <select id="score-activity" onchange="updateLiveAvg()" class="w-full bg-slate-900 border border-slate-700 p-2 rounded-lg text-white text-sm">
-                        <option value="5">5 نجوم - ممتاز</option>
-                        <option value="4" selected>4 نجوم - جيد جداً</option>
-                        <option value="3">3 نجوم - جيد</option>
-                        <option value="2">2 نجوم - مقبول</option>
-                        <option value="1">1 نجمة - ضعيف</option>
-                    </select>
+            <!-- سجل التقييمات التفصيلي -->
+            <section class="cyber-card rounded-2xl overflow-hidden">
+                <div class="p-4 border-b border-slate-800 flex justify-between items-center flex-wrap gap-2">
+                    <h3 class="text-sm font-bold text-teal-400">سجل التقييمات والملخصات</h3>
+                    <span id="eval-count-badge" class="text-xs bg-slate-900 text-slate-300 px-3 py-1 rounded-full">0 سجل</span>
                 </div>
-            </div>
-
-            <!-- 3. الوسوم السريعة والملاحظة -->
-            <div class="space-y-2">
-                <label class="text-xs text-slate-400 block">وسوم سريعة (اختياري - يمكن تحديد أكثر من وسم)</label>
-                <div id="tags-container" class="flex flex-wrap gap-2">
-                    <button type="button" onclick="toggleTag(this)" data-tag="متميز جداً" class="tag-btn text-xs px-3 py-1.5 rounded-full bg-slate-900 border border-slate-700 text-slate-300 cursor-pointer transition">متميز جداً</button>
-                    <button type="button" onclick="toggleTag(this)" data-tag="مشارك نشط" class="tag-btn text-xs px-3 py-1.5 rounded-full bg-slate-900 border border-slate-700 text-slate-300 cursor-pointer transition">مشارك نشط</button>
-                    <button type="button" onclick="toggleTag(this)" data-tag="ملتزم بالدوام" class="tag-btn text-xs px-3 py-1.5 rounded-full bg-slate-900 border border-slate-700 text-slate-300 cursor-pointer transition">ملتزم بالدوام</button>
-                    <button type="button" onclick="toggleTag(this)" data-tag="منجز للواجبات" class="tag-btn text-xs px-3 py-1.5 rounded-full bg-slate-900 border border-slate-700 text-slate-300 cursor-pointer transition">منجز للواجبات</button>
-                    <button type="button" onclick="toggleTag(this)" data-tag="تطور ملحوظ" class="tag-btn text-xs px-3 py-1.5 rounded-full bg-slate-900 border border-slate-700 text-slate-300 cursor-pointer transition">تطور ملحوظ</button>
-                    <button type="button" onclick="toggleTag(this)" data-tag="يحتاج متابعة" class="tag-btn text-xs px-3 py-1.5 rounded-full bg-slate-900 border border-slate-700 text-slate-300 cursor-pointer transition">يحتاج متابعة</button>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-right text-xs sm:text-sm">
+                        <thead class="bg-slate-950 text-teal-400">
+                            <tr>
+                                <th class="p-3">المُقيّم</th>
+                                <th class="p-3">المُقيَّم (طالب / شعبة)</th>
+                                <th class="p-3">الشعبة</th>
+                                <th class="p-3">المعايير / النتيجة</th>
+                                <th class="p-3">الوسوم والملاحظة</th>
+                                <th class="p-3">التاريخ</th>
+                                <th class="p-3 no-print">إجراء</th>
+                            </tr>
+                        </thead>
+                        <tbody id="evaluations-tbody" class="divide-y divide-slate-900"></tbody>
+                    </table>
                 </div>
-            </div>
+            </section>
 
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-center">
-                <div class="sm:col-span-2">
-                    <input type="text" id="eval-note" placeholder="ملاحظة قصيرة اختيارية..." class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-white text-sm">
-                </div>
-                <button onclick="saveEvaluation()" class="bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-2.5 px-4 rounded-lg text-sm cursor-pointer transition">حفظ التقييم</button>
-            </div>
-        </section>
-
-        <!-- الفلاتر -->
-        <section class="cyber-card p-4 rounded-2xl no-print">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                <div>
-                    <label class="text-xs text-slate-400 block mb-1">فلترة حسب الشعبة</label>
-                    <select id="filter-class" onchange="renderAll()" class="w-full bg-slate-950 border border-slate-800 p-2 rounded-lg text-white text-xs sm:text-sm">
-                        <option value="ALL">كل الشُعب</option>
-                        <option value="أول امن سيبراني A">أول امن سيبراني A</option>
-                        <option value="أول امن سيبراني B">أول امن سيبراني B</option>
-                        <option value="أول امن سيبراني C">أول امن سيبراني C</option>
-                        <option value="أول تكرار نفط A">أول تكرار نفط A</option>
-                        <option value="ثالث تجميع حاسوب A">ثالث تجميع حاسوب A</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="text-xs text-slate-400 block mb-1">فلترة حسب المعيار</label>
-                    <select id="filter-criterion" onchange="renderAll()" class="w-full bg-slate-950 border border-slate-800 p-2 rounded-lg text-white text-xs sm:text-sm">
-                        <option value="avg">المتوسط العام</option>
-                        <option value="interaction">التفاعل</option>
-                        <option value="commitment">الالتزام</option>
-                        <option value="homework">الواجبات</option>
-                        <option value="activity">النشاط والانضباط</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="text-xs text-slate-400 block mb-1">الفترة الزمنية</label>
-                    <select id="filter-period" onchange="renderAll()" class="w-full bg-slate-950 border border-slate-800 p-2 rounded-lg text-white text-xs sm:text-sm">
-                        <option value="ALL">كل الفترات</option>
-                        <option value="TODAY">اليوم</option>
-                        <option value="7D">آخر 7 أيام</option>
-                        <option value="30D">آخر 30 يوماً</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="text-xs text-slate-400 block mb-1">بحث باسم طالب أو شعبة</label>
-                    <input type="text" id="filter-search" oninput="renderAll()" placeholder="اكتب اسم الطالب..." class="w-full bg-slate-950 border border-slate-800 p-2 rounded-lg text-white text-xs sm:text-sm">
-                </div>
-            </div>
-        </section>
-
-        <!-- ملخص وترتيب الأبرز والأكثر نشاطاً -->
-        <section class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <div class="cyber-card p-4 rounded-2xl">
-                <h3 class="text-sm font-bold text-emerald-400 mb-3">🏆 ترتيب الأبرز تقييماً</h3>
-                <div id="top-rated-list" class="space-y-2 text-xs sm:text-sm"></div>
-            </div>
-
-            <div class="cyber-card p-4 rounded-2xl">
-                <h3 class="text-sm font-bold text-cyan-400 mb-3">⚡ الأكثر نشاطاً وتفاعلاً</h3>
-                <div id="most-active-list" class="space-y-2 text-xs sm:text-sm"></div>
-            </div>
-        </section>
-
-        <!-- سجل التقييمات التفصيلي -->
-        <section class="cyber-card rounded-2xl overflow-hidden">
-            <div class="p-4 border-b border-slate-800 flex justify-between items-center flex-wrap gap-2">
-                <h3 class="text-sm font-bold text-emerald-400">📋 سجل التقييمات والملخصات</h3>
-                <span id="eval-count-badge" class="text-xs bg-slate-900 text-slate-300 px-3 py-1 rounded-full">0 سجل</span>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-right text-xs sm:text-sm">
-                    <thead class="bg-slate-950 text-emerald-400">
-                        <tr>
-                            <th class="p-3">المُقيّم</th>
-                            <th class="p-3">المُقيَّم (طالب / شعبة)</th>
-                            <th class="p-3">الشعبة</th>
-                            <th class="p-3">المعايير / النتيجة</th>
-                            <th class="p-3">الوسوم والملاحظة</th>
-                            <th class="p-3">التاريخ</th>
-                            <th class="p-3 no-print">إجراء</th>
-                        </tr>
-                    </thead>
-                    <tbody id="evaluations-tbody" class="divide-y divide-slate-900"></tbody>
-                </table>
-            </div>
-        </section>
-
+        </div>
     </main>
 
-    <footer class="fixed bottom-0 left-0 w-full bg-slate-900/95 backdrop-blur-md border-t border-emerald-500/30 py-2.5 px-4 z-50 text-center shadow-lg no-print">
+    <footer class="fixed bottom-0 left-0 w-full bg-slate-900/95 backdrop-blur-md border-t border-teal-500/30 py-2.5 px-4 z-50 text-center shadow-lg no-print">
       <div class="flex items-center justify-center gap-2 text-xs md:text-sm font-mono dir-rtl">
-        <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="inline-block w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
         <span class="text-slate-300">تم التطوير والبرمجة بواسطة:</span>
-        <span class="font-bold text-emerald-400 tracking-wide border-b border-emerald-500/40 pb-0.5">عباس محمد عزيز</span>
+        <span class="font-bold text-teal-400 tracking-wide border-b border-teal-500/40 pb-0.5">عباس محمد عزيز</span>
       </div>
     </footer>
 
@@ -256,7 +268,25 @@
         }
         const db = firebase.database();
 
+        let evalPassCode = "4040";
         let allEvaluations = [];
+        let evalLoaded = false;
+
+        db.ref('settings/evalPass').on('value', (snap) => {
+            if (snap.val()) evalPassCode = String(snap.val());
+        });
+
+        function checkEvalAccess() {
+            const input = document.getElementById('e-pass');
+            if (input && input.value.trim() === String(evalPassCode).trim()) {
+                document.getElementById('e-login').classList.add('hidden');
+                document.getElementById('e-dash').classList.remove('hidden');
+                input.value = '';
+                startEvaluationsSync();
+            } else {
+                alert('رمز بوابة التقييم خطأ!');
+            }
+        }
 
         function updateRoleScopeHint() {
             const role = document.getElementById('eval-role').value;
@@ -289,58 +319,4 @@
 
         function updateLiveAvg() {
             const { avg } = getScoresFromForm();
-            const el = document.getElementById('live-avg-preview');
-            if (el) el.innerText = `المتوسط: ${avg.toFixed(1)} / 5`;
-        }
-
-        function toggleTag(btn) {
-            btn.classList.toggle('active');
-        }
-
-        function getSelectedTags() {
-            return Array.from(document.querySelectorAll('#tags-container .tag-btn.active'))
-                .map(b => b.getAttribute('data-tag'));
-        }
-
-        function saveEvaluation() {
-            const evaluatorRole = document.getElementById('eval-role').value;
-            const targetType = document.getElementById('eval-scope').value;
-            const className = document.getElementById('eval-class').value;
-            const studentInput = document.getElementById('eval-student').value.trim();
-            const note = document.getElementById('eval-note').value.trim();
-
-            if (targetType === 'طالب' && !studentInput) {
-                alert('يرجى إدخال اسم الطالب');
-                return;
-            }
-
-            const targetName = targetType === 'شعبة' ? `شعبة: ${className}` : studentInput;
-            const scores = getScoresFromForm();
-            const tags = getSelectedTags();
-            const now = new Date();
-            const dateStr = now.toISOString().slice(0, 10);
-
-            const record = {
-                evaluatorRole,
-                targetType,
-                targetName,
-                className,
-                scores: {
-                    interaction: scores.interaction,
-                    commitment: scores.commitment,
-                    homework: scores.homework,
-                    activity: scores.activity
-                },
-                avgScore: scores.avg,
-                tags,
-                note,
-                date: dateStr,
-                timestamp: Date.now()
-            };
-
-            db.ref('evaluations').push(record, (err) => {
-                if (err) {
-                    alert('حدث خطأ أثناء حفظ التقييم في السحابة');
-                } else {
-                    document.getElementById('eval-student').value = '';
-                    document.getElementById('ev
+            const
