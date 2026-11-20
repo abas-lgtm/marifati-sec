@@ -3,17 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALPHA-SEC // النظام المدرسي المتكامل</title>
+    <title>ALPHA-SEC // النظام المدرسي</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { font-family: 'Cairo', sans-serif; background: #030712; color: #f3f4f6; }
-        .card { background: #0b0f19; border: 1px solid rgba(16, 185, 129, 0.35); display: block; }
-        .card-blue { background: #0b0f19; border: 1px solid rgba(6, 182, 212, 0.35); display: block; }
+        .box { background: #0b0f19; border: 1px solid rgba(16, 185, 129, 0.35); display: block; }
         @media print {
-            body { background: #ffffff !important; color: #000000 !important; }
+            body { background: #fff !important; color: #000 !important; }
             .no-print { display: none !important; }
             table { width: 100%; border-collapse: collapse; }
-            th, td { border: 1px solid #333333; padding: 6px; color: #000000 !important; }
+            th, td { border: 1px solid #333; padding: 6px; color: #000 !important; }
         }
     </style>
 </head>
@@ -24,54 +23,54 @@
             <h1 class="text-white font-bold text-base md:text-lg">إعدادية المعرفة المهنية الاهلية</h1>
             <span class="text-xs text-emerald-400 font-mono">برمجة: عباس محمد عزيز</span>
         </div>
-        <button type="button" onclick="openView('home')" class="bg-slate-900 text-emerald-400 px-4 py-2 rounded-lg border border-emerald-500/30 text-sm cursor-pointer">الرئيسية</button>
+        <button type="button" onclick="showPage('home')" class="bg-slate-900 text-emerald-400 px-4 py-2 rounded-lg border border-emerald-500/30 text-sm">الرئيسية</button>
     </header>
 
     <main class="max-w-4xl mx-auto w-full my-6 flex-grow">
 
         <!-- الرئيسية -->
-        <div id="view-home" class="text-center py-4">
+        <div id="p-home" class="text-center py-4">
             <h2 class="text-2xl sm:text-3xl font-black text-white mb-2">نظام إدارة المدرسة الآمن</h2>
-            <p class="text-slate-400 mb-6 text-sm">اختر البوابة المطلوبة للمتابعة:</p>
+            <p class="text-slate-400 mb-6 text-sm">اختر البوابة المطلوبة:</p>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-right">
-                <button type="button" onclick="openView('ast-login')" class="card p-5 rounded-2xl hover:border-emerald-400 w-full cursor-pointer">
+                <button type="button" onclick="showPage('ast-login')" class="box p-5 rounded-2xl hover:border-emerald-400 w-full">
                     <span class="text-xs font-mono text-emerald-400 block mb-2">01</span>
                     <h3 class="text-lg font-bold text-white">بوابة المعاون</h3>
-                    <p class="text-xs text-slate-400 mt-1">إدارة الغيابات، الهروب، والإجازات</p>
+                    <p class="text-xs text-slate-400 mt-1">الغيابات، الهروب، والإجازات</p>
                 </button>
 
-                <button type="button" onclick="openView('tch-select')" class="card-blue p-5 rounded-2xl hover:border-cyan-400 w-full cursor-pointer">
+                <button type="button" onclick="showPage('tch-select')" class="box p-5 rounded-2xl hover:border-cyan-400 w-full">
                     <span class="text-xs font-mono text-cyan-400 block mb-2">02</span>
                     <h3 class="text-lg font-bold text-white">بوابة المدرسين</h3>
                     <p class="text-xs text-slate-400 mt-1">رصد درجات المواد من 100</p>
                 </button>
 
-                <a href="students.html" class="card p-5 rounded-2xl hover:border-purple-400">
+                <a href="students.html" class="box p-5 rounded-2xl hover:border-purple-400">
                     <span class="text-xs font-mono text-purple-400 block mb-2">03</span>
                     <h3 class="text-lg font-bold text-white">بوابة الطلاب</h3>
                     <p class="text-xs text-slate-400 mt-1">الجداول والنتائج</p>
                 </a>
 
-                <a href="counselor.html" class="card p-5 rounded-2xl hover:border-amber-400">
+                <a href="counselor.html" class="box p-5 rounded-2xl hover:border-amber-400">
                     <span class="text-xs font-mono text-amber-400 block mb-2">04</span>
                     <h3 class="text-lg font-bold text-white">بوابة المشرف التربوي / المرشد</h3>
                     <p class="text-xs text-slate-400 mt-1">الحالات السلوكية والملفات</p>
                 </a>
 
-                <a href="admin.html" class="card p-5 rounded-2xl hover:border-rose-400">
+                <a href="admin.html" class="box p-5 rounded-2xl hover:border-rose-400">
                     <span class="text-xs font-mono text-rose-400 block mb-2">05</span>
                     <h3 class="text-lg font-bold text-white">بوابة الإدارة / المدير</h3>
                     <p class="text-xs text-slate-400 mt-1">الإحصائيات والصلاحيات</p>
                 </a>
 
-                <a href="evaluations.html" class="card p-5 rounded-2xl hover:border-teal-400">
+                <a href="evaluations.html" class="box p-5 rounded-2xl hover:border-teal-400">
                     <span class="text-xs font-mono text-teal-400 block mb-2">06</span>
                     <h3 class="text-lg font-bold text-white">بوابة التقييم</h3>
                     <p class="text-xs text-slate-400 mt-1">تقييم الطلاب والشُعب</p>
                 </a>
 
-                <a href="accounts.html" class="card p-5 rounded-2xl hover:border-sky-400">
+                <a href="accounts.html" class="box p-5 rounded-2xl hover:border-sky-400">
                     <span class="text-xs font-mono text-sky-400 block mb-2">07</span>
                     <h3 class="text-lg font-bold text-white">بوابة الحسابات</h3>
                     <p class="text-xs text-slate-400 mt-1">الأقساط والخصومات والوصولات</p>
@@ -80,24 +79,24 @@
         </div>
 
         <!-- دخول المعاون -->
-        <div id="view-ast-login" class="hidden max-w-md mx-auto card p-6 rounded-2xl">
+        <div id="p-ast-login" class="hidden max-w-md mx-auto box p-6 rounded-2xl">
             <h3 class="text-xl text-emerald-400 font-bold mb-1 text-center">دخول المعاون</h3>
-            <p id="ast-status" class="text-xs text-slate-400 mb-4 text-center">المحاولات المتبقية: 10 من 10</p>
+            <p id="ast-msg" class="text-xs text-slate-400 mb-4 text-center">المحاولات المتبقية: 10 من 10</p>
             <input type="password" id="ast-pass" placeholder="أدخل رمز الدخول السري" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center">
             <div class="flex gap-2">
-                <button type="button" onclick="submitAst()" class="flex-1 bg-emerald-500 text-black font-bold p-3 rounded-lg cursor-pointer">دخول</button>
-                <button type="button" onclick="openView('home')" class="bg-slate-800 px-4 rounded-lg text-slate-300 cursor-pointer">إلغاء</button>
+                <button type="button" onclick="checkAst()" class="flex-1 bg-emerald-500 text-black font-bold p-3 rounded-lg">دخول</button>
+                <button type="button" onclick="showPage('home')" class="bg-slate-800 px-4 rounded-lg text-slate-300">إلغاء</button>
             </div>
         </div>
 
         <!-- لوحة المعاون -->
-        <div id="view-ast-dash" class="hidden card p-6 rounded-2xl">
+        <div id="p-ast-dash" class="hidden box p-6 rounded-2xl">
             <div class="flex justify-between items-center mb-5 flex-wrap gap-2 no-print">
                 <h3 class="text-xl font-bold text-emerald-400">سجل الغيابات، الهروب، والإجازات</h3>
                 <div class="flex gap-2">
-                    <button type="button" onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer">طباعة PDF</button>
-                    <button type="button" onclick="clearAbsList()" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer">مسح السجل</button>
-                    <button type="button" onclick="openView('home')" class="bg-slate-800 px-3 py-1.5 rounded-lg text-xs cursor-pointer">رجوع</button>
+                    <button type="button" onclick="window.print()" class="bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold">طباعة PDF</button>
+                    <button type="button" onclick="clearAbs()" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold">مسح السجل</button>
+                    <button type="button" onclick="showPage('home')" class="bg-slate-800 px-3 py-1.5 rounded-lg text-xs">رجوع</button>
                 </div>
             </div>
 
@@ -119,7 +118,7 @@
                     </select>
                     <input type="date" id="g-date" class="bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-white text-sm">
                 </div>
-                <button type="button" onclick="addAbs()" class="bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-4 py-2.5 rounded-lg text-sm w-full cursor-pointer">حفظ السجل</button>
+                <button type="button" onclick="addAbs()" class="bg-emerald-500 text-black font-bold px-4 py-2.5 rounded-lg text-sm w-full">حفظ السجل</button>
             </div>
 
             <div class="overflow-x-auto">
@@ -139,33 +138,33 @@
         </div>
 
         <!-- اختيار المادة للمدرس -->
-        <div id="view-tch-select" class="hidden max-w-xl mx-auto">
+        <div id="p-tch-select" class="hidden max-w-xl mx-auto">
             <h3 class="text-xl font-bold text-cyan-400 mb-4 text-center">اختر المادة الدراسية</h3>
             <div id="subj-box" class="space-y-2 mb-4"></div>
             <div class="text-center">
-                <button type="button" onclick="openView('home')" class="bg-slate-800 px-4 py-2 rounded-lg text-slate-300 text-sm cursor-pointer">رجوع</button>
+                <button type="button" onclick="showPage('home')" class="bg-slate-800 px-4 py-2 rounded-lg text-slate-300 text-sm">رجوع</button>
             </div>
         </div>
 
         <!-- دخول المدرس -->
-        <div id="view-tch-login" class="hidden max-w-md mx-auto card-blue p-6 rounded-2xl">
+        <div id="p-tch-login" class="hidden max-w-md mx-auto box p-6 rounded-2xl">
             <h3 id="tch-title" class="text-xl text-cyan-400 font-bold mb-1 text-center">دخول المدرس</h3>
-            <p id="tch-status" class="text-xs text-slate-400 mb-4 text-center">المحاولات المتبقية: 10 من 10</p>
+            <p id="tch-msg" class="text-xs text-slate-400 mb-4 text-center">المحاولات المتبقية: 10 من 10</p>
             <input type="password" id="tch-pass" placeholder="أدخل رمز المادة السري" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center">
             <div class="flex gap-2">
-                <button type="button" onclick="submitTch()" class="flex-1 bg-cyan-500 text-black font-bold p-3 rounded-lg cursor-pointer">دخول</button>
-                <button type="button" onclick="openView('tch-select')" class="bg-slate-800 px-4 rounded-lg text-slate-300 cursor-pointer">رجوع</button>
+                <button type="button" onclick="checkTch()" class="flex-1 bg-cyan-500 text-black font-bold p-3 rounded-lg">دخول</button>
+                <button type="button" onclick="showPage('tch-select')" class="bg-slate-800 px-4 rounded-lg text-slate-300">رجوع</button>
             </div>
         </div>
 
         <!-- لوحة المدرس -->
-        <div id="view-tch-dash" class="hidden card-blue p-6 rounded-2xl">
+        <div id="p-tch-dash" class="hidden box p-6 rounded-2xl">
             <div class="flex justify-between items-center mb-5 flex-wrap gap-2 no-print">
                 <h3 id="dash-title" class="text-xl font-bold text-cyan-400">رصد الدرجات (من 100)</h3>
                 <div class="flex gap-2">
-                    <button type="button" onclick="window.print()" class="bg-cyan-600 hover:bg-cyan-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer">طباعة PDF</button>
-                    <button type="button" onclick="clearGradesList()" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer">مسح السجل</button>
-                    <button type="button" onclick="openView('home')" class="bg-slate-800 px-3 py-1.5 rounded-lg text-xs cursor-pointer">رجوع</button>
+                    <button type="button" onclick="window.print()" class="bg-cyan-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold">طباعة PDF</button>
+                    <button type="button" onclick="clearGrades()" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold">مسح السجل</button>
+                    <button type="button" onclick="showPage('home')" class="bg-slate-800 px-3 py-1.5 rounded-lg text-xs">رجوع</button>
                 </div>
             </div>
 
@@ -182,7 +181,7 @@
                     </select>
                     <input type="number" id="s-grade" min="0" max="100" placeholder="الدرجة من 100" class="bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-white text-sm">
                 </div>
-                <button type="button" onclick="addGrade()" class="bg-cyan-500 hover:bg-cyan-400 text-black font-bold px-4 py-2.5 rounded-lg text-sm w-full cursor-pointer">حفظ الدرجة</button>
+                <button type="button" onclick="addGrade()" class="bg-cyan-500 text-black font-bold px-4 py-2.5 rounded-lg text-sm w-full">حفظ الدرجة</button>
             </div>
 
             <div class="overflow-x-auto">
@@ -208,15 +207,7 @@
 
     <script>
         var MAX_TRIES = 10;
-        var AST_SECRET = (function() {
-            var saved = localStorage.getItem("ast_secret_code");
-            if (!saved || String(saved).trim() === "2020") {
-                localStorage.setItem("ast_secret_code", "55100");
-                return "55100";
-            }
-            return String(saved).trim();
-        })();
-
+        var AST_PASS = "55100";
         var subs = [
             { name: "التربية الإسلامية", code: "1090" },
             { name: "اللغة العربية", code: "202500" },
@@ -266,7 +257,7 @@
             return Math.floor(h / 24) + " يوم و " + (h % 24) + " ساعة (" + h + " ساعة)";
         }
 
-        function syncLabel(k, elId) {
+        function syncMsg(k, elId) {
             var el = document.getElementById(elId);
             if (!el) return;
             var st = getLock(k);
@@ -279,65 +270,22 @@
             }
         }
 
-        function openView(v) {
+        function showPage(v) {
             var pages = ["home", "ast-login", "ast-dash", "tch-select", "tch-login", "tch-dash"];
             for (var i = 0; i < pages.length; i++) {
-                var el = document.getElementById("view-" + pages[i]);
+                var el = document.getElementById("p-" + pages[i]);
                 if (el) el.classList.add("hidden");
             }
-            var t = document.getElementById("view-" + v);
+            var t = document.getElementById("p-" + v);
             if (t) t.classList.remove("hidden");
-            if (v === "ast-login") syncLabel("assistant", "ast-status");
+            if (v === "ast-login") syncMsg("assistant", "ast-msg");
             if (v === "tch-select") renderSubs();
-            if (v === "tch-login" && currSubj) syncLabel("tch_" + currSubj.name, "tch-status");
+            if (v === "tch-login" && currSubj) syncMsg("tch_" + currSubj.name, "tch-msg");
         }
 
-        function submitAst() {
+        function checkAst() {
             var st = getLock("assistant");
             if (st.until && Date.now() < st.until) {
                 alert("بوابة المعاون محظورة لمدة " + st.hrs + " ساعة.\nالمتبقي: " + remText(st.until - Date.now()));
-                return;
-            }
-            var inp = document.getElementById("ast-pass");
-            var val = inp ? inp.value.trim() : "";
-            if (val === AST_SECRET) {
-                setLock("assistant", { tries: 0, until: 0, hrs: 0 });
-                if (inp) inp.value = "";
-                openView("ast-dash");
-            } else {
-                st.tries += 1;
-                if (st.tries > MAX_TRIES) {
-                    var hrs = banHours(val, AST_SECRET);
-                    setLock("assistant", { tries: st.tries, until: Date.now() + hrs * 3600000, hrs: hrs });
-                    syncLabel("assistant", "ast-status");
-                    alert("تجاوزت 10 محاولات! تم الحظر لمدة " + hrs + " ساعة.");
-                } else {
-                    setLock("assistant", st);
-                    syncLabel("assistant", "ast-status");
-                    alert("رمز الدخول خطأ! المتبقي: " + (MAX_TRIES - st.tries) + " من " + MAX_TRIES);
-                }
-            }
-        }
-
-        function addAbs() {
-            var n = document.getElementById("g-name").value.trim();
-            var c = document.getElementById("g-class").value;
-            var tp = document.getElementById("g-type").value;
-            var d = document.getElementById("g-date").value || new Date().toISOString().slice(0, 10);
-            if (!n) return alert("يرجى إدخال اسم الطالب");
-            var tr = document.createElement("tr");
-            tr.innerHTML = "<td class='p-3 font-bold'>" + n + "</td><td class='p-3 text-emerald-400'>" + c + "</td><td class='p-3'>" + tp + "</td><td class='p-3'>" + d + "</td><td class='p-3 no-print'><button type='button' onclick='this.closest(\"tr\").remove()' class='text-red-400 text-xs cursor-pointer'>حذف</button></td>";
-            document.getElementById("abs-list").appendChild(tr);
-            document.getElementById("g-name").value = "";
-        }
-
-        function clearAbsList() {
-            if (confirm("مسح جميع صفوف سجل المعاون؟")) {
-                document.getElementById("abs-list").innerHTML = "";
-            }
-        }
-
-        function renderSubs() {
-            var h = "";
-            for (var i = 0; i < subs.length; i++) {
-                h += "<button type='button' onclick=\"pickSubj('" + subs[i].name + "')\" class='w-full card-blue p-4 rounded-xl text-right hover:border-cyan-400 flex justify-between items-center cursor-pointer'><span
+                return
+                        
