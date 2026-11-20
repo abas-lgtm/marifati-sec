@@ -1,291 +1,295 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALPHA-SEC // النظام المدرسي</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { font-family: 'Cairo', sans-serif; background: #030712; color: #f3f4f6; }
-        .box { background: #0b0f19; border: 1px solid rgba(16, 185, 129, 0.35); display: block; }
-        @media print {
-            body { background: #fff !important; color: #000 !important; }
-            .no-print { display: none !important; }
-            table { width: 100%; border-collapse: collapse; }
-            th, td { border: 1px solid #333; padding: 6px; color: #000 !important; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALPHA-SEC // النظام المدرسي</title>
+<style>
+  * { box-sizing: border-box; font-family: Tahoma, Arial, sans-serif; }
+  body { margin: 0; padding: 16px 16px 65px 16px; background: #030712; color: #f3f4f6; }
+  header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #10b98155; padding-bottom: 12px; margin-bottom: 20px; }
+  h1 { margin: 0; font-size: 17px; color: #fff; }
+  .sub { font-size: 12px; color: #34d399; }
+  .btn { background: #10b981; color: #000; border: none; padding: 10px 14px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px; }
+  .btn-blue { background: #06b6d4; color: #000; border: none; padding: 10px 14px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px; }
+  .btn-gray { background: #1e293b; color: #e2e8f0; border: 1px solid #334155; padding: 10px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; text-decoration: none; display: block; }
+  .btn-red { background: #dc2626; color: #fff; border: none; padding: 8px 12px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 12px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+  .card { background: #0b0f19; border: 1px solid #10b98155; border-radius: 14px; padding: 16px; text-align: right; cursor: pointer; width: 100%; color: #fff; }
+  .card:hover { border-color: #34d399; }
+  .panel { max-width: 780px; margin: 0 auto; background: #0b0f19; border: 1px solid #10b98155; border-radius: 14px; padding: 18px; }
+  .box-sm { max-width: 420px; margin: 0 auto; background: #0b0f19; border: 1px solid #10b98155; border-radius: 14px; padding: 18px; }
+  input, select { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #334155; background: #020617; color: #fff; font-size: 14px; }
+  table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 13px; }
+  th, td { border: 1px solid #1e293b; padding: 8px; text-align: right; }
+  th { background: #020617; color: #34d399; }
+  .row-flex { display: flex; gap: 8px; flex-wrap: wrap; justify-content: space-between; align-items: center; }
+  footer { position: fixed; bottom: 0; left: 0; width: 100%; background: #0f172a; border-top: 1px solid #10b98155; padding: 10px; text-align: center; font-size: 12px; color: #cbd5e1; }
+  @media print {
+    body { background: #fff; color: #000; padding: 0; }
+    .no-print, footer { display: none !important; }
+    th, td { border: 1px solid #000; color: #000; }
+  }
+</style>
 </head>
-<body class="min-h-screen flex flex-col justify-between p-4 sm:p-6 pb-16">
+<body>
 
-    <header class="flex justify-between items-center border-b border-emerald-500/30 pb-4 no-print">
-        <div class="text-right">
-            <h1 class="text-white font-bold text-base md:text-lg">إعدادية المعرفة المهنية الاهلية</h1>
-            <span class="text-xs text-emerald-400 font-mono">برمجة: عباس محمد عزيز</span>
-        </div>
-        <button type="button" onclick="showPage('home')" class="bg-slate-900 text-emerald-400 px-4 py-2 rounded-lg border border-emerald-500/30 text-sm">الرئيسية</button>
-    </header>
+<header class="no-print">
+  <div>
+    <h1>إعدادية المعرفة المهنية الاهلية</h1>
+    <div class="sub">برمجة: عباس محمد عزيز</div>
+  </div>
+  <button type="button" class="btn-gray" onclick="goSec('home')">الرئيسية</button>
+</header>
 
-    <main class="max-w-4xl mx-auto w-full my-6 flex-grow">
+<!-- الرئيسية -->
+<div id="sec-home" style="display:block; max-width:860px; margin:0 auto;">
+  <h2 style="text-align:center; margin:6px 0;">نظام إدارة المدرسة الآمن</h2>
+  <p style="text-align:center; color:#94a3b8; font-size:13px; margin-bottom:18px;">اختر البوابة المطلوبة للمتابعة:</p>
 
-        <!-- الرئيسية -->
-        <div id="p-home" class="text-center py-4">
-            <h2 class="text-2xl sm:text-3xl font-black text-white mb-2">نظام إدارة المدرسة الآمن</h2>
-            <p class="text-slate-400 mb-6 text-sm">اختر البوابة المطلوبة:</p>
+  <div class="grid">
+    <button type="button" class="card" onclick="goSec('ast-login')">
+      <div class="sub">01</div>
+      <div style="font-weight:bold; font-size:16px; margin:4px 0;">بوابة المعاون</div>
+      <div style="font-size:12px; color:#94a3b8;">الغيابات، الهروب، والإجازات</div>
+    </button>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-right">
-                <button type="button" onclick="showPage('ast-login')" class="box p-5 rounded-2xl hover:border-emerald-400 w-full">
-                    <span class="text-xs font-mono text-emerald-400 block mb-2">01</span>
-                    <h3 class="text-lg font-bold text-white">بوابة المعاون</h3>
-                    <p class="text-xs text-slate-400 mt-1">الغيابات، الهروب، والإجازات</p>
-                </button>
+    <button type="button" class="card" onclick="goSec('tch-select')">
+      <div class="sub" style="color:#22d3ee;">02</div>
+      <div style="font-weight:bold; font-size:16px; margin:4px 0;">بوابة المدرسين</div>
+      <div style="font-size:12px; color:#94a3b8;">رصد درجات المواد من 100</div>
+    </button>
 
-                <button type="button" onclick="showPage('tch-select')" class="box p-5 rounded-2xl hover:border-cyan-400 w-full">
-                    <span class="text-xs font-mono text-cyan-400 block mb-2">02</span>
-                    <h3 class="text-lg font-bold text-white">بوابة المدرسين</h3>
-                    <p class="text-xs text-slate-400 mt-1">رصد درجات المواد من 100</p>
-                </button>
+    <a href="students.html" class="card">
+      <div class="sub" style="color:#c084fc;">03</div>
+      <div style="font-weight:bold; font-size:16px; margin:4px 0;">بوابة الطلاب</div>
+      <div style="font-size:12px; color:#94a3b8;">الجداول والنتائج</div>
+    </a>
 
-                <a href="students.html" class="box p-5 rounded-2xl hover:border-purple-400">
-                    <span class="text-xs font-mono text-purple-400 block mb-2">03</span>
-                    <h3 class="text-lg font-bold text-white">بوابة الطلاب</h3>
-                    <p class="text-xs text-slate-400 mt-1">الجداول والنتائج</p>
-                </a>
+    <a href="counselor.html" class="card">
+      <div class="sub" style="color:#fbbf24;">04</div>
+      <div style="font-weight:bold; font-size:16px; margin:4px 0;">بوابة المشرف التربوي / المرشد</div>
+      <div style="font-size:12px; color:#94a3b8;">الحالات السلوكية والملفات</div>
+    </a>
 
-                <a href="counselor.html" class="box p-5 rounded-2xl hover:border-amber-400">
-                    <span class="text-xs font-mono text-amber-400 block mb-2">04</span>
-                    <h3 class="text-lg font-bold text-white">بوابة المشرف التربوي / المرشد</h3>
-                    <p class="text-xs text-slate-400 mt-1">الحالات السلوكية والملفات</p>
-                </a>
+    <a href="admin.html" class="card">
+      <div class="sub" style="color:#fb7185;">05</div>
+      <div style="font-weight:bold; font-size:16px; margin:4px 0;">بوابة الإدارة / المدير</div>
+      <div style="font-size:12px; color:#94a3b8;">الإحصائيات والصلاحيات</div>
+    </a>
 
-                <a href="admin.html" class="box p-5 rounded-2xl hover:border-rose-400">
-                    <span class="text-xs font-mono text-rose-400 block mb-2">05</span>
-                    <h3 class="text-lg font-bold text-white">بوابة الإدارة / المدير</h3>
-                    <p class="text-xs text-slate-400 mt-1">الإحصائيات والصلاحيات</p>
-                </a>
+    <a href="evaluations.html" class="card">
+      <div class="sub" style="color:#2dd4bf;">06</div>
+      <div style="font-weight:bold; font-size:16px; margin:4px 0;">بوابة التقييم</div>
+      <div style="font-size:12px; color:#94a3b8;">تقييم الطلاب والشُعب</div>
+    </a>
 
-                <a href="evaluations.html" class="box p-5 rounded-2xl hover:border-teal-400">
-                    <span class="text-xs font-mono text-teal-400 block mb-2">06</span>
-                    <h3 class="text-lg font-bold text-white">بوابة التقييم</h3>
-                    <p class="text-xs text-slate-400 mt-1">تقييم الطلاب والشُعب</p>
-                </a>
+    <a href="accounts.html" class="card">
+      <div class="sub" style="color:#38bdf8;">07</div>
+      <div style="font-weight:bold; font-size:16px; margin:4px 0;">بوابة الحسابات</div>
+      <div style="font-size:12px; color:#94a3b8;">الأقساط والخصومات والوصولات</div>
+    </a>
+  </div>
+</div>
 
-                <a href="accounts.html" class="box p-5 rounded-2xl hover:border-sky-400">
-                    <span class="text-xs font-mono text-sky-400 block mb-2">07</span>
-                    <h3 class="text-lg font-bold text-white">بوابة الحسابات</h3>
-                    <p class="text-xs text-slate-400 mt-1">الأقساط والخصومات والوصولات</p>
-                </a>
-            </div>
-        </div>
+<!-- دخول المعاون -->
+<div id="sec-ast-login" style="display:none;" class="box-sm">
+  <h3 style="text-align:center; color:#34d399; margin-top:0;">دخول بوابة المعاون</h3>
+  <div id="ast-msg" style="text-align:center; font-size:12px; color:#94a3b8; margin-bottom:12px;">المحاولات المتبقية: 10 من 10</div>
+  <input type="password" id="ast-pass" placeholder="أدخل الرمز السري">
+  <div class="row-flex">
+    <button type="button" class="btn" style="flex:1;" onclick="loginAst()">دخول</button>
+    <button type="button" class="btn-gray" onclick="goSec('home')">إلغاء</button>
+  </div>
+</div>
 
-        <!-- دخول المعاون -->
-        <div id="p-ast-login" class="hidden max-w-md mx-auto box p-6 rounded-2xl">
-            <h3 class="text-xl text-emerald-400 font-bold mb-1 text-center">دخول المعاون</h3>
-            <p id="ast-msg" class="text-xs text-slate-400 mb-4 text-center">المحاولات المتبقية: 10 من 10</p>
-            <input type="password" id="ast-pass" placeholder="أدخل رمز الدخول السري" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center">
-            <div class="flex gap-2">
-                <button type="button" onclick="checkAst()" class="flex-1 bg-emerald-500 text-black font-bold p-3 rounded-lg">دخول</button>
-                <button type="button" onclick="showPage('home')" class="bg-slate-800 px-4 rounded-lg text-slate-300">إلغاء</button>
-            </div>
-        </div>
+<!-- لوحة المعاون -->
+<div id="sec-ast-dash" style="display:none;" class="panel">
+  <div class="row-flex no-print" style="margin-bottom:14px;">
+    <h3 style="color:#34d399; margin:0;">سجل الغيابات، الهروب، والإجازات</h3>
+    <div class="row-flex">
+      <button type="button" class="btn" onclick="window.print()">طباعة PDF</button>
+      <button type="button" class="btn-red" onclick="clearRows('abs-body')">مسح السجل</button>
+      <button type="button" class="btn-gray" onclick="goSec('home')">رجوع</button>
+    </div>
+  </div>
 
-        <!-- لوحة المعاون -->
-        <div id="p-ast-dash" class="hidden box p-6 rounded-2xl">
-            <div class="flex justify-between items-center mb-5 flex-wrap gap-2 no-print">
-                <h3 class="text-xl font-bold text-emerald-400">سجل الغيابات، الهروب، والإجازات</h3>
-                <div class="flex gap-2">
-                    <button type="button" onclick="window.print()" class="bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold">طباعة PDF</button>
-                    <button type="button" onclick="clearAbs()" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold">مسح السجل</button>
-                    <button type="button" onclick="showPage('home')" class="bg-slate-800 px-3 py-1.5 rounded-lg text-xs">رجوع</button>
-                </div>
-            </div>
+  <div class="no-print">
+    <input type="text" id="a-name" placeholder="اسم الطالب">
+    <select id="a-class">
+      <option value="اول امن سيبراني A">اول امن سيبراني A</option>
+      <option value="اول امن سيبراني B">اول امن سيبراني B</option>
+      <option value="اول امن سيبراني C">اول امن سيبراني C</option>
+      <option value="اول تكرير نفط A">اول تكرير نفط A</option>
+      <option value="اول تجميع حاسوب A">اول تجميع حاسوب A</option>
+      <option value="اول اجهزه طبية A">اول اجهزه طبية A</option>
+    </select>
+    <select id="a-type">
+      <option value="غياب">غياب</option>
+      <option value="هروب">هروب</option>
+      <option value="اجازة">اجازة</option>
+    </select>
+    <input type="date" id="a-date">
+    <button type="button" class="btn" style="width:100%;" onclick="addAbs()">حفظ الغياب</button>
+  </div>
 
-            <div class="bg-slate-950/70 border border-slate-800 p-4 rounded-xl mb-5 no-print space-y-3">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                    <input type="text" id="g-name" placeholder="اسم الطالب" class="bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-white text-sm">
-                    <select id="g-class" class="bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-white text-sm">
-                        <option value="اول امن سيبراني A">اول امن سيبراني A</option>
-                        <option value="اول امن سيبراني B">اول امن سيبراني B</option>
-                        <option value="اول امن سيبراني C">اول امن سيبراني C</option>
-                        <option value="اول تكرير نفط A">اول تكرير نفط A</option>
-                        <option value="اول تجميع حاسوب A">اول تجميع حاسوب A</option>
-                        <option value="اول اجهزه طبية A">اول اجهزه طبية A</option>
-                    </select>
-                    <select id="g-type" class="bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-white text-sm">
-                        <option value="غياب">غياب</option>
-                        <option value="هروب">هروب</option>
-                        <option value="اجازة">اجازة</option>
-                    </select>
-                    <input type="date" id="g-date" class="bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-white text-sm">
-                </div>
-                <button type="button" onclick="addAbs()" class="bg-emerald-500 text-black font-bold px-4 py-2.5 rounded-lg text-sm w-full">حفظ السجل</button>
-            </div>
+  <table>
+    <thead>
+      <tr>
+        <th>اسم الطالب</th>
+        <th>الصف</th>
+        <th>الحالة</th>
+        <th>التاريخ</th>
+        <th class="no-print">حذف</th>
+      </tr>
+    </thead>
+    <tbody id="abs-body"></tbody>
+  </table>
+</div>
 
-            <div class="overflow-x-auto">
-                <table class="w-full text-right text-sm">
-                    <thead class="bg-slate-950 text-emerald-400">
-                        <tr>
-                            <th class="p-3">اسم الطالب</th>
-                            <th class="p-3">الصف</th>
-                            <th class="p-3">الحالة</th>
-                            <th class="p-3">التاريخ</th>
-                            <th class="p-3 no-print">حذف</th>
-                        </tr>
-                    </thead>
-                    <tbody id="abs-list" class="divide-y divide-slate-800"></tbody>
-                </table>
-            </div>
-        </div>
+<!-- اختيار مادة المدرس -->
+<div id="sec-tch-select" style="display:none;" class="box-sm">
+  <h3 style="text-align:center; color:#22d3ee; margin-top:0;">اختر المادة الدراسية</h3>
+  <div id="subj-list"></div>
+  <div style="text-align:center; margin-top:12px;">
+    <button type="button" class="btn-gray" style="display:inline-block;" onclick="goSec('home')">رجوع</button>
+  </div>
+</div>
 
-        <!-- اختيار المادة للمدرس -->
-        <div id="p-tch-select" class="hidden max-w-xl mx-auto">
-            <h3 class="text-xl font-bold text-cyan-400 mb-4 text-center">اختر المادة الدراسية</h3>
-            <div id="subj-box" class="space-y-2 mb-4"></div>
-            <div class="text-center">
-                <button type="button" onclick="showPage('home')" class="bg-slate-800 px-4 py-2 rounded-lg text-slate-300 text-sm">رجوع</button>
-            </div>
-        </div>
+<!-- دخول المدرس -->
+<div id="sec-tch-login" style="display:none;" class="box-sm">
+  <h3 id="tch-title" style="text-align:center; color:#22d3ee; margin-top:0;">دخول المدرس</h3>
+  <div id="tch-msg" style="text-align:center; font-size:12px; color:#94a3b8; margin-bottom:12px;">المحاولات المتبقية: 10 من 10</div>
+  <input type="password" id="tch-pass" placeholder="أدخل رمز المادة السري">
+  <div class="row-flex">
+    <button type="button" class="btn-blue" style="flex:1;" onclick="loginTch()">دخول</button>
+    <button type="button" class="btn-gray" onclick="goSec('tch-select')">رجوع</button>
+  </div>
+</div>
 
-        <!-- دخول المدرس -->
-        <div id="p-tch-login" class="hidden max-w-md mx-auto box p-6 rounded-2xl">
-            <h3 id="tch-title" class="text-xl text-cyan-400 font-bold mb-1 text-center">دخول المدرس</h3>
-            <p id="tch-msg" class="text-xs text-slate-400 mb-4 text-center">المحاولات المتبقية: 10 من 10</p>
-            <input type="password" id="tch-pass" placeholder="أدخل رمز المادة السري" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center">
-            <div class="flex gap-2">
-                <button type="button" onclick="checkTch()" class="flex-1 bg-cyan-500 text-black font-bold p-3 rounded-lg">دخول</button>
-                <button type="button" onclick="showPage('tch-select')" class="bg-slate-800 px-4 rounded-lg text-slate-300">رجوع</button>
-            </div>
-        </div>
+<!-- لوحة المدرس -->
+<div id="sec-tch-dash" style="display:none;" class="panel">
+  <div class="row-flex no-print" style="margin-bottom:14px;">
+    <h3 id="tch-dash-title" style="color:#22d3ee; margin:0;">رصد الدرجات (من 100)</h3>
+    <div class="row-flex">
+      <button type="button" class="btn-blue" onclick="window.print()">طباعة PDF</button>
+      <button type="button" class="btn-red" onclick="clearRows('gr-body')">مسح السجل</button>
+      <button type="button" class="btn-gray" onclick="goSec('home')">رجوع</button>
+    </div>
+  </div>
 
-        <!-- لوحة المدرس -->
-        <div id="p-tch-dash" class="hidden box p-6 rounded-2xl">
-            <div class="flex justify-between items-center mb-5 flex-wrap gap-2 no-print">
-                <h3 id="dash-title" class="text-xl font-bold text-cyan-400">رصد الدرجات (من 100)</h3>
-                <div class="flex gap-2">
-                    <button type="button" onclick="window.print()" class="bg-cyan-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold">طباعة PDF</button>
-                    <button type="button" onclick="clearGrades()" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold">مسح السجل</button>
-                    <button type="button" onclick="showPage('home')" class="bg-slate-800 px-3 py-1.5 rounded-lg text-xs">رجوع</button>
-                </div>
-            </div>
+  <div class="no-print">
+    <input type="text" id="t-name" placeholder="اسم الطالب">
+    <select id="t-class">
+      <option value="اول امن سيبراني A">اول امن سيبراني A</option>
+      <option value="اول امن سيبراني B">اول امن سيبراني B</option>
+      <option value="اول امن سيبراني C">اول امن سيبراني C</option>
+      <option value="اول تكرير نفط A">اول تكرير نفط A</option>
+      <option value="اول تجميع حاسوب A">اول تجميع حاسوب A</option>
+      <option value="اول اجهزه طبية A">اول اجهزه طبية A</option>
+    </select>
+    <input type="number" id="t-grade" min="0" max="100" placeholder="الدرجة من 100">
+    <button type="button" class="btn-blue" style="width:100%;" onclick="addGrade()">حفظ الدرجة</button>
+  </div>
 
-            <div class="bg-slate-950/70 border border-slate-800 p-4 rounded-xl mb-5 no-print space-y-3">
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <input type="text" id="s-name" placeholder="اسم الطالب" class="bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-white text-sm">
-                    <select id="s-class" class="bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-white text-sm">
-                        <option value="اول امن سيبراني A">اول امن سيبراني A</option>
-                        <option value="اول امن سيبراني B">اول امن سيبراني B</option>
-                        <option value="اول امن سيبراني C">اول امن سيبراني C</option>
-                        <option value="اول تكرير نفط A">اول تكرير نفط A</option>
-                        <option value="اول تجميع حاسوب A">اول تجميع حاسوب A</option>
-                        <option value="اول اجهزه طبية A">اول اجهزه طبية A</option>
-                    </select>
-                    <input type="number" id="s-grade" min="0" max="100" placeholder="الدرجة من 100" class="bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-white text-sm">
-                </div>
-                <button type="button" onclick="addGrade()" class="bg-cyan-500 text-black font-bold px-4 py-2.5 rounded-lg text-sm w-full">حفظ الدرجة</button>
-            </div>
+  <table>
+    <thead>
+      <tr>
+        <th>اسم الطالب</th>
+        <th>الصف</th>
+        <th>المادة</th>
+        <th>الدرجة (من 100)</th>
+        <th class="no-print">حذف</th>
+      </tr>
+    </thead>
+    <tbody id="gr-body"></tbody>
+  </table>
+</div>
 
-            <div class="overflow-x-auto">
-                <table class="w-full text-right text-sm">
-                    <thead class="bg-slate-950 text-cyan-400">
-                        <tr>
-                            <th class="p-3">اسم الطالب</th>
-                            <th class="p-3">الصف</th>
-                            <th class="p-3">المادة</th>
-                            <th class="p-3">الدرجة (من 100)</th>
-                            <th class="p-3 no-print">حذف</th>
-                        </tr>
-                    </thead>
-                    <tbody id="grades-list" class="divide-y divide-slate-800"></tbody>
-                </table>
-            </div>
-        </div>
-    </main>
+<footer>برمجة وتطوير: <strong style="color:#34d399;">عباس محمد عزيز</strong></footer>
 
-    <footer class="fixed bottom-0 left-0 w-full bg-slate-900/95 border-t border-emerald-500/30 py-2.5 px-4 text-center text-xs no-print">
-        برمجة وتطوير: <span class="font-bold text-emerald-400">عباس محمد عزيز</span>
-    </footer>
+<script>
+var MAX_T = 10;
+var AST_CODE = "55100";
+var SUBJS = [
+  { name: "التربية الإسلامية", code: "1090" },
+  { name: "اللغة العربية", code: "202500" },
+  { name: "الرياضيات", code: "12300" },
+  { name: "الانجليزي", code: "0005" },
+  { name: "اساسيات الكهرباء", code: "9000" },
+  { name: "تجميع الحاسوب", code: "6200" },
+  { name: "تطبيقات الحاسوب", code: "1999" },
+  { name: "الاتصالات والشبكات", code: "6100" },
+  { name: "مبادى الحاسوب", code: "1998" }
+];
+var curS = null;
 
-    <script>
-        var MAX_TRIES = 10;
-        var AST_PASS = "55100";
-        var subs = [
-            { name: "التربية الإسلامية", code: "1090" },
-            { name: "اللغة العربية", code: "202500" },
-            { name: "الرياضيات", code: "12300" },
-            { name: "الانجليزي", code: "0005" },
-            { name: "اساسيات الكهرباء", code: "9000" },
-            { name: "تجميع الحاسوب", code: "6200" },
-            { name: "تطبيقات الحاسوب", code: "1999" },
-            { name: "الاتصالات والشبكات", code: "6100" },
-            { name: "مبادى الحاسوب", code: "1998" }
-        ];
-        var currSubj = null;
+function calcBan(g, s) {
+  g = String(g || "").trim(); s = String(s || "").trim();
+  var diff = Math.abs(g.length - s.length), same = 0, pool = s.split("");
+  for (var i = 0; i < g.length; i++) {
+    var idx = pool.indexOf(g[i]);
+    if (idx !== -1) { same++; pool.splice(idx, 1); }
+  }
+  var sim = same / Math.max(g.length, s.length, 1);
+  var n1 = Number(g), n2 = Number(s);
+  var close = !isNaN(n1) && !isNaN(n2) && n2 > 0 && (Math.abs(n1 - n2) / n2) <= 0.25;
+  if (close || (sim >= 0.6 && diff <= 1)) return 72;
+  if (sim >= 0.35 && diff <= 2) return 96;
+  return 120;
+}
 
-        function banHours(guess, secret) {
-            var g = String(guess || "").trim(), s = String(secret || "").trim();
-            var diff = Math.abs(g.length - s.length), same = 0, pool = s.split("");
-            for (var i = 0; i < g.length; i++) {
-                var p = pool.indexOf(g[i]);
-                if (p !== -1) { same++; pool.splice(p, 1); }
-            }
-            var sim = same / Math.max(g.length, s.length, 1);
-            var n1 = Number(g), n2 = Number(s);
-            var close = !isNaN(n1) && !isNaN(n2) && n2 > 0 && (Math.abs(n1 - n2) / n2) <= 0.25;
-            if (close || (sim >= 0.6 && diff <= 1)) return 72;
-            if (sim >= 0.35 && diff <= 2) return 96;
-            return 120;
-        }
+function getLk(k) {
+  try {
+    var d = JSON.parse(localStorage.getItem("sec_" + k) || "{}");
+    if (d.until && Date.now() >= Number(d.until)) {
+      var clean = { tries: 0, until: 0, hrs: 0 };
+      localStorage.setItem("sec_" + k, JSON.stringify(clean));
+      return clean;
+    }
+    return { tries: Number(d.tries || 0), until: Number(d.until || 0), hrs: Number(d.hrs || 0) };
+  } catch (e) { return { tries: 0, until: 0, hrs: 0 }; }
+}
 
-        function getLock(k) {
-            try {
-                var o = JSON.parse(localStorage.getItem("lk_" + k) || "{}");
-                if (o.until && Date.now() >= Number(o.until)) {
-                    var c = { tries: 0, until: 0, hrs: 0 };
-                    localStorage.setItem("lk_" + k, JSON.stringify(c));
-                    return c;
-                }
-                return { tries: Number(o.tries || 0), until: Number(o.until || 0), hrs: Number(o.hrs || 0) };
-            } catch (e) { return { tries: 0, until: 0, hrs: 0 }; }
-        }
+function saveLk(k, st) {
+  try { localStorage.setItem("sec_" + k, JSON.stringify(st)); } catch (e) {}
+}
 
-        function setLock(k, st) {
-            try { localStorage.setItem("lk_" + k, JSON.stringify(st)); } catch (e) {}
-        }
+function fmtLeft(ms) {
+  var h = Math.max(1, Math.ceil(ms / 3600000));
+  return Math.floor(h / 24) + " يوم و " + (h % 24) + " ساعة (" + h + " ساعة)";
+}
 
-        function remText(ms) {
-            var h = Math.max(1, Math.ceil(ms / 3600000));
-            return Math.floor(h / 24) + " يوم و " + (h % 24) + " ساعة (" + h + " ساعة)";
-        }
+function paintMsg(k, id) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  var st = getLk(k);
+  if (st.until && Date.now() < st.until) {
+    el.style.color = "#fb7185";
+    el.innerHTML = "محظور لمدة " + st.hrs + " ساعة — المتبقي: " + fmtLeft(st.until - Date.now());
+  } else {
+    el.style.color = "#94a3b8";
+    el.innerHTML = "المحاولات المتبقية: " + Math.max(0, MAX_T - st.tries) + " من " + MAX_T;
+  }
+}
 
-        function syncMsg(k, elId) {
-            var el = document.getElementById(elId);
-            if (!el) return;
-            var st = getLock(k);
-            if (st.until && Date.now() < st.until) {
-                el.innerText = "محظور لمدة " + st.hrs + " ساعة — المتبقي: " + remText(st.until - Date.now());
-                el.className = "text-xs text-rose-400 font-bold mb-4 text-center";
-            } else {
-                el.innerText = "المحاولات المتبقية: " + Math.max(0, MAX_TRIES - st.tries) + " من " + MAX_TRIES;
-                el.className = "text-xs text-slate-400 mb-4 text-center";
-            }
-        }
+function goSec(name) {
+  var list = ["home", "ast-login", "ast-dash", "tch-select", "tch-login", "tch-dash"];
+  for (var i = 0; i < list.length; i++) {
+    var el = document.getElementById("sec-" + list[i]);
+    if (el) el.style.display = "none";
+  }
+  var target = document.getElementById("sec-" + name);
+  if (target) target.style.display = "block";
+  if (name === "ast-login") paintMsg("ast", "ast-msg");
+  if (name === "tch-select") drawSubjs();
+  if (name === "tch-login" && curS) paintMsg("tch_" + curS.name, "tch-msg");
+}
 
-        function showPage(v) {
-            var pages = ["home", "ast-login", "ast-dash", "tch-select", "tch-login", "tch-dash"];
-            for (var i = 0; i < pages.length; i++) {
-                var el = document.getElementById("p-" + pages[i]);
-                if (el) el.classList.add("hidden");
-            }
-            var t = document.getElementById("p-" + v);
-            if (t) t.classList.remove("hidden");
-            if (v === "ast-login") syncMsg("assistant", "ast-msg");
-            if (v === "tch-select") renderSubs();
-            if (v === "tch-login" && currSubj) syncMsg("tch_" + currSubj.name, "tch-msg");
-        }
-
-        function checkAst() {
-            var st = getLock("assistant");
-            if (st.until && Date.now() < st.until) {
-                alert("بوابة المعاون محظورة لمدة " + st.hrs + " ساعة.\nالمتبقي: " + remText(st.until - Date.now()));
-                return
-                        
+function loginAst() {
+  var st = getLk("ast");
+  if (st.until && Date.now() < st.until) {
+    alert("بوابة المعاون محظورة لمدة " + st.hrs + " ساعة.\nالمتبقي: " + fmtLeft(st.until - Date.now()));
+    return;
+  }
+        
