@@ -37,8 +37,8 @@
             <p class="text-xs text-slate-400 mb-4 text-center">صلاحيات إشرافية شاملة وإحصائيات النظام</p>
             <input type="password" id="m-pass" placeholder="أدخل رمز المدير السري" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center">
             <div class="flex gap-2">
-                <button onclick="checkAdmin()" class="flex-1 bg-rose-600 hover:bg-rose-500 text-white font-bold p-3 rounded-lg cursor-pointer transition">دخول</button>
-                <button onclick="window.location.href='index.html'" class="bg-slate-800 px-4 rounded-lg text-slate-300 cursor-pointer">رجوع</button>
+                <button type="button" onclick="checkAdmin()" class="flex-1 bg-rose-600 hover:bg-rose-500 text-white font-bold p-3 rounded-lg cursor-pointer transition">دخول</button>
+                <button type="button" onclick="window.location.href='index.html'" class="bg-slate-800 px-4 rounded-lg text-slate-300 cursor-pointer">رجوع</button>
             </div>
         </div>
 
@@ -46,8 +46,8 @@
         <div id="m-dash" class="hidden space-y-6">
 
             <div class="flex justify-between items-center flex-wrap gap-2 no-print">
-                <h2 class="text-xl font-bold text-rose-400">لوحة المتابعة العامة والصلاحيات الإشرافية (سحابي ☁️)</h2>
-                <button onclick="window.print()" class="bg-rose-600 hover:bg-rose-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">🖨️ طباعة التقرير</button>
+                <h2 class="text-xl font-bold text-rose-400">لوحة المتابعة العامة والصلاحيات الإشرافية (سحابي)</h2>
+                <button type="button" onclick="window.print()" class="bg-rose-600 hover:bg-rose-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">طباعة التقرير</button>
             </div>
 
             <!-- بطاقات ملخص سريع -->
@@ -72,7 +72,7 @@
 
             <!-- 1. ملخص إحصائي للغياب والهروب حسب الشُعب -->
             <div class="cyber-card-rose p-4 rounded-xl">
-                <h3 class="text-sm font-bold text-rose-300 mb-3">📊 ملخص إحصائي للغياب والهروب حسب الشُعب</h3>
+                <h3 class="text-sm font-bold text-rose-300 mb-3">ملخص إحصائي للغياب والهروب حسب الشُعب</h3>
                 <div class="overflow-x-auto">
                     <table class="w-full text-right text-sm">
                         <thead class="bg-slate-950 text-rose-400">
@@ -91,7 +91,7 @@
 
             <!-- 2. نسب الدرجات والمواد + متابعة إنجاز المدرسين -->
             <div class="cyber-card-rose p-4 rounded-xl">
-                <h3 class="text-sm font-bold text-rose-300 mb-3">📈 نسب الدرجات والمواد ومتابعة إنجاز المدرسين</h3>
+                <h3 class="text-sm font-bold text-rose-300 mb-3">نسب الدرجات والمواد ومتابعة إنجاز المدرسين</h3>
                 <div class="overflow-x-auto">
                     <table class="w-full text-right text-sm">
                         <thead class="bg-slate-950 text-rose-400">
@@ -110,13 +110,13 @@
 
             <!-- 3. متابعة إنجاز المشرف التربوي -->
             <div class="cyber-card-rose p-4 rounded-xl">
-                <h3 class="text-sm font-bold text-rose-300 mb-3">🧭 متابعة إنجاز المشرف التربوي / المرشد</h3>
-                <p id="counselor-summary" class="text-xs sm:text-sm text-slate-300 leading-relaxed"></p>
+                <h3 class="text-sm font-bold text-rose-300 mb-3">متابعة إنجاز المشرف التربوي / المرشد</h3>
+                <p id="counselor-summary" class="text-xs sm:text-sm text-slate-300 leading-relaxed">جاري التحميل...</p>
             </div>
 
             <!-- 4. قفل تعديل الدرجات التلقائي واليدوي -->
             <div class="cyber-card-rose p-4 rounded-xl no-print">
-                <h3 class="text-sm font-bold text-rose-300 mb-3">🔒 قفل تعديل الدرجات (بعد انتهاء الفترة أو اعتماد النتيجة)</h3>
+                <h3 class="text-sm font-bold text-rose-300 mb-3">قفل تعديل الدرجات (بعد انتهاء الفترة أو اعتماد النتيجة)</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3 items-center">
                     <div class="bg-slate-950 border border-slate-800 p-2.5 rounded text-xs">
                         <span class="text-slate-400 block mb-1">حالة القفل الحالية:</span>
@@ -127,8 +127,8 @@
                         <input type="datetime-local" id="lock-deadline" class="w-full bg-slate-950 border border-slate-800 p-2 rounded text-white text-xs">
                     </div>
                     <div class="flex gap-2">
-                        <button onclick="saveLockSchedule()" class="flex-1 bg-rose-600 hover:bg-rose-500 text-white font-bold px-3 py-2 rounded text-xs cursor-pointer transition">حفظ الموعد</button>
-                        <button onclick="toggleManualLock()" id="toggle-lock-btn" class="flex-1 bg-amber-500 hover:bg-amber-400 text-black font-bold px-3 py-2 rounded text-xs cursor-pointer transition">قفل الآن</button>
+                        <button type="button" onclick="saveLockSchedule()" class="flex-1 bg-rose-600 hover:bg-rose-500 text-white font-bold px-3 py-2 rounded text-xs cursor-pointer transition">حفظ الموعد</button>
+                        <button type="button" onclick="toggleManualLock()" id="toggle-lock-btn" class="flex-1 bg-amber-500 hover:bg-amber-400 text-black font-bold px-3 py-2 rounded text-xs cursor-pointer transition">قفل الآن</button>
                     </div>
                 </div>
                 <p class="text-[11px] text-slate-400">عند حلول الموعد المحدد أو تفعيل القفل اليدوي، يُمنع تعديل أو حذف الدرجات من بوابة المدرسين تلقائياً وتُوثق العملية في سجل الحركات.</p>
@@ -136,11 +136,12 @@
 
             <!-- 5. إدارة الحسابات وإعادة ضبط كلمات المرور -->
             <div class="cyber-card-rose p-4 rounded-xl no-print">
-                <h3 class="text-sm font-bold text-rose-300 mb-3">🔐 إدارة الحسابات وإعادة ضبط كلمات المرور</h3>
+                <h3 class="text-sm font-bold text-rose-300 mb-3">إدارة الحسابات وإعادة ضبط كلمات المرور</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
                     <select id="role-target" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
                         <option value="astPass">بوابة المعاون (الافتراضي: 2020)</option>
                         <option value="counselorPass">بوابة المشرف التربوي (الافتراضي: 3030)</option>
+                        <option value="evalPass">بوابة التقييم (الافتراضي: 4040)</option>
                         <option value="adminPass">بوابة المدير (الافتراضي: 9999)</option>
                         <option value="subj:التربية الإسلامية">مدرس: التربية الإسلامية</option>
                         <option value="subj:اللغة العربية">مدرس: اللغة العربية</option>
@@ -153,7 +154,7 @@
                         <option value="subj:مبادى الحاسوب">مدرس: مبادى الحاسوب</option>
                     </select>
                     <input type="text" id="new-role-pass" placeholder="أدخل الرمز الجديد" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
-                    <button onclick="updatePassword()" class="bg-rose-600 hover:bg-rose-500 text-white font-bold px-4 py-2 rounded text-sm cursor-pointer transition">تحديث الرمز</button>
+                    <button type="button" onclick="updatePassword()" class="bg-rose-600 hover:bg-rose-500 text-white font-bold px-4 py-2 rounded text-sm cursor-pointer transition">تحديث الرمز</button>
                 </div>
                 <p class="text-[11px] text-slate-400">ملاحظة: الرموز تُحفظ في عقدة <span class="font-mono text-rose-300">settings</span> بقاعدة بيانات Firebase.</p>
             </div>
@@ -161,8 +162,8 @@
             <!-- 6. سجل الحركات -->
             <div class="cyber-card-rose p-4 rounded-xl">
                 <div class="flex justify-between items-center mb-3 flex-wrap gap-2 no-print">
-                    <h3 class="text-sm font-bold text-rose-300">🕵️ سجل الحركات الإشرافية والنظام</h3>
-                    <button onclick="clearAuditLogs()" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded text-xs font-semibold cursor-pointer">مسح السجل</button>
+                    <h3 class="text-sm font-bold text-rose-300">سجل الحركات الإشرافية والنظام</h3>
+                    <button type="button" onclick="clearAuditLogs()" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded text-xs font-semibold cursor-pointer">مسح السجل</button>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-right text-xs sm:text-sm">
@@ -227,27 +228,31 @@
 
         let adminPassCode = "9999";
         let gradesLockState = { manualLocked: false, deadline: '' };
+        let dashboardInitialized = false;
 
         db.ref('settings/adminPass').on('value', (snap) => {
             if (snap.val()) adminPassCode = String(snap.val());
         });
 
         function logAudit(action, details) {
-            db.ref('audit_logs').push({
-                action,
-                details,
-                time: new Date().toLocaleString('ar-IQ')
-            });
+            try {
+                db.ref('audit_logs').push({
+                    action,
+                    details,
+                    time: new Date().toLocaleString('ar-IQ')
+                });
+            } catch (e) {}
         }
 
         function checkAdmin() {
-            let input = document.getElementById('m-pass');
-            if (input && input.value === adminPassCode) {
+            const input = document.getElementById('m-pass');
+            const val = input ? input.value.trim() : '';
+            if (val === String(adminPassCode).trim()) {
                 document.getElementById('m-login').classList.add('hidden');
                 document.getElementById('m-dash').classList.remove('hidden');
                 input.value = '';
-                logAudit('دخول الإدارة', 'تم تسجيل الدخول إلى بوابة المدير');
                 initAdminDashboard();
+                logAudit('دخول الإدارة', 'تم تسجيل الدخول إلى بوابة المدير');
             } else {
                 alert('رمز المدير خطأ!');
             }
@@ -256,7 +261,7 @@
         function isGradesLockedNow() {
             if (gradesLockState.manualLocked) return true;
             if (gradesLockState.deadline) {
-                let deadlineTime = new Date(gradesLockState.deadline).getTime();
+                const deadlineTime = new Date(gradesLockState.deadline).getTime();
                 if (!isNaN(deadlineTime) && Date.now() >= deadlineTime) {
                     return true;
                 }
@@ -265,9 +270,9 @@
         }
 
         function updateLockUI() {
-            let badge = document.getElementById('lock-status-badge');
-            let btn = document.getElementById('toggle-lock-btn');
-            let locked = isGradesLockedNow();
+            const badge = document.getElementById('lock-status-badge');
+            const btn = document.getElementById('toggle-lock-btn');
+            const locked = isGradesLockedNow();
 
             if (badge) {
                 if (gradesLockState.manualLocked) {
@@ -289,12 +294,12 @@
 
         function initLockSettings() {
             db.ref('settings/gradesLock').on('value', (snap) => {
-                let val = snap.val() || {};
+                const val = snap.val() || {};
                 gradesLockState = {
                     manualLocked: Boolean(val.manualLocked),
                     deadline: val.deadline || ''
                 };
-                let input = document.getElementById('lock-deadline');
+                const input = document.getElementById('lock-deadline');
                 if (input && gradesLockState.deadline && document.activeElement !== input) {
                     input.value = gradesLockState.deadline;
                 }
@@ -304,7 +309,7 @@
         }
 
         function saveLockSchedule() {
-            let deadlineVal = document.getElementById('lock-deadline').value;
+            const deadlineVal = document.getElementById('lock-deadline').value;
             db.ref('settings/gradesLock').update({ deadline: deadlineVal || '' }, (err) => {
                 if (err) {
                     alert('فشل حفظ موعد القفل!');
@@ -319,7 +324,7 @@
         }
 
         function toggleManualLock() {
-            let nextState = !gradesLockState.manualLocked;
+            const nextState = !gradesLockState.manualLocked;
             db.ref('settings/gradesLock').update({ manualLocked: nextState }, (err) => {
                 if (err) {
                     alert('فشل تغيير حالة القفل!');
@@ -333,20 +338,22 @@
         }
 
         function initAdminDashboard() {
+            if (dashboardInitialized) return;
+            dashboardInitialized = true;
+
             initLockSettings();
 
-            // 1. إحصائيات الغياب والهروب حسب الشُعب
             db.ref('abs').on('value', (snap) => {
-                let data = snap.val() || {};
-                let records = Object.values(data);
-                let statsMap = {};
+                const data = snap.val() || {};
+                const records = Object.values(data);
+                const statsMap = {};
 
                 defaultClasses.forEach(c => {
                     statsMap[c] = { abs: 0, esc: 0, leave: 0, total: 0 };
                 });
 
                 records.forEach(r => {
-                    let cls = (r.cls || 'غير محدد').trim();
+                    const cls = (r.cls || 'غير محدد').trim();
                     if (!statsMap[cls]) {
                         statsMap[cls] = { abs: 0, esc: 0, leave: 0, total: 0 };
                     }
@@ -358,7 +365,7 @@
 
                 document.getElementById('kpi-abs-total').innerText = records.length;
 
-                let tbody = document.getElementById('class-stats-body');
+                const tbody = document.getElementById('class-stats-body');
                 tbody.innerHTML = Object.entries(statsMap).map(([cls, s]) => `
                     <tr>
                         <td class="p-3 font-bold text-white">${cls}</td>
@@ -370,17 +377,10 @@
                 `).join('');
             });
 
-            // 2. نسب الدرجات والمواد + إنجاز المدرسين
             db.ref('grades').on('value', (snap) => {
-                let data = snap.val() || {};
-                let grades = Object.values(data);
+                const data = snap.val() || {};
+                const grades = Object.values(data);
 
-                let totalGrades = grades.length;
-                let totalPass = grades.filter(g => Number(g.grade) >= 50).length;
-                let overallPassRate = totalGrades > 0 ? ((totalPass / totalGrades) * 100).toFixed(1) : 0;
-                document.getElementById('kpi-pass-rate').innerText = `${overallPassRate}%`;
-
-                let activeSubsCount = 0;
-                let rowsHtml = defaultSubs.map(subjName => {
-                    let subGrades = grades.filter(g => g.subj === subjName);
-                    l
+                const totalGrades = grades.length;
+                const totalPass = grades.filter(g => Number(g.grade) >= 50).length;
+                const overallPassRate = tota
