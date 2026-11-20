@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { font-family: 'Cairo', sans-serif; background: #030712; color: #f3f4f6; }
-        .card { background: #0b0f19; border: 1px solid rgba(16, 185, 129, 0.35); }
+        .card { background: #0b0f19; border: 1px solid rgba(16, 185, 129, 0.35); display: block; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between p-4 sm:p-6 pb-16">
@@ -17,69 +17,76 @@
             <h1 class="text-white font-bold text-base md:text-lg">إعدادية المعرفة المهنية الاهلية</h1>
             <span class="text-xs text-emerald-400 font-mono">برمجة: عباس محمد عزيز</span>
         </div>
-        <button type="button" onclick="go('home')" class="bg-slate-900 text-emerald-400 px-4 py-2 rounded-lg border border-emerald-500/30 text-sm cursor-pointer">الرئيسية</button>
+        <button type="button" onclick="showBox('home')" class="bg-slate-900 text-emerald-400 px-4 py-2 rounded-lg border border-emerald-500/30 text-sm">الرئيسية</button>
     </header>
 
     <main class="max-w-4xl mx-auto w-full my-6 flex-grow">
         <!-- الرئيسية -->
-        <div id="v-home" class="text-center py-6">
+        <div id="box-home" class="text-center py-4">
             <h2 class="text-2xl sm:text-3xl font-black text-white mb-2">نظام إدارة المدرسة الآمن</h2>
             <p class="text-slate-400 mb-6 text-sm">اختر البوابة المطلوبة للمتابعة:</p>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <button type="button" onclick="go('ast-login')" class="card p-5 rounded-2xl text-right hover:border-emerald-400 cursor-pointer">
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-right">
+                <button type="button" id="open-ast" class="card p-5 rounded-2xl hover:border-emerald-400 w-full">
                     <span class="text-xs font-mono text-emerald-400 block mb-2">01</span>
                     <h3 class="text-lg font-bold text-white">بوابة المعاون</h3>
-                    <p class="text-xs text-slate-400 mt-1">إدارة الغيابات والشعب</p>
+                    <p class="text-xs text-slate-400 mt-1">إدارة الغيابات والشعب (الرمز: 2020)</p>
                 </button>
-                <button type="button" onclick="go('tch-select')" class="card p-5 rounded-2xl text-right hover:border-cyan-400 cursor-pointer">
+
+                <button type="button" id="open-tch" class="card p-5 rounded-2xl hover:border-cyan-400 w-full">
                     <span class="text-xs font-mono text-cyan-400 block mb-2">02</span>
                     <h3 class="text-lg font-bold text-white">بوابة المدرسين</h3>
                     <p class="text-xs text-slate-400 mt-1">رصد درجات المواد</p>
                 </button>
-                <button type="button" onclick="openFile('students', 'students.html')" class="card p-5 rounded-2xl text-right hover:border-purple-400 cursor-pointer">
+
+                <a href="students.html" data-gate="students" class="gate-link card p-5 rounded-2xl hover:border-purple-400">
                     <span class="text-xs font-mono text-purple-400 block mb-2">03</span>
                     <h3 class="text-lg font-bold text-white">بوابة الطلاب</h3>
                     <p class="text-xs text-slate-400 mt-1">الجداول والنتائج</p>
-                </button>
-                <button type="button" onclick="openFile('counselor', 'counselor.html')" class="card p-5 rounded-2xl text-right hover:border-amber-400 cursor-pointer">
+                </a>
+
+                <a href="counselor.html" data-gate="counselor" class="gate-link card p-5 rounded-2xl hover:border-amber-400">
                     <span class="text-xs font-mono text-amber-400 block mb-2">04</span>
                     <h3 class="text-lg font-bold text-white">بوابة المشرف التربوي / المرشد</h3>
                     <p class="text-xs text-slate-400 mt-1">الحالات السلوكية والملفات</p>
-                </button>
-                <button type="button" onclick="openFile('admin', 'admin.html')" class="card p-5 rounded-2xl text-right hover:border-rose-400 cursor-pointer">
+                </a>
+
+                <a href="admin.html" data-gate="admin" class="gate-link card p-5 rounded-2xl hover:border-rose-400">
                     <span class="text-xs font-mono text-rose-400 block mb-2">05</span>
                     <h3 class="text-lg font-bold text-white">بوابة الإدارة / المدير</h3>
                     <p class="text-xs text-slate-400 mt-1">الإحصائيات والصلاحيات</p>
-                </button>
-                <button type="button" onclick="openFile('evaluations', 'evaluations.html')" class="card p-5 rounded-2xl text-right hover:border-teal-400 cursor-pointer">
+                </a>
+
+                <a href="evaluations.html" data-gate="evaluations" class="gate-link card p-5 rounded-2xl hover:border-teal-400">
                     <span class="text-xs font-mono text-teal-400 block mb-2">06</span>
                     <h3 class="text-lg font-bold text-white">بوابة التقييم</h3>
                     <p class="text-xs text-slate-400 mt-1">تقييم الطلاب والشُعب</p>
-                </button>
-                <button type="button" onclick="openFile('accounts', 'accounts.html')" class="card p-5 rounded-2xl text-right hover:border-sky-400 cursor-pointer">
+                </a>
+
+                <a href="accounts.html" data-gate="accounts" class="gate-link card p-5 rounded-2xl hover:border-sky-400">
                     <span class="text-xs font-mono text-sky-400 block mb-2">07</span>
                     <h3 class="text-lg font-bold text-white">بوابة الحسابات</h3>
                     <p class="text-xs text-slate-400 mt-1">الأقساط والخصومات والوصولات</p>
-                </button>
+                </a>
             </div>
         </div>
 
         <!-- دخول المعاون -->
-        <div id="v-ast-login" class="hidden max-w-md mx-auto card p-6 rounded-2xl">
+        <div id="box-ast-login" class="hidden max-w-md mx-auto card p-6 rounded-2xl">
             <h3 class="text-xl text-emerald-400 font-bold mb-1 text-center">دخول المعاون</h3>
-            <p id="ast-st" class="text-xs text-slate-400 mb-4 text-center">المحاولات المتبقية: 10 من 10</p>
-            <input type="password" id="ast-pass" placeholder="أدخل رمز المعاون" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center">
+            <p id="ast-msg" class="text-xs text-slate-400 mb-4 text-center">المحاولات المتبقية: 10 من 10</p>
+            <input type="password" id="ast-pass" placeholder="أدخل رمز المعاون (2020)" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center">
             <div class="flex gap-2">
-                <button type="button" onclick="checkAst()" class="flex-1 bg-emerald-500 text-black font-bold p-3 rounded-lg cursor-pointer">دخول</button>
-                <button type="button" onclick="go('home')" class="bg-slate-800 px-4 rounded-lg text-slate-300 cursor-pointer">إلغاء</button>
+                <button type="button" id="ast-btn" class="flex-1 bg-emerald-500 text-black font-bold p-3 rounded-lg">دخول</button>
+                <button type="button" onclick="showBox('home')" class="bg-slate-800 px-4 rounded-lg text-slate-300">إلغاء</button>
             </div>
         </div>
 
         <!-- لوحة المعاون -->
-        <div id="v-ast-dash" class="hidden card p-6 rounded-2xl">
+        <div id="box-ast-dash" class="hidden card p-6 rounded-2xl">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-xl font-bold text-emerald-400">سجل الغيابات</h3>
-                <button type="button" onclick="go('home')" class="bg-slate-800 px-3 py-1.5 rounded text-xs cursor-pointer">رجوع</button>
+                <button type="button" onclick="showBox('home')" class="bg-slate-800 px-3 py-1.5 rounded text-xs">رجوع</button>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
                 <input type="text" id="g-name" placeholder="اسم الطالب" class="bg-slate-950 border border-slate-800 p-2.5 rounded text-white text-sm">
@@ -91,7 +98,7 @@
                 </select>
                 <input type="date" id="g-date" class="bg-slate-950 border border-slate-800 p-2.5 rounded text-white text-sm">
             </div>
-            <button type="button" onclick="addAbs()" class="bg-emerald-500 text-black font-bold px-4 py-2.5 rounded text-sm w-full mb-4 cursor-pointer">حفظ الغياب</button>
+            <button type="button" onclick="addAbs()" class="bg-emerald-500 text-black font-bold px-4 py-2.5 rounded text-sm w-full mb-4">حفظ الغياب</button>
             <table class="w-full text-right text-sm">
                 <thead class="bg-slate-950 text-emerald-400"><tr><th class="p-3">الطالب</th><th class="p-3">الصف</th><th class="p-3">التاريخ</th></tr></thead>
                 <tbody id="abs-list" class="divide-y divide-slate-800"></tbody>
@@ -99,88 +106,16 @@
         </div>
 
         <!-- اختيار المادة للمدرس -->
-        <div id="v-tch-select" class="hidden max-w-xl mx-auto">
+        <div id="box-tch-select" class="hidden max-w-xl mx-auto">
             <h3 class="text-xl font-bold text-cyan-400 mb-4 text-center">اختر المادة الدراسية</h3>
             <div id="subj-box" class="space-y-2 mb-4"></div>
             <div class="text-center">
-                <button type="button" onclick="go('home')" class="bg-slate-800 px-4 py-2 rounded-lg text-slate-300 text-sm cursor-pointer">رجوع</button>
+                <button type="button" onclick="showBox('home')" class="bg-slate-800 px-4 py-2 rounded-lg text-slate-300 text-sm">رجوع</button>
             </div>
         </div>
 
         <!-- دخول المدرس -->
-        <div id="v-tch-login" class="hidden max-w-md mx-auto card p-6 rounded-2xl">
+        <div id="box-tch-login" class="hidden max-w-md mx-auto card p-6 rounded-2xl">
             <h3 id="tch-title" class="text-xl text-cyan-400 font-bold mb-1 text-center">دخول المدرس</h3>
-            <p id="tch-st" class="text-xs text-slate-400 mb-4 text-center">المحاولات المتبقية: 10 من 10</p>
-            <input type="password" id="tch-pass" placeholder="أدخل رمز المادة" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center">
-            <div class="flex gap-2">
-                <button type="button" onclick="checkTch()" class="flex-1 bg-cyan-500 text-black font-bold p-3 rounded-lg cursor-pointer">دخول</button>
-                <button type="button" onclick="go('tch-select')" class="bg-slate-800 px-4 rounded-lg text-slate-300 cursor-pointer">رجوع</button>
-            </div>
-        </div>
-
-        <!-- لوحة المدرس -->
-        <div id="v-tch-dash" class="hidden card p-6 rounded-2xl">
-            <div class="flex justify-between items-center mb-4">
-                <h3 id="dash-title" class="text-xl font-bold text-cyan-400">رصد الدرجات</h3>
-                <button type="button" onclick="go('home')" class="bg-slate-800 px-3 py-1.5 rounded text-xs cursor-pointer">رجوع</button>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
-                <input type="text" id="s-name" placeholder="اسم الطالب" class="bg-slate-950 border border-slate-800 p-2.5 rounded text-white text-sm">
-                <input type="number" id="s-grade" min="0" max="100" placeholder="الدرجة (0-100)" class="bg-slate-950 border border-slate-800 p-2.5 rounded text-white text-sm">
-                <button type="button" onclick="addGrade()" class="bg-cyan-500 text-black font-bold px-4 py-2.5 rounded text-sm cursor-pointer">حفظ الدرجة</button>
-            </div>
-            <table class="w-full text-right text-sm">
-                <thead class="bg-slate-950 text-cyan-400"><tr><th class="p-3">الطالب</th><th class="p-3">المادة</th><th class="p-3">الدرجة</th></tr></thead>
-                <tbody id="grades-list" class="divide-y divide-slate-800"></tbody>
-            </table>
-        </div>
-    </main>
-
-    <footer class="fixed bottom-0 left-0 w-full bg-slate-900/95 border-t border-emerald-500/30 py-2.5 px-4 text-center text-xs">
-        برمجة وتطوير: <span class="font-bold text-emerald-400">عباس محمد عزيز</span>
-    </footer>
-
-    <script>
-        var MAX_TRIES = 10;
-        var subs = [
-            { name: "التربية الإسلامية", code: "1090" },
-            { name: "اللغة العربية", code: "202500" },
-            { name: "الرياضيات", code: "12300" },
-            { name: "الانجليزي", code: "0005" },
-            { name: "اساسيات الكهرباء", code: "9000" },
-            { name: "تجميع الحاسوب", code: "6200" },
-            { name: "تطبيقات الحاسوب", code: "1999" },
-            { name: "الاتصالات والشبكات", code: "6100" },
-            { name: "مبادى الحاسوب", code: "1998" }
-        ];
-        var currSubj = null;
-
-        function banHours(guess, secret) {
-            var g = String(guess || "").trim(), s = String(secret || "").trim();
-            var diff = Math.abs(g.length - s.length), same = 0, pool = s.split("");
-            for (var i = 0; i < g.length; i++) {
-                var p = pool.indexOf(g[i]);
-                if (p !== -1) { same++; pool.splice(p, 1); }
-            }
-            var sim = same / Math.max(g.length, s.length, 1);
-            var n1 = Number(g), n2 = Number(s);
-            var close = !isNaN(n1) && !isNaN(n2) && n2 > 0 && (Math.abs(n1 - n2) / n2) <= 0.25;
-            if (close || (sim >= 0.6 && diff <= 1)) return 72;
-            if (sim >= 0.35 && diff <= 2) return 96;
-            return 120;
-        }
-
-        function getLock(k) {
-            try {
-                var o = JSON.parse(localStorage.getItem("lk_" + k) || "{}");
-                if (o.until && Date.now() >= Number(o.until)) {
-                    var c = { tries: 0, until: 0, hrs: 0 };
-                    localStorage.setItem("lk_" + k, JSON.stringify(c));
-                    return c;
-                }
-                return { tries: Number(o.tries || 0), until: Number(o.until || 0), hrs: Number(o.hrs || 0) };
-            } catch (e) { return { tries: 0, until: 0, hrs: 0 }; }
-        }
-
-        function set
-                                                                                                                                                        
+            <p id="tch-msg" class="text-xs text-slate-400 mb-4 text-center">المحاولات
+                
