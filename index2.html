@@ -5,79 +5,90 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>ALPHA-SEC // Index 2</title>
 <style>
-body{margin:0;padding:14px 14px 60px;background:#030712;color:#f3f4f6;font-family:Tahoma,Arial,sans-serif}
-.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
-.b,.l{display:block;width:100%;text-align:right;background:#0b0f19;color:#fff;border:1px solid #10b98166;border-radius:10px;padding:12px;text-decoration:none;cursor:pointer;box-sizing:border-box}
-.p{display:none;background:#0b0f19;border:1px solid #10b98166;border-radius:10px;padding:14px;max-width:760px;margin:12px auto}
-input,select{width:100%;padding:8px;margin-bottom:8px;border-radius:7px;border:1px solid #334155;background:#020617;color:#fff;box-sizing:border-box}
-button{cursor:pointer;border-radius:7px;border:0;padding:8px 12px;font-weight:700}
-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:12px}
-th,td{border:1px solid #1e293b;padding:6px;text-align:right}
+*{box-sizing:border-box;font-family:Tahoma,Arial,sans-serif}
+body{margin:0;padding:20px 18px 80px;background:#030712;color:#f3f4f6;font-size:16px}
+.wrap{max-width:1020px;margin:0 auto}
+header{display:flex;justify-content:space-between;align-items:center;gap:14px;border-bottom:2px solid #10b98155;padding-bottom:16px;margin-bottom:24px}
+header h1{margin:0;font-size:22px;color:#fff}
+header .sub{font-size:14px;color:#34d399;margin-top:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.card,.link{display:block;width:100%;text-align:right;background:#0b0f19;color:#fff;border:1.5px solid #10b98166;border-radius:18px;padding:22px;text-decoration:none;cursor:pointer;min-height:125px}
+.card:hover,.link:hover{border-color:#34d399}
+.num{font-size:14px;font-weight:bold;color:#34d399;margin-bottom:8px;display:block}
+.title{font-size:19px;font-weight:bold;color:#fff;margin-bottom:6px;display:block}
+.desc{font-size:14px;color:#94a3b8;display:block}
+.panel{display:none;background:#0b0f19;border:1.5px solid #10b98166;border-radius:18px;padding:24px;max-width:900px;margin:18px auto}
+.box-sm{max-width:500px}
+input,select{width:100%;padding:13px 15px;margin-bottom:13px;border-radius:12px;border:1px solid #334155;background:#020617;color:#fff;font-size:16px}
+button{cursor:pointer;border-radius:12px;border:0;padding:12px 18px;font-weight:bold;font-size:15px}
+.btn-g{background:#10b981;color:#000}
+.btn-b{background:#06b6d4;color:#000}
+.btn-d{background:#1e293b;color:#f1f5f9;border:1px solid #334155}
+.btn-r{background:#dc2626;color:#fff}
+.bar{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:16px}
+table{width:100%;border-collapse:collapse;margin-top:16px;font-size:15px}
+th,td{border:1px solid #1e293b;padding:11px;text-align:right}
 th{background:#020617;color:#34d399}
-.bar{display:flex;gap:6px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:8px}
-footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1px solid #10b98155;padding:9px;text-align:center;font-size:12px;color:#cbd5e1}
+footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1px solid #10b98155;padding:13px;text-align:center;font-size:14px;color:#cbd5e1}
 @media print{body{background:#fff;color:#000;padding:0}.np,footer{display:none!important}th,td{border:1px solid #000;color:#000}}
 </style>
 </head>
 <body>
-<div class="np bar" style="border-bottom:1px solid #10b98144;padding-bottom:10px">
-  <div><b>إعدادية المعرفة المهنية الاهلية</b><div style="font-size:11px;color:#34d399">عباس محمد عزيز</div></div>
-  <button onclick="sw('home')" style="background:#1e293b;color:#fff">الرئيسية</button>
-</div>
-
-<div id="v-home" class="g">
-  <button class="b" onclick="sw('al')">01 — بوابة المعاون</button>
-  <button class="b" onclick="sw('ts')">02 — بوابة المدرسين</button>
-  <a class="l" href="students.html">03 — بوابة الطلاب</a>
-  <a class="l" href="counselor.html">04 — بوابة المرشد</a>
-  <a class="l" href="admin.html">05 — بوابة الإدارة</a>
-  <a class="l" href="evaluations.html">06 — بوابة التقييم</a>
-  <a class="l" href="accounts.html">07 — بوابة الحسابات</a>
-</div>
-
-<!-- دخول المعاون -->
-<div id="v-al" class="p" style="max-width:380px">
-  <h3 style="margin-top:0;color:#34d399">دخول المعاون</h3>
-  <div id="am" style="font-size:12px;color:#94a3b8;margin-bottom:8px">المحاولات المتبقية: 10 من 10</div>
-  <input type="password" id="ap" placeholder="الرمز السري">
-  <div class="bar"><button onclick="la()" style="background:#10b981;color:#000;flex:1">دخول</button><button onclick="sw('home')" style="background:#1e293b;color:#fff">رجوع</button></div>
-</div>
-
-<!-- لوحة المعاون -->
-<div id="v-ad" class="p">
-  <div class="np bar">
-    <b style="color:#34d399">سجل الغيابات، الهروب، والإجازات</b>
-    <div style="display:flex;gap:6px">
-      <button onclick="print()" style="background:#10b981;color:#000">PDF</button>
-      <button onclick="clrData('abs')" style="background:#dc2626;color:#fff">مسح الكل</button>
-      <button onclick="sw('home')" style="background:#1e293b;color:#fff">رجوع</button>
+<div class="wrap">
+  <header class="np">
+    <div>
+      <h1>إعدادية المعرفة المهنية الاهلية — Index 2</h1>
+      <div class="sub">برمجة: عباس محمد عزيز</div>
     </div>
+    <button type="button" id="i2-home" class="btn-d">الرئيسية</button>
+  </header>
+
+  <div id="i2-v-home" class="grid">
+    <button type="button" id="i2-btn-ast" class="card">
+      <span class="num">01</span>
+      <span class="title">بوابة المعاون</span>
+      <span class="desc">الغيابات، الهروب، والإجازات</span>
+    </button>
+
+    <button type="button" id="i2-btn-tch" class="card">
+      <span class="num" style="color:#22d3ee">02</span>
+      <span class="title">بوابة المدرسين</span>
+      <span class="desc">رصد درجات المواد من 100</span>
+    </button>
+
+    <a href="students.html" class="link">
+      <span class="num" style="color:#c084fc">03</span>
+      <span class="title">بوابة الطلاب</span>
+      <span class="desc">الجداول والنتائج</span>
+    </a>
+
+    <a href="counselor.html" class="link">
+      <span class="num" style="color:#fbbf24">04</span>
+      <span class="title">بوابة المشرف التربوي / المرشد</span>
+      <span class="desc">الحالات السلوكية والملفات</span>
+    </a>
+
+    <a href="admin.html" class="link">
+      <span class="num" style="color:#fb7185">05</span>
+      <span class="title">بوابة الإدارة / المدير</span>
+      <span class="desc">الإحصائيات والصلاحيات</span>
+    </a>
+
+    <a href="evaluations.html" class="link">
+      <span class="num" style="color:#2dd4bf">06</span>
+      <span class="title">بوابة التقييم</span>
+      <span class="desc">تقييم الطلاب والشُعب</span>
+    </a>
+
+    <a href="accounts.html" class="link">
+      <span class="num" style="color:#38bdf8">07</span>
+      <span class="title">بوابة الحسابات</span>
+      <span class="desc">الأقساط والخصومات والوصولات</span>
+    </a>
   </div>
-  <div class="np">
-    <input id="an" placeholder="اسم الطالب">
-    <select id="ac">
-      <option>اول امن سيبراني A</option><option>اول امن سيبراني B</option><option>اول امن سيبراني C</option>
-      <option>اول تكرير نفط A</option><option>اول تجميع حاسوب A</option><option>اول اجهزه طبية A</option>
-    </select>
-    <select id="at"><option>غياب</option><option>هروب</option><option>اجازة</option></select>
-    <input type="date" id="ad">
-    <button onclick="aa()" style="background:#10b981;color:#000;width:100%;margin-bottom:8px">حفظ السجل</button>
-    <input id="af" oninput="drawAbs()" placeholder="بحث باسم الطالب أو الصف...">
-  </div>
-  <table><thead><tr><th>الطالب</th><th>الصف</th><th>الحالة</th><th>التاريخ</th><th class="np">حذف</th></tr></thead><tbody id="ab"></tbody></table>
-</div>
 
-<!-- اختيار المادة -->
-<div id="v-ts" class="p" style="max-width:380px">
-  <h3 style="margin-top:0;color:#22d3ee">اختر المادة</h3>
-  <div id="sl"></div>
-  <button onclick="sw('home')" style="background:#1e293b;color:#fff;width:100%;margin-top:6px">رجوع</button>
-</div>
-
-<!-- دخول المدرس -->
-<div id="v-tl" class="p" style="max-width:380px">
-  <h3 id="th" style="margin-top:0;color:#22d3ee">دخول المدرس</h3>
-  <div id="tm" style="font-size:12px;color:#94a3b8;margin-bottom:8px">المحاولات المتبقية: 10 من 10</div>
-  <input type="password" id="tp" placeholder="رمز المادة">
-
-
+  <!-- دخول المعاون -->
+  <div id="i2-v-al" class="panel box-sm">
+    <h3 style="margin-top:0;color:#34d399;text-align:center;font-size:20px">دخول بوابة المعاون</h3>
+    <div id="i2-am" style="text-
+      
