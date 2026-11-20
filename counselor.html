@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALPHA-SEC // بوابة المشرف التربوي والمرشد</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+    <style>
+        body { font-family: 'Cairo', sans-serif; background-color: #030712; color: #f3f4f6; }
+        .cyber-card-amber { background-color: #0b0f19; border: 1px solid rgba(245, 158, 11, 0.35); }
+        @media print {
+            body { background: white !important; color: black !important; }
+            .no-print { display: none !important; }
+            table { width: 100%; border-collapse: collapse; }
+            th, td { border: 1px solid #333; padding: 6px; color: black !important; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-4 sm:p-6 pb-16">
+
+    <header class="flex justify-between items-center border-b border-amber-500/30 pb-4 no-print">
+        <div class="flex flex-col text-right">
+            <h1 class="text-white font-bold text-base md:text-lg">بوابة المشرف التربوي / المرشد</h1>
+            <span class="text-[11px] md:text-xs text-amber-400 font-mono">إعدادية المعرفة المهنية الاهلية</span>
+        </div>
+        <button onclick="window.location.href='index.html'" class="bg-slate-900 text-amber-400 px-4 py-2 rounded-lg border border-amber-500/30 text-sm font-semibold cursor-pointer">الرئيسية</button>
+    </header>
+
+    <main class="max-w-4xl mx-auto w-full my-6 flex-grow">
+
+        <!-- دخول المشرف التربوي / المرشد -->
+        <div id="c-login" class="max-w-md mx-auto cyber-card-amber p-6 rounded-2xl mt-8">
+            <h2 class="text-xl text-amber-400 font-bold mb-2 text-center">دخول المرشد / المشرف التربوي</h2>
+            <p class="text-xs text-slate-400 mb-4 text-center">متابعة الحالات السلوكية، الغياب المتكرر، والملفات التربوية</p>
+            <input type="password" id="c-pass" placeholder="أدخل رمز المرشد السري" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center">
+            <div class="flex gap-2">
+                <button onclick="checkCounselor()" class="flex-1 bg-amber-500 hover:bg-amber-400 text-black font-bold p-3 rounded-lg cursor-pointer transition">دخول</button>
+                <button onclick="window.location.href='index.html'" class="bg-slate-800 px-4 rounded-lg text-slate-300 cursor-pointer">رجوع</button>
+            </div>
+        </div>
+
+        <!-- لوحة المرشد التربوي -->
+        <div id="c-dash" class="hidden space-y-6">
+
+            <div class="flex justify-between items-center flex-wrap gap-2 no-print">
+                <h2 class="text-xl font-bold text-amber-400">الملفات التربوية والحالات السلوكية (سحابي ☁️)</h2>
+                <div class="flex gap-2">
+                    <button onclick="window.print()" class="bg-amber-600 hover:bg-amber-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">🖨️ طباعة PDF</button>
+                    <button onclick="clearGuidance()" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">🗑️ مسح الملفات</button>
+                </div>
+            </div>
+
+            <!-- إضافة حالة سلوكية أو ملف تربوي -->
+            <div class="cyber-card-amber p-4 rounded-xl no-print">
+                <h3 class="text-sm font-bold text-amber-300 mb-3">تسجيل حالة سلوكية / ملف تربوي</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 mb-3">
+                    <input type="text" id="c-name" placeholder="اسم الطالب" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
+                    <select id="c-class" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
+                        <option value="أول امن سيبراني A">أول امن سيبراني A</option>
+                        <option value="أول امن سيبراني B">أول امن سيبراني B</option>
+                        <option value="أول امن سيبراني C">أول امن سيبراني C</option>
+                        <option value="أول تكرار نفط A">أول تكرار نفط A</option>
+                        <option value="ثالث تجميع حاسوب A">ثالث تجميع حاسوب A</option>
+                    </select>
+                    <select id="c-type" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
+                        <option value="حالة سلوكية">حالة سلوكية</option>
+                        <option value="ملف تربوي">ملف تربوي</option>
+                        <option value="متابعة أسرية">متابعة أسرية</option>
+                        <option value="إرشاد وتوجيه">إرشاد وتوجيه</option>
+                    </select>
+                    <input type="date" id="c-date" class="bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm">
+                </div>
+                <input type="text" id="c-note" placeholder="وصف الحالة أو الإجراء التربوي المتخذ..." class="w-full bg-slate-950 border border-slate-800 p-2 rounded text-white text-sm mb-3">
+                <button onclick="saveGuidance()" class="bg-amber-500 hover:bg-amber-400 text-black font-bold px-4 py-2 rounded text-sm w-full cursor-pointer transition">حفظ في الملف التربوي</button>
+            </div>
+
+            <!-- جدول الحالات السلوكية والملفات التربوية -->
+            <div class="cyber-card-amber rounded-xl overflow-hidden">
+                <table class="w-full text-right text-sm">
+                    <thead class="bg-slate-950 text-amber-400">
+                        <tr>
+                            <th class="p-3">الطالب</th>
+                            <th class="p-3">الصف</th>
+                            <th class="p-3">النوع</th>
+                            <th class="p-3">الملاحظة / الإجراء</th>
+                            <th class="p-3">التاريخ</th>
+                            <th class="p-3 no-print">إجراء</th>
+                        </tr>
+                    </thead>
+                    <tbody id="guidance-list" class="divide-y divide-slate-900"></tbody>
+                </table>
+            </div>
+
+            <!-- متابعة الغياب المتكرر من سجل الغيابات -->
+            <div class="cyber-card-amber p-4 rounded-xl">
+                <h3 class="text-sm font-bold text-amber-300 mb-3">📋 متابعة الغياب المتكرر للطلاب (من سجل الغيابات)</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-right text-sm">
+                        <thead class="bg-slate-950 text-amber-400">
+                            <tr>
+                                <th class="p-3">الطالب</th>
+                                <th class="p-3">الصف</th>
+                                <th class="p-3">عدد الغيابات</th>
+                                <th class="p-3">حالات الهروب</th>
+                                <th class="p-3">التواريخ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="repeat-abs-list" class="divide-y divide-slate-900"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="fixed bottom-0 left-0 w-full bg-slate-900/95 backdrop-blur-md border-t border-amber-500/30 py-2.5 px-4 z-50 text-center shadow-lg no-print">
+      <div class="flex items-center justify-center gap-2 text-xs md:text-sm font-mono dir-rtl">
+        <span class="inline-block w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+        <span class="text-slate-300">تم التطوير والبرمجة بواسطة:</span>
+        <span class="font-bold text-amber-400 tracking-wide border-b border-amber-500/40 pb-0.5">عباس محمد عزيز</span>
+      </div>
+    </footer>
+
+    <script>
+        const firebaseConfig = {
+          apiKey: "AIzaSyB6jzXTFRW6h3r7E5s8aWd0Ry5ixvBG-Do",
+          authDomain: "al-maarefa-school.firebaseapp.com",
+          databaseURL: "https://al-maarefa-school-default-rtdb.firebaseio.com",
+          projectId: "al-maarefa-school",
+          storageBucket: "al-maarefa-school.appspot.com",
+          messagingSenderId: "922687511699",
+          appId: "1:922687511699:web:5b77f972833cf9bb984166"
+        };
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.database();
+
+        function checkCounselor() {
+            let passInput = document.getElementById('c-pass');
+            if (passInput && passInput.value === '3030') {
+                document.getElementById('c-login').classList.add('hidden');
+                document.getElementById('c-dash').classList.remove('hidden');
+                passInput.value = '';
+                loadGuidance();
+                loadRepeatAbsences();
+            } else {
+                alert('رمز المرشد التربوي خطأ!');
+            }
+        }
+
+        function saveGuidance() {
+            let name = document.getElementById('c-name').value.trim();
+            let cls = document.getElementById('c-class').value;
+            let type = document.getElementById('c-type').value;
+            let date = document.getElementById('c-date').value;
+            let note = document.getElementById('c-note').value.trim();
+
+            if (!name || !date || !note) {
+                alert('يرجى إدخال اسم الطالب والتاريخ ووصف الحالة');
+                return;
+            }
+
+            db.ref('guidance').push({ name, cls, type, date, note }, (error) => {
+                if (error) {
+                    alert('فشل حفظ الملف التربوي سحابياً!');
+                } else {
+                    document.getElementById('c-name').value = '';
+                    document.getElementById('c-note').value = '';
+                }
+            });
+        }
+
+        function loadGuidance() {
+            db.ref('guidance').on('value', (snapshot) => {
+                let data = snapshot.val();
+                let listEl = document.getElementById('guidance-list');
+                if (!listEl) return;
+
+                if (!data) {
+                    listEl.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-500">لا توجد حالات سلوكية أو ملفات تربوية مسجلة حالياً</td></tr>`;
+                    return;
+                }
+
+                listEl.innerHTML = Object.entries(data).map(([id, item]) => `
+                    <tr>
+                        <td class="p-3 font-bold">${item.name}</td>
+                        <td class="p-3 text-amber-400">${item.cls}</td>
+                        <td class="p-3">${item.type}</td>
+                        <td class="p-3 text-slate-300">${item.note}</td>
+                        <td class="p-3">${item.date}</td>
+                        <td class="p-3 no-print"><button onclick="delGuidance('${id}')" class="text-red-400 text-xs cursor-pointer">حذف</button></td>
+                    </tr>
+                `).join('');
+            });
+        }
+
+        function delGuidance(id) {
+            db.ref('guidance/' + id).remove();
+        }
+
+        function clearGuidance() {
+            if (confirm('هل تريد مسح جميع الملفات التربوية من السحابة؟')) {
+                db.ref('guidance').remove();
+            }
+        }
+
+        function loadRepeatAbsences() {
+            db.ref('abs').on('value', (snapshot) => {
+                let data = snapshot.val();
+                let tbody = document.getElementById('repeat-abs-list');
+                if (!tbody) return;
+
+                if (!data) {
+                    tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-500">لا توجد سجلات غياب حالياً</td></tr>`;
+                    return;
+                }
+
+                let map = {};
+                Object.values(data).forEach((item) => {
+                    let name = (item.name || '').trim();
+                    let cls = (item.cls || '').trim();
+                    if (!name) return;
+                    let key = `${name}__${cls}`;
+                    if (!map[key]) {
+                        map[key] = { name, cls, absCount: 0, escCount: 0, dates: [] };
+                    }
+                    if (item.type === 'غياب') map[key].absCount++;
+                    if (item.type === 'هروب') map[key].escCount++;
+                    if (item.date) map[key].dates.push(`${item.date} (${item.type})`);
+                });
+
+                let repeated = Object.values(map).filter(s => s.absCount >= 2 || s.escCount >= 1);
+                if (repeated.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-500">لا توجد حالات غياب متكرر مسجلة حالياً</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = repeated.map(s => `
+                    <tr>
+                        <td class="p-3 font-bold">${s.name}</td>
+                        <td class="p-3 text-amber-400">${s.cls}</td>
+                        <td class="p-3 font-bold text-amber-300">${s.absCount}</td>
+                        <td class="p-3 font-bold text-red-400">${s.escCount}</td>
+                        <td class="p-3 text-xs text-slate-300">${s.dates.join('، ')}</td>
+                    </tr>
+                `).join('');
+            });
+        }
+    </script>
+</body>
+  </html>
+                              
