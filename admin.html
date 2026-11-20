@@ -99,7 +99,7 @@
                                 <th class="p-3">المادة الدراسية</th>
                                 <th class="p-3">عدد الدرجات المرصودة</th>
                                 <th class="p-3">المعدل</th>
-                                <th class="p-3">نسبة النجاح (≥50)</th>
+                                <th class="p-3">نسبة النجاح (50 فأكثر)</th>
                                 <th class="p-3">حالة الإنجاز</th>
                             </tr>
                         </thead>
@@ -114,7 +114,27 @@
                 <p id="counselor-summary" class="text-xs sm:text-sm text-slate-300 leading-relaxed"></p>
             </div>
 
-            <!-- 4. إدارة الحسابات وإعادة ضبط كلمات المرور -->
+            <!-- 4. قفل تعديل الدرجات التلقائي واليدوي -->
+            <div class="cyber-card-rose p-4 rounded-xl no-print">
+                <h3 class="text-sm font-bold text-rose-300 mb-3">🔒 قفل تعديل الدرجات (بعد انتهاء الفترة أو اعتماد النتيجة)</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3 items-center">
+                    <div class="bg-slate-950 border border-slate-800 p-2.5 rounded text-xs">
+                        <span class="text-slate-400 block mb-1">حالة القفل الحالية:</span>
+                        <span id="lock-status-badge" class="font-bold text-emerald-400">مفتوح للرصد</span>
+                    </div>
+                    <div>
+                        <label class="text-[11px] text-slate-400 block mb-1">موعد انتهاء فترة إدخال الدرجات (قفل تلقائي):</label>
+                        <input type="datetime-local" id="lock-deadline" class="w-full bg-slate-950 border border-slate-800 p-2 rounded text-white text-xs">
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="saveLockSchedule()" class="flex-1 bg-rose-600 hover:bg-rose-500 text-white font-bold px-3 py-2 rounded text-xs cursor-pointer transition">حفظ الموعد</button>
+                        <button onclick="toggleManualLock()" id="toggle-lock-btn" class="flex-1 bg-amber-500 hover:bg-amber-400 text-black font-bold px-3 py-2 rounded text-xs cursor-pointer transition">قفل الآن</button>
+                    </div>
+                </div>
+                <p class="text-[11px] text-slate-400">عند حلول الموعد المحدد أو تفعيل القفل اليدوي، يُمنع تعديل أو حذف الدرجات من بوابة المدرسين تلقائياً وتُوثق العملية في سجل الحركات.</p>
+            </div>
+
+            <!-- 5. إدارة الحسابات وإعادة ضبط كلمات المرور -->
             <div class="cyber-card-rose p-4 rounded-xl no-print">
                 <h3 class="text-sm font-bold text-rose-300 mb-3">🔐 إدارة الحسابات وإعادة ضبط كلمات المرور</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
@@ -138,7 +158,7 @@
                 <p class="text-[11px] text-slate-400">ملاحظة: الرموز تُحفظ في عقدة <span class="font-mono text-rose-300">settings</span> بقاعدة بيانات Firebase.</p>
             </div>
 
-            <!-- 5. سجل الحركات -->
+            <!-- 6. سجل الحركات -->
             <div class="cyber-card-rose p-4 rounded-xl">
                 <div class="flex justify-between items-center mb-3 flex-wrap gap-2 no-print">
                     <h3 class="text-sm font-bold text-rose-300">🕵️ سجل الحركات الإشرافية والنظام</h3>
@@ -206,6 +226,7 @@
         ];
 
         let adminPassCode = "9999";
+        let gradesLockState = { manualLocked: false, deadline: '' };
 
         db.ref('settings/adminPass').on('value', (snap) => {
             if (snap.val()) adminPassCode = String(snap.val());
@@ -232,7 +253,88 @@
             }
         }
 
+        function isGradesLockedNow() {
+            if (gradesLockState.manualLocked) return true;
+            if (gradesLockState.deadline) {
+                let deadlineTime = new Date(gradesLockState.deadline).getTime();
+                if (!isNaN(deadlineTime) && Date.now() >= deadlineTime) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function updateLockUI() {
+            let badge = document.getElementById('lock-status-badge');
+            let btn = document.getElementById('toggle-lock-btn');
+            let locked = isGradesLockedNow();
+
+            if (badge) {
+                if (gradesLockState.manualLocked) {
+                    badge.innerText = 'مقفل يدوياً (معتمد)';
+                    badge.className = 'font-bold text-rose-400';
+                } else if (locked) {
+                    badge.innerText = 'مقفل تلقائياً (انتهت الفترة)';
+                    badge.className = 'font-bold text-rose-400';
+                } else {
+                    badge.innerText = 'مفتوح للرصد';
+                    badge.className = 'font-bold text-emerald-400';
+                }
+            }
+
+            if (btn) {
+                btn.innerText = gradesLockState.manualLocked ? 'فتح القفل اليدوي' : 'قفل الآن';
+            }
+        }
+
+        function initLockSettings() {
+            db.ref('settings/gradesLock').on('value', (snap) => {
+                let val = snap.val() || {};
+                gradesLockState = {
+                    manualLocked: Boolean(val.manualLocked),
+                    deadline: val.deadline || ''
+                };
+                let input = document.getElementById('lock-deadline');
+                if (input && gradesLockState.deadline && document.activeElement !== input) {
+                    input.value = gradesLockState.deadline;
+                }
+                updateLockUI();
+            });
+            setInterval(updateLockUI, 15000);
+        }
+
+        function saveLockSchedule() {
+            let deadlineVal = document.getElementById('lock-deadline').value;
+            db.ref('settings/gradesLock').update({ deadline: deadlineVal || '' }, (err) => {
+                if (err) {
+                    alert('فشل حفظ موعد القفل!');
+                } else {
+                    logAudit(
+                        'تحديث موعد قفل الدرجات',
+                        deadlineVal ? `تم ضبط موعد القفل التلقائي: ${deadlineVal}` : 'تم إلغاء موعد القفل التلقائي'
+                    );
+                    alert('تم حفظ إعدادات الموعد بنجاح');
+                }
+            });
+        }
+
+        function toggleManualLock() {
+            let nextState = !gradesLockState.manualLocked;
+            db.ref('settings/gradesLock').update({ manualLocked: nextState }, (err) => {
+                if (err) {
+                    alert('فشل تغيير حالة القفل!');
+                } else {
+                    logAudit(
+                        nextState ? 'قفل تعديل الدرجات' : 'فتح تعديل الدرجات',
+                        nextState ? 'تم قفل رصد وتعديل الدرجات من قبل الإدارة' : 'تم فتح رصد وتعديل الدرجات من قبل الإدارة'
+                    );
+                }
+            });
+        }
+
         function initAdminDashboard() {
+            initLockSettings();
+
             // 1. إحصائيات الغياب والهروب حسب الشُعب
             db.ref('abs').on('value', (snap) => {
                 let data = snap.val() || {};
@@ -254,8 +356,7 @@
                     statsMap[cls].total++;
                 });
 
-                let grandTotal = records.length;
-                document.getElementById('kpi-abs-total').innerText = grandTotal;
+                document.getElementById('kpi-abs-total').innerText = records.length;
 
                 let tbody = document.getElementById('class-stats-body');
                 tbody.innerHTML = Object.entries(statsMap).map(([cls, s]) => `
@@ -282,107 +383,4 @@
                 let activeSubsCount = 0;
                 let rowsHtml = defaultSubs.map(subjName => {
                     let subGrades = grades.filter(g => g.subj === subjName);
-                    let count = subGrades.length;
-                    if (count > 0) activeSubsCount++;
-
-                    let avg = count > 0
-                        ? (subGrades.reduce((sum, item) => sum + Number(item.grade || 0), 0) / count).toFixed(1)
-                        : '—';
-
-                    let passCount = subGrades.filter(item => Number(item.grade || 0) >= 50).length;
-                    let rate = count > 0 ? `${((passCount / count) * 100).toFixed(1)}%` : '—';
-
-                    let statusBadge = count > 0
-                        ? `<span class="text-xs px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-500/30 font-bold">تم الرصد</span>`
-                        : `<span class="text-xs px-2 py-0.5 rounded bg-slate-900 text-slate-400 border border-slate-700">بانتظار الرصد</span>`;
-
-                    return `
-                        <tr>
-                            <td class="p-3 font-bold text-white">${subjName}</td>
-                            <td class="p-3 text-cyan-300 font-bold">${count}</td>
-                            <td class="p-3 text-slate-200">${avg}</td>
-                            <td class="p-3 text-emerald-400 font-bold">${rate}</td>
-                            <td class="p-3">${statusBadge}</td>
-                        </tr>
-                    `;
-                }).join('');
-
-                document.getElementById('kpi-subs-active').innerText = `${activeSubsCount} / ${defaultSubs.length}`;
-                document.getElementById('subj-stats-body').innerHTML = rowsHtml;
-            });
-
-            // 3. متابعة إنجاز المشرف التربوي
-            db.ref('guidance').on('value', (snap) => {
-                let data = snap.val() || {};
-                let items = Object.values(data);
-                document.getElementById('kpi-guidance-count').innerText = items.length;
-
-                let summaryEl = document.getElementById('counselor-summary');
-                if (items.length === 0) {
-                    summaryEl.innerText = 'لم يتم تسجيل أي ملفات أو حالات تربوية في بوابة المشرف التربوي حتى الآن.';
-                    return;
-                }
-
-                let byType = {};
-                items.forEach(i => {
-                    let t = i.type || 'ملف تربوي';
-                    byType[t] = (byType[t] || 0) + 1;
-                });
-
-                let breakdown = Object.entries(byType).map(([k, v]) => `${k}: ${v}`).join(' | ');
-                summaryEl.innerText = `إجمالي الملفات المسجلة بواسطة المشرف التربوي: ${items.length} (${breakdown}).`;
-            });
-
-            // 4. سجل الحركات
-            db.ref('audit_logs').on('value', (snap) => {
-                let data = snap.val() || {};
-                let listEl = document.getElementById('audit-list');
-                let entries = Object.values(data).reverse();
-
-                if (entries.length === 0) {
-                    listEl.innerHTML = `<tr><td colspan="3" class="p-4 text-center text-slate-500">لا توجد حركات مسجلة حالياً</td></tr>`;
-                    return;
-                }
-
-                listEl.innerHTML = entries.map(log => `
-                    <tr>
-                        <td class="p-3 font-bold text-rose-300">${log.action || 'حركة'}</td>
-                        <td class="p-3 text-slate-200">${log.details || ''}</td>
-                        <td class="p-3 text-slate-400 font-mono text-xs">${log.time || ''}</td>
-                    </tr>
-                `).join('');
-            });
-        }
-
-        function updatePassword() {
-            let target = document.getElementById('role-target').value;
-            let newPass = document.getElementById('new-role-pass').value.trim();
-            if (!newPass) {
-                alert('يرجى إدخال الرمز الجديد');
-                return;
-            }
-
-            let path = target.startsWith('subj:')
-                ? `settings/teacherCodes/${encodeURIComponent(target.replace('subj:', ''))}`
-                : `settings/${target}`;
-
-            db.ref(path).set(newPass, (err) => {
-                if (err) {
-                    alert('فشل تحديث الرمز سحابياً!');
-                } else {
-                    document.getElementById('new-role-pass').value = '';
-                    logAudit('تحديث رمز مرور', `تم تحديث رمز: ${target}`);
-                    alert('تم تحديث الرمز بنجاح!');
-                }
-            });
-        }
-
-        function clearAuditLogs() {
-            if (confirm('هل تريد مسح سجل الحركات بالكامل؟')) {
-                db.ref('audit_logs').remove();
-            }
-        }
-    </script>
-</body>
-                  </html>
-                  
+                    l
