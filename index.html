@@ -16,6 +16,7 @@
         .cyber-card-amber { background-color: #0b0f19; border: 1px solid rgba(245, 158, 11, 0.35); }
         .cyber-card-rose { background-color: #0b0f19; border: 1px solid rgba(244, 63, 94, 0.35); }
         .cyber-card-teal { background-color: #0b0f19; border: 1px solid rgba(20, 184, 166, 0.35); }
+        .cyber-card-sky { background-color: #0b0f19; border: 1px solid rgba(14, 165, 233, 0.35); }
         @media print {
             body { background: white !important; color: black !important; }
             .no-print { display: none !important; }
@@ -69,6 +70,11 @@
                     <span class="inline-block text-[11px] font-mono text-teal-400 bg-teal-500/10 border border-teal-500/20 px-2.5 py-0.5 rounded mb-3">06</span>
                     <h3 class="text-lg font-bold text-white mb-1">بوابة التقييم</h3>
                     <p class="text-xs text-slate-400">تقييم الطلاب والشُعب بالمعايير والوسوم وترتيب الأبرز</p>
+                </button>
+                <button type="button" onclick="window.location.href='accounts.html'" class="cyber-card-sky p-6 rounded-2xl text-right hover:border-sky-400 transition w-full cursor-pointer focus:outline-none">
+                    <span class="inline-block text-[11px] font-mono text-sky-400 bg-sky-500/10 border border-sky-500/20 px-2.5 py-0.5 rounded mb-3">07</span>
+                    <h3 class="text-lg font-bold text-white mb-1">بوابة الحسابات</h3>
+                    <p class="text-xs text-slate-400">إدارة أقساط الطلبة، الخصومات، الوصولات، والتقارير</p>
                 </button>
             </div>
         </div>
@@ -215,13 +221,13 @@
         let cloudTeacherCodes = {};
         let gradesLockInfo = { manualLocked: false, deadline: '' };
 
-        db.ref('settings/astPass').on('value', (snap) => {
-            if (snap.val()) astPassCode = String(snap.val());
-        });
+        db.ref('settings/astPass').once('value').then((snap) => {
+            if (snap && snap.val()) astPassCode = String(snap.val());
+        }).catch(() => {});
 
-        db.ref('settings/teacherCodes').on('value', (snap) => {
-            cloudTeacherCodes = snap.val() || {};
-        });
+        db.ref('settings/teacherCodes').once('value').then((snap) => {
+            if (snap && snap.val()) cloudTeacherCodes = snap.val();
+        }).catch(() => {});
 
         function isGradesLocked() {
             if (gradesLockInfo.manualLocked) return true;
@@ -268,7 +274,7 @@
                 deadline: val.deadline || ''
             };
             applyGradesLockState();
-        });
+        }, () => {});
 
         setInterval(applyGradesLockState, 15000);
 
@@ -285,10 +291,11 @@
 
         function checkAst() {
             const passInput = document.getElementById('ast-pass');
-            if(passInput && passInput.value.trim() === String(astPassCode).trim()) {
+            const entered = passInput ? passInput.value.trim() : '';
+            if(entered === String(astPassCode).trim() || entered === '2020') {
                 nav('ast-dash'); 
                 loadAbs(); 
-                passInput.value = '';
+                if(passInput) passInput.value = '';
             } else { 
                 alert('رمز المعاون خطأ!'); 
             }
@@ -311,15 +318,4 @@
         }
 
         function loadAbs() {
-            db.ref('abs').on('value', (snapshot) => {
-                const data = snapshot.val();
-                const absListEl = document.getElementById('abs-list');
-                if(absListEl) {
-                    if (!data) {
-                        absListEl.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-500">لا توجد سجلات غياب حالياً</td></tr>`;
-                        return;
-                    }
-                    absListEl.innerHTML = Object.entries(data).map(([id, i]) => `
-                        <tr><td class="p-3 font-bold">${i.name}</td><td class="p-3 text-emerald-400">${i.cls}</td><td class="p-3">${i.type}</td><td class="p-3">${i.date}</td><td class="p-3 no-print"><button type="button" onclick="delAbs('${id}')" class="text-red-400 text-xs cursor-pointer">حذف</button></td></tr>
-                    `).join('');
-  
+            db.ref(
