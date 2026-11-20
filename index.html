@@ -13,6 +13,9 @@
         .cyber-card { background-color: #0b0f19; border: 1px solid rgba(0, 255, 102, 0.3); }
         .cyber-card-blue { background-color: #0b0f19; border: 1px solid rgba(6, 182, 212, 0.3); }
         .cyber-card-purple { background-color: #0b0f19; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .cyber-card-amber { background-color: #0b0f19; border: 1px solid rgba(245, 158, 11, 0.35); }
+        .cyber-card-rose { background-color: #0b0f19; border: 1px solid rgba(244, 63, 94, 0.35); }
+        .cyber-card-teal { background-color: #0b0f19; border: 1px solid rgba(20, 184, 166, 0.35); }
         @media print {
             body { background: white !important; color: black !important; }
             .no-print { display: none !important; }
@@ -51,6 +54,21 @@
                     <div class="text-3xl mb-2">🎓</div>
                     <h3 class="text-lg font-bold text-white mb-1">بوابة الطلاب</h3>
                     <p class="text-xs text-slate-400">الجداول، الامتحانات، ومتابعة النتائج</p>
+                </button>
+                <button onclick="window.location.href='counselor.html'" class="cyber-card-amber p-6 rounded-2xl text-right hover:border-amber-400 transition w-full cursor-pointer focus:outline-none">
+                    <div class="text-3xl mb-2">🧭</div>
+                    <h3 class="text-lg font-bold text-white mb-1">بوابة المشرف التربوي / المرشد</h3>
+                    <p class="text-xs text-slate-400">الحالات السلوكية، الغياب المتكرر، والملفات التربوية</p>
+                </button>
+                <button onclick="window.location.href='admin.html'" class="cyber-card-rose p-6 rounded-2xl text-right hover:border-rose-400 transition w-full cursor-pointer focus:outline-none">
+                    <div class="text-3xl mb-2">👑</div>
+                    <h3 class="text-lg font-bold text-white mb-1">بوابة الإدارة / المدير</h3>
+                    <p class="text-xs text-slate-400">إحصائيات شاملة، متابعة الإنجاز، والصلاحيات الإشرافية</p>
+                </button>
+                <button onclick="window.location.href='evaluations.html'" class="cyber-card-teal p-6 rounded-2xl text-right hover:border-teal-400 transition w-full cursor-pointer focus:outline-none">
+                    <div class="text-3xl mb-2">⭐</div>
+                    <h3 class="text-lg font-bold text-white mb-1">بوابة التقييم</h3>
+                    <p class="text-xs text-slate-400">تقييم الطلاب والشُعب بالمعايير والوسوم وترتيب الأبرز</p>
                 </button>
             </div>
         </div>
@@ -319,33 +337,4 @@
                         return;
                     }
                     let list = Object.entries(data).filter(([id, g]) => g.subj === currSubj.name).map(([id, i]) => `
-                        <tr><td class="p-3 font-bold">${i.name}</td><td class="p-3 text-cyan-300">${i.cls}</td><td class="p-3">${i.subj}</td><td class="p-3 text-emerald-400 font-bold">${i.grade}</td><td class="p-3 no-print"><button onclick="delGrade('${id}')" class="text-red-400 text-xs cursor-pointer">حذف</button></td></tr>
-                    `).join('');
-                    gradesListEl.innerHTML = list;
-                }
-            });
-        }
-
-        function delGrade(id) {
-            db.ref('grades/' + id).remove();
-        }
-
-        function clearGrades() {
-            if(!currSubj) return;
-            if(confirm('مسح سجل درجات هذه المادة من السحابة؟')) {
-                db.ref('grades').once('value', (snapshot) => {
-                    let data = snapshot.val();
-                    if(data) {
-                        Object.entries(data).forEach(([id, g]) => {
-                            if(g.subj === currSubj.name) {
-                                db.ref('grades/' + id).remove();
-                            }
-                        });
-                    }
-                });
-            }
-        }
-    </script>
-</body>
-    </html>
-    
+                        <tr><td class="p-3 font-bold">${i.name}</td><td class="p-3 text-cyan-300">${i.cls}</td><td class="p-3">${i.subj}</td><td class="p-3 text-emerald-400 f
