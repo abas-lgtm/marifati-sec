@@ -40,17 +40,17 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
       <h1>إعدادية المعرفة المهنية الاهلية — Index 2</h1>
       <div class="sub">برمجة: عباس محمد عزيز</div>
     </div>
-    <button type="button" id="i2-home" class="btn-d">الرئيسية</button>
+    <button type="button" onclick="openTab('home')" class="btn-d">الرئيسية</button>
   </header>
 
-  <div id="i2-v-home" class="grid">
-    <button type="button" id="i2-btn-ast" class="card">
+  <div id="tab-home" class="grid" style="display:grid">
+    <button type="button" onclick="openTab('al')" class="card">
       <span class="num">01</span>
       <span class="title">بوابة المعاون</span>
       <span class="desc">الغيابات، الهروب، والإجازات</span>
     </button>
 
-    <button type="button" id="i2-btn-tch" class="card">
+    <button type="button" onclick="openTab('ts')" class="card">
       <span class="num" style="color:#22d3ee">02</span>
       <span class="title">بوابة المدرسين</span>
       <span class="desc">رصد درجات المواد من 100</span>
@@ -88,7 +88,281 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
   </div>
 
   <!-- دخول المعاون -->
-  <div id="i2-v-al" class="panel box-sm">
+  <div id="tab-al" class="panel box-sm">
     <h3 style="margin-top:0;color:#34d399;text-align:center;font-size:20px">دخول بوابة المعاون</h3>
-    <div id="i2-am" style="text-
-      
+    <div id="m-ast" style="text-align:center;font-size:14px;color:#94a3b8;margin-bottom:14px">المحاولات المتبقية: 10 من 10</div>
+    <input type="password" id="p-ast" placeholder="أدخل الرمز السري">
+    <div class="bar">
+      <button type="button" onclick="doAstLogin()" class="btn-g" style="flex:1">دخول</button>
+      <button type="button" onclick="openTab('home')" class="btn-d">إلغاء</button>
+    </div>
+  </div>
+
+  <!-- لوحة المعاون -->
+  <div id="tab-ad" class="panel">
+    <div class="bar np">
+      <h3 style="margin:0;color:#34d399;font-size:20px">سجل الغيابات، الهروب، والإجازات</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button type="button" onclick="window.print()" class="btn-g">طباعة PDF</button>
+        <button type="button" onclick="clearStore('abs')" class="btn-r">مسح الكل</button>
+        <button type="button" onclick="openTab('home')" class="btn-d">رجوع</button>
+      </div>
+    </div>
+    <div class="np">
+      <input type="text" id="a-name" placeholder="اسم الطالب">
+      <select id="a-cls">
+        <option>اول امن سيبراني A</option>
+        <option>اول امن سيبراني B</option>
+        <option>اول امن سيبراني C</option>
+        <option>اول تكرير نفط A</option>
+        <option>اول تجميع حاسوب A</option>
+        <option>اول اجهزه طبية A</option>
+      </select>
+      <select id="a-st">
+        <option>غياب</option>
+        <option>هروب</option>
+        <option>اجازة</option>
+      </select>
+      <input type="date" id="a-dt">
+      <button type="button" onclick="saveAbs()" class="btn-g" style="width:100%;margin-bottom:12px">حفظ السجل</button>
+      <input type="text" id="a-srch" oninput="renderAbs()" placeholder="بحث باسم الطالب أو الصف...">
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>الطالب</th>
+          <th>الصف</th>
+          <th>الحالة</th>
+          <th>التاريخ</th>
+          <th class="np">حذف</th>
+        </tr>
+      </thead>
+      <tbody id="a-tbody"></tbody>
+    </table>
+  </div>
+
+  <!-- اختيار المادة -->
+  <div id="tab-ts" class="panel box-sm">
+    <h3 style="margin-top:0;color:#22d3ee;text-align:center;font-size:20px">اختر المادة الدراسية</h3>
+    <div id="sub-list"></div>
+    <button type="button" onclick="openTab('home')" class="btn-d" style="width:100%;margin-top:10px">رجوع</button>
+  </div>
+
+  <!-- دخول المدرس -->
+  <div id="tab-tl" class="panel box-sm">
+    <h3 id="t-head" style="margin-top:0;color:#22d3ee;text-align:center;font-size:20px">دخول المدرس</h3>
+    <div id="m-tch" style="text-align:center;font-size:14px;color:#94a3b8;margin-bottom:14px">المحاولات المتبقية: 10 من 10</div>
+    <input type="password" id="p-tch" placeholder="أدخل رمز المادة السري">
+    <div class="bar">
+      <button type="button" onclick="doTchLogin()" class="btn-b" style="flex:1">دخول</button>
+      <button type="button" onclick="openTab('ts')" class="btn-d">رجوع</button>
+    </div>
+  </div>
+
+  <!-- لوحة المدرس -->
+  <div id="tab-td" class="panel">
+    <div class="bar np">
+      <h3 id="t-dhead" style="margin:0;color:#22d3ee;font-size:20px">رصد الدرجات (من 100)</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button type="button" onclick="window.print()" class="btn-b">طباعة PDF</button>
+        <button type="button" onclick="clearStore('gr')" class="btn-r">مسح الكل</button>
+        <button type="button" onclick="openTab('home')" class="btn-d">رجوع</button>
+      </div>
+    </div>
+    <div class="np">
+      <input type="text" id="t-name" placeholder="اسم الطالب">
+      <select id="t-cls">
+        <option>اول امن سيبراني A</option>
+        <option>اول امن سيبراني B</option>
+        <option>اول امن سيبراني C</option>
+        <option>اول تكرير نفط A</option>
+        <option>اول تجميع حاسوب A</option>
+        <option>اول اجهزه طبية A</option>
+      </select>
+      <input type="number" id="t-gr" min="0" max="100" placeholder="الدرجة من 100">
+      <button type="button" onclick="saveGr()" class="btn-b" style="width:100%;margin-bottom:12px">حفظ الدرجة</button>
+      <input type="text" id="t-srch" oninput="renderGr()" placeholder="بحث باسم الطالب أو الصف...">
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>الطالب</th>
+          <th>الصف</th>
+          <th>المادة</th>
+          <th>الدرجة</th>
+          <th class="np">حذف</th>
+        </tr>
+      </thead>
+      <tbody id="t-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<footer>برمجة وتطوير: <strong style="color:#34d399">عباس محمد عزيز</strong></footer>
+
+<script>
+var MAX = 10, AST_PASS = "55100", CUR = null;
+var SUBJECTS = [
+  {name:"التربية الإسلامية", code:"1090"},
+  {name:"اللغة العربية", code:"202500"},
+  {name:"الرياضيات", code:"12300"},
+  {name:"الانجليزي", code:"0005"},
+  {name:"اساسيات الكهرباء", code:"9000"},
+  {name:"تجميع الحاسوب", code:"6200"},
+  {name:"تطبيقات الحاسوب", code:"1999"},
+  {name:"الاتصالات والشبكات", code:"6100"},
+  {name:"مبادى الحاسوب", code:"1998"}
+];
+
+function banHrs(g, s){
+  g = String(g || "").trim(); s = String(s || "").trim();
+  var d = Math.abs(g.length - s.length), m = 0, p = s.split("");
+  for (var i = 0; i < g.length; i++){ var x = p.indexOf(g[i]); if (x > -1){ m++; p.splice(x, 1); } }
+  var r = m / Math.max(g.length, s.length, 1), a = Number(g), b = Number(s);
+  if ((!isNaN(a) && !isNaN(b) && b > 0 && Math.abs(a - b) / b <= 0.25) || (r >= 0.6 && d <= 1)) return 72;
+  if (r >= 0.35 && d <= 2) return 96;
+  return 120;
+}
+
+function getLk(k){
+  try {
+    var o = JSON.parse(localStorage.getItem("lk2_" + k) || "{}");
+    if (o.u && Date.now() >= +o.u){ var z = {t:0, u:0, h:0}; localStorage.setItem("lk2_" + k, JSON.stringify(z)); return z; }
+    return {t:+o.t||0, u:+o.u||0, h:+o.h||0};
+  } catch(e){ return {t:0, u:0, h:0}; }
+}
+
+function setLk(k, v){ try { localStorage.setItem("lk2_" + k, JSON.stringify(v)); } catch(e){} }
+function remTxt(ms){ var h = Math.max(1, Math.ceil(ms / 36e5)); return Math.floor(h / 24) + " يوم و " + (h % 24) + " ساعة (" + h + " ساعة)"; }
+
+function showMsg(k, id){
+  var e = document.getElementById(id), s = getLk(k);
+  if (!e) return;
+  e.innerText = (s.u && Date.now() < s.u)
+    ? ("محظور " + s.h + " ساعة — المتبقي: " + remTxt(s.u - Date.now()))
+    : ("المحاولات المتبقية: " + Math.max(0, MAX - s.t) + " من " + MAX);
+}
+
+function getList(k){ try { return JSON.parse(localStorage.getItem("dt2_" + k) || "[]"); } catch(e){ return []; } }
+function setList(k, a){ try { localStorage.setItem("dt2_" + k, JSON.stringify(a)); } catch(e){} }
+
+function openTab(name){
+  var all = ["home", "al", "ad", "ts", "tl", "td"];
+  for (var i = 0; i < all.length; i++){
+    var el = document.getElementById("tab-" + all[i]);
+    if (el) el.style.display = "none";
+  }
+  var target = document.getElementById("tab-" + name);
+  if (target) target.style.display = (name === "home" ? "grid" : "block");
+  if (name === "al") showMsg("ast", "m-ast");
+  if (name === "ad") renderAbs();
+  if (name === "ts") renderSubs();
+  if (name === "tl" && CUR) showMsg("tch_" + CUR.name, "m-tch");
+  if (name === "td") renderGr();
+}
+
+function renderSubs(){
+  var html = "";
+  for (var i = 0; i < SUBJECTS.length; i++){
+    html += "<button type='button' onclick=\"selectSub('" + SUBJECTS[i].name + "')\" class='card' style='margin-bottom:10px;min-height:0;padding:16px 18px'><span class='title' style='margin:0;font-size:17px;color:#22d3ee'>" + SUBJECTS[i].name + "</span></button>";
+  }
+  document.getElementById("sub-list").innerHTML = html;
+}
+
+function selectSub(n){
+  CUR = null;
+  for (var i = 0; i < SUBJECTS.length; i++){
+    if (SUBJECTS[i].name === n){ CUR = SUBJECTS[i]; break; }
+  }
+  if (!CUR) return;
+  document.getElementById("t-head").innerText = "دخول: " + CUR.name;
+  document.getElementById("p-tch").value = "";
+  openTab("tl");
+}
+
+function doAstLogin(){
+  var s = getLk("ast");
+  if (s.u && Date.now() < s.u){ alert("محظور " + s.h + " ساعة.\nالمتبقي: " + remTxt(s.u - Date.now())); return; }
+  var inp = document.getElementById("p-ast"), val = inp ? inp.value.trim() : "";
+  if (val === AST_PASS){ setLk("ast", {t:0, u:0, h:0}); inp.value = ""; openTab("ad"); }
+  else {
+    s.t++;
+    if (s.t > MAX){ var h = banHrs(val, AST_PASS); setLk("ast", {t:s.t, u:Date.now() + h * 36e5, h:h}); showMsg("ast", "m-ast"); alert("تجاوزت 10 محاولات! حظر " + h + " ساعة"); }
+    else { setLk("ast", s); showMsg("ast", "m-ast"); alert("الرمز خطأ! المتبقي: " + (MAX - s.t)); }
+  }
+}
+
+function saveAbs(){
+  var n = document.getElementById("a-name").value.trim();
+  var c = document.getElementById("a-cls").value;
+  var t = document.getElementById("a-st").value;
+  var d = document.getElementById("a-dt").value || new Date().toISOString().slice(0, 10);
+  if (!n){ alert("أدخل اسم الطالب"); return; }
+  var arr = getList("abs"); arr.unshift({n:n, c:c, t:t, d:d}); setList("abs", arr);
+  document.getElementById("a-name").value = ""; renderAbs();
+}
+
+function delAbs(i){ var arr = getList("abs"); arr.splice(i, 1); setList("abs", arr); renderAbs(); }
+
+function renderAbs(){
+  var q = (document.getElementById("a-srch").value || "").trim().toLowerCase();
+  var arr = getList("abs"), h = "";
+  for (var i = 0; i < arr.length; i++){
+    var x = arr[i];
+    if (!q || (x.n + " " + x.c + " " + x.t).toLowerCase().indexOf(q) > -1){
+      var col = x.t === "هروب" ? "#fb7185" : (x.t === "غياب" ? "#fbbf24" : "#34d399");
+      h += "<tr><td>" + x.n + "</td><td>" + x.c + "</td><td style='color:" + col + ";font-weight:bold'>" + x.t + "</td><td>" + x.d + "</td><td class='np'><button type='button' onclick='delAbs(" + i + ")' class='btn-r' style='padding:6px 12px;font-size:13px'>حذف</button></td></tr>";
+    }
+  }
+  document.getElementById("a-tbody").innerHTML = h;
+}
+
+function doTchLogin(){
+  if (!CUR) return;
+  var k = "tch_" + CUR.name, s = getLk(k);
+  if (s.u && Date.now() < s.u){ alert("محظور " + s.h + " ساعة.\nالمتبقي: " + remTxt(s.u - Date.now())); return; }
+  var inp = document.getElementById("p-tch"), val = inp ? inp.value.trim() : "";
+  if (val === CUR.code){ setLk(k, {t:0, u:0, h:0}); inp.value = ""; document.getElementById("t-dhead").innerText = "رصد درجات - " + CUR.name + " (من 100)"; openTab("td"); }
+  else {
+    s.t++;
+    if (s.t > MAX){ var h = banHrs(val, CUR.code); setLk(k, {t:s.t, u:Date.now() + h * 36e5, h:h}); showMsg(k, "m-tch"); alert("تجاوزت 10 محاولات! حظر " + h + " ساعة"); }
+    else { setLk(k, s); showMsg(k, "m-tch"); alert("الرمز خطأ! المتبقي: " + (MAX - s.t)); }
+  }
+}
+
+function saveGr(){
+  if (!CUR) return;
+  var n = document.getElementById("t-name").value.trim();
+  var c = document.getElementById("t-cls").value;
+  var gi = document.getElementById("t-gr"), g = Number(gi.value);
+  if (!n || gi.value === ""){ alert("أدخل اسم الطالب والدرجة"); return; }
+  if (g < 0 || g > 100){ alert("الدرجة بين 0 و 100"); return; }
+  var arr = getList("gr"); arr.unshift({n:n, c:c, s:CUR.name, g:g}); setList("gr", arr);
+  document.getElementById("t-name").value = ""; gi.value = ""; renderGr();
+}
+
+function delGr(i){ var arr = getList("gr"); arr.splice(i, 1); setList("gr", arr); renderGr(); }
+
+function renderGr(){
+  var q = (document.getElementById("t-srch").value || "").trim().toLowerCase();
+  var arr = getList("gr"), h = "";
+  for (var i = 0; i < arr.length; i++){
+    var x = arr[i];
+    if ((!CUR || x.s === CUR.name) && (!q || (x.n + " " + x.c + " " + x.s).toLowerCase().indexOf(q) > -1)){
+      h += "<tr><td>" + x.n + "</td><td>" + x.c + "</td><td>" + x.s + "</td><td><strong>" + x.g + " / 100</strong></td><td class='np'><button type='button' onclick='delGr(" + i + ")' class='btn-r' style='padding:6px 12px;font-size:13px'>حذف</button></td></tr>";
+    }
+  }
+  document.getElementById("t-tbody").innerHTML = h;
+}
+
+function clearStore(k){
+  if (confirm("هل تريد مسح جميع السجلات المحفوظة؟")){
+    setList(k, []);
+    if (k === "abs") renderAbs();
+    else renderGr();
+  }
+}
+</script>
+</body>
+                                                                            </html>
+                                                                            
