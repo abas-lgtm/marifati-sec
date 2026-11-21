@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>نظام إدارة المدرسة الآمن — إعدادية المعرفة المهنية الاهلية</title>
+<title>ALPHA-SEC // النظام المدرسي المتكامل</title>
 <style>
 *{box-sizing:border-box;font-family:Tahoma,Arial,sans-serif}
-body{margin:0;padding:0 0 88px;background:linear-gradient(160deg,#050b0e 0%,#09161c 55%,#050d11 100%);color:#f1f5f9;min-height:100vh}
+body{margin:0;padding:0 0 75px;background:#030712;color:#f3f4f6;font-size:15px}
 
 /* شريط الإعلانات المتحرك في الواجهة الأمامية */
 .front-ticker-wrap{
   width:100%;
   overflow:hidden;
-  background:linear-gradient(90deg,#07141a,#0d252f,#07141a);
-  border-bottom:1px solid rgba(251,191,36,.4);
+  background:#071022;
+  border-bottom:1px solid #10b98166;
   padding:9px 0;
   direction:rtl;
 }
@@ -40,181 +40,217 @@ body{margin:0;padding:0 0 88px;background:linear-gradient(160deg,#050b0e 0%,#091
   border-radius:10px;
   font-size:12.5px;
   font-weight:bold;
-  background:#0f242d;
-  color:#e2e8f0;
-  border:1px solid rgba(45,212,191,.3);
+  background:#0b1324;
+  color:#f3f4f6;
+  border:1px solid #10b98155;
 }
 .front-ad-item.is-urgent{
-  background:#451015;
+  background:#450a0a;
   color:#fecaca;
-  border-color:#f87171;
+  border-color:#ef4444;
 }
 
-/* حاوية البوابات المرقمة */
-.container{max-width:680px;margin:0 auto;padding:24px 16px 14px}
-.top-head{margin-bottom:20px}
-.top-head h1{margin:0 0 6px;font-size:24px;color:#f8fafc;font-weight:bold}
-.top-head p{margin:0;font-size:14px;color:#94a3b8}
-
-.portal-list{display:flex;flex-direction:column;gap:14px}
-.portal-item{
-  display:block;
-  text-decoration:none;
-  background:rgba(13,22,27,.95);
-  border:1px solid rgba(148,163,184,.18);
-  border-radius:18px;
-  padding:18px 20px;
-  transition:transform .15s ease,border-color .15s ease;
-}
-.portal-item:hover{transform:translateY(-2px);border-color:rgba(45,212,191,.45)}
-.portal-num{font-size:13px;font-weight:bold;color:#38bdf8;margin-bottom:6px;letter-spacing:.5px}
-.portal-title{font-size:19px;font-weight:bold;color:#f8fafc;margin-bottom:4px}
-.portal-desc{font-size:13.5px;color:#94a3b8}
-
-.portal-item.p-04{border-color:rgba(245,158,11,.55)}
-.portal-item.p-04 .portal-num{color:#fbbf24}
-.portal-item.p-05{border-color:rgba(244,114,182,.45)}
-.portal-item.p-05 .portal-num{color:#f472b6}
-.portal-item.p-06 .portal-num{color:#34d399}
-.portal-item.p-07 .portal-num{color:#2dd4bf}
-
-/* نافذة البوابة الداخلية حتى لا يطلع 404 */
-.modal-backdrop{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(3,8,12,.84);
-  z-index:50;
-  padding:20px 14px 80px;
-  overflow-y:auto;
-}
-.modal-box{
-  max-width:640px;
-  margin:24px auto;
-  background:#0b1920;
-  border:1.5px solid rgba(45,212,191,.45);
-  border-radius:20px;
-  padding:22px;
-  box-shadow:0 18px 40px rgba(0,0,0,.6);
-}
-.modal-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}
-.modal-head h2{margin:0;font-size:20px;color:#5eead4}
-.close-btn{background:#162c36;color:#f1f5f9;border:1px solid #2b4c5b;border-radius:10px;padding:8px 14px;cursor:pointer;font-weight:bold}
-.m-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-bottom:12px}
-input,select,textarea{width:100%;padding:11px 13px;border-radius:11px;border:1px solid #264653;background:#061117;color:#fff;font-size:14px;margin-bottom:10px}
-.save-btn{width:100%;background:linear-gradient(135deg,#14b8a6,#10b981);color:#041311;border:0;border-radius:11px;padding:11px 16px;font-weight:bold;font-size:14px;cursor:pointer}
-.m-list{margin-top:14px;display:flex;flex-direction:column;gap:8px}
-.m-row{background:#071319;border:1px solid #1a3541;border-radius:12px;padding:11px 13px;font-size:13.5px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
-.del-mini{background:#dc2626;color:#fff;border:0;border-radius:8px;padding:5px 10px;font-size:12px;cursor:pointer;font-weight:bold}
-
-/* الفوتر السفلي */
-.footer{
-  position:fixed;
-  bottom:0;
-  left:0;
-  width:100%;
-  background:#071217;
-  border-top:1px solid rgba(45,212,191,.22);
-  padding:13px 12px;
-  text-align:center;
-  font-size:13.5px;
-  color:#cbd5e1;
-  z-index:40;
-}
-.footer strong{color:#2dd4bf}
+.wrap{max-width:980px;margin:0 auto;padding:18px 18px 0}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid #10b98155;padding-bottom:14px;margin-bottom:22px}
+header h1{margin:0;font-size:20px;color:#fff}
+header .sub{font-size:13px;color:#34d399;margin-top:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.card,.link{display:block;width:100%;text-align:right;background:#0b0f19;color:#fff;border:1px solid #10b98166;border-radius:16px;padding:20px;text-decoration:none;cursor:pointer;min-height:110px}
+.card:hover,.link:hover{border-color:#34d399}
+.num{font-size:13px;font-weight:bold;color:#34d399;margin-bottom:8px;display:block}
+.title{font-size:18px;font-weight:bold;color:#fff;margin-bottom:6px;display:block}
+.desc{font-size:13px;color:#94a3b8;display:block}
+.panel{display:none;background:#0b0f19;border:1px solid #10b98166;border-radius:16px;padding:22px;max-width:860px;margin:16px auto}
+.box-sm{max-width:460px}
+input,select{width:100%;padding:12px 14px;margin-bottom:12px;border-radius:10px;border:1px solid #334155;background:#020617;color:#fff;font-size:15px}
+button{cursor:pointer;border-radius:10px;border:0;padding:11px 16px;font-weight:bold;font-size:14px}
+.btn-g{background:#10b981;color:#000}
+.btn-b{background:#06b6d4;color:#000}
+.btn-d{background:#1e293b;color:#f1f5f9;border:1px solid #334155}
+.btn-r{background:#dc2626;color:#fff}
+.bar{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:14px}
+table{width:100%;border-collapse:collapse;margin-top:14px;font-size:14px}
+th,td{border:1px solid #1e293b;padding:10px;text-align:right}
+th{background:#020617;color:#34d399}
+footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1px solid #10b98155;padding:12px;text-align:center;font-size:13px;color:#cbd5e1}
+@media print{body{background:#fff;color:#000;padding:0}.np,footer,.front-ticker-wrap{display:none!important}th,td{border:1px solid #000;color:#000}}
 </style>
 </head>
 <body>
 
-<!-- شريط الإعلانات المتحرك للجميع في الواجهة الأمامية -->
+<!-- شريط الإعلانات المتحرك في الواجهة الأمامية -->
 <div class="front-ticker-wrap" title="مرر للتوقف وقراءة التبليغ">
   <div id="front-ad-track" class="front-ticker-track"></div>
 </div>
 
-<div class="container">
-  <div class="top-head">
-    <h1>نظام إدارة المدرسة الآمن</h1>
-    <p>اختر البوابة المطلوبة للمتابعة:</p>
-  </div>
-
-  <div class="portal-list">
-    <a class="portal-item" href="assistant.html" onclick="return openSmartPortal('assistant', this.href)">
-      <div class="portal-num">01</div>
-      <div class="portal-title">بوابة المعاون</div>
-      <div class="portal-desc">إدارة الغيابات والشعب</div>
-    </a>
-
-    <a class="portal-item" href="teachers.html" onclick="return openSmartPortal('teachers', this.href)">
-      <div class="portal-num">02</div>
-      <div class="portal-title">بوابة المدرسين</div>
-      <div class="portal-desc">رصد درجات المواد</div>
-    </a>
-
-    <a class="portal-item" href="students.html">
-      <div class="portal-num">03</div>
-      <div class="portal-title">بوابة الطلاب</div>
-      <div class="portal-desc">الجداول والنتائج</div>
-    </a>
-
-    <a class="portal-item p-04" href="supervisor.html" onclick="return openSmartPortal('supervisor', this.href)">
-      <div class="portal-num">04</div>
-      <div class="portal-title">بوابة المشرف التربوي / المرشد</div>
-      <div class="portal-desc">الحالات السلوكية والملفات</div>
-    </a>
-
-    <a class="portal-item p-05" href="principal.html" onclick="return openSmartPortal('principal', this.href)">
-      <div class="portal-num">05</div>
-      <div class="portal-title">بوابة الإدارة / المدير</div>
-      <div class="portal-desc">الإحصائيات والصلاحيات</div>
-    </a>
-
-    <a class="portal-item p-06" href="evaluations.html">
-      <div class="portal-num">06</div>
-      <div class="portal-title">بوابة التقييم</div>
-      <div class="portal-desc">تقييم الطلاب والشعب</div>
-    </a>
-
-    <a class="portal-item p-07" href="accounts.html">
-      <div class="portal-num">07</div>
-      <div class="portal-title">بوابة الحسابات</div>
-      <div class="portal-desc">الأقساط والخصومات والوصولات</div>
-    </a>
-  </div>
-</div>
-
-<!-- نافذة البوابات الأربع (تفتح إذا لم يكن الملف الخارجي موجوداً لمنع خطأ 404) -->
-<div id="smart-modal" class="modal-backdrop">
-  <div class="modal-box">
-    <div class="modal-head">
-      <h2 id="m-title">البوابة</h2>
-      <button type="button" class="close-btn" onclick="closeSmartPortal()">إغلاق</button>
+<div class="wrap">
+  <header class="np">
+    <div>
+      <h1>إعدادية المعرفة المهنية الاهلية</h1>
+      <div class="sub">برمجة: عباس محمد عزيز</div>
     </div>
-    <p id="m-sub" style="margin:0 0 12px;font-size:13px;color:#94a3b8"></p>
+    <button type="button" id="btn-home" class="btn-d">الرئيسية</button>
+  </header>
 
-    <div class="m-grid">
-      <input type="text" id="m-f1" placeholder="الاسم أو العنوان">
-      <select id="m-f2">
+  <div id="v-home" class="grid">
+    <button type="button" id="btn-ast" class="card">
+      <span class="num">01</span>
+      <span class="title">بوابة المعاون</span>
+      <span class="desc">الغيابات، الهروب، والإجازات</span>
+    </button>
+
+    <button type="button" id="btn-tch" class="card">
+      <span class="num" style="color:#22d3ee">02</span>
+      <span class="title">بوابة المدرسين</span>
+      <span class="desc">رصد درجات المواد من 100</span>
+    </button>
+
+    <a href="students.html" class="link">
+      <span class="num" style="color:#c084fc">03</span>
+      <span class="title">بوابة الطلاب</span>
+      <span class="desc">الجداول والنتائج</span>
+    </a>
+
+    <a href="counselor.html" class="link">
+      <span class="num" style="color:#fbbf24">04</span>
+      <span class="title">بوابة المشرف التربوي / المرشد</span>
+      <span class="desc">الحالات السلوكية والملفات</span>
+    </a>
+
+    <a href="admin.html" class="link">
+      <span class="num" style="color:#fb7185">05</span>
+      <span class="title">بوابة الإدارة / المدير</span>
+      <span class="desc">الإحصائيات والصلاحيات</span>
+    </a>
+
+    <a href="evaluations.html" class="link">
+      <span class="num" style="color:#2dd4bf">06</span>
+      <span class="title">بوابة التقييم</span>
+      <span class="desc">تقييم الطلاب والشُعب</span>
+    </a>
+
+    <a href="accounts.html" class="link">
+      <span class="num" style="color:#38bdf8">07</span>
+      <span class="title">بوابة الحسابات</span>
+      <span class="desc">الأقساط والخصومات والوصولات</span>
+    </a>
+  </div>
+
+  <!-- دخول المعاون -->
+  <div id="v-al" class="panel box-sm">
+    <h3 style="margin-top:0;color:#34d399;text-align:center">دخول بوابة المعاون</h3>
+    <div id="am" style="text-align:center;font-size:13px;color:#94a3b8;margin-bottom:12px">المحاولات المتبقية: 10 من 10</div>
+    <input type="password" id="ap" placeholder="أدخل الرمز السري">
+    <div class="bar">
+      <button type="button" id="btn-login-ast" class="btn-g" style="flex:1">دخول</button>
+      <button type="button" class="btn-d back-home">إلغاء</button>
+    </div>
+  </div>
+
+  <!-- لوحة المعاون -->
+  <div id="v-ad" class="panel">
+    <div class="bar np">
+      <h3 style="margin:0;color:#34d399">سجل الغيابات، الهروب، والإجازات</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button type="button" onclick="window.print()" class="btn-g">طباعة PDF</button>
+        <button type="button" id="clr-abs" class="btn-r">مسح الكل</button>
+        <button type="button" class="btn-d back-home">رجوع</button>
+      </div>
+    </div>
+    <div class="np">
+      <input type="text" id="an" placeholder="اسم الطالب">
+      <select id="ac">
         <option>اول امن سيبراني A</option>
         <option>اول امن سيبراني B</option>
         <option>اول امن سيبراني C</option>
-        <option>اول تكرار نفط A</option>
-        <option>اول اجهزة طبية A</option>
+        <option>اول تكرير نفط A</option>
         <option>اول تجميع حاسوب A</option>
-        <option>ثالث تجميع حاسوب A</option>
-        <option>ثالث تجميع حاسوب B</option>
+        <option>اول اجهزه طبية A</option>
       </select>
+      <select id="at">
+        <option>غياب</option>
+        <option>هروب</option>
+        <option>اجازة</option>
+      </select>
+      <input type="date" id="ad">
+      <button type="button" id="save-abs" class="btn-g" style="width:100%;margin-bottom:10px">حفظ السجل</button>
+      <input type="text" id="af" placeholder="بحث باسم الطالب أو الصف...">
     </div>
-    <textarea id="m-f3" rows="3" placeholder="اكتب التفاصيل أو الملاحظات أو الدرجات / الغيابات..."></textarea>
-    <button type="button" class="save-btn" onclick="savePortalEntry()">حفظ السجل</button>
+    <table>
+      <thead>
+        <tr>
+          <th>الطالب</th>
+          <th>الصف</th>
+          <th>الحالة</th>
+          <th>التاريخ</th>
+          <th class="np">حذف</th>
+        </tr>
+      </thead>
+      <tbody id="ab"></tbody>
+    </table>
+  </div>
 
-    <div id="m-list" class="m-list"></div>
+  <!-- اختيار المادة -->
+  <div id="v-ts" class="panel box-sm">
+    <h3 style="margin-top:0;color:#22d3ee;text-align:center">اختر المادة الدراسية</h3>
+    <div id="sl"></div>
+    <button type="button" class="btn-d back-home" style="width:100%;margin-top:8px">رجوع</button>
+  </div>
+
+  <!-- دخول المدرس -->
+  <div id="v-tl" class="panel box-sm">
+    <h3 id="th" style="margin-top:0;color:#22d3ee;text-align:center">دخول المدرس</h3>
+    <div id="tm" style="text-align:center;font-size:13px;color:#94a3b8;margin-bottom:12px">المحاولات المتبقية: 10 من 10</div>
+    <input type="password" id="tp" placeholder="أدخل رمز المادة السري">
+    <div class="bar">
+      <button type="button" id="btn-login-tch" class="btn-b" style="flex:1">دخول</button>
+      <button type="button" id="back-subjs" class="btn-d">رجوع</button>
+    </div>
+  </div>
+
+  <!-- لوحة المدرس -->
+  <div id="v-td" class="panel">
+    <div class="bar np">
+      <h3 id="tdh" style="margin:0;color:#22d3ee">رصد الدرجات (من 100)</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button type="button" onclick="window.print()" class="btn-b">طباعة PDF</button>
+        <button type="button" id="clr-gr" class="btn-r">مسح الكل</button>
+        <button type="button" class="btn-d back-home">رجوع</button>
+      </div>
+    </div>
+    <div class="np">
+      <input type="text" id="tn" placeholder="اسم الطالب">
+      <select id="tc">
+        <option>اول امن سيبراني A</option>
+        <option>اول امن سيبراني B</option>
+        <option>اول امن سيبراني C</option>
+        <option>اول تكرير نفط A</option>
+        <option>اول تجميع حاسوب A</option>
+        <option>اول اجهزه طبية A</option>
+      </select>
+      <input type="number" id="tg" min="0" max="100" placeholder="الدرجة من 100">
+      <button type="button" id="save-gr" class="btn-b" style="width:100%;margin-bottom:10px">حفظ الدرجة</button>
+      <input type="text" id="gf" placeholder="بحث باسم الطالب أو الصف...">
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>الطالب</th>
+          <th>الصف</th>
+          <th>المادة</th>
+          <th>الدرجة</th>
+          <th class="np">حذف</th>
+        </tr>
+      </thead>
+      <tbody id="gb"></tbody>
+    </table>
   </div>
 </div>
 
-<div class="footer">برمجة وتطوير: <strong>عباس محمد عزيز</strong></div>
+<footer>برمجة وتطوير: <strong style="color:#34d399">عباس محمد عزيز</strong></footer>
 
 <script>
-/* شريط الإعلانات المتحرك للواجهة الأمامية */
+/* تحديث شريط الإعلانات المتحرك في الواجهة الأمامية */
 (function(){
   var STORAGE_KEY = "alpha_sec_announcements";
   var lastSnapshot = "";
@@ -239,7 +275,7 @@ input,select,textarea{width:100%;padding:11px 13px;border-radius:11px;border:1px
     lastSnapshot = snap;
 
     if(!rows.length){
-      var emptyMsg = "<div class='front-ad-item'>📢 إعلانات إعدادية المعرفة المهنية الاهلية — أهلاً بكم في نظام إدارة المدرسة الآمن</div>";
+      var emptyMsg = "<div class='front-ad-item'>📢 إعلانات إعدادية المعرفة المهنية الاهلية — أهلاً بكم في النظام المدرسي المتكامل</div>";
       track.innerHTML = emptyMsg + emptyMsg;
       return;
     }
@@ -263,110 +299,209 @@ input,select,textarea{width:100%;padding:11px 13px;border-radius:11px;border:1px
   window.addEventListener("storage", renderFrontTicker);
 })();
 
-/* فحص وجود الملف الخارجي للبوابات الأربع وفتح واجهة مدمجة إذا لم يتوفر لتجنب 404 */
-var activePortalKey = "";
-var portalMeta = {
-  assistant: {
-    title: "بوابة المعاون — إدارة الغيابات والشعب",
-    sub: "تسجيل غيابات الطلبة ومتابعة الشعب الدراسية (محفوظ محلياً)",
-    p1: "اسم الطالب / الشعبة",
-    p3: "تفاصيل الغياب أو التوجيه الإداري..."
-  },
-  teachers: {
-    title: "بوابة المدرسين — رصد درجات المواد",
-    sub: "متابعة درجات المواد والاختبارات حسب الشعبة",
-    p1: "اسم الطالب والمادة",
-    p3: "الدرجة أو الملاحظة العلمية..."
-  },
-  supervisor: {
-    title: "بوابة المشرف التربوي / المرشد — الحالات السلوكية والملفات",
-    sub: "توثيق الحالات السلوكية والإرشادية للطلبة",
-    p1: "اسم الطالب ونوع الحالة",
-    p3: "تفاصيل الإرشاد أو المتابعة التربوية..."
-  },
-  principal: {
-    title: "بوابة الإدارة / المدير — الإحصائيات والصلاحيات",
-    sub: "متابعة القرارات الإدارية والتقارير العامة للمدرسة",
-    p1: "عنوان القرار أو التقرير",
-    p3: "تفاصيل التوجيه أو الصلاحية الإدارية..."
-  }
-};
+(function(){
+  var MAX = 10, AP = "55100", CS = null;
+  var SUBS = [
+    {n:"التربية الإسلامية", c:"1090"},
+    {n:"اللغة العربية", c:"202500"},
+    {n:"الرياضيات", c:"12300"},
+    {n:"الانجليزي", c:"0005"},
+    {n:"اساسيات الكهرباء", c:"9000"},
+    {n:"تجميع الحاسوب", c:"6200"},
+    {n:"تطبيقات الحاسوب", c:"1999"},
+    {n:"الاتصالات والشبكات", c:"6100"},
+    {n:"مبادى الحاسوب", c:"1998"}
+  ];
 
-function openSmartPortal(key, href){
-  fetch(href, { method: "HEAD" }).then(function(res){
-    if(res && res.ok){
-      window.location.href = href;
-    } else {
-      showFallbackModal(key);
+  function bh(g, s){
+    g = String(g || "").trim(); s = String(s || "").trim();
+    var d = Math.abs(g.length - s.length), m = 0, p = s.split("");
+    for (var i = 0; i < g.length; i++){ var x = p.indexOf(g[i]); if (x > -1){ m++; p.splice(x, 1); } }
+    var r = m / Math.max(g.length, s.length, 1), a = Number(g), b = Number(s);
+    if ((!isNaN(a) && !isNaN(b) && b > 0 && Math.abs(a - b) / b <= 0.25) || (r >= 0.6 && d <= 1)) return 72;
+    if (r >= 0.35 && d <= 2) return 96;
+    return 120;
+  }
+
+  function gl(k){
+    try {
+      var o = JSON.parse(localStorage.getItem("al_l_" + k) || "{}");
+      if (o.u && Date.now() >= +o.u){ var z = {t:0, u:0, h:0}; localStorage.setItem("al_l_" + k, JSON.stringify(z)); return z; }
+      return {t:+o.t||0, u:+o.u||0, h:+o.h||0};
+    } catch(e){ return {t:0, u:0, h:0}; }
+  }
+
+  function slk(k, v){ try { localStorage.setItem("al_l_" + k, JSON.stringify(v)); } catch(e){} }
+  function rm(ms){ var h = Math.max(1, Math.ceil(ms / 36e5)); return Math.floor(h / 24) + " يوم و " + (h % 24) + " ساعة (" + h + " ساعة)"; }
+
+  function pm(k, id){
+    var e = document.getElementById(id), s = gl(k);
+    if (!e) return;
+    e.innerText = (s.u && Date.now() < s.u)
+      ? ("محظور " + s.h + " ساعة — المتبقي: " + rm(s.u - Date.now()))
+      : ("المحاولات المتبقية: " + Math.max(0, MAX - s.t) + " من " + MAX);
+  }
+
+  function getArr(k){ try { return JSON.parse(localStorage.getItem("al_d_" + k) || "[]"); } catch(e){ return []; } }
+  function setArr(k, a){ try { localStorage.setItem("al_d_" + k, JSON.stringify(a)); } catch(e){} }
+
+  function sw(v){
+    var ids = ["home", "al", "ad", "ts", "tl", "td"];
+    for (var i = 0; i < ids.length; i++){
+      var e = document.getElementById("v-" + ids[i]);
+      if (e) e.style.display = "none";
     }
-  }).catch(function(){
-    showFallbackModal(key);
-  });
-  return false;
-}
-
-function showFallbackModal(key){
-  activePortalKey = key;
-  var meta = portalMeta[key] || { title: "البوابة", sub: "", p1: "العنوان", p3: "التفاصيل..." };
-  document.getElementById("m-title").innerText = meta.title;
-  document.getElementById("m-sub").innerText = meta.sub;
-  document.getElementById("m-f1").placeholder = meta.p1;
-  document.getElementById("m-f3").placeholder = meta.p3;
-  document.getElementById("smart-modal").style.display = "block";
-  renderPortalList();
-}
-
-function closeSmartPortal(){
-  document.getElementById("smart-modal").style.display = "none";
-}
-
-function getPortalRows(key){
-  try{
-    return JSON.parse(localStorage.getItem("alpha_portal_" + key) || "[]");
-  }catch(e){
-    return [];
+    var t = document.getElementById("v-" + v);
+    if (t) t.style.display = (v === "home" ? "grid" : "block");
+    if (v === "al") pm("a", "am");
+    if (v === "ad") drawAbs();
+    if (v === "ts") drawSubjs();
+    if (v === "tl" && CS) pm("t_" + CS.n, "tm");
+    if (v === "td") drawGr();
   }
-}
 
-function setPortalRows(key, arr){
-  try{
-    localStorage.setItem("alpha_portal_" + key, JSON.stringify(arr));
-  }catch(e){}
-}
-
-function savePortalEntry(){
-  if(!activePortalKey) return;
-  var f1 = document.getElementById("m-f1").value.trim();
-  var f2 = document.getElementById("m-f2").value;
-  var f3 = document.getElementById("m-f3").value.trim();
-  if(!f1 || !f3) return alert("يرجى إدخال العنوان والتفاصيل");
-  var rows = getPortalRows(activePortalKey);
-  rows.unshift({ f1: f1, f2: f2, f3: f3, dt: new Date().toISOString().slice(0, 10) });
-  setPortalRows(activePortalKey, rows);
-  document.getElementById("m-f1").value = "";
-  document.getElementById("m-f3").value = "";
-  renderPortalList();
-}
-
-function delPortalEntry(idx){
-  if(!activePortalKey) return;
-  var rows = getPortalRows(activePortalKey);
-  rows.splice(idx, 1);
-  setPortalRows(activePortalKey, rows);
-  renderPortalList();
-}
-
-function renderPortalList(){
-  var box = document.getElementById("m-list");
-  var rows = getPortalRows(activePortalKey);
-  if(!rows.length){
-    box.innerHTML = "<div style='color:#94a3b8;font-size:13px;text-align:center;padding:8px'>لا توجد سجلات محفوظة بعد في هذه البوابة</div>";
-    return;
+  function drawSubjs(){
+    var box = document.getElementById("sl");
+    if (!box) return;
+    box.innerHTML = "";
+    for (var i = 0; i < SUBS.length; i++){
+      (function(sub){
+        var b = document.createElement("button");
+        b.type = "button";
+        b.className = "card";
+        b.style.marginBottom = "8px";
+        b.style.minHeight = "0";
+        b.style.padding = "14px 16px";
+        b.innerHTML = "<span class='title' style='margin:0;font-size:16px;color:#22d3ee'>" + sub.n + "</span>";
+        b.onclick = function(){
+          CS = sub;
+          document.getElementById("th").innerText = "دخول: " + sub.n;
+          document.getElementById("tp").value = "";
+          sw("tl");
+        };
+        box.appendChild(b);
+      })(SUBS[i]);
+    }
   }
-  box.innerHTML = rows.map(function(r, i){
-    return "<div class='m-row'><div><strong style='color:#5eead4'>" + r.f1 + "</strong> <span style='color:#fbbf24'>[" + r.f2 + "]</span> <span style='color:#94a3b8;font-size:12px'>(" + r.dt + ")</span><div style='margin-top:4px;color:#e2e8f0'>" + r.f3 + "</div></div><button type='button' class='del-mini' onclick='delPortalEntry(" + i + ")'>حذف</button></div>";
-  }).join("");
-}
+
+  function la(){
+    var s = gl("a");
+    if (s.u && Date.now() < s.u){ alert("محظور " + s.h + " ساعة.\nالمتبقي: " + rm(s.u - Date.now())); return; }
+    var i = document.getElementById("ap"), v = i ? i.value.trim() : "";
+    if (v === AP){ slk("a", {t:0, u:0, h:0}); i.value = ""; sw("ad"); }
+    else {
+      s.t++;
+      if (s.t > MAX){ var h = bh(v, AP); slk("a", {t:s.t, u:Date.now() + h * 36e5, h:h}); pm("a", "am"); alert("تجاوزت 10 محاولات! حظر " + h + " ساعة"); }
+      else { slk("a", s); pm("a", "am"); alert("الرمز خطأ! المتبقي: " + (MAX - s.t)); }
+    }
+  }
+
+  function aa(){
+    var n = document.getElementById("an").value.trim();
+    var c = document.getElementById("ac").value;
+    var t = document.getElementById("at").value;
+    var d = document.getElementById("ad").value || new Date().toISOString().slice(0, 10);
+    if (!n){ alert("أدخل اسم الطالب"); return; }
+    var a = getArr("abs");
+    a.unshift({n:n, c:c, t:t, d:d});
+    setArr("abs", a);
+    document.getElementById("an").value = "";
+    drawAbs();
+  }
+
+  function drawAbs(){
+    var f = (document.getElementById("af").value || "").trim().toLowerCase();
+    var a = getArr("abs"), tb = document.getElementById("ab");
+    if (!tb) return;
+    tb.innerHTML = "";
+    for (var i = 0; i < a.length; i++){
+      (function(x, idx){
+        if (!f || (x.n + " " + x.c + " " + x.t).toLowerCase().indexOf(f) > -1){
+          var tr = document.createElement("tr");
+          var col = x.t === "هروب" ? "#fb7185" : (x.t === "غياب" ? "#fbbf24" : "#34d399");
+          tr.innerHTML = "<td>" + x.n + "</td><td>" + x.c + "</td><td style='color:" + col + ";font-weight:bold'>" + x.t + "</td><td>" + x.d + "</td><td class='np'></td>";
+          var delBtn = document.createElement("button");
+          delBtn.type = "button";
+          delBtn.className = "btn-r";
+          delBtn.style.padding = "5px 10px";
+          delBtn.style.fontSize = "12px";
+          delBtn.innerText = "حذف";
+          delBtn.onclick = function(){ var curA = getArr("abs"); curA.splice(idx, 1); setArr("abs", curA); drawAbs(); };
+          tr.lastChild.appendChild(delBtn);
+          tb.appendChild(tr);
+        }
+      })(a[i], i);
+    }
+  }
+
+  function lt(){
+    if (!CS) return;
+    var k = "t_" + CS.n, s = gl(k);
+    if (s.u && Date.now() < s.u){ alert("محظور " + s.h + " ساعة.\nالمتبقي: " + rm(s.u - Date.now())); return; }
+    var i = document.getElementById("tp"), v = i ? i.value.trim() : "";
+    if (v === CS.c){ slk(k, {t:0, u:0, h:0}); i.value = ""; document.getElementById("tdh").innerText = "رصد درجات - " + CS.n; sw("td"); }
+    else {
+      s.t++;
+      if (s.t > MAX){ var h = bh(v, CS.c); slk(k, {t:s.t, u:Date.now() + h * 36e5, h:h}); pm(k, "tm"); alert("تجاوزت 10 محاولات! حظر " + h + " ساعة"); }
+      else { slk(k, s); pm(k, "tm"); alert("الرمز خطأ! المتبقي: " + (MAX - s.t)); }
+    }
+  }
+
+  function ag(){
+    if (!CS) return;
+    var n = document.getElementById("tn").value.trim();
+    var c = document.getElementById("tc").value;
+    var gi = document.getElementById("tg"), g = Number(gi.value);
+    if (!n || gi.value === ""){ alert("أدخل اسم الطالب والدرجة"); return; }
+    if (g < 0 || g > 100){ alert("الدرجة بين 0 و 100"); return; }
+    var a = getArr("gr");
+    a.unshift({n:n, c:c, s:CS.n, g:g});
+    setArr("gr", a);
+    document.getElementById("tn").value = "";
+    gi.value = "";
+    drawGr();
+  }
+
+  function drawGr(){
+    var f = (document.getElementById("gf").value || "").trim().toLowerCase();
+    var a = getArr("gr"), tb = document.getElementById("gb");
+    if (!tb) return;
+    tb.innerHTML = "";
+    for (var i = 0; i < a.length; i++){
+      (function(x, idx){
+        if ((!CS || x.s === CS.n) && (!f || (x.n + " " + x.c + " " + x.s).toLowerCase().indexOf(f) > -1)){
+          var tr = document.createElement("tr");
+          tr.innerHTML = "<td>" + x.n + "</td><td>" + x.c + "</td><td>" + x.s + "</td><td><strong>" + x.g + " / 100</strong></td><td class='np'></td>";
+          var delBtn = document.createElement("button");
+          delBtn.type = "button";
+          delBtn.className = "btn-r";
+          delBtn.style.padding = "5px 10px";
+          delBtn.style.fontSize = "12px";
+          delBtn.innerText = "حذف";
+          delBtn.onclick = function(){ var curA = getArr("gr"); curA.splice(idx, 1); setArr("gr", curA); drawGr(); };
+          tr.lastChild.appendChild(delBtn);
+          tb.appendChild(tr);
+        }
+      })(a[i], i);
+    }
+  }
+
+  document.getElementById("btn-ast").onclick = function(){ sw("al"); };
+  document.getElementById("btn-tch").onclick = function(){ sw("ts"); };
+  document.getElementById("btn-home").onclick = function(){ sw("home"); };
+  document.getElementById("btn-login-ast").onclick = la;
+  document.getElementById("btn-login-tch").onclick = lt;
+  document.getElementById("back-subjs").onclick = function(){ sw("ts"); };
+  document.getElementById("save-abs").onclick = aa;
+  document.getElementById("save-gr").onclick = ag;
+  document.getElementById("af").oninput = drawAbs;
+  document.getElementById("gf").oninput = drawGr;
+  document.getElementById("clr-abs").onclick = function(){ if (confirm("مسح سجل المعاون؟")){ setArr("abs", []); drawAbs(); } };
+  document.getElementById("clr-gr").onclick = function(){ if (confirm("مسح سجل الدرجات؟")){ setArr("gr", []); drawGr(); } };
+  var backBtns = document.querySelectorAll(".back-home");
+  for (var i = 0; i < backBtns.length; i++){ backBtns[i].onclick = function(){ sw("home"); }; }
+})();
 </script>
 </body>
-</html>
+  </html>
+  
