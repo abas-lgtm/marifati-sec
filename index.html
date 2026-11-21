@@ -6,20 +6,36 @@
 <title>ALPHA-SEC // النظام المدرسي المتكامل</title>
 <style>
 *{box-sizing:border-box;font-family:Tahoma,Arial,sans-serif}
-body{margin:0;padding:0 0 75px;background:#030712;color:#f3f4f6;font-size:15px}
+html,body{margin:0;padding:0;background:#030712;color:#f3f4f6;font-size:15px}
+body{padding-bottom:75px}
 .wrap{max-width:980px;margin:0 auto;padding:18px 18px 0}
 header{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid #10b98155;padding-bottom:14px;margin-bottom:22px}
 header h1{margin:0;font-size:20px;color:#fff}
 header .sub{font-size:13px;color:#34d399;margin-top:4px}
 .sync-badge{font-size:12px;padding:5px 10px;border-radius:999px;background:#0b1324;border:1px solid #10b98155;color:#34d399}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
-.link{display:block;width:100%;text-align:right;background:#0b0f19;color:#fff;border:1px solid #10b98166;border-radius:16px;padding:20px;text-decoration:none;cursor:pointer;min-height:110px;-webkit-tap-highlight-color:rgba(52,211,153,0.25)}
-.link:hover,.link:active{border-color:#34d399}
+.link{
+  display:block;
+  width:100%;
+  text-align:right;
+  background:#0b0f19;
+  color:#fff;
+  border:1px solid #10b98166;
+  border-radius:16px;
+  padding:20px;
+  text-decoration:none;
+  cursor:pointer;
+  min-height:110px;
+  pointer-events:auto;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:rgba(52,211,153,0.3);
+}
+.link:hover,.link:active{border-color:#34d399;background:#0f172a}
 .num{font-size:13px;font-weight:bold;color:#34d399;margin-bottom:8px;display:block}
 .title{font-size:18px;font-weight:bold;color:#fff;margin-bottom:6px;display:block}
 .desc{font-size:13px;color:#94a3b8;display:block}
-.btn-d{background:#1e293b;color:#f1f5f9;border:1px solid #334155;border-radius:10px;padding:10px 14px;font-weight:bold;font-size:13px;text-decoration:none;cursor:pointer}
-footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1px solid #10b98155;padding:12px;text-align:center;font-size:13px;color:#cbd5e1;z-index:10}
+.btn-d{background:#1e293b;color:#f1f5f9;border:1px solid #334155;border-radius:10px;padding:10px 14px;font-weight:bold;font-size:13px;text-decoration:none;cursor:pointer;touch-action:manipulation}
+footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1px solid #10b98155;padding:12px;text-align:center;font-size:13px;color:#cbd5e1;z-index:10;pointer-events:none}
 </style>
 </head>
 <body>
@@ -35,14 +51,14 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
     </div>
   </header>
 
-  <div class="grid">
-    <a href="index2.html?portal=assistant" class="link">
+  <div class="grid" id="portals-grid">
+    <a href="index2.html?portal=assistant" data-go="index2.html?portal=assistant" class="link">
       <span class="num">01</span>
       <span class="title">بوابة المعاون</span>
       <span class="desc">الغيابات، الهروب، والإجازات</span>
     </a>
 
-    <a href="index2.html?portal=teachers" class="link">
+    <a href="index2.html?portal=teachers" data-go="index2.html?portal=teachers" class="link">
       <span class="num" style="color:#22d3ee">02</span>
       <span class="title">بوابة المدرسين</span>
       <span class="desc">رصد درجات المواد من 100</span>
@@ -84,7 +100,19 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
 
 <script>
 var FIREBASE_DB_URL = "https://al-maarefa-school-default-rtdb.firebaseio.com";
+
 (function(){
+  var grid = document.getElementById("portals-grid");
+  if(grid){
+    grid.addEventListener("click", function(e){
+      var a = e.target.closest ? e.target.closest("a[data-go]") : null;
+      if(a){
+        e.preventDefault();
+        window.location.href = a.getAttribute("data-go");
+      }
+    });
+  }
+
   var el = document.getElementById("cloud-status");
   var base = String(FIREBASE_DB_URL || "").trim().replace(/\/+$/, "");
   if(!base || !el) return;
@@ -95,5 +123,5 @@ var FIREBASE_DB_URL = "https://al-maarefa-school-default-rtdb.firebaseio.com";
 })();
 </script>
 </body>
-        </html>
-        
+  </html>
+  
