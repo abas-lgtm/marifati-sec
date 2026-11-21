@@ -1,335 +1,234 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALPHA-SEC // بوابة الحسابات والأقساط</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-    <style>
-        body { font-family: Tahoma, Arial, sans-serif; background-color: #030712; color: #f3f4f6; }
-        .cyber-card { background-color: #0b0f19; border: 1px solid rgba(16, 185, 129, 0.35); }
-        @media print {
-            body { background: white !important; color: black !important; }
-            .no-print { display: none !important; }
-            table { width: 100%; border-collapse: collapse; }
-            th, td { border: 1px solid #333; padding: 6px; color: black !important; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>الحسابات المالية — ALPHA-SEC</title>
+<style>
+*{box-sizing:border-box;font-family:Segoe UI,Tahoma,Arial,sans-serif}
+body{margin:0;padding:22px 16px 85px;background:linear-gradient(180deg,#081120 0%,#0f1c33 100%);color:#f8fafc;min-height:100vh}
+.container{max-width:980px;margin:0 auto}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;background:#132238;border:1px solid #2dd4bf55;border-radius:18px;padding:16px 20px;margin-bottom:24px}
+.topbar h1{margin:0;font-size:21px;color:#5eead4}
+.topbar span{font-size:13px;color:#94a3b8}
+.auth-card{max-width:460px;margin:36px auto;background:#132238;border:1.5px solid #38bdf866;border-radius:22px;padding:26px;box-shadow:0 12px 30px rgba(0,0,0,.35)}
+.panel-box{display:none;background:#132238;border:1.5px solid #2dd4bf66;border-radius:22px;padding:24px;box-shadow:0 12px 30px rgba(0,0,0,.35)}
+input,select{width:100%;padding:14px 16px;margin-bottom:14px;border-radius:13px;border:1px solid #334155;background:#091324;color:#fff;font-size:16px}
+input:focus,select:focus{outline:none;border-color:#2dd4bf}
+button{cursor:pointer;border:0;border-radius:13px;padding:13px 18px;font-weight:700;font-size:15px}
+.btn-teal{background:#14b8a6;color:#041312}
+.btn-sky{background:#0ea5e9;color:#04131c}
+.btn-slate{background:#1e293b;color:#e2e8f0;border:1px solid #475569}
+.btn-rose{background:#e11d48;color:#fff}
+.flex-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:14px}
+table{width:100%;border-collapse:collapse;margin-top:16px;font-size:15px;background:#091324;border-radius:14px;overflow:hidden}
+th,td{border:1px solid #1e293b;padding:11px 12px;text-align:right}
+th{background:#172a45;color:#5eead4}
+.foot{position:fixed;bottom:0;left:0;width:100%;background:#091324;border-top:1px solid #2dd4bf44;padding:12px;text-align:center;font-size:13px;color:#cbd5e1}
+@media print{body{background:#fff;color:#000;padding:0}.no-print,.foot{display:none!important}table{background:#fff}th,td{border:1px solid #000;color:#000}}
+</style>
 </head>
-<body class="min-h-screen flex flex-col justify-between p-4 sm:p-6 pb-16">
+<body>
+<div class="container">
+  <div class="topbar no-print">
+    <div>
+      <h1>بوابة الحسابات والأقساط</h1>
+      <span>إعدادية المعرفة المهنية الاهلية — عباس محمد عزيز</span>
+    </div>
+    <button type="button" class="btn-slate" onclick="goMain()">الرئيسية</button>
+  </div>
 
-    <header class="flex justify-between items-center border-b border-emerald-500/30 pb-4 no-print">
-        <div class="flex flex-col text-right">
-            <h1 class="text-white font-bold text-base md:text-lg">بوابة الحسابات وأقساط الطلبة</h1>
-            <span class="text-[11px] md:text-xs text-emerald-400">إعدادية المعرفة المهنية الاهلية</span>
-        </div>
-        <button type="button" onclick="window.location.href='index.html'" class="bg-slate-900 text-emerald-400 px-4 py-2 rounded-lg border border-emerald-500/30 text-sm font-semibold cursor-pointer">الرئيسية</button>
-    </header>
+  <div id="gate-box" class="auth-card">
+    <h2 style="margin:0 0 8px;color:#38bdf8;text-align:center;font-size:22px">تسجيل دخول الحسابات</h2>
+    <div id="gate-status" style="text-align:center;font-size:14px;color:#cbd5e1;margin-bottom:16px">المحاولات المتبقية: 10 من 10</div>
+    <input type="password" id="secret-code" placeholder="أدخل الرمز السري">
+    <div class="flex-row" style="margin-bottom:0">
+      <button type="button" class="btn-teal" style="flex:1" onclick="verifyAccounts()">دخول إلى الحسابات</button>
+      <button type="button" class="btn-slate" onclick="goMain()">رجوع</button>
+    </div>
+  </div>
 
-    <main class="max-w-6xl mx-auto w-full my-6 flex-grow">
-
-        <!-- دخول موظف الحسابات -->
-        <div id="acc-login" class="max-w-md mx-auto cyber-card p-6 rounded-2xl mt-8">
-            <h2 class="text-xl text-emerald-400 font-bold mb-2 text-center">دخول بوابة الحسابات</h2>
-            <p id="acc-sec-msg" class="text-xs text-slate-400 mb-4 text-center">المحاولات المتبقية: 10 من 10</p>
-            <input type="password" id="acc-pass" placeholder="أدخل رمز الحسابات السري" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-white mb-4 text-center text-base">
-            <div class="flex gap-2">
-                <button type="button" onclick="checkAccountsLogin()" class="flex-1 bg-emerald-500 hover:bg-emerald-400 text-black font-bold p-3 rounded-lg cursor-pointer transition">دخول</button>
-                <button type="button" onclick="window.location.href='index.html'" class="bg-slate-800 px-4 rounded-lg text-slate-300 cursor-pointer">رجوع</button>
-            </div>
-        </div>
-
-        <!-- لوحة الحسابات الرئيسية -->
-        <div id="acc-dash" class="hidden space-y-6">
-
-            <div class="flex justify-between items-center flex-wrap gap-2 no-print">
-                <div>
-                    <h2 class="text-xl font-black text-emerald-400">إدارة الأقساط والتحصيل المالي</h2>
-                    <p id="acc-lock-status" class="text-xs text-emerald-300 mt-0.5">حالة السجلات المالية: مفتوح للتعديل</p>
-                </div>
-                <div class="flex flex-wrap gap-2">
-                    <button type="button" onclick="toggleAccountingLock()" id="acc-lock-btn" class="bg-amber-500 hover:bg-amber-400 text-black px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer transition">اعتماد وقفل التعديل</button>
-                    <button type="button" onclick="exportPaymentsCSV()" class="bg-cyan-600 hover:bg-cyan-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">تصدير CSV</button>
-                    <button type="button" onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">طباعة التقرير</button>
-                </div>
-            </div>
-
-            <!-- ملخص مالي عام -->
-            <section class="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                <div class="cyber-card p-4 rounded-xl">
-                    <span class="text-xs text-slate-400 block">إجمالي الأقساط الصافية</span>
-                    <span id="kpi-net-tuition" class="text-xl sm:text-2xl font-black text-white mt-1 block">0</span>
-                </div>
-                <div class="cyber-card p-4 rounded-xl">
-                    <span class="text-xs text-slate-400 block">إجمالي المحصّل</span>
-                    <span id="kpi-collected" class="text-xl sm:text-2xl font-black text-emerald-400 mt-1 block">0</span>
-                </div>
-                <div class="cyber-card p-4 rounded-xl">
-                    <span class="text-xs text-slate-400 block">إجمالي المتبقي</span>
-                    <span id="kpi-remaining" class="text-xl sm:text-2xl font-black text-rose-400 mt-1 block">0</span>
-                </div>
-                <div class="cyber-card p-4 rounded-xl">
-                    <span class="text-xs text-slate-400 block">نسبة التحصيل</span>
-                    <span id="kpi-collection-rate" class="text-xl sm:text-2xl font-black text-cyan-400 mt-1 block">0%</span>
-                </div>
-            </section>
-
-            <!-- 1. إدارة قسط الطالب -->
-            <section class="cyber-card p-5 rounded-2xl no-print space-y-4">
-                <h3 class="text-base font-bold text-emerald-300 border-b border-slate-800 pb-2">1. إدارة قسط الطالب</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-                    <input type="text" id="st-name" placeholder="اسم الطالب الكامل" class="bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-white text-sm">
-                    <select id="st-class" class="bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-white text-sm">
-                        <option value="اول امن سيبراني A">اول امن سيبراني A</option>
-                        <option value="اول امن سيبراني B">اول امن سيبراني B</option>
-                        <option value="اول امن سيبراني C">اول امن سيبراني C</option>
-                        <option value="اول تكرير نفط A">اول تكرير نفط A</option>
-                        <option value="اول تجميع حاسوب A">اول تجميع حاسوب A</option>
-                        <option value="اول اجهزه طبية A">اول اجهزه طبية A</option>
-                    </select>
-                    <input type="number" id="st-total" min="0" step="1000" placeholder="القسط الكلي" class="bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-white text-sm">
-                    <input type="number" id="st-discount" min="0" step="1000" placeholder="خصم أو منحة (مبلغ)" class="bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-white text-sm">
-                    <select id="st-plan" class="bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-white text-sm">
-                        <option value="سنوية">دفعة سنوية (1)</option>
-                        <option value="فصلية">فصلية (2 دفعة)</option>
-                        <option value="شهرية" selected>شهرية (10 أشهر)</option>
-                    </select>
-                </div>
-                <button type="button" onclick="addStudentTuition()" class="bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-4 py-2.5 rounded-lg text-sm w-full cursor-pointer transition">حفظ قسط الطالب</button>
-            </section>
-
-            <!-- 2. تسجيل دفعة ووصل -->
-            <section class="cyber-card p-5 rounded-2xl no-print space-y-4">
-                <h3 class="text-base font-bold text-cyan-300 border-b border-slate-800 pb-2">2. تسجيل دفعة ووصل مالي</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-                    <select id="pay-student-select" class="bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-white text-sm">
-                        <option value="">اختر الطالب...</option>
-                    </select>
-                    <input type="number" id="pay-amount" min="1" step="1000" placeholder="المبلغ المدفوع" class="bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-white text-sm">
-                    <input type="date" id="pay-date" class="bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-white text-sm">
-                    <input type="text" id="pay-receipt" placeholder="رقم الوصل / المرجع" class="bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-white text-sm">
-                    <select id="pay-method" class="bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-white text-sm">
-                        <option value="نقداً">نقداً</option>
-                        <option value="زين كاش">زين كاش</option>
-                        <option value="بطاقة مصرفية">بطاقة مصرفية</option>
-                        <option value="تحويل">تحويل</option>
-                    </select>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-center">
-                    <input type="text" id="pay-note" placeholder="ملاحظة على الدفعة (اختياري)..." class="sm:col-span-2 bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-white text-sm">
-                    <button type="button" onclick="savePayment()" class="bg-cyan-500 hover:bg-cyan-400 text-black font-bold px-4 py-2.5 rounded-lg text-sm cursor-pointer transition">تسجيل الدفعة</button>
-                </div>
-            </section>
-
-            <!-- الفلاتر -->
-            <section class="cyber-card p-4 rounded-2xl no-print">
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div>
-                        <label class="text-xs text-slate-400 block mb-1">فلترة حسب الصف</label>
-                        <select id="acc-filter-class" onchange="renderStudentsTable()" class="w-full bg-slate-950 border border-slate-800 p-2 rounded-lg text-white text-sm">
-                            <option value="ALL">كل الصفوف</option>
-                            <option value="اول امن سيبراني A">اول امن سيبراني A</option>
-                            <option value="اول امن سيبراني B">اول امن سيبراني B</option>
-                            <option value="اول امن سيبراني C">اول امن سيبراني C</option>
-                            <option value="اول تكرير نفط A">اول تكرير نفط A</option>
-                            <option value="اول تجميع حاسوب A">اول تجميع حاسوب A</option>
-                            <option value="اول اجهزه طبية A">اول اجهزه طبية A</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="text-xs text-slate-400 block mb-1">حالة التسديد</label>
-                        <select id="acc-filter-status" onchange="renderStudentsTable()" class="w-full bg-slate-950 border border-slate-800 p-2 rounded-lg text-white text-sm">
-                            <option value="ALL">كل الطلبة</option>
-                            <option value="DUE">عليه متبقي</option>
-                            <option value="PAID">مسدد بالكامل</option>
-                            <option value="DISCOUNTED">حاصل على خصم</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="text-xs text-slate-400 block mb-1">بحث باسم الطالب</label>
-                        <input type="text" id="acc-filter-search" oninput="renderStudentsTable()" placeholder="اكتب اسم الطالب..." class="w-full bg-slate-950 border border-slate-800 p-2 rounded-lg text-white text-sm">
-                    </div>
-                </div>
-            </section>
-
-            <!-- جدول أقساط الطلبة -->
-            <section class="cyber-card rounded-2xl overflow-hidden">
-                <div class="p-4 border-b border-slate-800 flex justify-between items-center flex-wrap gap-2">
-                    <h3 class="text-sm font-bold text-emerald-400">سجل أقساط الطلبة</h3>
-                    <span id="students-count-badge" class="text-xs bg-slate-900 text-slate-300 px-3 py-1 rounded-full">0 طالب</span>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-right text-xs sm:text-sm">
-                        <thead class="bg-slate-950 text-emerald-400">
-                            <tr>
-                                <th class="p-3">الطالب</th>
-                                <th class="p-3">الصف</th>
-                                <th class="p-3">الكلي / الخصم</th>
-                                <th class="p-3">الصافي / الدفعة</th>
-                                <th class="p-3">المدفوع</th>
-                                <th class="p-3">المتبقي</th>
-                                <th class="p-3">الحالة</th>
-                                <th class="p-3 no-print">حذف</th>
-                            </tr>
-                        </thead>
-                        <tbody id="students-tuition-tbody" class="divide-y divide-slate-900"></tbody>
-                    </table>
-                </div>
-            </section>
-
-            <!-- جدول الدفعات -->
-            <section class="cyber-card rounded-2xl overflow-hidden">
-                <div class="p-4 border-b border-slate-800 flex justify-between items-center flex-wrap gap-2">
-                    <h3 class="text-sm font-bold text-cyan-400">سجل الدفعات والوصولات</h3>
-                    <span id="payments-count-badge" class="text-xs bg-slate-900 text-slate-300 px-3 py-1 rounded-full">0 وصل</span>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-right text-xs sm:text-sm">
-                        <thead class="bg-slate-950 text-cyan-400">
-                            <tr>
-                                <th class="p-3">رقم الوصل</th>
-                                <th class="p-3">الطالب</th>
-                                <th class="p-3">الصف</th>
-                                <th class="p-3">المبلغ</th>
-                                <th class="p-3">الطريقة</th>
-                                <th class="p-3">التاريخ</th>
-                                <th class="p-3 no-print">حذف</th>
-                            </tr>
-                        </thead>
-                        <tbody id="payments-tbody" class="divide-y divide-slate-900"></tbody>
-                    </table>
-                </div>
-            </section>
-
-        </div>
-    </main>
-
-    <footer class="fixed bottom-0 left-0 w-full bg-slate-900/95 border-t border-emerald-500/30 py-2.5 px-4 z-50 text-center no-print">
-      <div class="text-xs md:text-sm">
-        <span class="text-slate-300">تم التطوير والبرمجة بواسطة:</span>
-        <span class="font-bold text-emerald-400">عباس محمد عزيز</span>
+  <div id="work-box" class="panel-box">
+    <div class="flex-row no-print">
+      <h2 style="margin:0;color:#5eead4;font-size:21px">سجل الدفعات والوصولات</h2>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button type="button" class="btn-sky" onclick="window.print()">طباعة PDF</button>
+        <button type="button" class="btn-slate" onclick="goMain()">الرئيسية</button>
       </div>
-    </footer>
+    </div>
 
-    <script>
-        var db = null;
-        try {
-            var firebaseConfig = {
-                apiKey: "AIzaSyB6jzXTFRW6h3r7E5s8aWd0Ry5ixvBG-Do",
-                authDomain: "al-maarefa-school.firebaseapp.com",
-                databaseURL: "https://al-maarefa-school-default-rtdb.firebaseio.com",
-                projectId: "al-maarefa-school",
-                storageBucket: "al-maarefa-school.appspot.com",
-                messagingSenderId: "922687511699",
-                appId: "1:922687511699:web:5b77f972833cf9bb984166"
-            };
-            if (typeof firebase !== "undefined") {
-                if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-                db = firebase.database();
-            }
-        } catch (e) {}
+    <div class="no-print">
+      <input type="text" id="stu-full" placeholder="اسم الطالب">
+      <select id="stu-grade">
+        <option>اول امن سيبراني A</option>
+        <option>اول امن سيبراني B</option>
+        <option>اول امن سيبراني C</option>
+        <option>اول تكرير نفط A</option>
+        <option>اول تجميع حاسوب A</option>
+        <option>اول اجهزه طبية A</option>
+      </select>
+      <input type="number" id="stu-money" placeholder="المبلغ المدفوع">
+      <input type="text" id="stu-voucher" placeholder="رقم الوصل">
+      <button type="button" class="btn-teal" style="width:100%;margin-bottom:14px" onclick="storePayment()">إضافة دفعة</button>
+      <input type="text" id="stu-filter" oninput="paintPayments()" placeholder="بحث باسم الطالب أو الصف أو الوصل...">
+    </div>
 
-        var ACC_PASS = "20750";
-        var GATE_KEY = "accounts";
-        var MAX_ATTEMPTS = 10;
-        var isAccountingLocked = false;
-        var studentsMap = {};
-        var paymentsList = [];
+    <table>
+      <thead>
+        <tr>
+          <th>الطالب</th>
+          <th>الصف</th>
+          <th>المبلغ</th>
+          <th>الوصل</th>
+          <th class="no-print">حذف</th>
+        </tr>
+      </thead>
+      <tbody id="voucher-rows"></tbody>
+    </table>
+  </div>
+</div>
 
-        function getDevId() {
-            var id = localStorage.getItem("alpha_sec_dev");
-            if (!id) {
-                id = "dev_" + Math.random().toString(36).slice(2, 10);
-                localStorage.setItem("alpha_sec_dev", id);
-            }
-            return id;
-        }
+<div class="foot">برمجة وتطوير: <strong style="color:#5eead4">عباس محمد عزيز</strong></div>
 
-        function calcBanHours(attemptVal, correctVal) {
-            var a = String(attemptVal || "").trim();
-            var c = String(correctVal || "").trim();
-            var lenDiff = Math.abs(a.length - c.length);
-            var common = 0;
-            var arr = c.split("");
-            for (var i = 0; i < a.length; i++) {
-                var idx = arr.indexOf(a[i]);
-                if (idx !== -1) { common++; arr.splice(idx, 1); }
-            }
-            var sim = common / Math.max(a.length, c.length, 1);
-            var numA = Number(a), numC = Number(c);
-            var closeNum = !isNaN(numA) && !isNaN(numC) && numC > 0 && (Math.abs(numA - numC) / numC) <= 0.25;
-            if (closeNum || (sim >= 0.6 && lenDiff <= 1)) return 72;
-            if (sim >= 0.35 && lenDiff <= 2) return 96;
-            return 120;
-        }
+<script>
+var LIMIT_TRIES = 10;
+var ACCOUNT_PIN = "20750";
 
-        function getSec() {
-            try {
-                var raw = localStorage.getItem("sec_" + getDevId() + "_" + GATE_KEY);
-                if (!raw) return { fails: 0, until: 0, hours: 0 };
-                var o = JSON.parse(raw);
-                if (o.until && Date.now() >= Number(o.until)) {
-                    var clean = { fails: 0, until: 0, hours: 0 };
-                    localStorage.setItem("sec_" + getDevId() + "_" + GATE_KEY, JSON.stringify(clean));
-                    return clean;
-                }
-                return { fails: Number(o.fails || 0), until: Number(o.until || 0), hours: Number(o.hours || 0) };
-            } catch (e) { return { fails: 0, until: 0, hours: 0 }; }
-        }
+function goMain() {
+  window.location.href = "index.html";
+}
 
-        function setSec(o) {
-            try { localStorage.setItem("sec_" + getDevId() + "_" + GATE_KEY, JSON.stringify(o)); } catch (e) {}
-            if (db) {
-                try { db.ref("security_locks/" + getDevId() + "__" + GATE_KEY).set(o); } catch (e) {}
-            }
-        }
+function banDuration(guess, target) {
+  guess = String(guess || "").trim();
+  target = String(target || "").trim();
+  var diffLen = Math.abs(guess.length - target.length);
+  var sameChars = 0;
+  var pool = target.split("");
+  for (var i = 0; i < guess.length; i++) {
+    var pos = pool.indexOf(guess[i]);
+    if (pos > -1) {
+      sameChars++;
+      pool.splice(pos, 1);
+    }
+  }
+  var ratio = sameChars / Math.max(guess.length, target.length, 1);
+  var numG = Number(guess);
+  var numT = Number(target);
+  if ((!isNaN(numG) && !isNaN(numT) && numT > 0 && Math.abs(numG - numT) / numT <= 0.25) || (ratio >= 0.6 && diffLen <= 1)) return 72;
+  if (ratio >= 0.35 && diffLen <= 2) return 96;
+  return 120;
+}
 
-        function fmtRem(ms) {
-            var h = Math.max(1, Math.ceil(ms / 3600000));
-            return Math.floor(h / 24) + " يوم و " + (h % 24) + " ساعة (" + h + " ساعة)";
-        }
+function readLock() {
+  try {
+    var raw = JSON.parse(localStorage.getItem("alpha_acc_lock_v2") || "{}");
+    if (raw.until && Date.now() >= Number(raw.until)) {
+      var reset = { tries: 0, until: 0, hrs: 0 };
+      localStorage.setItem("alpha_acc_lock_v2", JSON.stringify(reset));
+      return reset;
+    }
+    return { tries: Number(raw.tries || 0), until: Number(raw.until || 0), hrs: Number(raw.hrs || 0) };
+  } catch (e) {
+    return { tries: 0, until: 0, hrs: 0 };
+  }
+}
 
-        function updateSecMsg() {
-            var el = document.getElementById("acc-sec-msg");
-            if (!el) return;
-            var s = getSec();
-            if (s.until && Date.now() < s.until) {
-                el.className = "text-xs text-rose-400 mb-4 text-center font-bold";
-                el.innerText = "محظور لمدة " + s.hours + " ساعة — المتبقي: " + fmtRem(s.until - Date.now());
-            } else {
-                el.className = "text-xs text-slate-400 mb-4 text-center";
-                el.innerText = "المحاولات المتبقية: " + Math.max(0, MAX_ATTEMPTS - s.fails) + " من " + MAX_ATTEMPTS;
-            }
-        }
+function writeLock(val) {
+  try { localStorage.setItem("alpha_acc_lock_v2", JSON.stringify(val)); } catch (e) {}
+}
 
-        function saveLocalAcc() {
-            try {
-                localStorage.setItem("acc_students_v1", JSON.stringify(studentsMap));
-                localStorage.setItem("acc_payments_v1", JSON.stringify(paymentsList));
-                localStorage.setItem("acc_locked_v1", JSON.stringify(isAccountingLocked));
-            } catch (e) {}
-        }
+function leftTimeText(ms) {
+  var hrs = Math.max(1, Math.ceil(ms / 3600000));
+  return Math.floor(hrs / 24) + " يوم و " + (hrs % 24) + " ساعة (" + hrs + " ساعة)";
+}
 
-        function loadLocalAcc() {
-            try {
-                studentsMap = JSON.parse(localStorage.getItem("acc_students_v1") || "{}") || {};
-                paymentsList = JSON.parse(localStorage.getItem("acc_payments_v1") || "[]") || [];
-                isAccountingLocked = JSON.parse(localStorage.getItem("acc_locked_v1") || "false") === true;
-            } catch (e) { studentsMap = {}; paymentsList = []; isAccountingLocked = false; }
-        }
+function refreshLockBanner() {
+  var box = document.getElementById("gate-status");
+  var st = readLock();
+  if (!box) return;
+  if (st.until && Date.now() < st.until) {
+    box.innerText = "محظور " + st.hrs + " ساعة — المتبقي: " + leftTimeText(st.until - Date.now());
+  } else {
+    box.innerText = "المحاولات المتبقية: " + Math.max(0, LIMIT_TRIES - st.tries) + " من " + LIMIT_TRIES;
+  }
+}
 
-        function checkAccountsLogin() {
-            var s = getSec();
-            if (s.until && Date.now() < s.until) {
-                alert("بوابة الحسابات محظورة لمدة " + s.hours + " ساعة.\nالمتبقي: " + fmtRem(s.until - Date.now()));
-                return;
-            }
-            var inp = document.getElementById("acc-pass");
-            var val = inp ? inp.value.trim() : "";
-            if (val === ACC_PASS) {
-                setSec({ fails: 0, until: 0, hours: 0 });
-                inp.value = "";
-                document.getElementById("acc-login").style.display = "none";
-                var dash = docume
+function verifyAccounts() {
+  var st = readLock();
+  if (st.until && Date.now() < st.until) {
+    alert("محظور " + st.hrs + " ساعة.\nالمتبقي: " + leftTimeText(st.until - Date.now()));
+    return;
+  }
+  var input = document.getElementById("secret-code");
+  var code = input ? input.value.trim() : "";
+  if (code === ACCOUNT_PIN) {
+    writeLock({ tries: 0, until: 0, hrs: 0 });
+    input.value = "";
+    document.getElementById("gate-box").style.display = "none";
+    document.getElementById("work-box").style.display = "block";
+    paintPayments();
+  } else {
+    st.tries++;
+    if (st.tries > LIMIT_TRIES) {
+      var hrs = banDuration(code, ACCOUNT_PIN);
+      writeLock({ tries: st.tries, until: Date.now() + hrs * 3600000, hrs: hrs });
+      refreshLockBanner();
+      alert("تجاوزت 10 محاولات! حظر " + hrs + " ساعة");
+    } else {
+      writeLock(st);
+      refreshLockBanner();
+      alert("الرمز خطأ! المتبقي: " + (LIMIT_TRIES - st.tries));
+    }
+  }
+}
+
+function readPayments() {
+  try { return JSON.parse(localStorage.getItem("alpha_acc_rows_v2") || "[]"); } catch (e) { return []; }
+}
+
+function writePayments(list) {
+  try { localStorage.setItem("alpha_acc_rows_v2", JSON.stringify(list)); } catch (e) {}
+}
+
+function storePayment() {
+  var name = document.getElementById("stu-full").value.trim();
+  var grade = document.getElementById("stu-grade").value;
+  var amt = document.getElementById("stu-money").value.trim();
+  var vou = document.getElementById("stu-voucher").value.trim() || ("V-" + Date.now().toString().slice(-5));
+  if (!name || !amt) {
+    alert("أدخل اسم الطالب والمبلغ");
+    return;
+  }
+  var rows = readPayments();
+  rows.unshift({ name: name, grade: grade, amt: amt, vou: vou });
+  writePayments(rows);
+  document.getElementById("stu-full").value = "";
+  document.getElementById("stu-money").value = "";
+  document.getElementById("stu-voucher").value = "";
+  paintPayments();
+}
+
+function removePayment(index) {
+  var rows = readPayments();
+  rows.splice(index, 1);
+  writePayments(rows);
+  paintPayments();
+}
+
+function paintPayments() {
+  var q = (document.getElementById("stu-filter").value || "").trim().toLowerCase();
+  var rows = readPayments();
+  var html = "";
+  for (var i = 0; i < rows.length; i++) {
+    var r = rows[i];
+    if (!q || (r.name + " " + r.grade + " " + r.vou).toLowerCase().indexOf(q) > -1) {
+      html += "<tr><td>" + r.name + "</td><td>" + r.grade + "</td><td>" + Number(r.amt).toLocaleString() + "</td><td>" + r.vou + "</td><td class='no-print'><button type='button' class='btn-rose' onclick='removePayment(" + i + ")'>حذف</button></td></tr>";
+    }
+  }
+  document.getElementById("voucher-rows").innerHTML = html;
+}
+
+refreshLockBanner();
+</script>
+</body>
+</html>
