@@ -40,17 +40,17 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
       <h1>إعدادية المعرفة المهنية الاهلية — Index 2</h1>
       <div class="sub">برمجة: عباس محمد عزيز</div>
     </div>
-    <button type="button" onclick="openTab('home')" class="btn-d">الرئيسية</button>
+    <button type="button" onclick="openView('home')" class="btn-d">الرئيسية</button>
   </header>
 
-  <div id="tab-home" class="grid" style="display:grid">
-    <button type="button" onclick="openTab('al')" class="card">
+  <div id="view-home" class="grid" style="display:grid">
+    <button type="button" onclick="openView('al')" class="card">
       <span class="num">01</span>
       <span class="title">بوابة المعاون</span>
       <span class="desc">الغيابات، الهروب، والإجازات</span>
     </button>
 
-    <button type="button" onclick="openTab('ts')" class="card">
+    <button type="button" onclick="openView('ts')" class="card">
       <span class="num" style="color:#22d3ee">02</span>
       <span class="title">بوابة المدرسين</span>
       <span class="desc">رصد درجات المواد من 100</span>
@@ -88,24 +88,24 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
   </div>
 
   <!-- دخول المعاون -->
-  <div id="tab-al" class="panel box-sm">
+  <div id="view-al" class="panel box-sm">
     <h3 style="margin-top:0;color:#34d399;text-align:center;font-size:20px">دخول بوابة المعاون</h3>
     <div id="m-ast" style="text-align:center;font-size:14px;color:#94a3b8;margin-bottom:14px">المحاولات المتبقية: 10 من 10</div>
     <input type="password" id="p-ast" placeholder="أدخل الرمز السري">
     <div class="bar">
-      <button type="button" onclick="doAstLogin()" class="btn-g" style="flex:1">دخول</button>
-      <button type="button" onclick="openTab('home')" class="btn-d">إلغاء</button>
+      <button type="button" onclick="loginAst()" class="btn-g" style="flex:1">دخول</button>
+      <button type="button" onclick="openView('home')" class="btn-d">إلغاء</button>
     </div>
   </div>
 
   <!-- لوحة المعاون -->
-  <div id="tab-ad" class="panel">
+  <div id="view-ad" class="panel">
     <div class="bar np">
       <h3 style="margin:0;color:#34d399;font-size:20px">سجل الغيابات، الهروب، والإجازات</h3>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
         <button type="button" onclick="window.print()" class="btn-g">طباعة PDF</button>
         <button type="button" onclick="clearStore('abs')" class="btn-r">مسح الكل</button>
-        <button type="button" onclick="openTab('home')" class="btn-d">رجوع</button>
+        <button type="button" onclick="openView('home')" class="btn-d">رجوع</button>
       </div>
     </div>
     <div class="np">
@@ -142,31 +142,31 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
   </div>
 
   <!-- اختيار المادة -->
-  <div id="tab-ts" class="panel box-sm">
+  <div id="view-ts" class="panel box-sm">
     <h3 style="margin-top:0;color:#22d3ee;text-align:center;font-size:20px">اختر المادة الدراسية</h3>
     <div id="sub-list"></div>
-    <button type="button" onclick="openTab('home')" class="btn-d" style="width:100%;margin-top:10px">رجوع</button>
+    <button type="button" onclick="openView('home')" class="btn-d" style="width:100%;margin-top:10px">رجوع</button>
   </div>
 
   <!-- دخول المدرس -->
-  <div id="tab-tl" class="panel box-sm">
+  <div id="view-tl" class="panel box-sm">
     <h3 id="t-head" style="margin-top:0;color:#22d3ee;text-align:center;font-size:20px">دخول المدرس</h3>
     <div id="m-tch" style="text-align:center;font-size:14px;color:#94a3b8;margin-bottom:14px">المحاولات المتبقية: 10 من 10</div>
     <input type="password" id="p-tch" placeholder="أدخل رمز المادة السري">
     <div class="bar">
-      <button type="button" onclick="doTchLogin()" class="btn-b" style="flex:1">دخول</button>
-      <button type="button" onclick="openTab('ts')" class="btn-d">رجوع</button>
+      <button type="button" onclick="loginTch()" class="btn-b" style="flex:1">دخول</button>
+      <button type="button" onclick="openView('ts')" class="btn-d">رجوع</button>
     </div>
   </div>
 
   <!-- لوحة المدرس -->
-  <div id="tab-td" class="panel">
+  <div id="view-td" class="panel">
     <div class="bar np">
       <h3 id="t-dhead" style="margin:0;color:#22d3ee;font-size:20px">رصد الدرجات (من 100)</h3>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
         <button type="button" onclick="window.print()" class="btn-b">طباعة PDF</button>
         <button type="button" onclick="clearStore('gr')" class="btn-r">مسح الكل</button>
-        <button type="button" onclick="openTab('home')" class="btn-d">رجوع</button>
+        <button type="button" onclick="openView('home')" class="btn-d">رجوع</button>
       </div>
     </div>
     <div class="np">
@@ -226,13 +226,13 @@ function banHrs(g, s){
 
 function getLk(k){
   try {
-    var o = JSON.parse(localStorage.getItem("lk2_" + k) || "{}");
-    if (o.u && Date.now() >= +o.u){ var z = {t:0, u:0, h:0}; localStorage.setItem("lk2_" + k, JSON.stringify(z)); return z; }
+    var o = JSON.parse(localStorage.getItem("lk2v_" + k) || "{}");
+    if (o.u && Date.now() >= +o.u){ var z = {t:0, u:0, h:0}; localStorage.setItem("lk2v_" + k, JSON.stringify(z)); return z; }
     return {t:+o.t||0, u:+o.u||0, h:+o.h||0};
   } catch(e){ return {t:0, u:0, h:0}; }
 }
 
-function setLk(k, v){ try { localStorage.setItem("lk2_" + k, JSON.stringify(v)); } catch(e){} }
+function setLk(k, v){ try { localStorage.setItem("lk2v_" + k, JSON.stringify(v)); } catch(e){} }
 function remTxt(ms){ var h = Math.max(1, Math.ceil(ms / 36e5)); return Math.floor(h / 24) + " يوم و " + (h % 24) + " ساعة (" + h + " ساعة)"; }
 
 function showMsg(k, id){
@@ -243,16 +243,16 @@ function showMsg(k, id){
     : ("المحاولات المتبقية: " + Math.max(0, MAX - s.t) + " من " + MAX);
 }
 
-function getList(k){ try { return JSON.parse(localStorage.getItem("dt2_" + k) || "[]"); } catch(e){ return []; } }
-function setList(k, a){ try { localStorage.setItem("dt2_" + k, JSON.stringify(a)); } catch(e){} }
+function getList(k){ try { return JSON.parse(localStorage.getItem("dt2v_" + k) || "[]"); } catch(e){ return []; } }
+function setList(k, a){ try { localStorage.setItem("dt2v_" + k, JSON.stringify(a)); } catch(e){} }
 
-function openTab(name){
+function openView(name){
   var all = ["home", "al", "ad", "ts", "tl", "td"];
   for (var i = 0; i < all.length; i++){
-    var el = document.getElementById("tab-" + all[i]);
+    var el = document.getElementById("view-" + all[i]);
     if (el) el.style.display = "none";
   }
-  var target = document.getElementById("tab-" + name);
+  var target = document.getElementById("view-" + name);
   if (target) target.style.display = (name === "home" ? "grid" : "block");
   if (name === "al") showMsg("ast", "m-ast");
   if (name === "ad") renderAbs();
@@ -277,14 +277,14 @@ function selectSub(n){
   if (!CUR) return;
   document.getElementById("t-head").innerText = "دخول: " + CUR.name;
   document.getElementById("p-tch").value = "";
-  openTab("tl");
+  openView("tl");
 }
 
-function doAstLogin(){
+function loginAst(){
   var s = getLk("ast");
   if (s.u && Date.now() < s.u){ alert("محظور " + s.h + " ساعة.\nالمتبقي: " + remTxt(s.u - Date.now())); return; }
   var inp = document.getElementById("p-ast"), val = inp ? inp.value.trim() : "";
-  if (val === AST_PASS){ setLk("ast", {t:0, u:0, h:0}); inp.value = ""; openTab("ad"); }
+  if (val === AST_PASS){ setLk("ast", {t:0, u:0, h:0}); inp.value = ""; openView("ad"); }
   else {
     s.t++;
     if (s.t > MAX){ var h = banHrs(val, AST_PASS); setLk("ast", {t:s.t, u:Date.now() + h * 36e5, h:h}); showMsg("ast", "m-ast"); alert("تجاوزت 10 محاولات! حظر " + h + " ساعة"); }
@@ -317,12 +317,12 @@ function renderAbs(){
   document.getElementById("a-tbody").innerHTML = h;
 }
 
-function doTchLogin(){
+function loginTch(){
   if (!CUR) return;
   var k = "tch_" + CUR.name, s = getLk(k);
   if (s.u && Date.now() < s.u){ alert("محظور " + s.h + " ساعة.\nالمتبقي: " + remTxt(s.u - Date.now())); return; }
   var inp = document.getElementById("p-tch"), val = inp ? inp.value.trim() : "";
-  if (val === CUR.code){ setLk(k, {t:0, u:0, h:0}); inp.value = ""; document.getElementById("t-dhead").innerText = "رصد درجات - " + CUR.name + " (من 100)"; openTab("td"); }
+  if (val === CUR.code){ setLk(k, {t:0, u:0, h:0}); inp.value = ""; document.getElementById("t-dhead").innerText = "رصد درجات - " + CUR.name + " (من 100)"; openView("td"); }
   else {
     s.t++;
     if (s.t > MAX){ var h = banHrs(val, CUR.code); setLk(k, {t:s.t, u:Date.now() + h * 36e5, h:h}); showMsg(k, "m-tch"); alert("تجاوزت 10 محاولات! حظر " + h + " ساعة"); }
@@ -364,5 +364,4 @@ function clearStore(k){
 }
 </script>
 </body>
-                                                                            </html>
-                                                                            
+</html>
