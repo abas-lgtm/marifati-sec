@@ -6,7 +6,7 @@
 <title>نظام إدارة المدرسة الآمن — إعدادية المعرفة المهنية الاهلية</title>
 <style>
 *{box-sizing:border-box;font-family:Tahoma,Arial,sans-serif}
-body{margin:0;padding:0 0 84px;background:linear-gradient(160deg,#050b0e 0%,#09161c 55%,#050d11 100%);color:#f1f5f9;min-height:100vh}
+body{margin:0;padding:0 0 88px;background:linear-gradient(160deg,#050b0e 0%,#09161c 55%,#050d11 100%);color:#f1f5f9;min-height:100vh}
 
 /* شريط الإعلانات المتحرك في الواجهة الأمامية */
 .front-ticker-wrap{
@@ -71,15 +71,41 @@ body{margin:0;padding:0 0 84px;background:linear-gradient(160deg,#050b0e 0%,#091
 .portal-title{font-size:19px;font-weight:bold;color:#f8fafc;margin-bottom:4px}
 .portal-desc{font-size:13.5px;color:#94a3b8}
 
-/* تمييز البوابات */
 .portal-item.p-04{border-color:rgba(245,158,11,.55)}
 .portal-item.p-04 .portal-num{color:#fbbf24}
-
 .portal-item.p-05{border-color:rgba(244,114,182,.45)}
 .portal-item.p-05 .portal-num{color:#f472b6}
-
 .portal-item.p-06 .portal-num{color:#34d399}
 .portal-item.p-07 .portal-num{color:#2dd4bf}
+
+/* نافذة البوابة الداخلية حتى لا يطلع 404 */
+.modal-backdrop{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(3,8,12,.84);
+  z-index:50;
+  padding:20px 14px 80px;
+  overflow-y:auto;
+}
+.modal-box{
+  max-width:640px;
+  margin:24px auto;
+  background:#0b1920;
+  border:1.5px solid rgba(45,212,191,.45);
+  border-radius:20px;
+  padding:22px;
+  box-shadow:0 18px 40px rgba(0,0,0,.6);
+}
+.modal-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}
+.modal-head h2{margin:0;font-size:20px;color:#5eead4}
+.close-btn{background:#162c36;color:#f1f5f9;border:1px solid #2b4c5b;border-radius:10px;padding:8px 14px;cursor:pointer;font-weight:bold}
+.m-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-bottom:12px}
+input,select,textarea{width:100%;padding:11px 13px;border-radius:11px;border:1px solid #264653;background:#061117;color:#fff;font-size:14px;margin-bottom:10px}
+.save-btn{width:100%;background:linear-gradient(135deg,#14b8a6,#10b981);color:#041311;border:0;border-radius:11px;padding:11px 16px;font-weight:bold;font-size:14px;cursor:pointer}
+.m-list{margin-top:14px;display:flex;flex-direction:column;gap:8px}
+.m-row{background:#071319;border:1px solid #1a3541;border-radius:12px;padding:11px 13px;font-size:13.5px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.del-mini{background:#dc2626;color:#fff;border:0;border-radius:8px;padding:5px 10px;font-size:12px;cursor:pointer;font-weight:bold}
 
 /* الفوتر السفلي */
 .footer{
@@ -93,6 +119,7 @@ body{margin:0;padding:0 0 84px;background:linear-gradient(160deg,#050b0e 0%,#091
   text-align:center;
   font-size:13.5px;
   color:#cbd5e1;
+  z-index:40;
 }
 .footer strong{color:#2dd4bf}
 </style>
@@ -111,13 +138,13 @@ body{margin:0;padding:0 0 84px;background:linear-gradient(160deg,#050b0e 0%,#091
   </div>
 
   <div class="portal-list">
-    <a class="portal-item" href="assistant.html">
+    <a class="portal-item" href="assistant.html" onclick="return openSmartPortal('assistant', this.href)">
       <div class="portal-num">01</div>
       <div class="portal-title">بوابة المعاون</div>
       <div class="portal-desc">إدارة الغيابات والشعب</div>
     </a>
 
-    <a class="portal-item" href="teachers.html">
+    <a class="portal-item" href="teachers.html" onclick="return openSmartPortal('teachers', this.href)">
       <div class="portal-num">02</div>
       <div class="portal-title">بوابة المدرسين</div>
       <div class="portal-desc">رصد درجات المواد</div>
@@ -129,13 +156,13 @@ body{margin:0;padding:0 0 84px;background:linear-gradient(160deg,#050b0e 0%,#091
       <div class="portal-desc">الجداول والنتائج</div>
     </a>
 
-    <a class="portal-item p-04" href="supervisor.html">
+    <a class="portal-item p-04" href="supervisor.html" onclick="return openSmartPortal('supervisor', this.href)">
       <div class="portal-num">04</div>
       <div class="portal-title">بوابة المشرف التربوي / المرشد</div>
       <div class="portal-desc">الحالات السلوكية والملفات</div>
     </a>
 
-    <a class="portal-item p-05" href="principal.html">
+    <a class="portal-item p-05" href="principal.html" onclick="return openSmartPortal('principal', this.href)">
       <div class="portal-num">05</div>
       <div class="portal-title">بوابة الإدارة / المدير</div>
       <div class="portal-desc">الإحصائيات والصلاحيات</div>
@@ -155,9 +182,39 @@ body{margin:0;padding:0 0 84px;background:linear-gradient(160deg,#050b0e 0%,#091
   </div>
 </div>
 
+<!-- نافذة البوابات الأربع (تفتح إذا لم يكن الملف الخارجي موجوداً لمنع خطأ 404) -->
+<div id="smart-modal" class="modal-backdrop">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2 id="m-title">البوابة</h2>
+      <button type="button" class="close-btn" onclick="closeSmartPortal()">إغلاق</button>
+    </div>
+    <p id="m-sub" style="margin:0 0 12px;font-size:13px;color:#94a3b8"></p>
+
+    <div class="m-grid">
+      <input type="text" id="m-f1" placeholder="الاسم أو العنوان">
+      <select id="m-f2">
+        <option>اول امن سيبراني A</option>
+        <option>اول امن سيبراني B</option>
+        <option>اول امن سيبراني C</option>
+        <option>اول تكرار نفط A</option>
+        <option>اول اجهزة طبية A</option>
+        <option>اول تجميع حاسوب A</option>
+        <option>ثالث تجميع حاسوب A</option>
+        <option>ثالث تجميع حاسوب B</option>
+      </select>
+    </div>
+    <textarea id="m-f3" rows="3" placeholder="اكتب التفاصيل أو الملاحظات أو الدرجات / الغيابات..."></textarea>
+    <button type="button" class="save-btn" onclick="savePortalEntry()">حفظ السجل</button>
+
+    <div id="m-list" class="m-list"></div>
+  </div>
+</div>
+
 <div class="footer">برمجة وتطوير: <strong>عباس محمد عزيز</strong></div>
 
 <script>
+/* شريط الإعلانات المتحرك للواجهة الأمامية */
 (function(){
   var STORAGE_KEY = "alpha_sec_announcements";
   var lastSnapshot = "";
@@ -205,6 +262,111 @@ body{margin:0;padding:0 0 84px;background:linear-gradient(160deg,#050b0e 0%,#091
   setInterval(renderFrontTicker, 1000);
   window.addEventListener("storage", renderFrontTicker);
 })();
+
+/* فحص وجود الملف الخارجي للبوابات الأربع وفتح واجهة مدمجة إذا لم يتوفر لتجنب 404 */
+var activePortalKey = "";
+var portalMeta = {
+  assistant: {
+    title: "بوابة المعاون — إدارة الغيابات والشعب",
+    sub: "تسجيل غيابات الطلبة ومتابعة الشعب الدراسية (محفوظ محلياً)",
+    p1: "اسم الطالب / الشعبة",
+    p3: "تفاصيل الغياب أو التوجيه الإداري..."
+  },
+  teachers: {
+    title: "بوابة المدرسين — رصد درجات المواد",
+    sub: "متابعة درجات المواد والاختبارات حسب الشعبة",
+    p1: "اسم الطالب والمادة",
+    p3: "الدرجة أو الملاحظة العلمية..."
+  },
+  supervisor: {
+    title: "بوابة المشرف التربوي / المرشد — الحالات السلوكية والملفات",
+    sub: "توثيق الحالات السلوكية والإرشادية للطلبة",
+    p1: "اسم الطالب ونوع الحالة",
+    p3: "تفاصيل الإرشاد أو المتابعة التربوية..."
+  },
+  principal: {
+    title: "بوابة الإدارة / المدير — الإحصائيات والصلاحيات",
+    sub: "متابعة القرارات الإدارية والتقارير العامة للمدرسة",
+    p1: "عنوان القرار أو التقرير",
+    p3: "تفاصيل التوجيه أو الصلاحية الإدارية..."
+  }
+};
+
+function openSmartPortal(key, href){
+  fetch(href, { method: "HEAD" }).then(function(res){
+    if(res && res.ok){
+      window.location.href = href;
+    } else {
+      showFallbackModal(key);
+    }
+  }).catch(function(){
+    showFallbackModal(key);
+  });
+  return false;
+}
+
+function showFallbackModal(key){
+  activePortalKey = key;
+  var meta = portalMeta[key] || { title: "البوابة", sub: "", p1: "العنوان", p3: "التفاصيل..." };
+  document.getElementById("m-title").innerText = meta.title;
+  document.getElementById("m-sub").innerText = meta.sub;
+  document.getElementById("m-f1").placeholder = meta.p1;
+  document.getElementById("m-f3").placeholder = meta.p3;
+  document.getElementById("smart-modal").style.display = "block";
+  renderPortalList();
+}
+
+function closeSmartPortal(){
+  document.getElementById("smart-modal").style.display = "none";
+}
+
+function getPortalRows(key){
+  try{
+    return JSON.parse(localStorage.getItem("alpha_portal_" + key) || "[]");
+  }catch(e){
+    return [];
+  }
+}
+
+function setPortalRows(key, arr){
+  try{
+    localStorage.setItem("alpha_portal_" + key, JSON.stringify(arr));
+  }catch(e){}
+}
+
+function savePortalEntry(){
+  if(!activePortalKey) return;
+  var f1 = document.getElementById("m-f1").value.trim();
+  var f2 = document.getElementById("m-f2").value;
+  var f3 = document.getElementById("m-f3").value.trim();
+  if(!f1 || !f3) return alert("يرجى إدخال العنوان والتفاصيل");
+  var rows = getPortalRows(activePortalKey);
+  rows.unshift({ f1: f1, f2: f2, f3: f3, dt: new Date().toISOString().slice(0, 10) });
+  setPortalRows(activePortalKey, rows);
+  document.getElementById("m-f1").value = "";
+  document.getElementById("m-f3").value = "";
+  renderPortalList();
+}
+
+function delPortalEntry(idx){
+  if(!activePortalKey) return;
+  var rows = getPortalRows(activePortalKey);
+  rows.splice(idx, 1);
+  setPortalRows(activePortalKey, rows);
+  renderPortalList();
+}
+
+function renderPortalList(){
+  var box = document.getElementById("m-list");
+  var rows = getPortalRows(activePortalKey);
+  if(!rows.length){
+    box.innerHTML = "<div style='color:#94a3b8;font-size:13px;text-align:center;padding:8px'>لا توجد سجلات محفوظة بعد في هذه البوابة</div>";
+    return;
+  }
+  box.innerHTML = rows.map(function(r, i){
+    return "<div class='m-row'><div><strong style='color:#5eead4'>" + r.f1 + "</strong> <span style='color:#fbbf24'>[" + r.f2 + "]</span> <span style='color:#94a3b8;font-size:12px'>(" + r.dt + ")</span><div style='margin-top:4px;color:#e2e8f0'>" + r.f3 + "</div></div><button type='button' class='del-mini' onclick='delPortalEntry(" + i + ")'>حذف</button></div>";
+  }).join("");
+}
 </script>
 </body>
 </html>
