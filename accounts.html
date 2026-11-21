@@ -13,17 +13,20 @@ header h1{margin:0;font-size:20px;color:#fff}
 header .sub{font-size:13px;color:#38bdf8;margin-top:4px}
 .sync-badge{font-size:12px;padding:5px 10px;border-radius:999px;background:#0b1324;border:1px solid #38bdf855;color:#38bdf8}
 .panel{background:#0b0f19;border:1px solid #38bdf866;border-radius:16px;padding:20px;margin-bottom:18px}
+.lock-box{max-width:440px;margin:30px auto;background:#0b0f19;border:1px solid #38bdf866;border-radius:16px;padding:22px;text-align:center}
+#acc-content{display:none}
 .summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px}
 .stat{background:#020617;border:1px solid #1e293b;border-radius:12px;padding:14px}
 .stat .k{font-size:12px;color:#94a3b8;display:block;margin-bottom:6px}
 .stat .v{font-size:18px;font-weight:bold;color:#38bdf8}
+label{display:block;font-size:13px;color:#cbd5e1;margin-bottom:5px;font-weight:bold}
 input,select{width:100%;padding:12px 14px;margin-bottom:12px;border-radius:10px;border:1px solid #334155;background:#020617;color:#fff;font-size:15px}
 button{cursor:pointer;border-radius:10px;border:0;padding:11px 16px;font-weight:bold;font-size:14px}
 .btn-sky{background:#38bdf8;color:#000}
 .btn-d{background:#1e293b;color:#f1f5f9;border:1px solid #334155;text-decoration:none;padding:10px 14px;font-size:13px;display:inline-block}
 .btn-r{background:#dc2626;color:#fff;padding:6px 10px;font-size:12px}
-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px}
-th,td{border:1px solid #1e293b;padding:10px;text-align:right}
+table{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px;overflow-x:auto;display:block}
+th,td{border:1px solid #1e293b;padding:10px;text-align:right;white-space:nowrap}
 th{background:#020617;color:#38bdf8}
 footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1px solid #38bdf855;padding:12px;text-align:center;font-size:13px;color:#cbd5e1;z-index:10}
 </style>
@@ -42,52 +45,92 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
     </div>
   </header>
 
-  <div class="summary">
-    <div class="stat">
-      <span class="k">المحصل المالي الكلي</span>
-      <span id="total-iqd" class="v">0 د.ع</span>
-    </div>
-    <div class="stat">
-      <span class="k">عدد الوصولات المسجلة</span>
-      <span id="count-rows" class="v">0</span>
-    </div>
-    <div class="stat">
-      <span class="k">العملة المعتمدة</span>
-      <span class="v">دينار عراقي (د.ع)</span>
-    </div>
+  <!-- شاشة الباسورد -->
+  <div id="acc-lock" class="lock-box">
+    <h3 style="margin-top:0;color:#38bdf8">دخول بوابة الحسابات</h3>
+    <p style="font-size:13px;color:#94a3b8;margin-top:0">أدخل الرمز السري لفتح سجلات الأقساط والمحصل المالي</p>
+    <input type="password" id="acc-pass-input" placeholder="أدخل رمز بوابة الحسابات">
+    <button type="button" id="acc-unlock-btn" class="btn-sky" style="width:100%">فتح البوابة</button>
   </div>
 
-  <div class="panel">
-    <h3 style="margin-top:0;color:#38bdf8">تسجيل قسط / دفعة جديدة</h3>
-    <input type="text" id="st-name" placeholder="اسم الطالب">
-    <select id="pay-type">
-      <option value="دفعة اولى">دفعة اولى</option>
-      <option value="قسط شهري">قسط شهري</option>
-      <option value="دفعة ثانية">دفعة ثانية</option>
-      <option value="تسوية قسط">تسوية قسط</option>
-    </select>
-    <input type="number" id="pay-amount" min="0" step="250" placeholder="المبلغ بالدينار العراقي (مثال: 250000)">
-    <select id="pay-curr">
-      <option value="د.ع" selected>دينار عراقي (د.ع)</option>
-    </select>
-    <input type="date" id="pay-date">
-    <button type="button" id="save-pay" class="btn-sky" style="width:100%">حفظ الوصل سحابياً</button>
-  </div>
+  <!-- محتوى الحسابات بعد فتح الباسورد -->
+  <div id="acc-content">
+    <div class="summary">
+      <div class="stat">
+        <span class="k">المحصل المالي الكلي</span>
+        <span id="total-iqd" class="v">0 د.ع</span>
+      </div>
+      <div class="stat">
+        <span class="k">عدد الوصولات المسجلة</span>
+        <span id="count-rows" class="v">0</span>
+      </div>
+      <div class="stat">
+        <span class="k">العملة المعتمدة</span>
+        <span class="v">دينار عراقي (د.ع)</span>
+      </div>
+    </div>
 
-  <div class="panel">
-    <h3 style="margin-top:0;color:#38bdf8">سجل الأقساط والدفعات</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>الطالب</th>
-          <th>نوع الدفعة</th>
-          <th>المبلغ</th>
-          <th>التاريخ</th>
-          <th>حذف</th>
-        </tr>
-      </thead>
-      <tbody id="pay-body"></tbody>
-    </table>
+    <div class="panel">
+      <h3 style="margin-top:0;color:#38bdf8">تسجيل قسط / وصل قبض جديد</h3>
+
+      <!-- اولا: اسم الطالب -->
+      <label for="st-name">أولاً: اسم الطالب</label>
+      <input type="text" id="st-name" placeholder="أدخل اسم الطالب الثلاثي أو الرباعي">
+
+      <!-- ثانيا: الصف -->
+      <label for="st-class">ثانياً: الصف</label>
+      <select id="st-class">
+        <option value="اول امن سيبراني A">اول امن سيبراني A</option>
+        <option value="اول امن سيبراني B">اول امن سيبراني B</option>
+        <option value="اول امن سيبراني C">اول امن سيبراني C</option>
+        <option value="اول تكرير نفط A">اول تكرير نفط A</option>
+        <option value="اول تجميع حاسوب A">اول تجميع حاسوب A</option>
+        <option value="اول اجهزة طبية A">اول اجهزة طبية A</option>
+        <option value="ثالث تجميع حاسوب A">ثالث تجميع حاسوب A</option>
+        <option value="ثالث تجميع حاسوب B">ثالث تجميع حاسوب B</option>
+      </select>
+
+      <!-- ثالثا: رقم وصل القبض -->
+      <label for="receipt-no">ثالثاً: رقم وصل القبض</label>
+      <input type="text" id="receipt-no" placeholder="أدخل رقم وصل القبض (مثال: 1045)">
+
+      <!-- رابعا: المبلغ بالدينار العراقي -->
+      <label for="pay-amount">رابعاً: المبلغ بالدينار العراقي (د.ع)</label>
+      <input type="number" id="pay-amount" min="0" step="250" placeholder="أدخل المبلغ بالدينار العراقي (مثال: 250000)">
+
+      <!-- خامسا: الدفعة -->
+      <label for="pay-installment">خامساً: الدفعة</label>
+      <select id="pay-installment">
+        <option value="دفعة اولى">دفعة اولى</option>
+        <option value="دفعة ثانية">دفعة ثانية</option>
+        <option value="دفعة ثالثة">دفعة ثالثة</option>
+        <option value="حسب سعر القسط">حسب سعر القسط</option>
+      </select>
+
+      <!-- سادسا: التاريخ -->
+      <label for="pay-date">سادساً: التاريخ</label>
+      <input type="date" id="pay-date">
+
+      <button type="button" id="save-pay" class="btn-sky" style="width:100%">حفظ الوصل سحابياً</button>
+    </div>
+
+    <div class="panel">
+      <h3 style="margin-top:0;color:#38bdf8">سجل الأقساط والوصولات</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>اسم الطالب</th>
+            <th>الصف</th>
+            <th>رقم وصل القبض</th>
+            <th>المبلغ (د.ع)</th>
+            <th>الدفعة</th>
+            <th>التاريخ</th>
+            <th>حذف</th>
+          </tr>
+        </thead>
+        <tbody id="pay-body"></tbody>
+      </table>
+    </div>
   </div>
 </div>
 
@@ -95,6 +138,7 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
 
 <script>
 var FIREBASE_DB_URL = "https://al-maarefa-school-default-rtdb.firebaseio.com";
+var ACC_PASS = "778800";
 var CLOUD_KEY = "accounts";
 var LOCAL_KEY = "alpha_sec_accounts_iqd";
 
@@ -144,8 +188,10 @@ function renderRows(rows){
       var tr = document.createElement("tr");
       tr.innerHTML =
         "<td>" + (item.student || "") + "</td>" +
-        "<td>" + (item.type || "دفعة اولى") + "</td>" +
+        "<td>" + (item.className || "") + "</td>" +
+        "<td>" + (item.receiptNo || "") + "</td>" +
         "<td><strong>" + formatIQD(item.amount) + "</strong></td>" +
+        "<td>" + (item.installment || "دفعة اولى") + "</td>" +
         "<td>" + (item.date || "") + "</td>" +
         "<td></td>";
       var btn = document.createElement("button");
@@ -198,21 +244,56 @@ function pullAll(){
   });
 }
 
+document.getElementById("acc-unlock-btn").onclick = function(){
+  var inp = document.getElementById("acc-pass-input");
+  var val = inp ? inp.value.trim() : "";
+  if(val === ACC_PASS){
+    document.getElementById("acc-lock").style.display = "none";
+    document.getElementById("acc-content").style.display = "block";
+    if(inp) inp.value = "";
+    pullAll();
+  } else {
+    alert("الرمز السري خطأ!");
+  }
+};
+
+document.getElementById("acc-pass-input").addEventListener("keydown", function(e){
+  if(e.key === "Enter") document.getElementById("acc-unlock-btn").click();
+});
+
 document.getElementById("save-pay").onclick = function(){
   var student = document.getElementById("st-name").value.trim();
-  var type = document.getElementById("pay-type").value;
+  var className = document.getElementById("st-class").value;
+  var receiptNo = document.getElementById("receipt-no").value.trim();
   var amount = Number(document.getElementById("pay-amount").value);
-  var curr = document.getElementById("pay-curr").value || "د.ع";
+  var installment = document.getElementById("pay-installment").value;
   var date = document.getElementById("pay-date").value || new Date().toISOString().slice(0, 10);
+
   if(!student){ alert("أدخل اسم الطالب"); return; }
+  if(!receiptNo){ alert("أدخل رقم وصل القبض"); return; }
   if(!amount || amount <= 0){ alert("أدخل مبلغاً صحيحاً بالدينار العراقي"); return; }
 
   var rows = readLocal();
-  rows.unshift({ student: student, type: type, amount: amount, currency: curr, date: date });
+  rows.unshift({
+    student: student,
+    className: className,
+    receiptNo: receiptNo,
+    amount: amount,
+    currency: "د.ع",
+    installment: installment,
+    date: date
+  });
+
   document.getElementById("st-name").value = "";
+  document.getElementById("receipt-no").value = "";
   document.getElementById("pay-amount").value = "";
   saveAll(rows);
 };
+
+var dateInput = document.getElementById("pay-date");
+if(dateInput && !dateInput.value){
+  dateInput.value = new Date().toISOString().slice(0, 10);
+}
 
 pullAll();
 </script>
