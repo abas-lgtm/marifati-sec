@@ -3,52 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>ALPHA-SEC // النظام المدرسي المتكامل</title>
+<title>ALPHA-SEC // مركز العمليات والإعلانات</title>
 <style>
 *{box-sizing:border-box;font-family:Tahoma,Arial,sans-serif}
 body{margin:0;padding:0 0 75px;background:#030712;color:#f3f4f6;font-size:15px}
 
-/* شريط الإعلانات المتحرك في الواجهة الأمامية */
 .front-ticker-wrap{
-  width:100%;
-  overflow:hidden;
-  background:#071022;
-  border-bottom:1px solid #10b98166;
-  padding:9px 0;
-  direction:rtl;
+  width:100%;overflow:hidden;background:#071022;border-bottom:1px solid #10b98166;padding:9px 0;direction:rtl;
 }
 .front-ticker-track{
-  display:flex;
-  gap:12px;
-  width:max-content;
-  padding-right:12px;
-  animation:frontScroll 15s linear infinite;
+  display:flex;gap:12px;width:max-content;padding-right:12px;animation:frontScroll 15s linear infinite;
 }
-.front-ticker-wrap:hover .front-ticker-track{
-  animation-play-state:paused;
-}
-@keyframes frontScroll{
-  0%{transform:translateX(0)}
-  100%{transform:translateX(50%)}
-}
+.front-ticker-wrap:hover .front-ticker-track{animation-play-state:paused}
+@keyframes frontScroll{0%{transform:translateX(0)}100%{transform:translateX(50%)}}
 .front-ad-item{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  white-space:nowrap;
-  padding:6px 13px;
-  border-radius:10px;
-  font-size:12.5px;
-  font-weight:bold;
-  background:#0b1324;
-  color:#f3f4f6;
-  border:1px solid #10b98155;
+  display:inline-flex;align-items:center;gap:8px;white-space:nowrap;padding:6px 13px;border-radius:10px;
+  font-size:12.5px;font-weight:bold;background:#0b1324;color:#f3f4f6;border:1px solid #10b98155;
 }
-.front-ad-item.is-urgent{
-  background:#450a0a;
-  color:#fecaca;
-  border-color:#ef4444;
-}
+.front-ad-item.is-urgent{background:#450a0a;color:#fecaca;border-color:#ef4444}
 
 .wrap{max-width:980px;margin:0 auto;padding:18px 18px 0}
 header{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid #10b98155;padding-bottom:14px;margin-bottom:22px}
@@ -68,19 +40,18 @@ button{cursor:pointer;border-radius:10px;border:0;padding:11px 16px;font-weight:
 .btn-g{background:#10b981;color:#000}
 .btn-b{background:#06b6d4;color:#000}
 .btn-w{background:#f59e0b;color:#000}
-.btn-d{background:#1e293b;color:#f1f5f9;border:1px solid #334155}
+.btn-d{background:#1e293b;color:#f1f5f9;border:1px solid #334155;text-decoration:none;font-size:13px;padding:10px 14px}
 .btn-r{background:#dc2626;color:#fff}
 .bar{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:14px}
 table{width:100%;border-collapse:collapse;margin-top:14px;font-size:14px}
 th,td{border:1px solid #1e293b;padding:10px;text-align:right}
 th{background:#020617;color:#34d399}
-footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1px solid #10b98155;padding:12px;text-align:center;font-size:13px;color:#cbd5e1}
+footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1px solid #10b98155;padding:12px;text-align:center;font-size:13px;color:#cbd5e1;z-index:10}
 @media print{body{background:#fff;color:#000;padding:0}.np,footer,.front-ticker-wrap{display:none!important}th,td{border:1px solid #000;color:#000}}
 </style>
 </head>
 <body>
 
-<!-- شريط الإعلانات المتحرك في الواجهة الأمامية -->
 <div class="front-ticker-wrap" title="مرر للتوقف وقراءة التبليغ">
   <div id="front-ad-track" class="front-ticker-track"></div>
 </div>
@@ -93,7 +64,8 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
     </div>
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
       <span id="cloud-status" class="sync-badge">جاري فحص الاتصال السحابي...</span>
-      <button type="button" id="btn-home" class="btn-d">الرئيسية</button>
+      <a href="index.html" class="btn-d">الرئيسية (1)</a>
+      <button type="button" id="btn-home" class="btn-d">كل البوابات</button>
     </div>
   </header>
 
@@ -290,10 +262,10 @@ function writeLocalArr(storageKey, arr){
 
 function pullArr(cloudKey, storageKey, onReady){
   var localArr = readLocalArr(storageKey);
+  if(onReady) onReady(localArr);
   var url = cloudUrl(cloudKey);
   if(!url){
     setSyncBadge("وضع محلي", false);
-    if(onReady) onReady(localArr);
     return;
   }
   fetch(url).then(function(res){
@@ -306,16 +278,15 @@ function pullArr(cloudKey, storageKey, onReady){
     if(onReady) onReady(arr);
   }).catch(function(){
     setSyncBadge("احتياط محلي (تعذر الاتصال بالسحابة)", false);
-    if(onReady) onReady(localArr);
   });
 }
 
 function pushArr(cloudKey, storageKey, arr, onDone){
   writeLocalArr(storageKey, arr);
+  if(onDone) onDone(arr);
   var url = cloudUrl(cloudKey);
   if(!url){
     setSyncBadge("وضع محلي", false);
-    if(onDone) onDone(arr);
     return;
   }
   fetch(url, {
@@ -325,10 +296,8 @@ function pushArr(cloudKey, storageKey, arr, onDone){
   }).then(function(res){
     if(!res.ok) throw new Error("net");
     setSyncBadge("تم الحفظ سحابياً", true);
-    if(onDone) onDone(arr);
   }).catch(function(){
     setSyncBadge("محفوظ محلياً (بانتظار الشبكة)", false);
-    if(onDone) onDone(arr);
   });
 }
 
@@ -356,20 +325,14 @@ function startNewMonth(cloudKey, storageKey, label, onDone){
   }
 }
 
-/* تحديث شريط الإعلانات المتحرك في الواجهة الأمامية */
 (function(){
   var STORAGE_KEY = "alpha_sec_announcements";
   var lastSnapshot = "";
 
   function readAnnouncements(){
-    try{
-      var raw = localStorage.getItem(STORAGE_KEY);
-      if(!raw) raw = localStorage.getItem("ann_v2_rows");
-      var list = JSON.parse(raw || "[]");
-      return Array.isArray(list) ? list : [];
-    }catch(e){
-      return [];
-    }
+    var raw = readLocalArr(STORAGE_KEY);
+    if(raw.length) return raw;
+    return readLocalArr("ann_v2_rows");
   }
 
   function renderCards(rows){
@@ -402,14 +365,13 @@ function startNewMonth(cloudKey, storageKey, label, onDone){
   function syncTicker(){
     renderCards(readAnnouncements());
     var url = cloudUrl("announcements");
-    if(url){
-      fetch(url).then(function(r){ return r.ok ? r.json() : null; }).then(function(data){
-        if(Array.isArray(data)){
-          writeLocalArr(STORAGE_KEY, data);
-          renderCards(data);
-        }
-      }).catch(function(){});
-    }
+    if(!url) return;
+    fetch(url).then(function(r){ return r.ok ? r.json() : null; }).then(function(data){
+      if(Array.isArray(data)){
+        writeLocalArr(STORAGE_KEY, data);
+        renderCards(data);
+      }
+    }).catch(function(){});
   }
 
   syncTicker();
@@ -538,4 +500,12 @@ function startNewMonth(cloudKey, storageKey, label, onDone){
           delBtn.type = "button";
           delBtn.className = "btn-r";
           delBtn.style.padding = "5px 10px";
- 
+          delBtn.style.fontSize = "12px";
+          delBtn.innerText = "حذف";
+          delBtn.onclick = function(){
+            var curA = readLocalArr("al_d_abs");
+            curA.splice(idx, 1);
+            pushArr("abs", "al_d_abs", curA, drawAbs);
+          };
+          tr.lastChild.appendChild(delBtn);
+          tb.appendChild(t
