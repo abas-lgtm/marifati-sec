@@ -8,10 +8,16 @@
 *{box-sizing:border-box;font-family:Tahoma,Arial,sans-serif}
 body{margin:0;padding:22px 16px 85px;background:linear-gradient(160deg,#061014 0%,#0b1e26 55%,#07151a 100%);color:#f1f5f9;min-height:100vh}
 .wrap{max-width:1080px;margin:0 auto}
-.header{display:flex;justify-content:space-between;align-items:center;gap:14px;background:rgba(15,35,44,.92);border:1px solid rgba(45,212,191,.35);border-radius:20px;padding:16px 22px;margin-bottom:24px;box-shadow:0 10px 28px rgba(0,0,0,.35)}
+.header{display:flex;justify-content:space-between;align-items:center;gap:14px;background:rgba(15,35,44,.92);border:1px solid rgba(45,212,191,.35);border-radius:20px;padding:16px 22px;margin-bottom:20px;box-shadow:0 10px 28px rgba(0,0,0,.35)}
 .header h1{margin:0;font-size:21px;color:#5eead4}
 .header .sub{font-size:13px;color:#cbd5e1;margin-top:4px}
-.login-card{max-width:460px;margin:40px auto;background:rgba(13,30,38,.96);border:1.5px solid rgba(251,191,36,.45);border-radius:22px;padding:28px;box-shadow:0 16px 36px rgba(0,0,0,.45)}
+.ticker-wrap{overflow:hidden;background:rgba(10,25,33,.95);border:1.5px solid rgba(251,191,36,.45);border-radius:16px;padding:12px 0;margin-bottom:22px;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.ticker-track{display:flex;gap:16px;width:max-content;padding-right:16px;animation:scrollAd 26s linear infinite}
+.ticker-wrap:hover .ticker-track{animation-play-state:paused}
+@keyframes scrollAd{0%{transform:translateX(0)}100%{transform:translateX(50%)}}
+.ad-pill{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;padding:8px 14px;border-radius:12px;font-size:13px;font-weight:bold;background:#102935;border:1px solid rgba(45,212,191,.35);color:#e2e8f0}
+.ad-pill.urgent{background:#451116;border-color:#f87171;color:#fecaca}
+.login-card{max-width:460px;margin:36px auto;background:rgba(13,30,38,.96);border:1.5px solid rgba(251,191,36,.45);border-radius:22px;padding:28px;box-shadow:0 16px 36px rgba(0,0,0,.45)}
 .dash-card{display:none;background:rgba(13,30,38,.96);border:1.5px solid rgba(45,212,191,.35);border-radius:22px;padding:24px;box-shadow:0 16px 36px rgba(0,0,0,.45)}
 .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:14px}
 .field label{display:block;font-size:13px;color:#99f6e4;margin-bottom:6px;font-weight:bold}
@@ -31,7 +37,7 @@ th{background:#102833;color:#5eead4}
 .p-urgent{display:inline-block;padding:4px 10px;border-radius:8px;font-size:12px;font-weight:bold;background:#7f1d1d;color:#fecaca;border:1px solid #f87171}
 .p-normal{display:inline-block;padding:4px 10px;border-radius:8px;font-size:12px;font-weight:bold;background:#064e3b;color:#6ee7b7;border:1px solid #34d399}
 .footer{position:fixed;bottom:0;left:0;width:100%;background:#071319;border-top:1px solid rgba(45,212,191,.3);padding:12px;text-align:center;font-size:13px;color:#cbd5e1}
-@media print{body{background:#fff;color:#000;padding:0}.no-print,.footer{display:none!important}.table-box{border:1px solid #000}table{background:#fff}th,td{border:1px solid #000;color:#000}.p-urgent,.p-normal{background:none;border:0;color:#000;padding:0}}
+@media print{body{background:#fff;color:#000;padding:0}.no-print,.footer,.ticker-wrap{display:none!important}.table-box{border:1px solid #000}table{background:#fff}th,td{border:1px solid #000;color:#000}.p-urgent,.p-normal{background:none;border:0;color:#000;padding:0}}
 </style>
 </head>
 <body>
@@ -42,6 +48,11 @@ th{background:#102833;color:#5eead4}
       <div class="sub">إعدادية المعرفة المهنية الاهلية — برمجة: عباس محمد عزيز</div>
     </div>
     <button type="button" class="btn-dark" onclick="goMain()">الرئيسية</button>
+  </div>
+
+  <!-- شريط الإعلانات المتحرك -->
+  <div class="ticker-wrap no-print" title="مرر للوقوف وقراءة التبليغ">
+    <div id="ad-ticker" class="ticker-track"></div>
   </div>
 
   <!-- دخول بوابة التبليغات -->
@@ -169,10 +180,10 @@ function calcBan(g, s) {
 
 function getLk() {
   try {
-    var o = JSON.parse(localStorage.getItem("ann_v1_lock") || "{}");
+    var o = JSON.parse(localStorage.getItem("ann_v2_lock") || "{}");
     if (o.u && Date.now() >= Number(o.u)) {
       var z = { t: 0, u: 0, h: 0 };
-      localStorage.setItem("ann_v1_lock", JSON.stringify(z));
+      localStorage.setItem("ann_v2_lock", JSON.stringify(z));
       return z;
     }
     return { t: Number(o.t || 0), u: Number(o.u || 0), h: Number(o.h || 0) };
@@ -180,7 +191,7 @@ function getLk() {
 }
 
 function setLk(v) {
-  try { localStorage.setItem("ann_v1_lock", JSON.stringify(v)); } catch (e) {}
+  try { localStorage.setItem("ann_v2_lock", JSON.stringify(v)); } catch (e) {}
 }
 
 function remText(ms) {
@@ -225,11 +236,27 @@ function loginAnn() {
 }
 
 function getRows() {
-  try { return JSON.parse(localStorage.getItem("ann_v1_rows") || "[]"); } catch (e) { return []; }
+  try { return JSON.parse(localStorage.getItem("ann_v2_rows") || "[]"); } catch (e) { return []; }
 }
 
 function setRows(a) {
-  try { localStorage.setItem("ann_v1_rows", JSON.stringify(a)); } catch (e) {}
+  try { localStorage.setItem("ann_v2_rows", JSON.stringify(a)); } catch (e) {}
+}
+
+function renderTicker() {
+  var tk = document.getElementById("ad-ticker");
+  if (!tk) return;
+  var rows = getRows();
+  if (!rows.length) {
+    tk.innerHTML = "<div class='ad-pill'>إعلانات إعدادية المعرفة المهنية الاهلية — لا توجد تبليغات منشورة حالياً</div><div class='ad-pill'>إعلانات إعدادية المعرفة المهنية الاهلية — لا توجد تبليغات منشورة حالياً</div>";
+    return;
+  }
+  var items = rows.map(function(r) {
+    var cls = r.prio === "عاجل" ? "ad-pill urgent" : "ad-pill";
+    var tag = r.prio === "عاجل" ? "🚨 عاجل" : "📌 عادي";
+    return "<div class='" + cls + "'><span>" + tag + "</span><span>[" + r.target + "]</span><strong>" + r.title + ":</strong><span>" + r.body + "</span><span style='opacity:.75'>(" + r.dt + ")</span></div>";
+  }).join("");
+  tk.innerHTML = items + items;
 }
 
 function saveAnn() {
@@ -258,6 +285,7 @@ function delAnn(idx) {
 }
 
 function renderAnn() {
+  renderTicker();
   var q = (document.getElementById("an-q").value || "").trim().toLowerCase();
   var rows = getRows(), html = "";
   for (var i = 0; i < rows.length; i++) {
@@ -274,6 +302,7 @@ function renderAnn() {
 }
 
 showMsg();
+renderTicker();
 document.getElementById("an-date").value = new Date().toISOString().slice(0, 10);
 </script>
 </body>
