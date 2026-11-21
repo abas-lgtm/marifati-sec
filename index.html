@@ -1,151 +1,97 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>ALPHA-SEC // النظام المدرسي المتكامل</title>
 <style>
-*{box-sizing:border-box;font-family:Tahoma,Arial,sans-serif}
-body{margin:0;padding:18px 18px 75px;background:#030712;color:#f3f4f6;font-size:15px}
-.wrap{max-width:980px;margin:0 auto}
-header{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid #10b98155;padding-bottom:14px;margin-bottom:22px}
-header h1{margin:0;font-size:20px;color:#fff}
-header .sub{font-size:13px;color:#34d399;margin-top:4px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
-.card,.link{display:block;width:100%;text-align:right;background:#0b0f19;color:#fff;border:1px solid #10b98166;border-radius:16px;padding:20px;text-decoration:none;cursor:pointer;min-height:110px}
-.card:hover,.link:hover{border-color:#34d399}
-.num{font-size:13px;font-weight:bold;color:#34d399;margin-bottom:8px;display:block}
-.title{font-size:18px;font-weight:bold;color:#fff;margin-bottom:6px;display:block}
-.desc{font-size:13px;color:#94a3b8;display:block}
-.panel{display:none;background:#0b0f19;border:1px solid #10b98166;border-radius:16px;padding:22px;max-width:860px;margin:16px auto}
-.box-sm{max-width:460px}
-input,select{width:100%;padding:12px 14px;margin-bottom:12px;border-radius:10px;border:1px solid #334155;background:#020617;color:#fff;font-size:15px}
-button{cursor:pointer;border-radius:10px;border:0;padding:11px 16px;font-weight:bold;font-size:14px}
-.btn-g{background:#10b981;color:#000}
-.btn-b{background:#06b6d4;color:#000}
-.btn-d{background:#1e293b;color:#f1f5f9;border:1px solid #334155}
-.btn-r{background:#dc2626;color:#fff}
-.bar{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:14px}
-table{width:100%;border-collapse:collapse;margin-top:14px;font-size:14px}
-th,td{border:1px solid #1e293b;padding:10px;text-align:right}
-th{background:#020617;color:#34d399}
-footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1px solid #10b98155;padding:12px;text-align:center;font-size:13px;color:#cbd5e1}
-@media print{body{background:#fff;color:#000;padding:0}.np,footer{display:none!important}th,td{border:1px solid #000;color:#000}}
+.front-ticker-wrap{
+  width:100%;
+  overflow:hidden;
+  background:linear-gradient(90deg,#081820,#0e2935,#081820);
+  border-bottom:1.5px solid rgba(251,191,36,.45);
+  padding:10px 0;
+  direction:rtl;
+  font-family:Tahoma,Arial,sans-serif;
+}
+.front-ticker-track{
+  display:flex;
+  gap:14px;
+  width:max-content;
+  padding-right:14px;
+  animation:frontScroll 15s linear infinite;
+}
+.front-ticker-wrap:hover .front-ticker-track{
+  animation-play-state:paused;
+}
+@keyframes frontScroll{
+  0%{transform:translateX(0)}
+  100%{transform:translateX(50%)}
+}
+.front-ad-item{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  white-space:nowrap;
+  padding:7px 14px;
+  border-radius:11px;
+  font-size:13px;
+  font-weight:bold;
+  background:#112c38;
+  color:#f1f5f9;
+  border:1px solid rgba(45,212,191,.35);
+}
+.front-ad-item.is-urgent{
+  background:#4c1117;
+  color:#fecaca;
+  border-color:#f87171;
+}
 </style>
-</head>
-<body>
-<div class="wrap">
-  <header class="np">
-    <div>
-      <h1>إعدادية المعرفة المهنية الاهلية</h1>
-      <div class="sub">برمجة: عباس محمد عزيز</div>
-    </div>
-    <button type="button" id="btn-home" class="btn-d">الرئيسية</button>
-  </header>
 
-  <div id="v-home" class="grid">
-    <button type="button" id="btn-ast" class="card">
-      <span class="num">01</span>
-      <span class="title">بوابة المعاون</span>
-      <span class="desc">الغيابات، الهروب، والإجازات</span>
-    </button>
+<div class="front-ticker-wrap" title="مرر للتوقف وقراءة التبليغ">
+  <div id="front-ad-track" class="front-ticker-track"></div>
+</div>
 
-    <button type="button" id="btn-tch" class="card">
-      <span class="num" style="color:#22d3ee">02</span>
-      <span class="title">بوابة المدرسين</span>
-      <span class="desc">رصد درجات المواد من 100</span>
-    </button>
+<script>
+(function(){
+  var STORAGE_KEY = "alpha_sec_announcements";
+  var lastSnapshot = "";
 
-    <a href="students.html" class="link">
-      <span class="num" style="color:#c084fc">03</span>
-      <span class="title">بوابة الطلاب</span>
-      <span class="desc">الجداول والنتائج</span>
-    </a>
+  function readAnnouncements(){
+    try{
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) raw = localStorage.getItem("ann_v2_rows");
+      var list = JSON.parse(raw || "[]");
+      return Array.isArray(list) ? list : [];
+    }catch(e){
+      return [];
+    }
+  }
 
-    <a href="counselor.html" class="link">
-      <span class="num" style="color:#fbbf24">04</span>
-      <span class="title">بوابة المشرف التربوي / المرشد</span>
-      <span class="desc">الحالات السلوكية والملفات</span>
-    </a>
+  function renderFrontTicker(){
+    var track = document.getElementById("front-ad-track");
+    if(!track) return;
+    var rows = readAnnouncements();
+    var snap = JSON.stringify(rows);
+    if(snap === lastSnapshot && track.innerHTML !== "") return;
+    lastSnapshot = snap;
 
-    <a href="admin.html" class="link">
-      <span class="num" style="color:#fb7185">05</span>
-      <span class="title">بوابة الإدارة / المدير</span>
-      <span class="desc">الإحصائيات والصلاحيات</span>
-    </a>
+    if(!rows.length){
+      var emptyMsg = "<div class='front-ad-item'>📢 إعلانات إعدادية المعرفة المهنية الاهلية — أهلاً بكم في المنصة المدرسية</div>";
+      track.innerHTML = emptyMsg + emptyMsg;
+      return;
+    }
 
-    <a href="evaluations.html" class="link">
-      <span class="num" style="color:#2dd4bf">06</span>
-      <span class="title">بوابة التقييم</span>
-      <span class="desc">تقييم الطلاب والشُعب</span>
-    </a>
+    var cards = rows.map(function(r){
+      var urgent = r.prio === "عاجل";
+      var cls = urgent ? "front-ad-item is-urgent" : "front-ad-item";
+      var badge = urgent ? "🚨 عاجل" : "📌 عادي";
+      var target = r.target ? "[" + r.target + "] " : "";
+      var title = r.title ? r.title + ": " : "";
+      var body = r.body || "";
+      var dt = r.dt ? " (" + r.dt + ")" : "";
+      return "<div class='" + cls + "'><span>" + badge + "</span><span>" + target + "<strong>" + title + "</strong>" + body + dt + "</span></div>";
+    }).join("");
 
-    <a href="accounts.html" class="link">
-      <span class="num" style="color:#38bdf8">07</span>
-      <span class="title">بوابة الحسابات</span>
-      <span class="desc">الأقساط والخصومات والوصولات</span>
-    </a>
-  </div>
+    track.innerHTML = cards + cards;
+  }
 
-  <!-- دخول المعاون -->
-  <div id="v-al" class="panel box-sm">
-    <h3 style="margin-top:0;color:#34d399;text-align:center">دخول بوابة المعاون</h3>
-    <div id="am" style="text-align:center;font-size:13px;color:#94a3b8;margin-bottom:12px">المحاولات المتبقية: 10 من 10</div>
-    <input type="password" id="ap" placeholder="أدخل الرمز السري">
-    <div class="bar">
-      <button type="button" id="btn-login-ast" class="btn-g" style="flex:1">دخول</button>
-      <button type="button" class="btn-d back-home">إلغاء</button>
-    </div>
-  </div>
-
-  <!-- لوحة المعاون -->
-  <div id="v-ad" class="panel">
-    <div class="bar np">
-      <h3 style="margin:0;color:#34d399">سجل الغيابات، الهروب، والإجازات</h3>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button type="button" onclick="window.print()" class="btn-g">طباعة PDF</button>
-        <button type="button" id="clr-abs" class="btn-r">مسح الكل</button>
-        <button type="button" class="btn-d back-home">رجوع</button>
-      </div>
-    </div>
-    <div class="np">
-      <input type="text" id="an" placeholder="اسم الطالب">
-      <select id="ac">
-        <option>اول امن سيبراني A</option>
-        <option>اول امن سيبراني B</option>
-        <option>اول امن سيبراني C</option>
-        <option>اول تكرير نفط A</option>
-        <option>اول تجميع حاسوب A</option>
-        <option>اول اجهزه طبية A</option>
-      </select>
-      <select id="at">
-        <option>غياب</option>
-        <option>هروب</option>
-        <option>اجازة</option>
-      </select>
-      <input type="date" id="ad">
-      <button type="button" id="save-abs" class="btn-g" style="width:100%;margin-bottom:10px">حفظ السجل</button>
-      <input type="text" id="af" placeholder="بحث باسم الطالب أو الصف...">
-    </div>
-    <table>
-      <thead>
-        <tr>
-          <th>الطالب</th>
-          <th>الصف</th>
-          <th>الحالة</th>
-          <th>التاريخ</th>
-          <th class="np">حذف</th>
-        </tr>
-      </thead>
-      <tbody id="ab"></tbody>
-    </table>
-  </div>
-
-  <!-- اختيار المادة -->
-  <div id="v-ts" class="panel box-sm">
-    <h3 style="margin-top:0;color:#22d3ee;text-align:center">اختر المادة الدراسية</h3>
-    <div id="sl"></div>
-    <button type="button" class="btn-d back-home" style="width:10
-
-
-        
+  renderFrontTicker();
+  setInterval(renderFrontTicker, 1000);
+  window.addEventListener("storage", renderFrontTicker);
+})();
+</script>
