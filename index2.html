@@ -54,6 +54,7 @@ body{margin:0;padding:0 0 75px;background:#030712;color:#f3f4f6;font-size:15px}
 header{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid #10b98155;padding-bottom:14px;margin-bottom:22px}
 header h1{margin:0;font-size:20px;color:#fff}
 header .sub{font-size:13px;color:#34d399;margin-top:4px}
+.sync-badge{font-size:12px;padding:5px 10px;border-radius:999px;background:#0b1324;border:1px solid #10b98155;color:#34d399}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
 .card,.link{display:block;width:100%;text-align:right;background:#0b0f19;color:#fff;border:1px solid #10b98166;border-radius:16px;padding:20px;text-decoration:none;cursor:pointer;min-height:110px}
 .card:hover,.link:hover{border-color:#34d399}
@@ -66,6 +67,7 @@ input,select{width:100%;padding:12px 14px;margin-bottom:12px;border-radius:10px;
 button{cursor:pointer;border-radius:10px;border:0;padding:11px 16px;font-weight:bold;font-size:14px}
 .btn-g{background:#10b981;color:#000}
 .btn-b{background:#06b6d4;color:#000}
+.btn-w{background:#f59e0b;color:#000}
 .btn-d{background:#1e293b;color:#f1f5f9;border:1px solid #334155}
 .btn-r{background:#dc2626;color:#fff}
 .bar{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:14px}
@@ -89,7 +91,10 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
       <h1>إعدادية المعرفة المهنية الاهلية</h1>
       <div class="sub">برمجة: عباس محمد عزيز</div>
     </div>
-    <button type="button" id="btn-home" class="btn-d">الرئيسية</button>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <span id="cloud-status" class="sync-badge">جاري فحص الاتصال السحابي...</span>
+      <button type="button" id="btn-home" class="btn-d">الرئيسية</button>
+    </div>
   </header>
 
   <div id="v-home" class="grid">
@@ -125,7 +130,7 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
 
     <a href="evaluations.html" class="link">
       <span class="num" style="color:#2dd4bf">06</span>
-      <span class="title">بوابة التقييم</span>
+      <span class="title">بوابة الاعلان المركزي</span>
       <span class="desc">نشر ومتابعة الإعلانات والتبليغات</span>
     </a>
 
@@ -153,6 +158,7 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
       <h3 style="margin:0;color:#34d399">سجل الغيابات، الهروب، والإجازات</h3>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
         <button type="button" onclick="window.print()" class="btn-g">طباعة PDF</button>
+        <button type="button" id="new-month-abs" class="btn-w">بدء شهر جديد</button>
         <button type="button" id="clr-abs" class="btn-r">مسح الكل</button>
         <button type="button" class="btn-d back-home">رجوع</button>
       </div>
@@ -214,6 +220,7 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
       <h3 id="tdh" style="margin:0;color:#22d3ee">رصد الدرجات (من 100)</h3>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
         <button type="button" onclick="window.print()" class="btn-b">طباعة PDF</button>
+        <button type="button" id="new-month-gr" class="btn-w">بدء شهر جديد</button>
         <button type="button" id="clr-gr" class="btn-r">مسح الكل</button>
         <button type="button" class="btn-d back-home">رجوع</button>
       </div>
@@ -250,6 +257,105 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
 <footer>برمجة وتطوير: <strong style="color:#34d399">عباس محمد عزيز</strong></footer>
 
 <script>
+var FIREBASE_DB_URL = "https://al-maarefa-school-default-rtdb.firebaseio.com";
+
+function setSyncBadge(text, ok){
+  var el = document.getElementById("cloud-status");
+  if(!el) return;
+  el.innerText = text;
+  el.style.color = ok ? "#34d399" : "#fbbf24";
+  el.style.borderColor = ok ? "#10b98166" : "#f59e0b66";
+}
+
+function cloudUrl(path){
+  var base = String(FIREBASE_DB_URL || "").trim().replace(/\/+$/, "");
+  var cleanPath = String(path || "").replace(/^\/+/, "");
+  return base ? (base + "/alpha_sec/" + cleanPath + ".json") : "";
+}
+
+function readLocalArr(storageKey){
+  try {
+    var d = JSON.parse(localStorage.getItem(storageKey) || "[]");
+    return Array.isArray(d) ? d : [];
+  } catch(e){
+    return [];
+  }
+}
+
+function writeLocalArr(storageKey, arr){
+  try {
+    localStorage.setItem(storageKey, JSON.stringify(arr));
+  } catch(e){}
+}
+
+function pullArr(cloudKey, storageKey, onReady){
+  var localArr = readLocalArr(storageKey);
+  var url = cloudUrl(cloudKey);
+  if(!url){
+    setSyncBadge("وضع محلي", false);
+    if(onReady) onReady(localArr);
+    return;
+  }
+  fetch(url).then(function(res){
+    if(!res.ok) throw new Error("net");
+    return res.json();
+  }).then(function(remoteData){
+    var arr = Array.isArray(remoteData) ? remoteData : (remoteData ? Object.values(remoteData) : []);
+    writeLocalArr(storageKey, arr);
+    setSyncBadge("متصل سحابياً (Firebase)", true);
+    if(onReady) onReady(arr);
+  }).catch(function(){
+    setSyncBadge("احتياط محلي (تعذر الاتصال بالسحابة)", false);
+    if(onReady) onReady(localArr);
+  });
+}
+
+function pushArr(cloudKey, storageKey, arr, onDone){
+  writeLocalArr(storageKey, arr);
+  var url = cloudUrl(cloudKey);
+  if(!url){
+    setSyncBadge("وضع محلي", false);
+    if(onDone) onDone(arr);
+    return;
+  }
+  fetch(url, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(arr)
+  }).then(function(res){
+    if(!res.ok) throw new Error("net");
+    setSyncBadge("تم الحفظ سحابياً", true);
+    if(onDone) onDone(arr);
+  }).catch(function(){
+    setSyncBadge("محفوظ محلياً (بانتظار الشبكة)", false);
+    if(onDone) onDone(arr);
+  });
+}
+
+function startNewMonth(cloudKey, storageKey, label, onDone){
+  var current = readLocalArr(storageKey);
+  var monthTag = new Date().toISOString().slice(0, 7);
+  if(!confirm("تأكيد بدء شهر جديد (" + monthTag + ") لـ " + label + "؟\nسيتم أرشفة السجل الحالي سحابياً وتصفير الشهر الجديد.")) return;
+
+  var archiveUrl = cloudUrl("archives/" + monthTag + "/" + cloudKey);
+  var finishReset = function(){
+    pushArr(cloudKey, storageKey, [], function(){
+      alert("تم بدء شهر جديد (" + monthTag + ") وتصفير سجل " + label + " سحابياً.");
+      if(onDone) onDone();
+    });
+  };
+
+  if(archiveUrl && current.length){
+    fetch(archiveUrl, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(current)
+    }).then(finishReset).catch(finishReset);
+  } else {
+    finishReset();
+  }
+}
+
 /* تحديث شريط الإعلانات المتحرك في الواجهة الأمامية */
 (function(){
   var STORAGE_KEY = "alpha_sec_announcements";
@@ -266,10 +372,9 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
     }
   }
 
-  function renderFrontTicker(){
+  function renderCards(rows){
     var track = document.getElementById("front-ad-track");
     if(!track) return;
-    var rows = readAnnouncements();
     var snap = JSON.stringify(rows);
     if(snap === lastSnapshot && track.innerHTML !== "") return;
     lastSnapshot = snap;
@@ -294,9 +399,22 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
     track.innerHTML = cards + cards;
   }
 
-  renderFrontTicker();
-  setInterval(renderFrontTicker, 1000);
-  window.addEventListener("storage", renderFrontTicker);
+  function syncTicker(){
+    renderCards(readAnnouncements());
+    var url = cloudUrl("announcements");
+    if(url){
+      fetch(url).then(function(r){ return r.ok ? r.json() : null; }).then(function(data){
+        if(Array.isArray(data)){
+          writeLocalArr(STORAGE_KEY, data);
+          renderCards(data);
+        }
+      }).catch(function(){});
+    }
+  }
+
+  syncTicker();
+  setInterval(syncTicker, 3000);
+  window.addEventListener("storage", function(){ renderCards(readAnnouncements()); });
 })();
 
 (function(){
@@ -327,5 +445,97 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
     try {
       var o = JSON.parse(localStorage.getItem("al_l_" + k) || "{}");
       if (o.u && Date.now() >= +o.u){ var z = {t:0, u:0, h:0}; localStorage.setItem("al_l_" + k, JSON.stringify(z)); return z; }
-      return {t:+
-  
+      return {t:+o.t||0, u:+o.u||0, h:+o.h||0};
+    } catch(e){ return {t:0, u:0, h:0}; }
+  }
+
+  function slk(k, v){ try { localStorage.setItem("al_l_" + k, JSON.stringify(v)); } catch(e){} }
+  function rm(ms){ var h = Math.max(1, Math.ceil(ms / 36e5)); return Math.floor(h / 24) + " يوم و " + (h % 24) + " ساعة (" + h + " ساعة)"; }
+
+  function pm(k, id){
+    var e = document.getElementById(id), s = gl(k);
+    if (!e) return;
+    e.innerText = (s.u && Date.now() < s.u)
+      ? ("محظور " + s.h + " ساعة — المتبقي: " + rm(s.u - Date.now()))
+      : ("المحاولات المتبقية: " + Math.max(0, MAX - s.t) + " من " + MAX);
+  }
+
+  function sw(v){
+    var ids = ["home", "al", "ad", "ts", "tl", "td"];
+    for (var i = 0; i < ids.length; i++){
+      var e = document.getElementById("v-" + ids[i]);
+      if (e) e.style.display = "none";
+    }
+    var t = document.getElementById("v-" + v);
+    if (t) t.style.display = (v === "home" ? "grid" : "block");
+    if (v === "al") pm("a", "am");
+    if (v === "ad") pullArr("abs", "al_d_abs", drawAbs);
+    if (v === "ts") drawSubjs();
+    if (v === "tl" && CS) pm("t_" + CS.n, "tm");
+    if (v === "td") pullArr("gr", "al_d_gr", drawGr);
+  }
+
+  function drawSubjs(){
+    var box = document.getElementById("sl");
+    if (!box) return;
+    box.innerHTML = "";
+    for (var i = 0; i < SUBS.length; i++){
+      (function(sub){
+        var b = document.createElement("button");
+        b.type = "button";
+        b.className = "card";
+        b.style.marginBottom = "8px";
+        b.style.minHeight = "0";
+        b.style.padding = "14px 16px";
+        b.innerHTML = "<span class='title' style='margin:0;font-size:16px;color:#22d3ee'>" + sub.n + "</span>";
+        b.onclick = function(){
+          CS = sub;
+          document.getElementById("th").innerText = "دخول: " + sub.n;
+          document.getElementById("tp").value = "";
+          sw("tl");
+        };
+        box.appendChild(b);
+      })(SUBS[i]);
+    }
+  }
+
+  function la(){
+    var s = gl("a");
+    if (s.u && Date.now() < s.u){ alert("محظور " + s.h + " ساعة.\nالمتبقي: " + rm(s.u - Date.now())); return; }
+    var i = document.getElementById("ap"), v = i ? i.value.trim() : "";
+    if (v === AP){ slk("a", {t:0, u:0, h:0}); i.value = ""; sw("ad"); }
+    else {
+      s.t++;
+      if (s.t > MAX){ var h = bh(v, AP); slk("a", {t:s.t, u:Date.now() + h * 36e5, h:h}); pm("a", "am"); alert("تجاوزت 10 محاولات! حظر " + h + " ساعة"); }
+      else { slk("a", s); pm("a", "am"); alert("الرمز خطأ! المتبقي: " + (MAX - s.t)); }
+    }
+  }
+
+  function aa(){
+    var n = document.getElementById("an").value.trim();
+    var c = document.getElementById("ac").value;
+    var t = document.getElementById("at").value;
+    var d = document.getElementById("ad").value || new Date().toISOString().slice(0, 10);
+    if (!n){ alert("أدخل اسم الطالب"); return; }
+    var a = readLocalArr("al_d_abs");
+    a.unshift({n:n, c:c, t:t, d:d});
+    document.getElementById("an").value = "";
+    pushArr("abs", "al_d_abs", a, drawAbs);
+  }
+
+  function drawAbs(){
+    var f = (document.getElementById("af").value || "").trim().toLowerCase();
+    var a = readLocalArr("al_d_abs"), tb = document.getElementById("ab");
+    if (!tb) return;
+    tb.innerHTML = "";
+    for (var i = 0; i < a.length; i++){
+      (function(x, idx){
+        if (!f || (x.n + " " + x.c + " " + x.t).toLowerCase().indexOf(f) > -1){
+          var tr = document.createElement("tr");
+          var col = x.t === "هروب" ? "#fb7185" : (x.t === "غياب" ? "#fbbf24" : "#34d399");
+          tr.innerHTML = "<td>" + x.n + "</td><td>" + x.c + "</td><td style='color:" + col + ";font-weight:bold'>" + x.t + "</td><td>" + x.d + "</td><td class='np'></td>";
+          var delBtn = document.createElement("button");
+          delBtn.type = "button";
+          delBtn.className = "btn-r";
+          delBtn.style.padding = "5px 10px";
+ 
