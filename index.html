@@ -1,12 +1,22 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ALPHA-SEC — إعدادية المعرفة المهنية الاهلية</title>
 <style>
+*{box-sizing:border-box;font-family:Tahoma,Arial,sans-serif}
+body{margin:0;padding:0 0 84px;background:linear-gradient(160deg,#061014 0%,#0b1e26 55%,#07151a 100%);color:#f1f5f9;min-height:100vh}
+
+/* شريط الإعلانات المتحرك في الواجهة الأمامية */
 .front-ticker-wrap{
   width:100%;
   overflow:hidden;
-  background:linear-gradient(90deg,#081820,#0e2935,#081820);
+  background:linear-gradient(90deg,#07161d,#0e2935,#07161d);
   border-bottom:1.5px solid rgba(251,191,36,.45);
-  padding:10px 0;
+  padding:11px 0;
   direction:rtl;
-  font-family:Tahoma,Arial,sans-serif;
+  box-shadow:0 6px 20px rgba(0,0,0,.3);
 }
 .front-ticker-track{
   display:flex;
@@ -40,11 +50,58 @@
   color:#fecaca;
   border-color:#f87171;
 }
-</style>
 
+/* الواجهة الرئيسية */
+.wrap{max-width:1040px;margin:0 auto;padding:26px 18px 0}
+.hero{background:rgba(13,30,38,.94);border:1px solid rgba(45,212,191,.32);border-radius:22px;padding:26px 22px;text-align:center;margin-bottom:24px;box-shadow:0 12px 30px rgba(0,0,0,.35)}
+.hero .badge{display:inline-block;background:rgba(251,191,36,.14);color:#fbbf24;border:1px solid rgba(251,191,36,.38);padding:5px 12px;border-radius:999px;font-size:12px;font-weight:bold;margin-bottom:10px}
+.hero h1{margin:0 0 8px;font-size:25px;color:#5eead4}
+.hero p{margin:0;font-size:14px;color:#cbd5e1}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.portal-card{background:rgba(13,30,38,.95);border:1.5px solid rgba(45,212,191,.32);border-radius:20px;padding:22px;display:flex;flex-direction:column;justify-content:space-between;gap:16px;box-shadow:0 12px 28px rgba(0,0,0,.35)}
+.portal-card h2{margin:0 0 8px;font-size:19px;color:#fbbf24}
+.portal-card p{margin:0;font-size:13px;color:#cbd5e1;line-height:1.6}
+.open-btn{display:block;text-align:center;text-decoration:none;background:linear-gradient(135deg,#14b8a6,#10b981);color:#041311;font-weight:bold;padding:12px 16px;border-radius:12px;font-size:14px}
+.open-btn.alt{background:linear-gradient(135deg,#f59e0b,#eab308);color:#181204}
+
+.footer{position:fixed;bottom:0;left:0;width:100%;background:#071319;border-top:1px solid rgba(45,212,191,.3);padding:12px;text-align:center;font-size:13px;color:#cbd5e1}
+</style>
+</head>
+<body>
+
+<!-- شريط الإعلانات المتحرك للجميع في الواجهة الأمامية -->
 <div class="front-ticker-wrap" title="مرر للتوقف وقراءة التبليغ">
   <div id="front-ad-track" class="front-ticker-track"></div>
 </div>
+
+<div class="wrap">
+  <section class="hero">
+    <div class="badge">ALPHA-SEC — النظام المدرسي</div>
+    <h1>إعدادية المعرفة المهنية الاهلية</h1>
+    <p>متابعة التبليغات المدرسية والأقساط الحسابية والوصول السريع لبوابات النظام</p>
+  </section>
+
+  <section class="grid">
+    <div class="portal-card">
+      <div>
+        <h2>بوابة التبليغات المدرسية</h2>
+        <p>نشر التبليغات العاجلة والعادية حسب الصف أو لكل المدرسة، البحث الفوري، وطباعة PDF.</p>
+      </div>
+      <a class="open-btn" href="evaluations.html">دخول بوابة التبليغات</a>
+    </div>
+
+    <div class="portal-card">
+      <div>
+        <h2>بوابة الحسابات والأقساط</h2>
+        <p>تسجيل الدفعات مع التاريخ والمبلغ ورقم الوصل، البحث السريع، وطباعة PDF.</p>
+      </div>
+      <a class="open-btn alt" href="accounts.html">دخول بوابة الحسابات</a>
+    </div>
+  </section>
+</div>
+
+<div class="footer">برمجة وتطوير: <strong style="color:#5eead4">عباس محمد عزيز</strong></div>
 
 <script>
 (function(){
@@ -95,3 +152,5 @@
   window.addEventListener("storage", renderFrontTicker);
 })();
 </script>
+</body>
+</html>
