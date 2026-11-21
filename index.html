@@ -3,26 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>ALPHA-SEC — إعدادية المعرفة المهنية الاهلية</title>
+<title>نظام إدارة المدرسة الآمن — إعدادية المعرفة المهنية الاهلية</title>
 <style>
 *{box-sizing:border-box;font-family:Tahoma,Arial,sans-serif}
-body{margin:0;padding:0 0 86px;background:linear-gradient(160deg,#061014 0%,#0b1e26 55%,#07151a 100%);color:#f1f5f9;min-height:100vh}
+body{margin:0;padding:0 0 84px;background:linear-gradient(160deg,#050b0e 0%,#09161c 55%,#050d11 100%);color:#f1f5f9;min-height:100vh}
 
 /* شريط الإعلانات المتحرك في الواجهة الأمامية */
 .front-ticker-wrap{
   width:100%;
   overflow:hidden;
-  background:linear-gradient(90deg,#07161d,#0e2935,#07161d);
-  border-bottom:1.5px solid rgba(251,191,36,.45);
-  padding:11px 0;
+  background:linear-gradient(90deg,#07141a,#0d252f,#07141a);
+  border-bottom:1px solid rgba(251,191,36,.4);
+  padding:9px 0;
   direction:rtl;
-  box-shadow:0 6px 20px rgba(0,0,0,.3);
 }
 .front-ticker-track{
   display:flex;
-  gap:14px;
+  gap:12px;
   width:max-content;
-  padding-right:14px;
+  padding-right:12px;
   animation:frontScroll 15s linear infinite;
 }
 .front-ticker-wrap:hover .front-ticker-track{
@@ -37,36 +36,65 @@ body{margin:0;padding:0 0 86px;background:linear-gradient(160deg,#061014 0%,#0b1
   align-items:center;
   gap:8px;
   white-space:nowrap;
-  padding:7px 14px;
-  border-radius:11px;
-  font-size:13px;
+  padding:6px 13px;
+  border-radius:10px;
+  font-size:12.5px;
   font-weight:bold;
-  background:#112c38;
-  color:#f1f5f9;
-  border:1px solid rgba(45,212,191,.35);
+  background:#0f242d;
+  color:#e2e8f0;
+  border:1px solid rgba(45,212,191,.3);
 }
 .front-ad-item.is-urgent{
-  background:#4c1117;
+  background:#451015;
   color:#fecaca;
   border-color:#f87171;
 }
 
-/* الواجهة الرئيسية */
-.wrap{max-width:1160px;margin:0 auto;padding:26px 18px 0}
-.hero{background:rgba(13,30,38,.94);border:1px solid rgba(45,212,191,.32);border-radius:22px;padding:24px 20px;text-align:center;margin-bottom:24px;box-shadow:0 12px 30px rgba(0,0,0,.35)}
-.hero .badge{display:inline-block;background:rgba(251,191,36,.14);color:#fbbf24;border:1px solid rgba(251,191,36,.38);padding:5px 12px;border-radius:999px;font-size:12px;font-weight:bold;margin-bottom:10px}
-.hero h1{margin:0 0 8px;font-size:25px;color:#5eead4}
-.hero p{margin:0;font-size:14px;color:#cbd5e1}
+/* حاوية البوابات المرقمة */
+.container{max-width:680px;margin:0 auto;padding:24px 16px 14px}
+.top-head{margin-bottom:20px}
+.top-head h1{margin:0 0 6px;font-size:24px;color:#f8fafc;font-weight:bold}
+.top-head p{margin:0;font-size:14px;color:#94a3b8}
 
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
-.portal-card{background:rgba(13,30,38,.95);border:1.5px solid rgba(45,212,191,.32);border-radius:20px;padding:22px;display:flex;flex-direction:column;justify-content:space-between;gap:16px;box-shadow:0 12px 28px rgba(0,0,0,.35)}
-.portal-card h2{margin:0 0 8px;font-size:19px;color:#fbbf24}
-.portal-card p{margin:0;font-size:13px;color:#cbd5e1;line-height:1.6}
-.open-btn{display:block;text-align:center;text-decoration:none;background:linear-gradient(135deg,#14b8a6,#10b981);color:#041311;font-weight:bold;padding:12px 16px;border-radius:12px;font-size:14px}
-.open-btn.gold{background:linear-gradient(135deg,#f59e0b,#eab308);color:#181204}
-.open-btn.dark{background:#162c36;color:#e2e8f0;border:1px solid #2b4c5b}
+.portal-list{display:flex;flex-direction:column;gap:14px}
+.portal-item{
+  display:block;
+  text-decoration:none;
+  background:rgba(13,22,27,.95);
+  border:1px solid rgba(148,163,184,.18);
+  border-radius:18px;
+  padding:18px 20px;
+  transition:transform .15s ease,border-color .15s ease;
+}
+.portal-item:hover{transform:translateY(-2px);border-color:rgba(45,212,191,.45)}
+.portal-num{font-size:13px;font-weight:bold;color:#38bdf8;margin-bottom:6px;letter-spacing:.5px}
+.portal-title{font-size:19px;font-weight:bold;color:#f8fafc;margin-bottom:4px}
+.portal-desc{font-size:13.5px;color:#94a3b8}
 
-.footer{position:fixed;bottom:0;left:0;width:100%;background:#071319;border-top:1px solid rgba(45,212,191,.3);padding:12px;text-align:center;font-size:13px;color:#cbd5e1}
+/* تمييز البوابات كما بالفيديو */
+.portal-item.p-04{border-color:rgba(245,158,11,.55)}
+.portal-item.p-04 .portal-num{color:#fbbf24}
+
+.portal-item.p-05{border-color:rgba(244,114,182,.45)}
+.portal-item.p-05 .portal-num{color:#f472b6}
+
+.portal-item.p-06 .portal-num{color:#34d399}
+.portal-item.p-07 .portal-num{color:#2dd4bf}
+
+/* الفوتر السفلي */
+.footer{
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  background:#071217;
+  border-top:1px solid rgba(45,212,191,.22);
+  padding:13px 12px;
+  text-align:center;
+  font-size:13.5px;
+  color:#cbd5e1;
+}
+.footer strong{color:#2dd4bf}
 </style>
 </head>
 <body>
@@ -76,80 +104,58 @@ body{margin:0;padding:0 0 86px;background:linear-gradient(160deg,#061014 0%,#0b1
   <div id="front-ad-track" class="front-ticker-track"></div>
 </div>
 
-<div class="wrap">
-  <section class="hero">
-    <div class="badge">ALPHA-SEC — إعدادية المعرفة المهنية الاهلية</div>
-    <h1>لوحة البوابات المدرسية الرئيسية</h1>
-    <p>الدخول السريع إلى البوابات السبع لإدارة المدرسة والهيئة التدريسية والطلبة والحسابات</p>
-  </section>
+<div class="container">
+  <div class="top-head">
+    <h1>نظام إدارة المدرسة الآمن</h1>
+    <p>اختر البوابة المطلوبة للمتابعة:</p>
+  </div>
 
-  <section class="grid">
-    <!-- 1. بوابة المعاون -->
-    <div class="portal-card">
-      <div>
-        <h2>بوابة المعاون</h2>
-        <p>متابعة الشؤون الإدارية، دوام الصفوف، والتوجيهات اليومية.</p>
-      </div>
-      <a class="open-btn" href="assistant.html">دخول بوابة المعاون</a>
-    </div>
+  <div class="portal-list">
+    <a class="portal-item" href="assistant.html">
+      <div class="portal-num">01</div>
+      <div class="portal-title">بوابة المعاون</div>
+      <div class="portal-desc">إدارة الغيابات والشعب</div>
+    </a>
 
-    <!-- 2. بوابة المدرسين -->
-    <div class="portal-card">
-      <div>
-        <h2>بوابة المدرسين</h2>
-        <p>متابعة الدروس، المختبرات، والمهام التعليمية للهيئة التدريسية.</p>
-      </div>
-      <a class="open-btn dark" href="teachers.html">دخول بوابة المدرسين</a>
-    </div>
+    <a class="portal-item" href="teachers.html">
+      <div class="portal-num">02</div>
+      <div class="portal-title">بوابة المدرسين</div>
+      <div class="portal-desc">رصد درجات المواد</div>
+    </a>
 
-    <!-- 3. بوابة الطلاب -->
-    <div class="portal-card">
-      <div>
-        <h2>بوابة الطلاب</h2>
-        <p>الاطلاع على المعلومات المدرسية، الصفوف، والإرشادات للطلبة.</p>
-      </div>
-      <a class="open-btn" href="students.html">دخول بوابة الطلاب</a>
-    </div>
+    <a class="portal-item" href="students.html">
+      <div class="portal-num">03</div>
+      <div class="portal-title">بوابة الطلاب</div>
+      <div class="portal-desc">الجداول والنتائج</div>
+    </a>
 
-    <!-- 4. بوابة المشرف -->
-    <div class="portal-card">
-      <div>
-        <h2>بوابة المشرف</h2>
-        <p>متابعة الإشراف التربوي والفني والملاحظات الميدانية.</p>
-      </div>
-      <a class="open-btn dark" href="supervisor.html">دخول بوابة المشرف</a>
-    </div>
+    <a class="portal-item p-04" href="supervisor.html">
+      <div class="portal-num">04</div>
+      <div class="portal-title">بوابة المشرف التربوي / المرشد</div>
+      <div class="portal-desc">الحالات السلوكية والملفات</div>
+    </a>
 
-    <!-- 5. بوابة التقييمات / التبليغات -->
-    <div class="portal-card">
-      <div>
-        <h2>بوابة التقييمات</h2>
-        <p>نشر التبليغات العاجلة والعادية التي تظهر فوراً في الشريط المتحرك وطباعة PDF.</p>
-      </div>
-      <a class="open-btn gold" href="evaluations.html">دخول بوابة التقييمات</a>
-    </div>
+    <a class="portal-item p-05" href="principal.html">
+      <div class="portal-num">05</div>
+      <div class="portal-title">بوابة الإدارة / المدير</div>
+      <div class="portal-desc">الإحصائيات والصلاحيات</div>
+    </a>
 
-    <!-- 6. بوابة الحسابات -->
-    <div class="portal-card">
-      <div>
-        <h2>بوابة الحسابات</h2>
-        <p>تسجيل الدفعات مع المبلغ والتاريخ ورقم الوصل، البحث السريع، وطباعة PDF.</p>
-      </div>
-      <a class="open-btn" href="accounts.html">دخول بوابة الحسابات</a>
-    </div>
+    <a class="portal-item p-06" href="evaluations.html">
+      <div class="portal-num">06</div>
+      <div class="portal-title">بوابة التقييم</div>
+      <div class="portal-desc">تقييم الطلاب والشعب</div>
+    </a>
 
-    <!-- 7. بوابة المديرة -->
-    <div class="portal-card">
-      <div>
-        <h2>بوابة المديرة</h2>
-        <p>الإدارة العليا للمدرسة ومتابعة القرارات والتقارير الشاملة.</p>
-      </div>
-      <a class="open-btn gold" href="principal.html">دخول بوابة المديرة</a>
-    </div>
-  </section>
+    <a class="portal-item p-07" href="accounts.html">
+      <div class="portal-num">07</div>
+      <div class="portal-title">بوابة الحسابات</div>
+      <div class="portal-desc">الأقساط والخصومات والوصولات</div>
+    </a>
+  </div>
 </div>
 
-<div class="footer">برمجة وتطوير: <strong style="color:#5eead4">عباس محمد عزيز</strong></div>
+<div class="footer">برمجة وتطوير: <strong>عباس محمد عزيز</strong></div>
 
 <script>
 (function(){
@@ -176,7 +182,7 @@ body{margin:0;padding:0 0 86px;background:linear-gradient(160deg,#061014 0%,#0b1
     lastSnapshot = snap;
 
     if(!rows.length){
-      var emptyMsg = "<div class='front-ad-item'>📢 إعلانات إعدادية المعرفة المهنية الاهلية — أهلاً بكم في المنصة المدرسية</div>";
+      var emptyMsg = "<div class='front-ad-item'>📢 إعلانات إعدادية المعرفة المهنية الاهلية — أهلاً بكم في نظام إدارة المدرسة الآمن</div>";
       track.innerHTML = emptyMsg + emptyMsg;
       return;
     }
