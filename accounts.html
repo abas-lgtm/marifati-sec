@@ -3,298 +3,218 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>بوابة الحسابات — ALPHA-SEC</title>
+<title>ALPHA-SEC // بوابة الحسابات (دينار عراقي)</title>
 <style>
 *{box-sizing:border-box;font-family:Tahoma,Arial,sans-serif}
-body{margin:0;padding:22px 16px 85px;background:linear-gradient(160deg,#061014 0%,#0b1e26 55%,#07151a 100%);color:#f1f5f9;min-height:100vh}
-.wrap{max-width:1080px;margin:0 auto}
-.header{display:flex;justify-content:space-between;align-items:center;gap:14px;background:rgba(15,35,44,.92);border:1px solid rgba(45,212,191,.35);border-radius:20px;padding:16px 22px;margin-bottom:24px;box-shadow:0 10px 28px rgba(0,0,0,.35)}
-.header h1{margin:0;font-size:21px;color:#5eead4}
-.header .sub{font-size:13px;color:#cbd5e1;margin-top:4px}
-.login-card{max-width:460px;margin:40px auto;background:rgba(13,30,38,.96);border:1.5px solid rgba(251,191,36,.45);border-radius:22px;padding:28px;box-shadow:0 16px 36px rgba(0,0,0,.45)}
-.dash-card{display:none;background:rgba(13,30,38,.96);border:1.5px solid rgba(45,212,191,.35);border-radius:22px;padding:24px;box-shadow:0 16px 36px rgba(0,0,0,.45)}
-.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:14px}
-.field label{display:block;font-size:13px;color:#99f6e4;margin-bottom:6px;font-weight:bold}
-input,select{width:100%;padding:13px 15px;border-radius:12px;border:1px solid #264653;background:#061117;color:#fff;font-size:15px}
-input:focus,select:focus{outline:none;border-color:#2dd4bf}
-button{cursor:pointer;border:0;border-radius:12px;padding:12px 18px;font-weight:bold;font-size:15px}
-.btn-mint{background:linear-gradient(135deg,#14b8a6,#10b981);color:#041311}
-.btn-gold{background:linear-gradient(135deg,#f59e0b,#eab308);color:#181204}
-.btn-dark{background:#162c36;color:#e2e8f0;border:1px solid #2b4c5b}
-.btn-del{background:#dc2626;color:#fff;padding:7px 12px;font-size:13px;border-radius:9px}
-.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:16px}
-.table-box{overflow-x:auto;margin-top:16px;border-radius:14px;border:1px solid #1e3a46}
-table{width:100%;border-collapse:collapse;font-size:14px;background:#071319}
-th,td{border:1px solid #19323d;padding:11px 12px;text-align:right;vertical-align:top}
-th{background:#102833;color:#5eead4}
-.badge{display:inline-block;padding:5px 10px;border-radius:8px;font-size:12px;font-weight:bold;margin:2px 0;background:#112d38;color:#fde68a;border:1px solid rgba(251,191,36,.32)}
-.footer{position:fixed;bottom:0;left:0;width:100%;background:#071319;border-top:1px solid rgba(45,212,191,.3);padding:12px;text-align:center;font-size:13px;color:#cbd5e1}
-@media print{body{background:#fff;color:#000;padding:0}.no-print,.footer{display:none!important}.table-box{border:1px solid #000}table{background:#fff}th,td{border:1px solid #000;color:#000}.badge{background:none;border:0;color:#000;padding:0}}
+body{margin:0;padding:0 0 75px;background:#030712;color:#f3f4f6;font-size:15px}
+.wrap{max-width:980px;margin:0 auto;padding:18px 18px 0}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid #38bdf855;padding-bottom:14px;margin-bottom:22px;flex-wrap:wrap}
+header h1{margin:0;font-size:20px;color:#fff}
+header .sub{font-size:13px;color:#38bdf8;margin-top:4px}
+.sync-badge{font-size:12px;padding:5px 10px;border-radius:999px;background:#0b1324;border:1px solid #38bdf855;color:#38bdf8}
+.panel{background:#0b0f19;border:1px solid #38bdf866;border-radius:16px;padding:20px;margin-bottom:18px}
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px}
+.stat{background:#020617;border:1px solid #1e293b;border-radius:12px;padding:14px}
+.stat .k{font-size:12px;color:#94a3b8;display:block;margin-bottom:6px}
+.stat .v{font-size:18px;font-weight:bold;color:#38bdf8}
+input,select{width:100%;padding:12px 14px;margin-bottom:12px;border-radius:10px;border:1px solid #334155;background:#020617;color:#fff;font-size:15px}
+button{cursor:pointer;border-radius:10px;border:0;padding:11px 16px;font-weight:bold;font-size:14px}
+.btn-sky{background:#38bdf8;color:#000}
+.btn-d{background:#1e293b;color:#f1f5f9;border:1px solid #334155;text-decoration:none;padding:10px 14px;font-size:13px;display:inline-block}
+.btn-r{background:#dc2626;color:#fff;padding:6px 10px;font-size:12px}
+table{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px}
+th,td{border:1px solid #1e293b;padding:10px;text-align:right}
+th{background:#020617;color:#38bdf8}
+footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1px solid #38bdf855;padding:12px;text-align:center;font-size:13px;color:#cbd5e1;z-index:10}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="header no-print">
+  <header>
     <div>
-      <h1>بوابة الحسابات وأقساط الطلبة</h1>
-      <div class="sub">إعدادية المعرفة المهنية الاهلية — برمجة: عباس محمد عزيز</div>
+      <h1>بوابة الحسابات — الدينار العراقي (د.ع)</h1>
+      <div class="sub">إعدادية المعرفة المهنية الاهلية // برمجة: عباس محمد عزيز</div>
     </div>
-    <button type="button" class="btn-dark" onclick="goHome()">الرئيسية</button>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <span id="cloud-status" class="sync-badge">جاري المزامنة...</span>
+      <a href="admin.html" class="btn-d">بوابة الإدارة (المحصل)</a>
+      <a href="index.html" class="btn-d">الرئيسية</a>
+    </div>
+  </header>
+
+  <div class="summary">
+    <div class="stat">
+      <span class="k">المحصل المالي الكلي</span>
+      <span id="total-iqd" class="v">0 د.ع</span>
+    </div>
+    <div class="stat">
+      <span class="k">عدد الوصولات المسجلة</span>
+      <span id="count-rows" class="v">0</span>
+    </div>
+    <div class="stat">
+      <span class="k">العملة المعتمدة</span>
+      <span class="v">دينار عراقي (د.ع)</span>
+    </div>
   </div>
 
-  <!-- دخول الحسابات -->
-  <div id="acc-login" class="login-card">
-    <h2 style="margin:0 0 8px;color:#fbbf24;text-align:center;font-size:22px">دخول بوابة الحسابات</h2>
-    <div id="acc-msg" style="text-align:center;font-size:13px;color:#cbd5e1;margin-bottom:16px">المحاولات المتبقية: 10 من 10</div>
-    <input type="password" id="acc-pass" placeholder="أدخل الرمز السري">
-    <div class="actions" style="margin-bottom:0">
-      <button type="button" class="btn-mint" style="flex:1" onclick="loginAcc()">دخول</button>
-      <button type="button" class="btn-dark" onclick="goHome()">رجوع</button>
-    </div>
+  <div class="panel">
+    <h3 style="margin-top:0;color:#38bdf8">تسجيل قسط / دفعة جديدة</h3>
+    <input type="text" id="st-name" placeholder="اسم الطالب">
+    <select id="pay-type">
+      <option value="دفعة اولى">دفعة اولى</option>
+      <option value="قسط شهري">قسط شهري</option>
+      <option value="دفعة ثانية">دفعة ثانية</option>
+      <option value="تسوية قسط">تسوية قسط</option>
+    </select>
+    <input type="number" id="pay-amount" min="0" step="250" placeholder="المبلغ بالدينار العراقي (مثال: 250000)">
+    <select id="pay-curr">
+      <option value="د.ع" selected>دينار عراقي (د.ع)</option>
+    </select>
+    <input type="date" id="pay-date">
+    <button type="button" id="save-pay" class="btn-sky" style="width:100%">حفظ الوصل سحابياً</button>
   </div>
 
-  <!-- لوحة الحسابات -->
-  <div id="acc-dash" class="dash-card">
-    <div class="actions no-print">
-      <h2 style="margin:0;color:#5eead4;font-size:20px">سجل الدفعات والأقساط</h2>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button type="button" class="btn-gold" onclick="window.print()">طباعة PDF</button>
-        <button type="button" class="btn-dark" onclick="goHome()">الرئيسية</button>
-      </div>
-    </div>
-
-    <div class="no-print">
-      <div class="form-grid">
-        <!-- 1. اسم الطالب -->
-        <div class="field">
-          <label for="f-name">1. اسم الطالب</label>
-          <input type="text" id="f-name" placeholder="اكتب اسم الطالب">
-        </div>
-
-        <!-- 2. الصف -->
-        <div class="field">
-          <label for="f-class">2. الصف</label>
-          <select id="f-class">
-            <option>اول امن سيبراني A</option>
-            <option>اول امن سيبراني B</option>
-            <option>اول امن سيبراني C</option>
-            <option>اول تكرار نفط A</option>
-            <option>اول اجهزة طبية A</option>
-            <option>اول تجميع حاسوب A</option>
-            <option>ثالث تجميع حاسوب A</option>
-            <option>ثالث تجميع حاسوب B</option>
-          </select>
-        </div>
-
-        <!-- 3. الدفعة + المبلغ + التاريخ -->
-        <div class="field">
-          <label for="f-installment">3. الدفعة</label>
-          <select id="f-installment">
-            <option value="تم دفع اول دفعه بمبلغ">تم دفع اول دفعه بمبلغ</option>
-            <option value="تم دفع ثاني دفعه بمبلغ">تم دفع ثاني دفعه بمبلغ</option>
-            <option value="تم دفع ثالث دفعه بمبلغ">تم دفع ثالث دفعه بمبلغ</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label for="f-amount">المبلغ المدفوع</label>
-          <input type="number" id="f-amount" placeholder="اكتب المبلغ">
-        </div>
-
-        <div class="field">
-          <label for="f-date">تاريخ الدفعة</label>
-          <input type="date" id="f-date">
-        </div>
-
-        <!-- 4. رقم الوصل -->
-        <div class="field">
-          <label for="f-receipt">4. رقم الوصل</label>
-          <input type="text" id="f-receipt" placeholder="اكتب رقم الوصل">
-        </div>
-      </div>
-
-      <button type="button" class="btn-mint" style="width:100%;margin-bottom:14px" onclick="saveAccRow()">حفظ الدفعة في السجل</button>
-
-      <!-- 5. بحث عن الطالب -->
-      <div class="field" style="margin-bottom:0">
-        <label for="f-search">5. بحث عن الطالب</label>
-        <input type="text" id="f-search" oninput="renderAccTable()" placeholder="ابحث باسم الطالب أو الصف أو الدفعة أو المبلغ أو رقم الوصل...">
-      </div>
-    </div>
-
-    <div class="table-box">
-      <table>
-        <thead>
-          <tr>
-            <th>اسم الطالب</th>
-            <th>الصف</th>
-            <th>الدفعات والمبالغ والتواريخ</th>
-            <th>أرقام الوصولات</th>
-            <th class="no-print">حذف</th>
-          </tr>
-        </thead>
-        <tbody id="acc-tbody"></tbody>
-      </table>
-    </div>
+  <div class="panel">
+    <h3 style="margin-top:0;color:#38bdf8">سجل الأقساط والدفعات</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>الطالب</th>
+          <th>نوع الدفعة</th>
+          <th>المبلغ</th>
+          <th>التاريخ</th>
+          <th>حذف</th>
+        </tr>
+      </thead>
+      <tbody id="pay-body"></tbody>
+    </table>
   </div>
 </div>
 
-<div class="footer">برمجة وتطوير: <strong style="color:#5eead4">عباس محمد عزيز</strong></div>
+<footer>برمجة وتطوير: <strong style="color:#38bdf8">عباس محمد عزيز</strong></footer>
 
 <script>
-var MAX_T = 10;
-var ACC_P = "20750";
+var FIREBASE_DB_URL = "https://al-maarefa-school-default-rtdb.firebaseio.com";
+var CLOUD_KEY = "accounts";
+var LOCAL_KEY = "alpha_sec_accounts_iqd";
 
-function goHome() {
-  window.location.href = "index.html";
+function formatIQD(num){
+  var n = Number(num) || 0;
+  return n.toLocaleString("en-US") + " د.ع";
 }
 
-function calcBan(g, s) {
-  g = String(g || "").trim();
-  s = String(s || "").trim();
-  var d = Math.abs(g.length - s.length), m = 0, p = s.split("");
-  for (var i = 0; i < g.length; i++) {
-    var x = p.indexOf(g[i]);
-    if (x > -1) { m++; p.splice(x, 1); }
-  }
-  var r = m / Math.max(g.length, s.length, 1), a = Number(g), b = Number(s);
-  if ((!isNaN(a) && !isNaN(b) && b > 0 && Math.abs(a - b) / b <= 0.25) || (r >= 0.6 && d <= 1)) return 72;
-  if (r >= 0.35 && d <= 2) return 96;
-  return 120;
+function setStatus(txt, ok){
+  var el = document.getElementById("cloud-status");
+  if(!el) return;
+  el.innerText = txt;
+  el.style.color = ok ? "#34d399" : "#fbbf24";
 }
 
-function getLk() {
+function cloudUrl(){
+  var base = String(FIREBASE_DB_URL || "").trim().replace(/\/+$/, "");
+  return base ? (base + "/alpha_sec/" + CLOUD_KEY + ".json") : "";
+}
+
+function readLocal(){
   try {
-    var o = JSON.parse(localStorage.getItem("acc_v4_lock") || "{}");
-    if (o.u && Date.now() >= Number(o.u)) {
-      var z = { t: 0, u: 0, h: 0 };
-      localStorage.setItem("acc_v4_lock", JSON.stringify(z));
-      return z;
-    }
-    return { t: Number(o.t || 0), u: Number(o.u || 0), h: Number(o.h || 0) };
-  } catch (e) { return { t: 0, u: 0, h: 0 }; }
+    var d = JSON.parse(localStorage.getItem(LOCAL_KEY) || "[]");
+    return Array.isArray(d) ? d : [];
+  } catch(e){ return []; }
 }
 
-function setLk(v) {
-  try { localStorage.setItem("acc_v4_lock", JSON.stringify(v)); } catch (e) {}
+function writeLocal(rows){
+  try { localStorage.setItem(LOCAL_KEY, JSON.stringify(rows)); } catch(e){}
 }
 
-function remText(ms) {
-  var h = Math.max(1, Math.ceil(ms / 3600000));
-  return Math.floor(h / 24) + " يوم و " + (h % 24) + " ساعة (" + h + " ساعة)";
-}
-
-function showMsg() {
-  var el = document.getElementById("acc-msg"), s = getLk();
-  if (!el) return;
-  el.innerText = (s.u && Date.now() < s.u)
-    ? ("محظور " + s.h + " ساعة — المتبقي: " + remText(s.u - Date.now()))
-    : ("المحاولات المتبقية: " + Math.max(0, MAX_T - s.t) + " من " + MAX_T);
-}
-
-function loginAcc() {
-  var s = getLk();
-  if (s.u && Date.now() < s.u) {
-    alert("محظور " + s.h + " ساعة.\nالمتبقي: " + remText(s.u - Date.now()));
-    return;
+function renderRows(rows){
+  var tb = document.getElementById("pay-body");
+  var totEl = document.getElementById("total-iqd");
+  var cntEl = document.getElementById("count-rows");
+  var sum = 0;
+  for(var i = 0; i < rows.length; i++){
+    sum += Number(rows[i].amount) || 0;
   }
-  var inp = document.getElementById("acc-pass"), v = inp ? inp.value.trim() : "";
-  if (v === ACC_P) {
-    setLk({ t: 0, u: 0, h: 0 });
-    inp.value = "";
-    document.getElementById("acc-login").style.display = "none";
-    document.getElementById("acc-dash").style.display = "block";
-    renderAccTable();
-  } else {
-    s.t++;
-    if (s.t > MAX_T) {
-      var h = calcBan(v, ACC_P);
-      setLk({ t: s.t, u: Date.now() + h * 3600000, h: h });
-      showMsg();
-      alert("تجاوزت 10 محاولات! حظر " + h + " ساعة");
-    } else {
-      setLk(s);
-      showMsg();
-      alert("الرمز خطأ! المتبقي: " + (MAX_T - s.t));
-    }
+  if(totEl) totEl.innerText = formatIQD(sum);
+  if(cntEl) cntEl.innerText = String(rows.length);
+  if(!tb) return;
+
+  tb.innerHTML = "";
+  for(var j = 0; j < rows.length; j++){
+    (function(item, idx){
+      var tr = document.createElement("tr");
+      tr.innerHTML =
+        "<td>" + (item.student || "") + "</td>" +
+        "<td>" + (item.type || "دفعة اولى") + "</td>" +
+        "<td><strong>" + formatIQD(item.amount) + "</strong></td>" +
+        "<td>" + (item.date || "") + "</td>" +
+        "<td></td>";
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "btn-r";
+      btn.innerText = "حذف";
+      btn.onclick = function(){
+        var cur = readLocal();
+        cur.splice(idx, 1);
+        saveAll(cur);
+      };
+      tr.lastChild.appendChild(btn);
+      tb.appendChild(tr);
+    })(rows[j], j);
   }
 }
 
-function getRows() {
-  try { return JSON.parse(localStorage.getItem("acc_v4_rows") || "[]"); } catch (e) { return []; }
+function saveAll(rows){
+  writeLocal(rows);
+  renderRows(rows);
+  var url = cloudUrl();
+  if(!url){ setStatus("محفوظ محلياً", false); return; }
+  fetch(url, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(rows)
+  }).then(function(r){
+    if(!r.ok) throw new Error("err");
+    setStatus("متصل سحابياً (د.ع)", true);
+  }).catch(function(){
+    setStatus("احتياط محلي", false);
+  });
 }
 
-function setRows(a) {
-  try { localStorage.setItem("acc_v4_rows", JSON.stringify(a)); } catch (e) {}
+function pullAll(){
+  var local = readLocal();
+  renderRows(local);
+  var url = cloudUrl();
+  if(!url){ setStatus("وضع محلي", false); return; }
+  fetch(url).then(function(r){
+    if(!r.ok) throw new Error("err");
+    return r.json();
+  }).then(function(data){
+    var arr = Array.isArray(data) ? data : (data ? Object.values(data) : []);
+    writeLocal(arr);
+    renderRows(arr);
+    setStatus("متصل سحابياً (د.ع)", true);
+  }).catch(function(){
+    setStatus("احتياط محلي", false);
+  });
 }
 
-function saveAccRow() {
-  var name = document.getElementById("f-name").value.trim();
-  var cls = document.getElementById("f-class").value;
-  var inst = document.getElementById("f-installment").value;
-  var amt = document.getElementById("f-amount").value.trim();
-  var dt = document.getElementById("f-date").value || new Date().toISOString().slice(0, 10);
-  var rec = document.getElementById("f-receipt").value.trim();
-  if (!name) return alert("اكتب اسم الطالب");
-  if (!amt) return alert("اكتب المبلغ المدفوع");
-  if (!rec) return alert("اكتب رقم الوصل");
+document.getElementById("save-pay").onclick = function(){
+  var student = document.getElementById("st-name").value.trim();
+  var type = document.getElementById("pay-type").value;
+  var amount = Number(document.getElementById("pay-amount").value);
+  var curr = document.getElementById("pay-curr").value || "د.ع";
+  var date = document.getElementById("pay-date").value || new Date().toISOString().slice(0, 10);
+  if(!student){ alert("أدخل اسم الطالب"); return; }
+  if(!amount || amount <= 0){ alert("أدخل مبلغاً صحيحاً بالدينار العراقي"); return; }
 
-  var fmtAmt = Number(amt).toLocaleString();
-  var labelText = inst + " " + fmtAmt;
+  var rows = readLocal();
+  rows.unshift({ student: student, type: type, amount: amount, currency: curr, date: date });
+  document.getElementById("st-name").value = "";
+  document.getElementById("pay-amount").value = "";
+  saveAll(rows);
+};
 
-  var rows = getRows();
-  var key = name.toLowerCase() + "__" + cls.toLowerCase();
-  var found = null;
-  for (var i = 0; i < rows.length; i++) {
-    if ((rows[i].name.toLowerCase() + "__" + rows[i].cls.toLowerCase()) === key) {
-      found = rows[i];
-      break;
-    }
-  }
-
-  var entry = { label: labelText, dt: dt, rec: rec };
-  if (found) {
-    found.payments.push(entry);
-  } else {
-    rows.unshift({ name: name, cls: cls, payments: [entry] });
-  }
-
-  setRows(rows);
-  document.getElementById("f-name").value = "";
-  document.getElementById("f-amount").value = "";
-  document.getElementById("f-receipt").value = "";
-  renderAccTable();
-}
-
-function delStudentRow(idx) {
-  if (!confirm("حذف سجل هذا الطالب؟")) return;
-  var rows = getRows();
-  rows.splice(idx, 1);
-  setRows(rows);
-  renderAccTable();
-}
-
-function renderAccTable() {
-  var q = (document.getElementById("f-search").value || "").trim().toLowerCase();
-  var rows = getRows(), html = "";
-  for (var i = 0; i < rows.length; i++) {
-    var r = rows[i];
-    var payText = r.payments.map(function(p) { return p.label + " (" + p.dt + ") [" + p.rec + "]"; }).join(" ");
-    if (!q || (r.name + " " + r.cls + " " + payText).toLowerCase().indexOf(q) > -1) {
-      var pHtml = r.payments.map(function(p) {
-        return "<div class='badge'>" + p.label + " — <b>" + p.dt + "</b></div>";
-      }).join("<br>");
-      var rHtml = r.payments.map(function(p) {
-        return "<div style='margin-bottom:4px'><b>" + p.rec + "</b> <span style='color:#94a3b8;font-size:12px'>(" + p.label + ")</span></div>";
-      }).join("");
-      html += "<tr><td><strong>" + r.name + "</strong></td><td>" + r.cls + "</td><td>" + pHtml + "</td><td>" + rHtml + "</td><td class='no-print'><button type='button' class='btn-del' onclick='delStudentRow(" + i + ")'>حذف</button></td></tr>";
-    }
-  }
-  document.getElementById("acc-tbody").innerHTML = html;
-}
-
-showMsg();
-document.getElementById("f-date").value = new Date().toISOString().slice(0, 10);
+pullAll();
 </script>
 </body>
 </html>
