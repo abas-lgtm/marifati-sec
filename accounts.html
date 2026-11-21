@@ -7,13 +7,13 @@
 <style>
 *{box-sizing:border-box;font-family:Tahoma,Arial,sans-serif}
 body{margin:0;padding:22px 16px 85px;background:linear-gradient(160deg,#061014 0%,#0b1e26 55%,#07151a 100%);color:#f1f5f9;min-height:100vh}
-.wrap{max-width:1040px;margin:0 auto}
-.header{display:flex;justify-content:space-between;align-items:center;gap:14px;background:rgba(15,35,44,.9);border:1px solid rgba(45,212,191,.35);border-radius:20px;padding:16px 22px;margin-bottom:24px;box-shadow:0 10px 28px rgba(0,0,0,.35)}
+.wrap{max-width:1080px;margin:0 auto}
+.header{display:flex;justify-content:space-between;align-items:center;gap:14px;background:rgba(15,35,44,.92);border:1px solid rgba(45,212,191,.35);border-radius:20px;padding:16px 22px;margin-bottom:24px;box-shadow:0 10px 28px rgba(0,0,0,.35)}
 .header h1{margin:0;font-size:21px;color:#5eead4}
 .header .sub{font-size:13px;color:#cbd5e1;margin-top:4px}
-.login-card{max-width:460px;margin:40px auto;background:rgba(13,30,38,.95);border:1.5px solid rgba(251,191,36,.45);border-radius:22px;padding:28px;box-shadow:0 16px 36px rgba(0,0,0,.45)}
-.dash-card{display:none;background:rgba(13,30,38,.95);border:1.5px solid rgba(45,212,191,.35);border-radius:22px;padding:24px;box-shadow:0 16px 36px rgba(0,0,0,.45)}
-.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-bottom:14px}
+.login-card{max-width:460px;margin:40px auto;background:rgba(13,30,38,.96);border:1.5px solid rgba(251,191,36,.45);border-radius:22px;padding:28px;box-shadow:0 16px 36px rgba(0,0,0,.45)}
+.dash-card{display:none;background:rgba(13,30,38,.96);border:1.5px solid rgba(45,212,191,.35);border-radius:22px;padding:24px;box-shadow:0 16px 36px rgba(0,0,0,.45)}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:14px}
 .field label{display:block;font-size:13px;color:#99f6e4;margin-bottom:6px;font-weight:bold}
 input,select{width:100%;padding:13px 15px;border-radius:12px;border:1px solid #264653;background:#061117;color:#fff;font-size:15px}
 input:focus,select:focus{outline:none;border-color:#2dd4bf}
@@ -27,7 +27,7 @@ button{cursor:pointer;border:0;border-radius:12px;padding:12px 18px;font-weight:
 table{width:100%;border-collapse:collapse;font-size:14px;background:#071319}
 th,td{border:1px solid #19323d;padding:11px 12px;text-align:right;vertical-align:top}
 th{background:#102833;color:#5eead4}
-.badge{display:inline-block;padding:4px 9px;border-radius:8px;font-size:12px;font-weight:bold;margin:2px 0;background:#112d38;color:#fde68a;border:1px solid rgba(251,191,36,.3)}
+.badge{display:inline-block;padding:5px 10px;border-radius:8px;font-size:12px;font-weight:bold;margin:2px 0;background:#112d38;color:#fde68a;border:1px solid rgba(251,191,36,.32)}
 .footer{position:fixed;bottom:0;left:0;width:100%;background:#071319;border-top:1px solid rgba(45,212,191,.3);padding:12px;text-align:center;font-size:13px;color:#cbd5e1}
 @media print{body{background:#fff;color:#000;padding:0}.no-print,.footer{display:none!important}.table-box{border:1px solid #000}table{background:#fff}th,td{border:1px solid #000;color:#000}.badge{background:none;border:0;color:#000;padding:0}}
 </style>
@@ -86,14 +86,19 @@ th{background:#102833;color:#5eead4}
           </select>
         </div>
 
-        <!-- 3. الدفعة والتاريخ -->
+        <!-- 3. الدفعة + المبلغ + التاريخ -->
         <div class="field">
           <label for="f-installment">3. الدفعة</label>
           <select id="f-installment">
-            <option value="تم دفع اول دفعه">تم دفع اول دفعه</option>
-            <option value="تم دفع ثاني دفعه">تم دفع ثاني دفعه</option>
-            <option value="تم دفع ثالث دفعه">تم دفع ثالث دفعه</option>
+            <option value="تم دفع اول دفعه بمبلغ">تم دفع اول دفعه بمبلغ</option>
+            <option value="تم دفع ثاني دفعه بمبلغ">تم دفع ثاني دفعه بمبلغ</option>
+            <option value="تم دفع ثالث دفعه بمبلغ">تم دفع ثالث دفعه بمبلغ</option>
           </select>
+        </div>
+
+        <div class="field">
+          <label for="f-amount">المبلغ المدفوع</label>
+          <input type="number" id="f-amount" placeholder="اكتب المبلغ">
         </div>
 
         <div class="field">
@@ -113,7 +118,7 @@ th{background:#102833;color:#5eead4}
       <!-- 5. بحث عن الطالب -->
       <div class="field" style="margin-bottom:0">
         <label for="f-search">5. بحث عن الطالب</label>
-        <input type="text" id="f-search" oninput="renderAccTable()" placeholder="ابحث باسم الطالب أو الصف أو الدفعة أو رقم الوصل...">
+        <input type="text" id="f-search" oninput="renderAccTable()" placeholder="ابحث باسم الطالب أو الصف أو الدفعة أو المبلغ أو رقم الوصل...">
       </div>
     </div>
 
@@ -123,7 +128,7 @@ th{background:#102833;color:#5eead4}
           <tr>
             <th>اسم الطالب</th>
             <th>الصف</th>
-            <th>الدفعات والتواريخ</th>
+            <th>الدفعات والمبالغ والتواريخ</th>
             <th>أرقام الوصولات</th>
             <th class="no-print">حذف</th>
           </tr>
@@ -160,10 +165,10 @@ function calcBan(g, s) {
 
 function getLk() {
   try {
-    var o = JSON.parse(localStorage.getItem("acc_v3_lock") || "{}");
+    var o = JSON.parse(localStorage.getItem("acc_v4_lock") || "{}");
     if (o.u && Date.now() >= Number(o.u)) {
       var z = { t: 0, u: 0, h: 0 };
-      localStorage.setItem("acc_v3_lock", JSON.stringify(z));
+      localStorage.setItem("acc_v4_lock", JSON.stringify(z));
       return z;
     }
     return { t: Number(o.t || 0), u: Number(o.u || 0), h: Number(o.h || 0) };
@@ -171,7 +176,7 @@ function getLk() {
 }
 
 function setLk(v) {
-  try { localStorage.setItem("acc_v3_lock", JSON.stringify(v)); } catch (e) {}
+  try { localStorage.setItem("acc_v4_lock", JSON.stringify(v)); } catch (e) {}
 }
 
 function remText(ms) {
@@ -216,21 +221,26 @@ function loginAcc() {
 }
 
 function getRows() {
-  try { return JSON.parse(localStorage.getItem("acc_v3_rows") || "[]"); } catch (e) { return []; }
+  try { return JSON.parse(localStorage.getItem("acc_v4_rows") || "[]"); } catch (e) { return []; }
 }
 
 function setRows(a) {
-  try { localStorage.setItem("acc_v3_rows", JSON.stringify(a)); } catch (e) {}
+  try { localStorage.setItem("acc_v4_rows", JSON.stringify(a)); } catch (e) {}
 }
 
 function saveAccRow() {
   var name = document.getElementById("f-name").value.trim();
   var cls = document.getElementById("f-class").value;
   var inst = document.getElementById("f-installment").value;
+  var amt = document.getElementById("f-amount").value.trim();
   var dt = document.getElementById("f-date").value || new Date().toISOString().slice(0, 10);
   var rec = document.getElementById("f-receipt").value.trim();
   if (!name) return alert("اكتب اسم الطالب");
+  if (!amt) return alert("اكتب المبلغ المدفوع");
   if (!rec) return alert("اكتب رقم الوصل");
+
+  var fmtAmt = Number(amt).toLocaleString();
+  var labelText = inst + " " + fmtAmt;
 
   var rows = getRows();
   var key = name.toLowerCase() + "__" + cls.toLowerCase();
@@ -242,7 +252,7 @@ function saveAccRow() {
     }
   }
 
-  var entry = { inst: inst, dt: dt, rec: rec };
+  var entry = { label: labelText, dt: dt, rec: rec };
   if (found) {
     found.payments.push(entry);
   } else {
@@ -251,6 +261,7 @@ function saveAccRow() {
 
   setRows(rows);
   document.getElementById("f-name").value = "";
+  document.getElementById("f-amount").value = "";
   document.getElementById("f-receipt").value = "";
   renderAccTable();
 }
@@ -268,13 +279,13 @@ function renderAccTable() {
   var rows = getRows(), html = "";
   for (var i = 0; i < rows.length; i++) {
     var r = rows[i];
-    var payText = r.payments.map(function(p) { return p.inst + " (" + p.dt + ") [" + p.rec + "]"; }).join(" ");
+    var payText = r.payments.map(function(p) { return p.label + " (" + p.dt + ") [" + p.rec + "]"; }).join(" ");
     if (!q || (r.name + " " + r.cls + " " + payText).toLowerCase().indexOf(q) > -1) {
       var pHtml = r.payments.map(function(p) {
-        return "<div class='badge'>" + p.inst + " — <b>" + p.dt + "</b></div>";
+        return "<div class='badge'>" + p.label + " — <b>" + p.dt + "</b></div>";
       }).join("<br>");
       var rHtml = r.payments.map(function(p) {
-        return "<div style='margin-bottom:4px'><b>" + p.rec + "</b> <span style='color:#94a3b8;font-size:12px'>(" + p.inst + ")</span></div>";
+        return "<div style='margin-bottom:4px'><b>" + p.rec + "</b> <span style='color:#94a3b8;font-size:12px'>(" + p.label + ")</span></div>";
       }).join("");
       html += "<tr><td><strong>" + r.name + "</strong></td><td>" + r.cls + "</td><td>" + pHtml + "</td><td>" + rHtml + "</td><td class='no-print'><button type='button' class='btn-del' onclick='delStudentRow(" + i + ")'>حذف</button></td></tr>";
     }
