@@ -3,240 +3,278 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>بوابة التقييم — ALPHA-SEC</title>
+<title>بوابة التبليغات المدرسية — ALPHA-SEC</title>
 <style>
-*{box-sizing:border-box;font-family:Segoe UI,Tahoma,Arial,sans-serif}
-body{margin:0;padding:22px 16px 85px;background:linear-gradient(180deg,#081120 0%,#0f1c33 100%);color:#f8fafc;min-height:100vh}
-.container{max-width:980px;margin:0 auto}
-.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;background:#132238;border:1px solid #2dd4bf55;border-radius:18px;padding:16px 20px;margin-bottom:24px}
-.topbar h1{margin:0;font-size:21px;color:#5eead4}
-.topbar span{font-size:13px;color:#94a3b8}
-.auth-card{max-width:460px;margin:36px auto;background:#132238;border:1.5px solid #2dd4bf66;border-radius:22px;padding:26px;box-shadow:0 12px 30px rgba(0,0,0,.35)}
-.panel-box{display:none;background:#132238;border:1.5px solid #2dd4bf66;border-radius:22px;padding:24px;box-shadow:0 12px 30px rgba(0,0,0,.35)}
-input,select{width:100%;padding:14px 16px;margin-bottom:14px;border-radius:13px;border:1px solid #334155;background:#091324;color:#fff;font-size:16px}
-input:focus,select:focus{outline:none;border-color:#2dd4bf}
-button{cursor:pointer;border:0;border-radius:13px;padding:13px 18px;font-weight:700;font-size:15px}
-.btn-teal{background:#14b8a6;color:#041312}
-.btn-sky{background:#0ea5e9;color:#04131c}
-.btn-slate{background:#1e293b;color:#e2e8f0;border:1px solid #475569}
-.btn-rose{background:#e11d48;color:#fff}
-.flex-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:14px}
-table{width:100%;border-collapse:collapse;margin-top:16px;font-size:15px;background:#091324;border-radius:14px;overflow:hidden}
-th,td{border:1px solid #1e293b;padding:11px 12px;text-align:right}
-th{background:#172a45;color:#5eead4}
-.foot{position:fixed;bottom:0;left:0;width:100%;background:#091324;border-top:1px solid #2dd4bf44;padding:12px;text-align:center;font-size:13px;color:#cbd5e1}
-@media print{body{background:#fff;color:#000;padding:0}.no-print,.foot{display:none!important}table{background:#fff}th,td{border:1px solid #000;color:#000}}
+*{box-sizing:border-box;font-family:Tahoma,Arial,sans-serif}
+body{margin:0;padding:22px 16px 85px;background:linear-gradient(160deg,#061014 0%,#0b1e26 55%,#07151a 100%);color:#f1f5f9;min-height:100vh}
+.wrap{max-width:1080px;margin:0 auto}
+.header{display:flex;justify-content:space-between;align-items:center;gap:14px;background:rgba(15,35,44,.92);border:1px solid rgba(45,212,191,.35);border-radius:20px;padding:16px 22px;margin-bottom:24px;box-shadow:0 10px 28px rgba(0,0,0,.35)}
+.header h1{margin:0;font-size:21px;color:#5eead4}
+.header .sub{font-size:13px;color:#cbd5e1;margin-top:4px}
+.login-card{max-width:460px;margin:40px auto;background:rgba(13,30,38,.96);border:1.5px solid rgba(251,191,36,.45);border-radius:22px;padding:28px;box-shadow:0 16px 36px rgba(0,0,0,.45)}
+.dash-card{display:none;background:rgba(13,30,38,.96);border:1.5px solid rgba(45,212,191,.35);border-radius:22px;padding:24px;box-shadow:0 16px 36px rgba(0,0,0,.45)}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:14px}
+.field label{display:block;font-size:13px;color:#99f6e4;margin-bottom:6px;font-weight:bold}
+input,select,textarea{width:100%;padding:13px 15px;border-radius:12px;border:1px solid #264653;background:#061117;color:#fff;font-size:15px}
+textarea{min-height:90px;resize:vertical;margin-bottom:14px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#2dd4bf}
+button{cursor:pointer;border:0;border-radius:12px;padding:12px 18px;font-weight:bold;font-size:15px}
+.btn-mint{background:linear-gradient(135deg,#14b8a6,#10b981);color:#041311}
+.btn-gold{background:linear-gradient(135deg,#f59e0b,#eab308);color:#181204}
+.btn-dark{background:#162c36;color:#e2e8f0;border:1px solid #2b4c5b}
+.btn-del{background:#dc2626;color:#fff;padding:7px 12px;font-size:13px;border-radius:9px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:16px}
+.table-box{overflow-x:auto;margin-top:16px;border-radius:14px;border:1px solid #1e3a46}
+table{width:100%;border-collapse:collapse;font-size:14px;background:#071319}
+th,td{border:1px solid #19323d;padding:11px 12px;text-align:right;vertical-align:top}
+th{background:#102833;color:#5eead4}
+.p-urgent{display:inline-block;padding:4px 10px;border-radius:8px;font-size:12px;font-weight:bold;background:#7f1d1d;color:#fecaca;border:1px solid #f87171}
+.p-normal{display:inline-block;padding:4px 10px;border-radius:8px;font-size:12px;font-weight:bold;background:#064e3b;color:#6ee7b7;border:1px solid #34d399}
+.footer{position:fixed;bottom:0;left:0;width:100%;background:#071319;border-top:1px solid rgba(45,212,191,.3);padding:12px;text-align:center;font-size:13px;color:#cbd5e1}
+@media print{body{background:#fff;color:#000;padding:0}.no-print,.footer{display:none!important}.table-box{border:1px solid #000}table{background:#fff}th,td{border:1px solid #000;color:#000}.p-urgent,.p-normal{background:none;border:0;color:#000;padding:0}}
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="topbar no-print">
+<div class="wrap">
+  <div class="header no-print">
     <div>
-      <h1>بوابة التقييم والمتابعة</h1>
-      <span>إعدادية المعرفة المهنية الاهلية — عباس محمد عزيز</span>
+      <h1>بوابة التبليغات المدرسية</h1>
+      <div class="sub">إعدادية المعرفة المهنية الاهلية — برمجة: عباس محمد عزيز</div>
     </div>
-    <button type="button" class="btn-slate" onclick="goMain()">الرئيسية</button>
+    <button type="button" class="btn-dark" onclick="goMain()">الرئيسية</button>
   </div>
 
-  <div id="gate-box" class="auth-card">
-    <h2 style="margin:0 0 8px;color:#2dd4bf;text-align:center;font-size:22px">تسجيل دخول التقييم</h2>
-    <div id="gate-status" style="text-align:center;font-size:14px;color:#cbd5e1;margin-bottom:16px">المحاولات المتبقية: 10 من 10</div>
-    <input type="password" id="eval-code" placeholder="أدخل الرمز السري">
-    <div class="flex-row" style="margin-bottom:0">
-      <button type="button" class="btn-teal" style="flex:1" onclick="verifyEvaluations()">دخول إلى التقييم</button>
-      <button type="button" class="btn-slate" onclick="goMain()">رجوع</button>
+  <!-- دخول بوابة التبليغات -->
+  <div id="ann-login" class="login-card">
+    <h2 style="margin:0 0 8px;color:#fbbf24;text-align:center;font-size:22px">دخول بوابة التبليغات</h2>
+    <div id="ann-msg" style="text-align:center;font-size:13px;color:#cbd5e1;margin-bottom:16px">المحاولات المتبقية: 10 من 10</div>
+    <input type="password" id="ann-pass" placeholder="أدخل الرمز السري">
+    <div class="actions" style="margin-bottom:0">
+      <button type="button" class="btn-mint" style="flex:1" onclick="loginAnn()">دخول</button>
+      <button type="button" class="btn-dark" onclick="goMain()">رجوع</button>
     </div>
   </div>
 
-  <div id="work-box" class="panel-box">
-    <div class="flex-row no-print">
-      <h2 style="margin:0;color:#5eead4;font-size:21px">سجل تقييم الطلبة</h2>
+  <!-- لوحة التبليغات -->
+  <div id="ann-dash" class="dash-card">
+    <div class="actions no-print">
+      <h2 style="margin:0;color:#5eead4;font-size:20px">إدارة ونشر التبليغات المدرسية</h2>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button type="button" class="btn-sky" onclick="window.print()">طباعة PDF</button>
-        <button type="button" class="btn-slate" onclick="goMain()">الرئيسية</button>
+        <button type="button" class="btn-gold" onclick="window.print()">طباعة PDF</button>
+        <button type="button" class="btn-dark" onclick="goMain()">الرئيسية</button>
       </div>
     </div>
 
     <div class="no-print">
-      <input type="text" id="ev-student" placeholder="اسم الطالب">
-      <select id="ev-class">
-        <option>اول امن سيبراني A</option>
-        <option>اول امن سيبراني B</option>
-        <option>اول امن سيبراني C</option>
-        <option>اول تكرير نفط A</option>
-        <option>اول تجميع حاسوب A</option>
-        <option>اول اجهزه طبية A</option>
-      </select>
-      <select id="ev-type">
-        <option>تقييم شهري</option>
-        <option>تقييم عملي</option>
-        <option>تقييم سلوكي</option>
-      </select>
-      <input type="number" id="ev-score" min="0" max="100" placeholder="التقييم من 100">
-      <button type="button" class="btn-teal" style="width:100%;margin-bottom:14px" onclick="storeEvaluation()">حفظ التقييم</button>
-      <input type="text" id="ev-filter" oninput="paintEvaluations()" placeholder="بحث باسم الطالب أو الصف أو النوع...">
+      <div class="form-grid">
+        <div class="field">
+          <label for="an-title">عنوان التبليغ</label>
+          <input type="text" id="an-title" placeholder="اكتب عنوان التبليغ">
+        </div>
+
+        <div class="field">
+          <label for="an-target">الجهة المستهدفة</label>
+          <select id="an-target">
+            <option>كل المدرسة</option>
+            <option>اول امن سيبراني A</option>
+            <option>اول امن سيبراني B</option>
+            <option>اول امن سيبراني C</option>
+            <option>اول تكرار نفط A</option>
+            <option>اول اجهزة طبية A</option>
+            <option>اول تجميع حاسوب A</option>
+            <option>ثالث تجميع حاسوب A</option>
+            <option>ثالث تجميع حاسوب B</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="an-type">نوع التبليغ</label>
+          <select id="an-type">
+            <option>إداري</option>
+            <option>امتحاني</option>
+            <option>دوام وعطل</option>
+            <option>توجيه عام</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="an-prio">الأولوية</label>
+          <select id="an-prio">
+            <option value="عادي">عادي</option>
+            <option value="عاجل">عاجل</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="an-date">تاريخ النشر</label>
+          <input type="date" id="an-date">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="an-body">نص التبليغ أو التعليمات</label>
+        <textarea id="an-body" placeholder="اكتب تفاصيل التبليغ أو التعليمات الموجهة..."></textarea>
+      </div>
+
+      <button type="button" class="btn-mint" style="width:100%;margin-bottom:14px" onclick="saveAnn()">نشر التبليغ</button>
+
+      <div class="field" style="margin-bottom:0">
+        <label for="an-q">بحث في التبليغات</label>
+        <input type="text" id="an-q" oninput="renderAnn()" placeholder="ابحث بالعنوان، النص، الصف، النوع، أو الأولوية (عاجل / عادي)...">
+      </div>
     </div>
 
-    <table>
-      <thead>
-        <tr>
-          <th>الطالب</th>
-          <th>الصف</th>
-          <th>النوع</th>
-          <th>الدرجة</th>
-          <th class="no-print">حذف</th>
-        </tr>
-      </thead>
-      <tbody id="eval-rows"></tbody>
-    </table>
+    <div class="table-box">
+      <table>
+        <thead>
+          <tr>
+            <th>الأولوية</th>
+            <th>العنوان</th>
+            <th>الجهة</th>
+            <th>النوع</th>
+            <th>التفاصيل</th>
+            <th>التاريخ</th>
+            <th class="no-print">حذف</th>
+          </tr>
+        </thead>
+        <tbody id="an-tb"></tbody>
+      </table>
+    </div>
   </div>
 </div>
 
-<div class="foot">برمجة وتطوير: <strong style="color:#5eead4">عباس محمد عزيز</strong></div>
+<div class="footer">برمجة وتطوير: <strong style="color:#5eead4">عباس محمد عزيز</strong></div>
 
 <script>
-var LIMIT_TRIES = 10;
-var EVAL_PIN = "300400";
+var MAX_T = 10;
+var ANN_P = "300400";
 
 function goMain() {
   window.location.href = "index.html";
 }
 
-function banDuration(guess, target) {
-  guess = String(guess || "").trim();
-  target = String(target || "").trim();
-  var diffLen = Math.abs(guess.length - target.length);
-  var sameChars = 0;
-  var pool = target.split("");
-  for (var i = 0; i < guess.length; i++) {
-    var pos = pool.indexOf(guess[i]);
-    if (pos > -1) {
-      sameChars++;
-      pool.splice(pos, 1);
-    }
+function calcBan(g, s) {
+  g = String(g || "").trim();
+  s = String(s || "").trim();
+  var d = Math.abs(g.length - s.length), m = 0, p = s.split("");
+  for (var i = 0; i < g.length; i++) {
+    var x = p.indexOf(g[i]);
+    if (x > -1) { m++; p.splice(x, 1); }
   }
-  var ratio = sameChars / Math.max(guess.length, target.length, 1);
-  var numG = Number(guess);
-  var numT = Number(target);
-  if ((!isNaN(numG) && !isNaN(numT) && numT > 0 && Math.abs(numG - numT) / numT <= 0.25) || (ratio >= 0.6 && diffLen <= 1)) return 72;
-  if (ratio >= 0.35 && diffLen <= 2) return 96;
+  var r = m / Math.max(g.length, s.length, 1), a = Number(g), b = Number(s);
+  if ((!isNaN(a) && !isNaN(b) && b > 0 && Math.abs(a - b) / b <= 0.25) || (r >= 0.6 && d <= 1)) return 72;
+  if (r >= 0.35 && d <= 2) return 96;
   return 120;
 }
 
-function readLock() {
+function getLk() {
   try {
-    var raw = JSON.parse(localStorage.getItem("alpha_ev_lock_v2") || "{}");
-    if (raw.until && Date.now() >= Number(raw.until)) {
-      var reset = { tries: 0, until: 0, hrs: 0 };
-      localStorage.setItem("alpha_ev_lock_v2", JSON.stringify(reset));
-      return reset;
+    var o = JSON.parse(localStorage.getItem("ann_v1_lock") || "{}");
+    if (o.u && Date.now() >= Number(o.u)) {
+      var z = { t: 0, u: 0, h: 0 };
+      localStorage.setItem("ann_v1_lock", JSON.stringify(z));
+      return z;
     }
-    return { tries: Number(raw.tries || 0), until: Number(raw.until || 0), hrs: Number(raw.hrs || 0) };
-  } catch (e) {
-    return { tries: 0, until: 0, hrs: 0 };
-  }
+    return { t: Number(o.t || 0), u: Number(o.u || 0), h: Number(o.h || 0) };
+  } catch (e) { return { t: 0, u: 0, h: 0 }; }
 }
 
-function writeLock(val) {
-  try { localStorage.setItem("alpha_ev_lock_v2", JSON.stringify(val)); } catch (e) {}
+function setLk(v) {
+  try { localStorage.setItem("ann_v1_lock", JSON.stringify(v)); } catch (e) {}
 }
 
-function leftTimeText(ms) {
-  var hrs = Math.max(1, Math.ceil(ms / 3600000));
-  return Math.floor(hrs / 24) + " يوم و " + (hrs % 24) + " ساعة (" + hrs + " ساعة)";
+function remText(ms) {
+  var h = Math.max(1, Math.ceil(ms / 3600000));
+  return Math.floor(h / 24) + " يوم و " + (h % 24) + " ساعة (" + h + " ساعة)";
 }
 
-function refreshLockBanner() {
-  var box = document.getElementById("gate-status");
-  var st = readLock();
-  if (!box) return;
-  if (st.until && Date.now() < st.until) {
-    box.innerText = "محظور " + st.hrs + " ساعة — المتبقي: " + leftTimeText(st.until - Date.now());
-  } else {
-    box.innerText = "المحاولات المتبقية: " + Math.max(0, LIMIT_TRIES - st.tries) + " من " + LIMIT_TRIES;
-  }
+function showMsg() {
+  var el = document.getElementById("ann-msg"), s = getLk();
+  if (!el) return;
+  el.innerText = (s.u && Date.now() < s.u)
+    ? ("محظور " + s.h + " ساعة — المتبقي: " + remText(s.u - Date.now()))
+    : ("المحاولات المتبقية: " + Math.max(0, MAX_T - s.t) + " من " + MAX_T);
 }
 
-function verifyEvaluations() {
-  var st = readLock();
-  if (st.until && Date.now() < st.until) {
-    alert("محظور " + st.hrs + " ساعة.\nالمتبقي: " + leftTimeText(st.until - Date.now()));
+function loginAnn() {
+  var s = getLk();
+  if (s.u && Date.now() < s.u) {
+    alert("محظور " + s.h + " ساعة.\nالمتبقي: " + remText(s.u - Date.now()));
     return;
   }
-  var input = document.getElementById("eval-code");
-  var code = input ? input.value.trim() : "";
-  if (code === EVAL_PIN) {
-    writeLock({ tries: 0, until: 0, hrs: 0 });
-    input.value = "";
-    document.getElementById("gate-box").style.display = "none";
-    document.getElementById("work-box").style.display = "block";
-    paintEvaluations();
+  var inp = document.getElementById("ann-pass"), v = inp ? inp.value.trim() : "";
+  if (v === ANN_P) {
+    setLk({ t: 0, u: 0, h: 0 });
+    inp.value = "";
+    document.getElementById("ann-login").style.display = "none";
+    document.getElementById("ann-dash").style.display = "block";
+    renderAnn();
   } else {
-    st.tries++;
-    if (st.tries > LIMIT_TRIES) {
-      var hrs = banDuration(code, EVAL_PIN);
-      writeLock({ tries: st.tries, until: Date.now() + hrs * 3600000, hrs: hrs });
-      refreshLockBanner();
-      alert("تجاوزت 10 محاولات! حظر " + hrs + " ساعة");
+    s.t++;
+    if (s.t > MAX_T) {
+      var h = calcBan(v, ANN_P);
+      setLk({ t: s.t, u: Date.now() + h * 3600000, h: h });
+      showMsg();
+      alert("تجاوزت 10 محاولات! حظر " + h + " ساعة");
     } else {
-      writeLock(st);
-      refreshLockBanner();
-      alert("الرمز خطأ! المتبقي: " + (LIMIT_TRIES - st.tries));
+      setLk(s);
+      showMsg();
+      alert("الرمز خطأ! المتبقي: " + (MAX_T - s.t));
     }
   }
 }
 
-function readEvaluations() {
-  try { return JSON.parse(localStorage.getItem("alpha_ev_rows_v2") || "[]"); } catch (e) { return []; }
+function getRows() {
+  try { return JSON.parse(localStorage.getItem("ann_v1_rows") || "[]"); } catch (e) { return []; }
 }
 
-function writeEvaluations(list) {
-  try { localStorage.setItem("alpha_ev_rows_v2", JSON.stringify(list)); } catch (e) {}
+function setRows(a) {
+  try { localStorage.setItem("ann_v1_rows", JSON.stringify(a)); } catch (e) {}
 }
 
-function storeEvaluation() {
-  var student = document.getElementById("ev-student").value.trim();
-  var grade = document.getElementById("ev-class").value;
-  var type = document.getElementById("ev-type").value;
-  var scoreInput = document.getElementById("ev-score");
-  var score = Number(scoreInput.value);
-  if (!student || scoreInput.value === "") {
-    alert("أدخل اسم الطالب والدرجة");
-    return;
-  }
-  if (score < 0 || score > 100) {
-    alert("الدرجة يجب أن تكون بين 0 و 100");
-    return;
-  }
-  var rows = readEvaluations();
-  rows.unshift({ student: student, grade: grade, type: type, score: score });
-  writeEvaluations(rows);
-  document.getElementById("ev-student").value = "";
-  scoreInput.value = "";
-  paintEvaluations();
+function saveAnn() {
+  var title = document.getElementById("an-title").value.trim();
+  var target = document.getElementById("an-target").value;
+  var type = document.getElementById("an-type").value;
+  var prio = document.getElementById("an-prio").value;
+  var dt = document.getElementById("an-date").value || new Date().toISOString().slice(0, 10);
+  var body = document.getElementById("an-body").value.trim();
+  if (!title || !body) return alert("اكتب عنوان التبليغ ونصه");
+
+  var rows = getRows();
+  rows.unshift({ title: title, target: target, type: type, prio: prio, dt: dt, body: body });
+  setRows(rows);
+  document.getElementById("an-title").value = "";
+  document.getElementById("an-body").value = "";
+  renderAnn();
 }
 
-function removeEvaluation(index) {
-  var rows = readEvaluations();
-  rows.splice(index, 1);
-  writeEvaluations(rows);
-  paintEvaluations();
+function delAnn(idx) {
+  if (!confirm("حذف هذا التبليغ؟")) return;
+  var rows = getRows();
+  rows.splice(idx, 1);
+  setRows(rows);
+  renderAnn();
 }
 
-function paintEvaluations() {
-  var q = (document.getElementById("ev-filter").value || "").trim().toLowerCase();
-  var rows = readEvaluations();
-  var html = "";
+function renderAnn() {
+  var q = (document.getElementById("an-q").value || "").trim().toLowerCase();
+  var rows = getRows(), html = "";
   for (var i = 0; i < rows.length; i++) {
     var r = rows[i];
-    if (!q || (r.student + " " + r.grade + " " + r.type).toLowerCase().indexOf(q) > -1) {
-      html += "<tr><td>" + r.student + "</td><td>" + r.grade + "</td><td>" + r.type + "</td><td><strong>" + r.score + " / 100</strong></td><td class='no-print'><button type='button' class='btn-rose' onclick='removeEvaluation(" + i + ")'>حذف</button></td></tr>";
+    var hay = (r.prio + " " + r.title + " " + r.target + " " + r.type + " " + r.body + " " + r.dt).toLowerCase();
+    if (!q || hay.indexOf(q) > -1) {
+      var badge = r.prio === "عاجل"
+        ? "<span class='p-urgent'>عاجل</span>"
+        : "<span class='p-normal'>عادي</span>";
+      html += "<tr><td>" + badge + "</td><td><strong>" + r.title + "</strong></td><td>" + r.target + "</td><td>" + r.type + "</td><td>" + r.body + "</td><td>" + r.dt + "</td><td class='no-print'><button type='button' class='btn-del' onclick='delAnn(" + i + ")'>حذف</button></td></tr>";
     }
   }
-  document.getElementById("eval-rows").innerHTML = html;
+  document.getElementById("an-tb").innerHTML = html;
 }
 
-refreshLockBanner();
+showMsg();
+document.getElementById("an-date").value = new Date().toISOString().slice(0, 10);
 </script>
 </body>
 </html>
