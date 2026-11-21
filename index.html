@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>ALPHA-SEC // النظام المدرسي المتكامل (1)</title>
+<title>ALPHA-SEC // النظام المدرسي المتكامل</title>
 <style>
 *{box-sizing:border-box;font-family:Tahoma,Arial,sans-serif}
 body{margin:0;padding:0 0 75px;background:#030712;color:#f3f4f6;font-size:15px}
@@ -13,54 +13,40 @@ header h1{margin:0;font-size:20px;color:#fff}
 header .sub{font-size:13px;color:#34d399;margin-top:4px}
 .sync-badge{font-size:12px;padding:5px 10px;border-radius:999px;background:#0b1324;border:1px solid #10b98155;color:#34d399}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
-.card,.link{position:relative;z-index:2;display:block;width:100%;text-align:right;background:#0b0f19;color:#fff;border:1px solid #10b98166;border-radius:16px;padding:20px;text-decoration:none;cursor:pointer;min-height:110px}
+.card,.link{display:block;width:100%;text-align:right;background:#0b0f19;color:#fff;border:1px solid #10b98166;border-radius:16px;padding:20px;text-decoration:none;cursor:pointer;min-height:110px}
 .card:hover,.link:hover{border-color:#34d399}
 .num{font-size:13px;font-weight:bold;color:#34d399;margin-bottom:8px;display:block}
 .title{font-size:18px;font-weight:bold;color:#fff;margin-bottom:6px;display:block}
 .desc{font-size:13px;color:#94a3b8;display:block}
-.panel{display:none;background:#0b0f19;border:1px solid #10b98166;border-radius:16px;padding:22px;max-width:860px;margin:16px auto}
-.box-sm{max-width:460px}
-input,select{width:100%;padding:12px 14px;margin-bottom:12px;border-radius:10px;border:1px solid #334155;background:#020617;color:#fff;font-size:15px}
-button{cursor:pointer;border-radius:10px;border:0;padding:11px 16px;font-weight:bold;font-size:14px}
-.btn-g{background:#10b981;color:#000}
-.btn-b{background:#06b6d4;color:#000}
-.btn-w{background:#f59e0b;color:#000}
-.btn-d{background:#1e293b;color:#f1f5f9;border:1px solid #334155}
-.btn-r{background:#dc2626;color:#fff}
-.bar{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:14px}
-table{width:100%;border-collapse:collapse;margin-top:14px;font-size:14px}
-th,td{border:1px solid #1e293b;padding:10px;text-align:right}
-th{background:#020617;color:#34d399}
+.btn-d{background:#1e293b;color:#f1f5f9;border:1px solid #334155;border-radius:10px;padding:10px 14px;font-weight:bold;font-size:13px;text-decoration:none;cursor:pointer}
 footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1px solid #10b98155;padding:12px;text-align:center;font-size:13px;color:#cbd5e1;z-index:10}
-@media print{body{background:#fff;color:#000;padding:0}.np,footer{display:none!important}th,td{border:1px solid #000;color:#000}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header class="np">
+  <header>
     <div>
       <h1>إعدادية المعرفة المهنية الاهلية</h1>
       <div class="sub">برمجة: عباس محمد عزيز</div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-      <span id="cloud-status" class="sync-badge">جاري فحص الاتصال السحابي...</span>
-      <a href="index2.html" class="btn-d" style="text-decoration:none;padding:10px 14px;font-size:13px">واجهة الإعلانات (2)</a>
-      <button type="button" id="btn-home" class="btn-d">الرئيسية</button>
+      <span id="cloud-status" class="sync-badge">جاري الفحص...</span>
+      <a href="index2.html" class="btn-d">لوحة العمليات (2)</a>
     </div>
   </header>
 
-  <div id="v-home" class="grid">
-    <button type="button" id="btn-ast" class="card">
+  <div class="grid">
+    <a href="index2.html?portal=assistant" class="card">
       <span class="num">01</span>
       <span class="title">بوابة المعاون</span>
       <span class="desc">الغيابات، الهروب، والإجازات</span>
-    </button>
+    </a>
 
-    <button type="button" id="btn-tch" class="card">
+    <a href="index2.html?portal=teachers" class="card">
       <span class="num" style="color:#22d3ee">02</span>
       <span class="title">بوابة المدرسين</span>
       <span class="desc">رصد درجات المواد من 100</span>
-    </button>
+    </a>
 
     <a href="students.html" class="link">
       <span class="num" style="color:#c084fc">03</span>
@@ -92,416 +78,21 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
       <span class="desc">الأقساط والخصومات والوصولات</span>
     </a>
   </div>
-
-  <!-- دخول المعاون -->
-  <div id="v-al" class="panel box-sm">
-    <h3 style="margin-top:0;color:#34d399;text-align:center">دخول بوابة المعاون</h3>
-    <div id="am" style="text-align:center;font-size:13px;color:#94a3b8;margin-bottom:12px">المحاولات المتبقية: 10 من 10</div>
-    <input type="password" id="ap" placeholder="أدخل الرمز السري">
-    <div class="bar">
-      <button type="button" id="btn-login-ast" class="btn-g" style="flex:1">دخول</button>
-      <button type="button" class="btn-d back-home">إلغاء</button>
-    </div>
-  </div>
-
-  <!-- لوحة المعاون -->
-  <div id="v-ad" class="panel">
-    <div class="bar np">
-      <h3 style="margin:0;color:#34d399">سجل الغيابات، الهروب، والإجازات</h3>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button type="button" onclick="window.print()" class="btn-g">طباعة PDF</button>
-        <button type="button" id="new-month-abs" class="btn-w">بدء شهر جديد</button>
-        <button type="button" id="clr-abs" class="btn-r">مسح الكل</button>
-        <button type="button" class="btn-d back-home">رجوع</button>
-      </div>
-    </div>
-    <div class="np">
-      <input type="text" id="an" placeholder="اسم الطالب">
-      <select id="ac">
-        <option>اول امن سيبراني A</option>
-        <option>اول امن سيبراني B</option>
-        <option>اول امن سيبراني C</option>
-        <option>اول تكرير نفط A</option>
-        <option>اول تجميع حاسوب A</option>
-        <option>اول اجهزه طبية A</option>
-      </select>
-      <select id="at">
-        <option>غياب</option>
-        <option>هروب</option>
-        <option>اجازة</option>
-      </select>
-      <input type="date" id="ad">
-      <button type="button" id="save-abs" class="btn-g" style="width:100%;margin-bottom:10px">حفظ السجل</button>
-      <input type="text" id="af" placeholder="بحث باسم الطالب أو الصف...">
-    </div>
-    <table>
-      <thead>
-        <tr>
-          <th>الطالب</th>
-          <th>الصف</th>
-          <th>الحالة</th>
-          <th>التاريخ</th>
-          <th class="np">حذف</th>
-        </tr>
-      </thead>
-      <tbody id="ab"></tbody>
-    </table>
-  </div>
-
-  <!-- اختيار المادة -->
-  <div id="v-ts" class="panel box-sm">
-    <h3 style="margin-top:0;color:#22d3ee;text-align:center">اختر المادة الدراسية</h3>
-    <div id="sl"></div>
-    <button type="button" class="btn-d back-home" style="width:100%;margin-top:8px">رجوع</button>
-  </div>
-
-  <!-- دخول المدرس -->
-  <div id="v-tl" class="panel box-sm">
-    <h3 id="th" style="margin-top:0;color:#22d3ee;text-align:center">دخول المدرس</h3>
-    <div id="tm" style="text-align:center;font-size:13px;color:#94a3b8;margin-bottom:12px">المحاولات المتبقية: 10 من 10</div>
-    <input type="password" id="tp" placeholder="أدخل رمز المادة السري">
-    <div class="bar">
-      <button type="button" id="btn-login-tch" class="btn-b" style="flex:1">دخول</button>
-      <button type="button" id="back-subjs" class="btn-d">رجوع</button>
-    </div>
-  </div>
-
-  <!-- لوحة المدرس -->
-  <div id="v-td" class="panel">
-    <div class="bar np">
-      <h3 id="tdh" style="margin:0;color:#22d3ee">رصد الدرجات (من 100)</h3>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button type="button" onclick="window.print()" class="btn-b">طباعة PDF</button>
-        <button type="button" id="new-month-gr" class="btn-w">بدء شهر جديد</button>
-        <button type="button" id="clr-gr" class="btn-r">مسح الكل</button>
-        <button type="button" class="btn-d back-home">رجوع</button>
-      </div>
-    </div>
-    <div class="np">
-      <input type="text" id="tn" placeholder="اسم الطالب">
-      <select id="tc">
-        <option>اول امن سيبراني A</option>
-        <option>اول امن سيبراني B</option>
-        <option>اول امن سيبراني C</option>
-        <option>اول تكرير نفط A</option>
-        <option>اول تجميع حاسوب A</option>
-        <option>اول اجهزه طبية A</option>
-      </select>
-      <input type="number" id="tg" min="0" max="100" placeholder="الدرجة من 100">
-      <button type="button" id="save-gr" class="btn-b" style="width:100%;margin-bottom:10px">حفظ الدرجة</button>
-      <input type="text" id="gf" placeholder="بحث باسم الطالب أو الصف...">
-    </div>
-    <table>
-      <thead>
-        <tr>
-          <th>الطالب</th>
-          <th>الصف</th>
-          <th>المادة</th>
-          <th>الدرجة</th>
-          <th class="np">حذف</th>
-        </tr>
-      </thead>
-      <tbody id="gb"></tbody>
-    </table>
-  </div>
 </div>
 
 <footer>برمجة وتطوير: <strong style="color:#34d399">عباس محمد عزيز</strong></footer>
 
 <script>
 var FIREBASE_DB_URL = "https://al-maarefa-school-default-rtdb.firebaseio.com";
-
-function setSyncBadge(text, ok){
-  var el = document.getElementById("cloud-status");
-  if(!el) return;
-  el.innerText = text;
-  el.style.color = ok ? "#34d399" : "#fbbf24";
-  el.style.borderColor = ok ? "#10b98166" : "#f59e0b66";
-}
-
-function cloudUrl(path){
-  var base = String(FIREBASE_DB_URL || "").trim().replace(/\/+$/, "");
-  var cleanPath = String(path || "").replace(/^\/+/, "");
-  return base ? (base + "/alpha_sec/" + cleanPath + ".json") : "";
-}
-
-function readLocalArr(storageKey){
-  try {
-    var d = JSON.parse(localStorage.getItem(storageKey) || "[]");
-    return Array.isArray(d) ? d : [];
-  } catch(e){
-    return [];
-  }
-}
-
-function writeLocalArr(storageKey, arr){
-  try {
-    localStorage.setItem(storageKey, JSON.stringify(arr));
-  } catch(e){}
-}
-
-function pullArr(cloudKey, storageKey, onReady){
-  var localArr = readLocalArr(storageKey);
-  if(onReady) onReady(localArr);
-  var url = cloudUrl(cloudKey);
-  if(!url){
-    setSyncBadge("وضع محلي", false);
-    return;
-  }
-  fetch(url).then(function(res){
-    if(!res.ok) throw new Error("net");
-    return res.json();
-  }).then(function(remoteData){
-    var arr = Array.isArray(remoteData) ? remoteData : (remoteData ? Object.values(remoteData) : []);
-    writeLocalArr(storageKey, arr);
-    setSyncBadge("متصل سحابياً (Firebase)", true);
-    if(onReady) onReady(arr);
-  }).catch(function(){
-    setSyncBadge("احتياط محلي (تعذر الاتصال بالسحابة)", false);
-  });
-}
-
-function pushArr(cloudKey, storageKey, arr, onDone){
-  writeLocalArr(storageKey, arr);
-  if(onDone) onDone(arr);
-  var url = cloudUrl(cloudKey);
-  if(!url){
-    setSyncBadge("وضع محلي", false);
-    return;
-  }
-  fetch(url, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(arr)
-  }).then(function(res){
-    if(!res.ok) throw new Error("net");
-    setSyncBadge("تم الحفظ سحابياً", true);
-  }).catch(function(){
-    setSyncBadge("محفوظ محلياً (بانتظار الشبكة)", false);
-  });
-}
-
-function startNewMonth(cloudKey, storageKey, label, onDone){
-  var current = readLocalArr(storageKey);
-  var monthTag = new Date().toISOString().slice(0, 7);
-  if(!confirm("تأكيد بدء شهر جديد (" + monthTag + ") لـ " + label + "؟\nسيتم أرشفة السجل الحالي سحابياً وتصفير الشهر الجديد.")) return;
-
-  var archiveUrl = cloudUrl("archives/" + monthTag + "/" + cloudKey);
-  var finishReset = function(){
-    pushArr(cloudKey, storageKey, [], function(){
-      alert("تم بدء شهر جديد (" + monthTag + ") وتصفير سجل " + label + " سحابياً.");
-      if(onDone) onDone();
-    });
-  };
-
-  if(archiveUrl && current.length){
-    fetch(archiveUrl, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(current)
-    }).then(finishReset).catch(finishReset);
-  } else {
-    finishReset();
-  }
-}
-
 (function(){
-  var MAX = 10, AP = "55100", CS = null;
-  var SUBS = [
-    {n:"التربية الإسلامية", c:"1090"},
-    {n:"اللغة العربية", c:"202500"},
-    {n:"الرياضيات", c:"12300"},
-    {n:"الانجليزي", c:"0005"},
-    {n:"اساسيات الكهرباء", c:"9000"},
-    {n:"تجميع الحاسوب", c:"6200"},
-    {n:"تطبيقات الحاسوب", c:"1999"},
-    {n:"الاتصالات والشبكات", c:"6100"},
-    {n:"مبادى الحاسوب", c:"1998"}
-  ];
-
-  function bh(g, s){
-    g = String(g || "").trim(); s = String(s || "").trim();
-    var d = Math.abs(g.length - s.length), m = 0, p = s.split("");
-    for (var i = 0; i < g.length; i++){ var x = p.indexOf(g[i]); if (x > -1){ m++; p.splice(x, 1); } }
-    var r = m / Math.max(g.length, s.length, 1), a = Number(g), b = Number(s);
-    if ((!isNaN(a) && !isNaN(b) && b > 0 && Math.abs(a - b) / b <= 0.25) || (r >= 0.6 && d <= 1)) return 72;
-    if (r >= 0.35 && d <= 2) return 96;
-    return 120;
-  }
-
-  function gl(k){
-    try {
-      var o = JSON.parse(localStorage.getItem("al_l_" + k) || "{}");
-      if (o.u && Date.now() >= +o.u){ var z = {t:0, u:0, h:0}; localStorage.setItem("al_l_" + k, JSON.stringify(z)); return z; }
-      return {t:+o.t||0, u:+o.u||0, h:+o.h||0};
-    } catch(e){ return {t:0, u:0, h:0}; }
-  }
-
-  function slk(k, v){ try { localStorage.setItem("al_l_" + k, JSON.stringify(v)); } catch(e){} }
-  function rm(ms){ var h = Math.max(1, Math.ceil(ms / 36e5)); return Math.floor(h / 24) + " يوم و " + (h % 24) + " ساعة (" + h + " ساعة)"; }
-
-  function pm(k, id){
-    var e = document.getElementById(id), s = gl(k);
-    if (!e) return;
-    e.innerText = (s.u && Date.now() < s.u)
-      ? ("محظور " + s.h + " ساعة — المتبقي: " + rm(s.u - Date.now()))
-      : ("المحاولات المتبقية: " + Math.max(0, MAX - s.t) + " من " + MAX);
-  }
-
-  function sw(v){
-    var ids = ["home", "al", "ad", "ts", "tl", "td"];
-    for (var i = 0; i < ids.length; i++){
-      var e = document.getElementById("v-" + ids[i]);
-      if (e) e.style.display = "none";
-    }
-    var t = document.getElementById("v-" + v);
-    if (t) t.style.display = (v === "home" ? "grid" : "block");
-    if (v === "al"){
-      pm("a", "am");
-      var apEl = document.getElementById("ap");
-      if (apEl) apEl.focus();
-    }
-    if (v === "ad") pullArr("abs", "al_d_abs", drawAbs);
-    if (v === "ts") drawSubjs();
-    if (v === "tl" && CS){
-      pm("t_" + CS.n, "tm");
-      var tpEl = document.getElementById("tp");
-      if (tpEl) tpEl.focus();
-    }
-    if (v === "td") pullArr("gr", "al_d_gr", drawGr);
-  }
-
-  function drawSubjs(){
-    var box = document.getElementById("sl");
-    if (!box) return;
-    box.innerHTML = "";
-    for (var i = 0; i < SUBS.length; i++){
-      (function(sub){
-        var b = document.createElement("button");
-        b.type = "button";
-        b.className = "card";
-        b.style.marginBottom = "8px";
-        b.style.minHeight = "0";
-        b.style.padding = "14px 16px";
-        b.innerHTML = "<span class='title' style='margin:0;font-size:16px;color:#22d3ee'>" + sub.n + "</span>";
-        b.onclick = function(){
-          CS = sub;
-          document.getElementById("th").innerText = "دخول: " + sub.n;
-          document.getElementById("tp").value = "";
-          sw("tl");
-        };
-        box.appendChild(b);
-      })(SUBS[i]);
-    }
-  }
-
-  function la(){
-    var s = gl("a");
-    if (s.u && Date.now() < s.u){ alert("محظور " + s.h + " ساعة.\nالمتبقي: " + rm(s.u - Date.now())); return; }
-    var i = document.getElementById("ap"), v = i ? i.value.trim() : "";
-    if (v === AP){ slk("a", {t:0, u:0, h:0}); i.value = ""; sw("ad"); }
-    else {
-      s.t++;
-      if (s.t > MAX){ var h = bh(v, AP); slk("a", {t:s.t, u:Date.now() + h * 36e5, h:h}); pm("a", "am"); alert("تجاوزت 10 محاولات! حظر " + h + " ساعة"); }
-      else { slk("a", s); pm("a", "am"); alert("الرمز خطأ! المتبقي: " + (MAX - s.t)); }
-    }
-  }
-
-  function aa(){
-    var n = document.getElementById("an").value.trim();
-    var c = document.getElementById("ac").value;
-    var t = document.getElementById("at").value;
-    var d = document.getElementById("ad").value || new Date().toISOString().slice(0, 10);
-    if (!n){ alert("أدخل اسم الطالب"); return; }
-    var a = readLocalArr("al_d_abs");
-    a.unshift({n:n, c:c, t:t, d:d});
-    document.getElementById("an").value = "";
-    pushArr("abs", "al_d_abs", a, drawAbs);
-  }
-
-  function drawAbs(){
-    var f = (document.getElementById("af").value || "").trim().toLowerCase();
-    var a = readLocalArr("al_d_abs"), tb = document.getElementById("ab");
-    if (!tb) return;
-    tb.innerHTML = "";
-    for (var i = 0; i < a.length; i++){
-      (function(x, idx){
-        if (!f || (x.n + " " + x.c + " " + x.t).toLowerCase().indexOf(f) > -1){
-          var tr = document.createElement("tr");
-          var col = x.t === "هروب" ? "#fb7185" : (x.t === "غياب" ? "#fbbf24" : "#34d399");
-          tr.innerHTML = "<td>" + x.n + "</td><td>" + x.c + "</td><td style='color:" + col + ";font-weight:bold'>" + x.t + "</td><td>" + x.d + "</td><td class='np'></td>";
-          var delBtn = document.createElement("button");
-          delBtn.type = "button";
-          delBtn.className = "btn-r";
-          delBtn.style.padding = "5px 10px";
-          delBtn.style.fontSize = "12px";
-          delBtn.innerText = "حذف";
-          delBtn.onclick = function(){
-            var curA = readLocalArr("al_d_abs");
-            curA.splice(idx, 1);
-            pushArr("abs", "al_d_abs", curA, drawAbs);
-          };
-          tr.lastChild.appendChild(delBtn);
-          tb.appendChild(tr);
-        }
-      })(a[i], i);
-    }
-  }
-
-  function lt(){
-    if (!CS) return;
-    var k = "t_" + CS.n, s = gl(k);
-    if (s.u && Date.now() < s.u){ alert("محظور " + s.h + " ساعة.\nالمتبقي: " + rm(s.u - Date.now())); return; }
-    var i = document.getElementById("tp"), v = i ? i.value.trim() : "";
-    if (v === CS.c){ slk(k, {t:0, u:0, h:0}); i.value = ""; document.getElementById("tdh").innerText = "رصد درجات - " + CS.n; sw("td"); }
-    else {
-      s.t++;
-      if (s.t > MAX){ var h = bh(v, CS.c); slk(k, {t:s.t, u:Date.now() + h * 36e5, h:h}); pm(k, "tm"); alert("تجاوزت 10 محاولات! حظر " + h + " ساعة"); }
-      else { slk(k, s); pm(k, "tm"); alert("الرمز خطأ! المتبقي: " + (MAX - s.t)); }
-    }
-  }
-
-  function ag(){
-    if (!CS) return;
-    var n = document.getElementById("tn").value.trim();
-    var c = document.getElementById("tc").value;
-    var gi = document.getElementById("tg"), g = Number(gi.value);
-    if (!n || gi.value === ""){ alert("أدخل اسم الطالب والدرجة"); return; }
-    if (g < 0 || g > 100){ alert("الدرجة بين 0 و 100"); return; }
-    var a = readLocalArr("al_d_gr");
-    a.unshift({n:n, c:c, s:CS.n, g:g});
-    document.getElementById("tn").value = "";
-    gi.value = "";
-    pushArr("gr", "al_d_gr", a, drawGr);
-  }
-
-  function drawGr(){
-    var f = (document.getElementById("gf").value || "").trim().toLowerCase();
-    var a = readLocalArr("al_d_gr"), tb = document.getElementById("gb");
-    if (!tb) return;
-    tb.innerHTML = "";
-    for (var i = 0; i < a.length; i++){
-      (function(x, idx){
-        if ((!CS || x.s === CS.n) && (!f || (x.n + " " + x.c + " " + x.s).toLowerCase().indexOf(f) > -1)){
-          var tr = document.createElement("tr");
-          tr.innerHTML = "<td>" + x.n + "</td><td>" + x.c + "</td><td>" + x.s + "</td><td><strong>" + x.g + " / 100</strong></td><td class='np'></td>";
-          var delBtn = document.createElement("button");
-          delBtn.type = "button";
-          delBtn.className = "btn-r";
-          delBtn.style.padding = "5px 10px";
-          delBtn.style.fontSize = "12px";
-          delBtn.innerText = "حذف";
-          delBtn.onclick = function(){
-            var curA = readLocalArr("al_d_gr");
-            curA.splice(idx, 1);
-            pushArr("gr", "al_d_gr", curA, drawGr);
-          };
-          tr.lastChild.appendChild(delBtn);
-          tb.appendChild(tr);
-        }
-      })(a[i], i);
-    }
-  }
-
-  function bindEvents(){
-    var bAst = document.g
+  var el = document.getElementById("cloud-status");
+  var base = String(FIREBASE_DB_URL || "").trim().replace(/\/+$/, "");
+  if(!base || !el) return;
+  fetch(base + "/alpha_sec.json")
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(){ el.innerText = "متصل سحابياً (Firebase)"; })
+    .catch(function(){ el.innerText = "احتياط محلي"; el.style.color = "#fbbf24"; });
+})();
+</script>
+</body>
+</html>
