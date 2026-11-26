@@ -28,7 +28,6 @@ button{cursor:pointer;border-radius:10px;border:0;padding:11px 16px;font-weight:
 .btn-d{background:#1e293b;color:#f1f5f9;border:1px solid #334155}
 .btn-r{background:#dc2626;color:#fff}
 .bar{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:14px}
-.lock-alert{display:none;background:#450a0a;border:1px solid #ef444488;color:#fca5a5;padding:10px 14px;border-radius:10px;margin-bottom:12px;font-size:13px;font-weight:bold}
 table{width:100%;border-collapse:collapse;margin-top:14px;font-size:14px}
 th,td{border:1px solid #1e293b;padding:10px;text-align:right}
 th{background:#020617;color:#34d399}
@@ -45,7 +44,7 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
     </div>
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
       <span id="cloud-status" class="sync-badge">متصل سحابياً (Firebase)</span>
-      <a href="evaluations.html" class="btn-d" style="text-decoration:none;padding:10px 14px;font-size:13px">الإعلانات</a>
+      <a href="index2.html" class="btn-d" style="text-decoration:none;padding:10px 14px;font-size:13px">الإعلانات (2)</a>
       <button type="button" id="btn-home" class="btn-d">الرئيسية</button>
     </div>
   </header>
@@ -98,7 +97,7 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
   <div id="v-al" class="panel box-sm">
     <h3 style="margin-top:0;color:#34d399;text-align:center">دخول بوابة المعاون</h3>
     <div id="am" style="text-align:center;font-size:13px;color:#94a3b8;margin-bottom:12px">المحاولات المتبقية: 10 من 10</div>
-    <input type="text" id="ap" autocomplete="off" placeholder="أدخل الرمز السري">
+    <input type="password" id="ap" placeholder="أدخل الرمز السري">
     <div class="bar">
       <button type="button" id="btn-login-ast" class="btn-g" style="flex:1">دخول</button>
       <button type="button" class="btn-d back-home">إلغاء</button>
@@ -116,7 +115,6 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
         <button type="button" class="btn-d back-home">رجوع</button>
       </div>
     </div>
-    <div id="abs-lock-banner" class="lock-alert np">التعديل والحذف على سجل الغيابات مقفول حالياً من الإدارة.</div>
     <div class="np">
       <input type="text" id="an" placeholder="اسم الطالب">
       <select id="ac">
@@ -161,7 +159,7 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
   <div id="v-tl" class="panel box-sm">
     <h3 id="th" style="margin-top:0;color:#22d3ee;text-align:center">دخول المدرس</h3>
     <div id="tm" style="text-align:center;font-size:13px;color:#94a3b8;margin-bottom:12px">المحاولات المتبقية: 10 من 10</div>
-    <input type="text" id="tp" autocomplete="off" placeholder="أدخل رمز المادة السري">
+    <input type="password" id="tp" placeholder="أدخل رمز المادة السري">
     <div class="bar">
       <button type="button" id="btn-login-tch" class="btn-b" style="flex:1">دخول</button>
       <button type="button" id="back-subjs" class="btn-d">رجوع</button>
@@ -179,7 +177,6 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
         <button type="button" class="btn-d back-home">رجوع</button>
       </div>
     </div>
-    <div id="gr-lock-banner" class="lock-alert np">التعديل والحذف على الدرجات مقفول حالياً من الإدارة.</div>
     <div class="np">
       <input type="text" id="tn" placeholder="اسم الطالب">
       <select id="tc">
@@ -217,7 +214,6 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
 <script>
 var FIREBASE_DB_URL = "https://al-maarefa-school-default-rtdb.firebaseio.com";
 var MAX = 10, AP = "55100", CS = null;
-var GR_LOCKED = false, ABS_LOCKED = false;
 var SUBS = [
   {n:"التربية الإسلامية", c:"1090"},
   {n:"اللغة العربية", c:"202500"},
@@ -236,6 +232,12 @@ function cloudUrl(path){
   return base ? (base + "/alpha_sec/" + cleanPath + ".json") : "";
 }
 
+function isLocked(type){
+  if(type === "gr") return localStorage.getItem("al_lock_gr") === "1";
+  if(type === "abs") return localStorage.getItem("al_lock_abs") === "1";
+  return false;
+}
+
 function readArr(k){
   try { var d = JSON.parse(localStorage.getItem(k) || "[]"); return Array.isArray(d) ? d : []; }
   catch(e){ return []; }
@@ -243,43 +245,6 @@ function readArr(k){
 
 function writeArr(k, a){
   try { localStorage.setItem(k, JSON.stringify(a)); } catch(e){}
-}
-
-function renderLockBanners(){
-  var gBan = document.getElementById("gr-lock-banner");
-  var aBan = document.getElementById("abs-lock-banner");
-  if(gBan) gBan.style.display = GR_LOCKED ? "block" : "none";
-  if(aBan) aBan.style.display = ABS_LOCKED ? "block" : "none";
-}
-
-function pullLocks(cb){
-  GR_LOCKED = localStorage.getItem("al_lock_gr") === "1";
-  ABS_LOCKED = localStorage.getItem("al_lock_abs") === "1";
-  renderLockBanners();
-  if(cb) cb();
-
-  var uG = cloudUrl("locks/grades");
-  var uA = cloudUrl("locks/abs");
-  if(uG){
-    fetch(uG).then(function(r){ return r.ok ? r.json() : null; }).then(function(v){
-      if(typeof v === "boolean"){
-        GR_LOCKED = v;
-        localStorage.setItem("al_lock_gr", v ? "1" : "0");
-        renderLockBanners();
-        if(cb) cb();
-      }
-    }).catch(function(){});
-  }
-  if(uA){
-    fetch(uA).then(function(r){ return r.ok ? r.json() : null; }).then(function(v){
-      if(typeof v === "boolean"){
-        ABS_LOCKED = v;
-        localStorage.setItem("al_lock_abs", v ? "1" : "0");
-        renderLockBanners();
-        if(cb) cb();
-      }
-    }).catch(function(){});
-  }
 }
 
 function syncPull(cloudKey, localKey, cb){
@@ -308,8 +273,8 @@ function syncPush(cloudKey, localKey, arr, cb){
 }
 
 function startNewMonth(cloudKey, localKey, label, cb){
-  if(cloudKey === "gr" && GR_LOCKED){ alert("الإجراءات على الدرجات مقفولة حالياً من الإدارة."); return; }
-  if(cloudKey === "abs" && ABS_LOCKED){ alert("الإجراءات على الغيابات مقفولة حالياً من الإدارة."); return; }
+  if(cloudKey === "gr" && isLocked("gr")){ alert("تعديل الدرجات مقفول من الإدارة."); return; }
+  if(cloudKey === "abs" && isLocked("abs")){ alert("تعديل الغيابات مقفول من الإدارة."); return; }
   var cur = readArr(localKey);
   var m = new Date().toISOString().slice(0, 7);
   if(!confirm("تأكيد بدء شهر جديد (" + m + ") لـ " + label + "؟")) return;
@@ -366,10 +331,10 @@ function sw(v){
   var t = document.getElementById("v-" + v);
   if(t) t.style.display = (v === "home" ? "grid" : "block");
   if(v === "al") pm("a", "am");
-  if(v === "ad"){ pullLocks(drawAbs); syncPull("abs", "al_d_abs", drawAbs); }
+  if(v === "ad") syncPull("abs", "al_d_abs", drawAbs);
   if(v === "ts") drawSubjs();
   if(v === "tl" && CS) pm("t_" + CS.n, "tm");
-  if(v === "td"){ pullLocks(drawGr); syncPull("gr", "al_d_gr", drawGr); }
+  if(v === "td") syncPull("gr", "al_d_gr", drawGr);
 }
 
 function drawSubjs(){
@@ -409,7 +374,7 @@ function la(){
 }
 
 function aa(){
-  if(ABS_LOCKED){ alert("التعديل والحذف على سجل الغيابات مقفول حالياً من الإدارة."); return; }
+  if(isLocked("abs")){ alert("تعديل الغيابات مقفول من الإدارة."); return; }
   var n = document.getElementById("an").value.trim();
   var c = document.getElementById("ac").value;
   var t = document.getElementById("at").value;
@@ -422,25 +387,24 @@ function aa(){
 }
 
 function drawAbs(){
-  renderLockBanners();
   var f = (document.getElementById("af").value || "").trim().toLowerCase();
   var a = readArr("al_d_abs"), tb = document.getElementById("ab");
   if(!tb) return;
   tb.innerHTML = "";
   for(var i = 0; i < a.length; i++){
     (function(x, idx){
-      if(!f || ((x.n || "") + " " + (x.c || "") + " " + (x.t || "")).toLowerCase().indexOf(f) > -1){
+      if(!f || (x.n + " " + x.c + " " + x.t).toLowerCase().indexOf(f) > -1){
         var tr = document.createElement("tr");
         var col = x.t === "هروب" ? "#fb7185" : (x.t === "غياب" ? "#fbbf24" : "#34d399");
-        tr.innerHTML = "<td>" + (x.n || "") + "</td><td>" + (x.c || "") + "</td><td style='color:" + col + ";font-weight:bold'>" + (x.t || "") + "</td><td>" + (x.d || "") + "</td><td class='np'></td>";
+        tr.innerHTML = "<td>" + x.n + "</td><td>" + x.c + "</td><td style='color:" + col + ";font-weight:bold'>" + x.t + "</td><td>" + x.d + "</td><td class='np'></td>";
         var btn = document.createElement("button");
         btn.type = "button";
         btn.className = "btn-r";
         btn.style.padding = "5px 10px";
         btn.style.fontSize = "12px";
-        btn.innerText = ABS_LOCKED ? "مقفول" : "حذف";
+        btn.innerText = "حذف";
         btn.onclick = function(){
-          if(ABS_LOCKED){ alert("الحذف والتعديل على سجل الغيابات مقفول حالياً من الإدارة."); return; }
+          if(isLocked("abs")){ alert("حذف الغيابات مقفول من الإدارة."); return; }
           var cur = readArr("al_d_abs");
           cur.splice(idx, 1);
           syncPush("abs", "al_d_abs", cur, drawAbs);
@@ -466,13 +430,13 @@ function lt(){
 }
 
 function ag(){
-  if(GR_LOCKED){ alert("التعديل والحذف على الدرجات مقفول حالياً من الإدارة."); return; }
+  if(isLocked("gr")){ alert("تعديل الدرجات مقفول من الإدارة."); return; }
   if(!CS) return;
   var n = document.getElementById("tn").value.trim();
   var c = document.getElementById("tc").value;
   var gi = document.getElementById("tg"), g = Number(gi.value);
   if(!n || gi.value === ""){ alert("أدخل اسم الطالب والدرجة"); return; }
-  if(isNaN(g) || g < 0 || g > 100){ alert("الدرجة بين 0 و 100"); return; }
+  if(g < 0 || g > 100){ alert("الدرجة بين 0 و 100"); return; }
   var a = readArr("al_d_gr");
   a.unshift({n:n, c:c, s:CS.n, g:g});
   document.getElementById("tn").value = "";
@@ -481,11 +445,45 @@ function ag(){
 }
 
 function drawGr(){
-  renderLockBanners();
   var f = (document.getElementById("gf").value || "").trim().toLowerCase();
   var a = readArr("al_d_gr"), tb = document.getElementById("gb");
   if(!tb) return;
   tb.innerHTML = "";
   for(var i = 0; i < a.length; i++){
     (function(x, idx){
-      if((!CS || x.s === CS.n) && (!f || ((x.n || "") + " " + (x.c || "") + " " + (x.s || ""
+      if((!CS || x.s === CS.n) && (!f || (x.n + " " + x.c + " " + x.s).toLowerCase().indexOf(f) > -1)){
+        var tr = document.createElement("tr");
+        tr.innerHTML = "<td>" + x.n + "</td><td>" + x.c + "</td><td>" + x.s + "</td><td><strong>" + x.g + " / 100</strong></td><td class='np'></td>";
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "btn-r";
+        btn.style.padding = "5px 10px";
+        btn.style.fontSize = "12px";
+        btn.innerText = "حذف";
+        btn.onclick = function(){
+          if(isLocked("gr")){ alert("حذف الدرجات مقفول من الإدارة."); return; }
+          var cur = readArr("al_d_gr");
+          cur.splice(idx, 1);
+          syncPush("gr", "al_d_gr", cur, drawGr);
+        };
+        tr.lastChild.appendChild(btn);
+        tb.appendChild(tr);
+      }
+    })(a[i], i);
+  }
+}
+
+document.getElementById("btn-ast").onclick = function(){ sw("al"); };
+document.getElementById("btn-tch").onclick = function(){ sw("ts"); };
+document.getElementById("btn-home").onclick = function(){ sw("home"); };
+document.getElementById("btn-login-ast").onclick = la;
+document.getElementById("btn-login-tch").onclick = lt;
+document.getElementById("back-subjs").onclick = function(){ sw("ts"); };
+document.getElementById("save-abs").onclick = aa;
+document.getElementById("save-gr").onclick = ag;
+document.getElementById("af").oninput = drawAbs;
+document.getElementById("gf").oninput = drawGr;
+document.getElementById("new-month-abs").onclick = function(){ startNewMonth("abs", "al_d_abs", "الغيابات", drawAbs); };
+document.getElementById("new-month-gr").onclick = function(){ startNewMonth("gr", "al_d_gr", "الدرجات", drawGr); };
+document.getElementById("clr-abs").onclick = function(){
+  if(isLoc
