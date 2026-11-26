@@ -3,148 +3,291 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>ALPHA-SEC // بوابة الإدارة والمدير</title>
+<title>ALPHA-SEC // بوابة الإدارة / المديرة</title>
 <style>
 *{box-sizing:border-box;font-family:Tahoma,Arial,sans-serif}
-body{margin:0;padding:0 0 75px;background:#030712;color:#f3f4f6;font-size:15px}
-.wrap{max-width:980px;margin:0 auto;padding:18px 18px 0}
+body{margin:0;padding:0 0 92px;background:#030712;color:#f3f4f6;font-size:15px}
+.wrap{max-width:1020px;margin:0 auto;padding:18px 18px 0}
 header{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid #fb718555;padding-bottom:14px;margin-bottom:22px;flex-wrap:wrap}
 header h1{margin:0;font-size:20px;color:#fff}
 header .sub{font-size:13px;color:#fb7185;margin-top:4px}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-bottom:18px}
-.card{background:#0b0f19;border:1px solid #fb718566;border-radius:16px;padding:18px}
-.card .k{font-size:13px;color:#94a3b8;display:block;margin-bottom:6px}
-.card .v{font-size:20px;font-weight:bold;color:#34d399}
-.panel{background:#0b0f19;border:1px solid #fb718566;border-radius:16px;padding:20px}
-button,.btn-d{cursor:pointer;border-radius:10px;border:1px solid #334155;background:#1e293b;color:#f1f5f9;padding:10px 14px;font-weight:bold;font-size:13px;text-decoration:none;display:inline-block}
+.sync-badge{font-size:12px;padding:5px 10px;border-radius:999px;background:#0b1324;border:1px solid #fb718555;color:#fb7185}
+.panel{background:#0b0f19;border:1px solid #fb718566;border-radius:16px;padding:20px;margin-bottom:18px}
+.box-sm{max-width:440px;margin:24px auto}
+input{width:100%;padding:12px 14px;margin-bottom:12px;border-radius:10px;border:1px solid #334155;background:#020617;color:#fff;font-size:15px}
+button,.btn-d{cursor:pointer;border-radius:10px;border:1px solid #334155;background:#1e293b;color:#f1f5f9;padding:11px 16px;font-weight:bold;font-size:14px;text-decoration:none;display:inline-block;text-align:center}
+.btn-r{background:#fb7185;color:#000;border:0}
 .btn-g{background:#10b981;color:#000;border:0}
-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px}
+.btn-w{background:#f59e0b;color:#000;border:0}
+.bar{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:14px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px}
+.stat{background:#020617;border:1px solid #1e293b;border-radius:12px;padding:14px}
+.stat .k{font-size:12px;color:#94a3b8;display:block;margin-bottom:6px}
+.stat .v{font-size:20px;font-weight:bold;color:#fb7185}
+#adm-dashboard{display:none}
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px}
 th,td{border:1px solid #1e293b;padding:10px;text-align:right}
 th{background:#020617;color:#fb7185}
-footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1px solid #fb718555;padding:12px;text-align:center;font-size:13px;color:#cbd5e1;z-index:10}
+.empty{text-align:center;color:#94a3b8;padding:14px}
+footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1px solid #fb718555;padding:10px 12px;text-align:center;font-size:13px;color:#cbd5e1;z-index:10}
+@media print{body{background:#fff;color:#000;padding:0}.np,footer{display:none!important}th,td{border:1px solid #000;color:#000}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header>
+  <header class="np">
     <div>
-      <h1>بوابة الإدارة / المدير</h1>
+      <h1>بوابة الإدارة / المديرة</h1>
       <div class="sub">إعدادية المعرفة المهنية الاهلية // برمجة: عباس محمد عزيز</div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-      <button type="button" id="btn-refresh" class="btn-g">تحديث المحصل</button>
-      <a href="accounts.html" class="btn-d">بوابة الحسابات</a>
+      <span id="cloud-status" class="sync-badge">متصل سحابياً (Firebase)</span>
       <a href="index.html" class="btn-d">الرئيسية</a>
     </div>
   </header>
 
-  <div class="stats">
-    <div class="card">
-      <span class="k">المحصل المالي الكلي (دينار عراقي)</span>
-      <span id="adm-total" class="v">0 د.ع</span>
-    </div>
-    <div class="card">
-      <span class="k">عدد الدفعات والأقساط</span>
-      <span id="adm-count" class="v" style="color:#38bdf8">0</span>
-    </div>
-    <div class="card">
-      <span class="k">حالة الربط المالي</span>
-      <span id="adm-sync" class="v" style="font-size:15px;color:#fbbf24">جاري الجلب...</span>
-    </div>
+  <!-- شاشة دخول المديرة -->
+  <div id="adm-login" class="panel box-sm np">
+    <h3 style="margin-top:0;color:#fb7185;text-align:center">دخول بوابة المديرة</h3>
+    <div style="text-align:center;font-size:12px;color:#94a3b8;margin-bottom:12px">أدخل الرمز السري الخاص بالإدارة</div>
+    <input type="password" id="adm-pass" placeholder="الرمز السري">
+    <button type="button" id="btn-adm-login" class="btn-r" style="width:100%">دخول إلى البوابة</button>
   </div>
 
-  <div class="panel">
-    <h3 style="margin-top:0;color:#fb7185">تفاصيل الأقساط والدفعات المستلمة</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>الطالب</th>
-          <th>نوع الدفعة</th>
-          <th>المبلغ</th>
-          <th>التاريخ</th>
-        </tr>
-      </thead>
-      <tbody id="adm-body"></tbody>
-    </table>
+  <!-- لوحة المديرة -->
+  <div id="adm-dashboard">
+    <div class="panel">
+      <div class="bar np">
+        <h3 style="margin:0;color:#fb7185">الإحصائيات العامة للمدرسة</h3>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button type="button" id="btn-refresh" class="btn-g">تحديث البيانات</button>
+          <button type="button" onclick="window.print()" class="btn-r">طباعة PDF</button>
+          <button type="button" id="btn-lock" class="btn-d">قفل البوابة</button>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <span class="k">إجمالي سجلات الغياب والهروب والإجازة</span>
+          <span id="st-abs-total" class="v">0</span>
+        </div>
+        <div class="stat">
+          <span class="k">إجمالي الدرجات المرصودة</span>
+          <span id="st-gr-total" class="v" style="color:#22d3ee">0</span>
+        </div>
+        <div class="stat">
+          <span class="k">المعدل العام للدرجات</span>
+          <span id="st-gr-avg" class="v" style="color:#34d399">0 / 100</span>
+        </div>
+      </div>
+
+      <input type="text" id="adm-filter" class="np" placeholder="بحث شامل باسم الطالب أو الصف أو المادة أو الحالة...">
+    </div>
+
+    <div class="panel">
+      <div class="bar np">
+        <h3 style="margin:0;color:#34d399">سجل الغيابات، الهروب، والإجازات</h3>
+        <button type="button" id="adm-new-month-abs" class="btn-w">بدء شهر جديد (الغيابات)</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>الطالب</th>
+            <th>الصف</th>
+            <th>الحالة</th>
+            <th>التاريخ</th>
+          </tr>
+        </thead>
+        <tbody id="adm-abs-body"></tbody>
+      </table>
+    </div>
+
+    <div class="panel">
+      <div class="bar np">
+        <h3 style="margin:0;color:#22d3ee">سجل الدرجات المرصودة (من 100)</h3>
+        <button type="button" id="adm-new-month-gr" class="btn-w">بدء شهر جديد (الدرجات)</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>الطالب</th>
+            <th>الصف</th>
+            <th>المادة</th>
+            <th>الدرجة</th>
+          </tr>
+        </thead>
+        <tbody id="adm-gr-body"></tbody>
+      </table>
+    </div>
   </div>
 </div>
 
-<footer>برمجة وتطوير: <strong style="color:#fb7185">عباس محمد عزيز</strong></footer>
+<footer>
+  <div>برمجة وتطوير: <strong style="color:#fb7185">عباس محمد عزيز</strong></div>
+  <div style="margin-top:3px;font-size:12px;color:#94a3b8">تحت تدريب الأستاذة أسمى حيدر</div>
+</footer>
 
 <script>
 var FIREBASE_DB_URL = "https://al-maarefa-school-default-rtdb.firebaseio.com";
-var LOCAL_KEY = "alpha_sec_accounts_iqd";
+var ADMIN_PASS = "99100";
+var absList = [];
+var grList = [];
 
-function formatIQD(num){
-  var n = Number(num) || 0;
-  return n.toLocaleString("en-US") + " د.ع";
-}
-
-function renderAdminAccounts(rows){
-  var totalEl = document.getElementById("adm-total");
-  var countEl = document.getElementById("adm-count");
-  var tb = document.getElementById("adm-body");
-  var sum = 0;
-  for(var i = 0; i < rows.length; i++){
-    sum += Number(rows[i].amount) || 0;
-  }
-  if(totalEl) totalEl.innerText = formatIQD(sum);
-  if(countEl) countEl.innerText = String(rows.length);
-  if(!tb) return;
-
-  tb.innerHTML = "";
-  if(!rows.length){
-    tb.innerHTML = "<tr><td colspan='4' style='text-align:center;color:#94a3b8'>لا توجد أقساط أو دفعات مسجلة حالياً</td></tr>";
-    return;
-  }
-  for(var j = 0; j < rows.length; j++){
-    var r = rows[j];
-    var tr = document.createElement("tr");
-    tr.innerHTML =
-      "<td>" + (r.student || "") + "</td>" +
-      "<td>" + (r.type || "دفعة اولى") + "</td>" +
-      "<td><strong>" + formatIQD(r.amount) + "</strong></td>" +
-      "<td>" + (r.date || "") + "</td>";
-    tb.appendChild(tr);
-  }
-}
-
-function loadAdminFinance(){
-  var local = [];
+function readArr(key){
   try {
-    var parsed = JSON.parse(localStorage.getItem(LOCAL_KEY) || "[]");
-    if(Array.isArray(parsed)) local = parsed;
-  } catch(e){}
-  renderAdminAccounts(local);
+    var d = JSON.parse(localStorage.getItem(key) || "[]");
+    return Array.isArray(d) ? d : [];
+  } catch(e){ return []; }
+}
 
-  var syncEl = document.getElementById("adm-sync");
+function writeArr(key, arr){
+  try { localStorage.setItem(key, JSON.stringify(arr)); } catch(e){}
+}
+
+function cloudUrl(path){
   var base = String(FIREBASE_DB_URL || "").trim().replace(/\/+$/, "");
-  if(!base){
-    if(syncEl) syncEl.innerText = "محلي";
-    return;
+  return base ? (base + "/alpha_sec/" + path + ".json") : "";
+}
+
+function setStatus(txt, ok){
+  var el = document.getElementById("cloud-status");
+  if(!el) return;
+  el.innerText = txt;
+  el.style.color = ok ? "#34d399" : "#fbbf24";
+}
+
+function renderAdmin(){
+  var q = (document.getElementById("adm-filter").value || "").trim().toLowerCase();
+  var aBody = document.getElementById("adm-abs-body");
+  var gBody = document.getElementById("adm-gr-body");
+
+  var fAbs = absList.filter(function(x){
+    return !q || ((x.n || "") + " " + (x.c || "") + " " + (x.t || "") + " " + (x.d || "")).toLowerCase().indexOf(q) > -1;
+  });
+
+  var fGr = grList.filter(function(x){
+    return !q || ((x.n || "") + " " + (x.c || "") + " " + (x.s || "") + " " + (x.g || "")).toLowerCase().indexOf(q) > -1;
+  });
+
+  document.getElementById("st-abs-total").innerText = String(fAbs.length);
+  document.getElementById("st-gr-total").innerText = String(fGr.length);
+
+  var sum = 0;
+  for(var i = 0; i < fGr.length; i++){ sum += Number(fGr[i].g) || 0; }
+  var avg = fGr.length ? (sum / fGr.length).toFixed(1) : "0";
+  document.getElementById("st-gr-avg").innerText = avg + " / 100";
+
+  aBody.innerHTML = "";
+  if(!fAbs.length){
+    aBody.innerHTML = "<tr><td colspan='4' class='empty'>لا توجد سجلات غياب أو هروب أو إجازة</td></tr>";
+  } else {
+    for(var j = 0; j < fAbs.length; j++){
+      var a = fAbs[j];
+      var col = a.t === "هروب" ? "#fb7185" : (a.t === "غياب" ? "#fbbf24" : "#34d399");
+      var trA = document.createElement("tr");
+      trA.innerHTML =
+        "<td>" + (a.n || "") + "</td>" +
+        "<td>" + (a.c || "") + "</td>" +
+        "<td style='color:" + col + ";font-weight:bold'>" + (a.t || "") + "</td>" +
+        "<td>" + (a.d || "") + "</td>";
+      aBody.appendChild(trA);
+    }
   }
 
-  fetch(base + "/alpha_sec/accounts.json").then(function(res){
-    if(!res.ok) throw new Error("net");
-    return res.json();
-  }).then(function(data){
-    var arr = Array.isArray(data) ? data : (data ? Object.values(data) : []);
-    try { localStorage.setItem(LOCAL_KEY, JSON.stringify(arr)); } catch(e){}
-    renderAdminAccounts(arr);
-    if(syncEl){
-      syncEl.innerText = "مزامنة سحابية نشطة";
-      syncEl.style.color = "#34d399";
+  gBody.innerHTML = "";
+  if(!fGr.length){
+    gBody.innerHTML = "<tr><td colspan='4' class='empty'>لا توجد درجات مرصودة</td></tr>";
+  } else {
+    for(var k = 0; k < fGr.length; k++){
+      var g = fGr[k];
+      var trG = document.createElement("tr");
+      trG.innerHTML =
+        "<td>" + (g.n || "") + "</td>" +
+        "<td>" + (g.c || "") + "</td>" +
+        "<td>" + (g.s || "") + "</td>" +
+        "<td><strong style='color:#22d3ee'>" + (g.g || 0) + " / 100</strong></td>";
+      gBody.appendChild(trG);
     }
-  }).catch(function(){
-    if(syncEl){
-      syncEl.innerText = "احتياط محلي";
-      syncEl.style.color = "#fbbf24";
+  }
+}
+
+function loadAllData(){
+  absList = readArr("al_d_abs");
+  grList = readArr("al_d_gr");
+  renderAdmin();
+
+  var uAbs = cloudUrl("abs");
+  var uGr = cloudUrl("gr");
+  if(!uAbs || !uGr){ setStatus("وضع محلي", false); return; }
+
+  Promise.all([
+    fetch(uAbs).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; }),
+    fetch(uGr).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; })
+  ]).then(function(res){
+    var synced = false;
+    if(res[0] !== null && res[0] !== undefined){
+      absList = Array.isArray(res[0]) ? res[0] : Object.values(res[0]);
+      writeArr("al_d_abs", absList);
+      synced = true;
     }
+    if(res[1] !== null && res[1] !== undefined){
+      grList = Array.isArray(res[1]) ? res[1] : Object.values(res[1]);
+      writeArr("al_d_gr", grList);
+      synced = true;
+    }
+    setStatus(synced ? "متصل سحابياً (Firebase)" : "احتياط محلي", synced);
+    renderAdmin();
   });
 }
 
-document.getElementById("btn-refresh").onclick = loadAdminFinance;
-loadAdminFinance();
+function resetMonth(cloudKey, localKey, label){
+  var cur = readArr(localKey);
+  var m = new Date().toISOString().slice(0, 7);
+  if(!confirm("تأكيد بدء شهر جديد (" + m + ") لـ " + label + "؟")) return;
+  var arch = cloudUrl("archives/" + m + "/" + cloudKey);
+  var done = function(){
+    writeArr(localKey, []);
+    var u = cloudUrl(cloudKey);
+    if(u){
+      fetch(u, { method:"PUT", headers:{"Content-Type":"application/json"}, body:JSON.stringify([]) }).catch(function(){});
+    }
+    alert("تم بدء شهر جديد (" + m + ") وتصفير " + label + ".");
+    loadAllData();
+  };
+  if(arch && cur.length){
+    fetch(arch, { method:"PUT", headers:{"Content-Type":"application/json"}, body:JSON.stringify(cur) })
+      .then(done).catch(done);
+  } else {
+    done();
+  }
+}
+
+document.getElementById("btn-adm-login").onclick = function(){
+  var val = document.getElementById("adm-pass").value.trim();
+  if(val === ADMIN_PASS){
+    document.getElementById("adm-pass").value = "";
+    document.getElementById("adm-login").style.display = "none";
+    document.getElementById("adm-dashboard").style.display = "block";
+    loadAllData();
+  } else {
+    alert("الرمز السري الخاص بالإدارة غير صحيح");
+  }
+};
+
+document.getElementById("adm-pass").addEventListener("keydown", function(e){
+  if(e.key === "Enter") document.getElementById("btn-adm-login").click();
+});
+
+document.getElementById("btn-lock").onclick = function(){
+  document.getElementById("adm-dashboard").style.display = "none";
+  document.getElementById("adm-login").style.display = "block";
+};
+
+document.getElementById("btn-refresh").onclick = loadAllData;
+document.getElementById("adm-filter").oninput = renderAdmin;
+document.getElementById("adm-new-month-abs").onclick = function(){ resetMonth("abs", "al_d_abs", "سجل الغيابات"); };
+document.getElementById("adm-new-month-gr").onclick = function(){ resetMonth("gr", "al_d_gr", "سجل الدرجات"); };
 </script>
 </body>
-</html>
+  </html>
+  
