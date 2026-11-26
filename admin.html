@@ -20,7 +20,6 @@ button,.btn-d{cursor:pointer;border-radius:10px;border:1px solid #334155;backgro
 .btn-r{background:#fb7185;color:#000;border:0}
 .btn-g{background:#10b981;color:#000;border:0}
 .btn-w{background:#f59e0b;color:#000;border:0}
-.btn-b{background:#22d3ee;color:#000;border:0}
 .bar{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:12px}
 .lock-pill{font-size:12px;padding:5px 10px;border-radius:8px;font-weight:bold}
 .locked{background:#450a0a;color:#fca5a5;border:1px solid #ef444466}
@@ -29,6 +28,8 @@ button,.btn-d{cursor:pointer;border-radius:10px;border:1px solid #334155;backgro
 table{width:100%;border-collapse:collapse;margin-top:8px;font-size:14px}
 th,td{border:1px solid #1e293b;padding:10px;text-align:right}
 th{background:#020617;color:#fb7185}
+.st-click{cursor:pointer;color:#22d3ee;font-weight:bold;text-decoration:underline}
+.st-detail{background:#020617;border:1px solid #22d3ee55;border-radius:12px;padding:14px;margin-top:12px;display:none}
 .empty{text-align:center;color:#94a3b8;padding:14px}
 .note-box{background:#020617;border:1px dashed #fb718577;border-radius:12px;padding:12px;color:#fde68a;font-size:14px;margin-top:8px}
 footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1px solid #fb718555;padding:10px 12px;text-align:center;font-size:13px;color:#cbd5e1;z-index:10}
@@ -48,14 +49,12 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
     </div>
   </header>
 
-  <!-- دخول المديرة -->
   <div id="adm-login" class="panel box-sm np">
     <h3 style="margin-top:0;color:#fb7185;text-align:center">دخول بوابة المديرة</h3>
     <input type="password" id="adm-pass" placeholder="أدخل الرمز السري">
     <button type="button" id="btn-adm-login" class="btn-r" style="width:100%">دخول</button>
   </div>
 
-  <!-- محتوى بوابة المديرة -->
   <div id="adm-view">
     <div class="bar np" style="margin-bottom:16px">
       <input type="text" id="adm-search" style="max-width:420px;margin:0" placeholder="بحث سريع باسم الطالب أو الصف أو المادة...">
@@ -66,7 +65,7 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
       </div>
     </div>
 
-    <!-- 1. الدرجات + قفل/فتح التعديل على المدرسين -->
+    <!-- 1. الدرجات (اسم الطالب مرة وحدة + ضغط لعرض جميع درجاته) -->
     <div class="panel">
       <div class="bar np">
         <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
@@ -75,20 +74,37 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
         </div>
         <button type="button" id="btn-toggle-gr-lock" class="btn-w">قفل التعديل على المدرسين</button>
       </div>
+      <div style="font-size:12px;color:#94a3b8;margin-bottom:8px">اضغط على اسم الطالب لعرض جميع درجاته في المواد</div>
       <table>
         <thead>
           <tr>
-            <th>الطالب</th>
+            <th>الطالب (اضغط لعرض الدرجات)</th>
             <th>الصف</th>
-            <th>المادة</th>
-            <th>الدرجة</th>
+            <th>عدد المواد</th>
+            <th>المعدل</th>
           </tr>
         </thead>
         <tbody id="body-grades"></tbody>
       </table>
+
+      <div id="st-grades-detail" class="st-detail">
+        <div class="bar">
+          <strong id="st-detail-title" style="color:#22d3ee">درجات الطالب</strong>
+          <button type="button" id="btn-close-detail" class="btn-d" style="padding:6px 12px;font-size:12px">إغلاق</button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>المادة</th>
+              <th>الدرجة</th>
+            </tr>
+          </thead>
+          <tbody id="st-detail-body"></tbody>
+        </table>
+      </div>
     </div>
 
-    <!-- 2. الغيابات + قفل/فتح التعديل على المعاون -->
+    <!-- 2. الغيابات -->
     <div class="panel">
       <div class="bar np">
         <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
@@ -124,15 +140,15 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
           <tr>
             <th>الطالب</th>
             <th>الصف</th>
-            <th>المادة</th>
-            <th>الدرجة</th>
+            <th>عدد المواد المتميزة</th>
+            <th>المعدل</th>
           </tr>
         </thead>
         <tbody id="body-excel"></tbody>
       </table>
     </div>
 
-    <!-- 4. الطلاب المدرجة أسماؤهم في بوابة المرشد التربوي -->
+    <!-- 4. المرشد التربوي -->
     <div class="panel">
       <h3 style="margin-top:0;color:#c084fc">الطلاب المدرجة أسماؤهم في بوابة المرشد التربوي</h3>
       <table>
@@ -164,7 +180,7 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
       </table>
     </div>
 
-    <!-- 6. توجيه / تعميم إداري للمدرسة -->
+    <!-- 6. توجيه إداري -->
     <div class="panel">
       <h3 style="margin-top:0;color:#fb7185">توجيه أو تعميم إداري</h3>
       <div class="np">
@@ -226,6 +242,49 @@ function setStatus(txt, ok){
   el.style.color = ok ? "#34d399" : "#fbbf24";
 }
 
+function normName(s){
+  return String(s || "").trim().replace(/\s+/g, " ").toLowerCase();
+}
+
+function groupGradesByStudent(list){
+  var map = {};
+  for(var i = 0; i < list.length; i++){
+    var item = list[i];
+    var name = String(item.n || item.student || "").trim();
+    if(!name) continue;
+    var cls = String(item.c || item.className || "").trim();
+    var subj = String(item.s || item.subject || "مادة").trim();
+    var val = Number(item.g !== undefined ? item.g : (item.grade || 0)) || 0;
+    var key = normName(name) + "__" + normName(cls);
+    if(!map[key]){
+      map[key] = { name: name, className: cls, items: [], sum: 0 };
+    }
+    map[key].items.push({ subject: subj, grade: val });
+    map[key].sum += val;
+  }
+  return Object.keys(map).map(function(k){
+    var g = map[k];
+    g.avg = g.items.length ? (g.sum / g.items.length) : 0;
+    return g;
+  });
+}
+
+function openStudentGrades(st){
+  var box = document.getElementById("st-grades-detail");
+  var title = document.getElementById("st-detail-title");
+  var body = document.getElementById("st-detail-body");
+  title.innerText = "جميع درجات الطالب: " + st.name + (st.className ? (" (" + st.className + ")") : "");
+  body.innerHTML = "";
+  for(var i = 0; i < st.items.length; i++){
+    var r = st.items[i];
+    var tr = document.createElement("tr");
+    tr.innerHTML = "<td>" + r.subject + "</td><td><strong style='color:#22d3ee'>" + r.grade + " / 100</strong></td>";
+    body.appendChild(tr);
+  }
+  box.style.display = "block";
+  box.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
 function renderLockBadges(){
   var gBadge = document.getElementById("badge-gr-lock");
   var gBtn = document.getElementById("btn-toggle-gr-lock");
@@ -267,22 +326,33 @@ function renderAllSections(){
   var q = (document.getElementById("adm-search").value || "").trim().toLowerCase();
   var minExcel = Number(document.getElementById("min-excel").value) || 90;
 
-  // الدرجات
-  var gBody = document.getElementById("body-grades");
-  var fGr = gradesArr.filter(function(x){
-    return matchText((x.n || x.student || "") + " " + (x.c || x.className || "") + " " + (x.s || x.subject || "") + " " + (x.g ?? x.grade ?? ""), q);
+  // الدرجات مجمعة لكل طالب مرة وحدة
+  var grouped = groupGradesByStudent(gradesArr).filter(function(st){
+    var subNames = st.items.map(function(x){ return x.subject + " " + x.grade; }).join(" ");
+    return matchText(st.name + " " + st.className + " " + subNames, q);
   });
+
+  var gBody = document.getElementById("body-grades");
   gBody.innerHTML = "";
-  if(!fGr.length){
+  if(!grouped.length){
     gBody.innerHTML = "<tr><td colspan='4' class='empty'>لا توجد درجات معروضة</td></tr>";
   } else {
-    fGr.forEach(function(x){
+    grouped.forEach(function(st){
       var tr = document.createElement("tr");
-      tr.innerHTML =
-        "<td>" + (x.n || x.student || "") + "</td>" +
-        "<td>" + (x.c || x.className || "") + "</td>" +
-        "<td>" + (x.s || x.subject || "") + "</td>" +
-        "<td><strong style='color:#22d3ee'>" + (x.g ?? x.grade ?? 0) + " / 100</strong></td>";
+      var tdName = document.createElement("td");
+      var link = document.createElement("span");
+      link.className = "st-click";
+      link.innerText = st.name;
+      link.onclick = function(){ openStudentGrades(st); };
+      tdName.appendChild(link);
+
+      tr.appendChild(tdName);
+      tr.innerHTML +=
+        "<td>" + st.className + "</td>" +
+        "<td>" + st.items.length + " مواد</td>" +
+        "<td><strong style='color:#34d399'>" + st.avg.toFixed(1) + " / 100</strong></td>";
+      tr.firstChild.innerHTML = "";
+      tr.firstChild.appendChild(link);
       gBody.appendChild(tr);
     });
   }
@@ -309,23 +379,24 @@ function renderAllSections(){
     });
   }
 
-  // الطلاب المتميزون
+  // الطلاب المتميزون (حسب المعدل أو الدرجات العالية)
   var eBody = document.getElementById("body-excel");
-  var excelList = gradesArr.filter(function(x){
-    var val = Number(x.g ?? x.grade ?? 0);
-    return val >= minExcel && matchText((x.n || x.student || "") + " " + (x.c || x.className || "") + " " + (x.s || x.subject || ""), q);
+  var excelStudents = groupGradesByStudent(gradesArr).filter(function(st){
+    var hasHigh = st.avg >= minExcel || st.items.some(function(it){ return it.grade >= minExcel; });
+    return hasHigh && matchText(st.name + " " + st.className, q);
   });
   eBody.innerHTML = "";
-  if(!excelList.length){
+  if(!excelStudents.length){
     eBody.innerHTML = "<tr><td colspan='4' class='empty'>لا يوجد طلاب متميزون بالحد المحدد حالياً</td></tr>";
   } else {
-    excelList.forEach(function(x){
+    excelStudents.forEach(function(st){
       var tr = document.createElement("tr");
       tr.innerHTML =
-        "<td>" + (x.n || x.student || "") + "</td>" +
-        "<td>" + (x.c || x.className || "") + "</td>" +
-        "<td>" + (x.s || x.subject || "") + "</td>" +
-        "<td><strong style='color:#fbbf24'>" + (x.g ?? x.grade ?? 0) + " / 100</strong></td>";
+        "<td><span class='st-click'>" + st.name + "</span></td>" +
+        "<td>" + st.className + "</td>" +
+        "<td>" + st.items.length + " مواد</td>" +
+        "<td><strong style='color:#fbbf24'>" + st.avg.toFixed(1) + " / 100</strong></td>";
+      tr.querySelector(".st-click").onclick = function(){ openStudentGrades(st); };
       eBody.appendChild(tr);
     });
   }
@@ -360,7 +431,7 @@ function renderAllSections(){
     pBody.innerHTML = "<tr><td colspan='4' class='empty'>لا توجد أقساط مدفوعة مسجلة حالياً</td></tr>";
   } else {
     fPay.forEach(function(x){
-      var amt = x.amount ?? x.paid ?? x.g ?? 0;
+      var amt = x.amount !== undefined ? x.amount : (x.paid !== undefined ? x.paid : 0);
       var tr = document.createElement("tr");
       tr.innerHTML =
         "<td>" + (x.n || x.student || x.name || "") + "</td>" +
@@ -371,7 +442,6 @@ function renderAllSections(){
     });
   }
 
-  // التوجيه الإداري
   var noteDisp = document.getElementById("dir-note-display");
   noteDisp.innerText = dirNoteText ? ("توجيه الإدارة: " + dirNoteText) : "لا يوجد توجيه إداري منشور حالياً.";
 }
@@ -445,48 +515,4 @@ document.getElementById("btn-adm-login").onclick = function(){
   var p = document.getElementById("adm-pass").value.trim();
   if(p === ADMIN_PASS){
     document.getElementById("adm-pass").value = "";
-    document.getElementById("adm-login").style.display = "none";
-    document.getElementById("adm-view").style.display = "block";
-    loadAllDirectorData();
-  } else {
-    alert("الرمز السري غير صحيح");
-  }
-};
-
-document.getElementById("adm-pass").addEventListener("keydown", function(e){
-  if(e.key === "Enter") document.getElementById("btn-adm-login").click();
-});
-
-document.getElementById("btn-lock-portal").onclick = function(){
-  document.getElementById("adm-view").style.display = "none";
-  document.getElementById("adm-login").style.display = "block";
-};
-
-document.getElementById("btn-toggle-gr-lock").onclick = function(){
-  grLocked = !grLocked;
-  localStorage.setItem("al_lock_gr", grLocked ? "1" : "0");
-  putCloud("locks/grades", grLocked);
-  renderLockBadges();
-};
-
-document.getElementById("btn-toggle-abs-lock").onclick = function(){
-  absLocked = !absLocked;
-  localStorage.setItem("al_lock_abs", absLocked ? "1" : "0");
-  putCloud("locks/abs", absLocked);
-  renderLockBadges();
-};
-
-document.getElementById("btn-save-note").onclick = function(){
-  dirNoteText = document.getElementById("dir-note-input").value.trim();
-  localStorage.setItem("al_dir_note", dirNoteText);
-  putCloud("director_note", dirNoteText);
-  renderAllSections();
-  alert("تم حفظ التوجيه الإداري");
-};
-
-document.getElementById("btn-reload").onclick = loadAllDirectorData;
-document.getElementById("adm-search").oninput = renderAllSections;
-document.getElementById("min-excel").oninput = renderAllSections;
-</script>
-</body>
-</html>
+    document.getElementById("adm-login").style.display
