@@ -19,7 +19,6 @@ button,.btn-d{cursor:pointer;border-radius:10px;border:1px solid #334155;backgro
 .btn-r{background:#fb7185;color:#000;border:0}
 .btn-g{background:#10b981;color:#000;border:0}
 .btn-w{background:#f59e0b;color:#000;border:0}
-.btn-b{background:#22d3ee;color:#000;border:0}
 .bar{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:12px}
 .ctrl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin-bottom:12px}
 .lock-pill{font-size:12px;padding:5px 10px;border-radius:8px;font-weight:bold}
@@ -51,16 +50,13 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
     </div>
   </header>
 
-  <!-- دخول المديرة -->
   <div id="adm-login" class="panel box-sm np">
     <h3 style="margin-top:0;color:#fb7185;text-align:center">دخول بوابة المديرة</h3>
     <input type="password" id="adm-pass" placeholder="أدخل الرمز السري">
     <button type="button" id="btn-adm-login" class="btn-r" style="width:100%">دخول</button>
   </div>
 
-  <!-- محتوى بوابة المديرة -->
   <div id="adm-view">
-    <!-- لوحة التحكم -->
     <div class="panel np">
       <div class="bar">
         <h3 style="margin:0;color:#fb7185">لوحة التحكم الإدارية</h3>
@@ -86,7 +82,6 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
       </div>
     </div>
 
-    <!-- عرض الطلاب (اسم الطالب مرة وحدة + ضغط لعرض الدرجات والغياب/الهروب/الإجازة) -->
     <div class="panel">
       <h3 style="margin-top:0;color:#22d3ee">سجل الطلاب (اضغط على اسم الطالب لعرض التفاصيل)</h3>
       <table>
@@ -135,7 +130,6 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
       </div>
     </div>
 
-    <!-- الطلاب اللي دافعين أقساط -->
     <div class="panel">
       <h3 style="margin-top:0;color:#38bdf8">الطلاب الذين دفعوا أقساطاً</h3>
       <table>
@@ -151,9 +145,8 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
       </table>
     </div>
 
-    <!-- قوائم أسماء الطلاب لكل شعبة -->
     <div class="panel">
-      <h3 style="margin-top:0;color:#fbbf24">قوائم أسماء الطلاب حسب الشعبة</h3>
+      <h3 style="margin-top:0;color:#fbbf24">قوائم أسماء الطلاب لكل شعبة</h3>
       <div class="bar np">
         <select id="sec-select" style="max-width:260px;margin:0">
           <option>اول امن سيبراني A</option>
@@ -179,387 +172,367 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
 </footer>
 
 <script>
-var FIREBASE_DB_URL = "https://al-maarefa-school-default-rtdb.firebaseio.com";
-var ADMIN_PASS = "99100";
+(function(){
+  var FIREBASE_DB_URL = "https://al-maarefa-school-default-rtdb.firebaseio.com";
+  var ADMIN_PASS = "99100";
 
-var TARGET_SECTIONS = [
-  "اول امن سيبراني A",
-  "اول امن سيبراني B",
-  "اول امن سيبراني C",
-  "اول تجميع A",
-  "اول تكرار نفط A",
-  "اول اجهزه طبية A",
-  "ثالث تجميع A",
-  "ثالث تجميع B"
-];
+  var TARGET_SECTIONS = [
+    "اول امن سيبراني A",
+    "اول امن سيبراني B",
+    "اول امن سيبراني C",
+    "اول تجميع A",
+    "اول تكرار نفط A",
+    "اول اجهزه طبية A",
+    "ثالث تجميع A",
+    "ثالث تجميع B"
+  ];
 
-var gradesData = [];
-var absData = [];
-var paidData = [];
-var rostersData = {};
-var grLocked = false;
-var absLocked = false;
+  var gradesData = [];
+  var absData = [];
+  var paidData = [];
+  var rostersData = {};
+  var grLocked = false;
+  var absLocked = false;
 
-function esc(s){
-  return String(s === undefined || s === null ? "" : s)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
-
-function norm(s){
-  return String(s || "").trim().replace(/\s+/g, " ").toLowerCase();
-}
-
-function readArr(key){
-  try {
-    var d = JSON.parse(localStorage.getItem(key) || "[]");
-    return Array.isArray(d) ? d : [];
-  } catch(e){ return []; }
-}
-
-function writeArr(key, arr){
-  try { localStorage.setItem(key, JSON.stringify(arr)); } catch(e){}
-}
-
-function readObj(key){
-  try {
-    var d = JSON.parse(localStorage.getItem(key) || "{}");
-    return (d && typeof d === "object" && !Array.isArray(d)) ? d : {};
-  } catch(e){ return {}; }
-}
-
-function writeObj(key, obj){
-  try { localStorage.setItem(key, JSON.stringify(obj)); } catch(e){}
-}
-
-function cloudUrl(path){
-  var base = String(FIREBASE_DB_URL || "").trim().replace(/\/+$/, "");
-  return base ? (base + "/alpha_sec/" + path + ".json") : "";
-}
-
-function putCloud(path, val){
-  var u = cloudUrl(path);
-  if(!u) return;
-  fetch(u, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(val)
-  }).catch(function(){});
-}
-
-function setStatus(txt, ok){
-  var el = document.getElementById("cloud-status");
-  if(!el) return;
-  el.innerText = txt;
-  el.style.color = ok ? "#34d399" : "#fbbf24";
-}
-
-function renderLocks(){
-  var gBadge = document.getElementById("badge-gr-lock");
-  var gBtn = document.getElementById("btn-toggle-gr-lock");
-  var aBadge = document.getElementById("badge-abs-lock");
-  var aBtn = document.getElementById("btn-toggle-abs-lock");
-
-  if(grLocked){
-    gBadge.className = "lock-pill locked";
-    gBadge.innerText = "الدرجات: مقفول على المدرسين";
-    gBtn.className = "btn-g";
-    gBtn.innerText = "فتح الدرجات للمدرسين";
-  } else {
-    gBadge.className = "lock-pill unlocked";
-    gBadge.innerText = "الدرجات: مفتوح للمدرسين";
-    gBtn.className = "btn-w";
-    gBtn.innerText = "قفل الدرجات";
+  function esc(s){
+    return String(s === undefined || s === null ? "" : s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
   }
 
-  if(absLocked){
-    aBadge.className = "lock-pill locked";
-    aBadge.innerText = "الغيابات: مقفول على المعاون";
-    aBtn.className = "btn-g";
-    aBtn.innerText = "فتح الغيابات للمعاون";
-  } else {
-    aBadge.className = "lock-pill unlocked";
-    aBadge.innerText = "الغيابات: مفتوح للمعاون";
-    aBtn.className = "btn-w";
-    aBtn.innerText = "قفل الغيابات";
+  function norm(s){
+    return String(s || "").trim().replace(/\s+/g, " ").toLowerCase();
   }
-}
 
-function buildUnifiedStudents(){
-  var map = {};
+  function toList(d){
+    if(!d) return [];
+    if(Array.isArray(d)) return d;
+    if(typeof d === "object") return Object.keys(d).map(function(k){ return d[k]; });
+    return [];
+  }
 
-  function ensureStudent(name, sec){
-    var cleanName = String(name || "").trim();
-    if(!cleanName) return null;
-    var cleanSec = String(sec || "").trim();
-    var key = norm(cleanName) + "__" + norm(cleanSec);
-    if(!map[key]){
-      map[key] = { name: cleanName, section: cleanSec, grades: [], abs: [] };
+  function readArr(key){
+    try { return toList(JSON.parse(localStorage.getItem(key) || "[]")); }
+    catch(e){ return []; }
+  }
+
+  function writeArr(key, arr){
+    try { localStorage.setItem(key, JSON.stringify(arr)); } catch(e){}
+  }
+
+  function readObj(key){
+    try {
+      var d = JSON.parse(localStorage.getItem(key) || "{}");
+      return (d && typeof d === "object" && !Array.isArray(d)) ? d : {};
+    } catch(e){ return {}; }
+  }
+
+  function writeObj(key, obj){
+    try { localStorage.setItem(key, JSON.stringify(obj)); } catch(e){}
+  }
+
+  function cloudUrl(path){
+    var base = String(FIREBASE_DB_URL || "").trim().replace(/\/+$/, "");
+    return base ? (base + "/alpha_sec/" + path + ".json") : "";
+  }
+
+  function putCloud(path, val){
+    var u = cloudUrl(path);
+    if(!u) return;
+    fetch(u, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(val)
+    }).catch(function(){});
+  }
+
+  function setStatus(txt, ok){
+    var el = document.getElementById("cloud-status");
+    if(!el) return;
+    el.innerText = txt;
+    el.style.color = ok ? "#34d399" : "#fbbf24";
+  }
+
+  function renderLocks(){
+    var gBadge = document.getElementById("badge-gr-lock");
+    var gBtn = document.getElementById("btn-toggle-gr-lock");
+    var aBadge = document.getElementById("badge-abs-lock");
+    var aBtn = document.getElementById("btn-toggle-abs-lock");
+
+    if(gBadge && gBtn){
+      if(grLocked){
+        gBadge.className = "lock-pill locked";
+        gBadge.innerText = "الدرجات: مقفول على المدرسين";
+        gBtn.className = "btn-g";
+        gBtn.innerText = "فتح الدرجات للمدرسين";
+      } else {
+        gBadge.className = "lock-pill unlocked";
+        gBadge.innerText = "الدرجات: مفتوح للمدرسين";
+        gBtn.className = "btn-w";
+        gBtn.innerText = "قفل الدرجات";
+      }
     }
-    return map[key];
+
+    if(aBadge && aBtn){
+      if(absLocked){
+        aBadge.className = "lock-pill locked";
+        aBadge.innerText = "الغيابات: مقفول على المعاون";
+        aBtn.className = "btn-g";
+        aBtn.innerText = "فتح الغيابات للمعاون";
+      } else {
+        aBadge.className = "lock-pill unlocked";
+        aBadge.innerText = "الغيابات: مفتوح للمعاون";
+        aBtn.className = "btn-w";
+        aBtn.innerText = "قفل الغيابات";
+      }
+    }
   }
 
-  for(var i = 0; i < gradesData.length; i++){
-    var g = gradesData[i];
-    if(!g) continue;
-    var st = ensureStudent(g.n || g.student, g.c || g.className);
-    if(st){
-      st.grades.push({
-        subject: String(g.s || g.subject || "مادة"),
-        grade: g.g !== undefined ? g.g : (g.grade || 0)
+  function buildUnifiedStudents(){
+    var map = {};
+    function ensureStudent(name, sec){
+      var cleanName = String(name || "").trim();
+      if(!cleanName) return null;
+      var cleanSec = String(sec || "").trim();
+      var key = norm(cleanName) + "__" + norm(cleanSec);
+      if(!map[key]){
+        map[key] = { name: cleanName, section: cleanSec, grades: [], abs: [] };
+      }
+      return map[key];
+    }
+
+    for(var i = 0; i < gradesData.length; i++){
+      var g = gradesData[i];
+      if(!g || typeof g !== "object") continue;
+      var st = ensureStudent(g.n || g.student, g.c || g.className);
+      if(st){
+        st.grades.push({
+          subject: String(g.s || g.subject || "مادة"),
+          grade: g.g !== undefined ? g.g : (g.grade || 0)
+        });
+      }
+    }
+
+    for(var j = 0; j < absData.length; j++){
+      var a = absData[j];
+      if(!a || typeof a !== "object") continue;
+      var stA = ensureStudent(a.n || a.student, a.c || a.className);
+      if(stA){
+        stA.abs.push({
+          type: String(a.t || a.type || "غياب"),
+          date: String(a.d || a.date || "")
+        });
+      }
+    }
+
+    for(var s = 0; s < TARGET_SECTIONS.length; s++){
+      var secName = TARGET_SECTIONS[s];
+      var list = toList(rostersData[secName]);
+      for(var k = 0; k < list.length; k++){
+        ensureStudent(list[k], secName);
+      }
+    }
+
+    return Object.keys(map).map(function(k){ return map[k]; });
+  }
+
+  function openStudentDetails(st){
+    var box = document.getElementById("st-detail-box");
+    var title = document.getElementById("st-detail-title");
+    var gBody = document.getElementById("st-detail-grades");
+    var aBody = document.getElementById("st-detail-abs");
+    if(!box || !title || !gBody || !aBody) return;
+
+    title.innerText = "ملف الطالب: " + st.name + (st.section ? (" — الشعبة: " + st.section) : "");
+
+    gBody.innerHTML = "";
+    if(!st.grades.length){
+      gBody.innerHTML = "<tr><td colspan='2' class='empty'>لا توجد درجات مرصودة لهذا الطالب</td></tr>";
+    } else {
+      for(var i = 0; i < st.grades.length; i++){
+        var gr = st.grades[i];
+        var trG = document.createElement("tr");
+        trG.innerHTML = "<td>" + esc(gr.subject) + "</td><td><strong style='color:#22d3ee'>" + esc(gr.grade) + " / 100</strong></td>";
+        gBody.appendChild(trG);
+      }
+    }
+
+    aBody.innerHTML = "";
+    if(!st.abs.length){
+      aBody.innerHTML = "<tr><td colspan='2' class='empty'>لا توجد سجلات غياب أو هروب أو إجازة لهذا الطالب</td></tr>";
+    } else {
+      for(var j = 0; j < st.abs.length; j++){
+        var ab = st.abs[j];
+        var col = ab.type === "هروب" ? "#fb7185" : (ab.type === "غياب" ? "#fbbf24" : "#34d399");
+        var trA = document.createElement("tr");
+        trA.innerHTML = "<td style='color:" + col + ";font-weight:bold'>" + esc(ab.type) + "</td><td>" + esc(ab.date) + "</td>";
+        aBody.appendChild(trA);
+      }
+    }
+
+    box.style.display = "block";
+  }
+
+  function matchQ(txt, q){
+    if(!q) return true;
+    return String(txt || "").toLowerCase().indexOf(q) > -1;
+  }
+
+  function renderAll(){
+    try {
+      renderLocks();
+      var sEl = document.getElementById("adm-search");
+      var q = sEl ? String(sEl.value || "").trim().toLowerCase() : "";
+
+      var allStudents = buildUnifiedStudents().filter(function(st){
+        var extra = st.grades.map(function(x){ return x.subject + " " + x.grade; }).join(" ") +
+                    " " + st.abs.map(function(y){ return y.type + " " + y.date; }).join(" ");
+        return matchQ(st.name + " " + st.section + " " + extra, q);
       });
-    }
+
+      var stBody = document.getElementById("body-students");
+      if(stBody){
+        stBody.innerHTML = "";
+        if(!allStudents.length){
+          stBody.innerHTML = "<tr><td colspan='4' class='empty'>لا توجد بيانات طلاب مطابقة</td></tr>";
+        } else {
+          for(var i = 0; i < allStudents.length; i++){
+            (function(st){
+              var tr = document.createElement("tr");
+              var tdName = document.createElement("td");
+              var span = document.createElement("span");
+              span.className = "st-click";
+              span.innerText = st.name;
+              span.onclick = function(){ openStudentDetails(st); };
+              tdName.appendChild(span);
+
+              var tdSec = document.createElement("td"); tdSec.innerText = st.section;
+              var tdGrCount = document.createElement("td"); tdGrCount.innerText = st.grades.length + " مواد";
+              var tdAbsCount = document.createElement("td"); tdAbsCount.innerText = st.abs.length + " سجل";
+
+              tr.appendChild(tdName);
+              tr.appendChild(tdSec);
+              tr.appendChild(tdGrCount);
+              tr.appendChild(tdAbsCount);
+              stBody.appendChild(tr);
+            })(allStudents[i]);
+          }
+        }
+      }
+
+      var paidBody = document.getElementById("body-paid");
+      if(paidBody){
+        var fPaid = paidData.filter(function(p){
+          if(!p || typeof p !== "object") return false;
+          var amt = p.amount !== undefined ? p.amount : (p.paid !== undefined ? p.paid : 0);
+          return Number(amt) > 0 && matchQ((p.n || p.student || p.name || "") + " " + (p.c || p.className || "") + " " + amt + " " + (p.note || p.d || p.date || ""), q);
+        });
+        paidBody.innerHTML = "";
+        if(!fPaid.length){
+          paidBody.innerHTML = "<tr><td colspan='4' class='empty'>لا توجد أقساط مدفوعة معروضة حالياً</td></tr>";
+        } else {
+          for(var j = 0; j < fPaid.length; j++){
+            var p = fPaid[j];
+            var amt = p.amount !== undefined ? p.amount : (p.paid !== undefined ? p.paid : 0);
+            var trP = document.createElement("tr");
+            trP.innerHTML =
+              "<td>" + esc(p.n || p.student || p.name || "") + "</td>" +
+              "<td>" + esc(p.c || p.className || "") + "</td>" +
+              "<td><strong style='color:#38bdf8'>" + esc(amt) + "</strong></td>" +
+              "<td>" + esc(p.note || p.d || p.date || "") + "</td>";
+            paidBody.appendChild(trP);
+          }
+        }
+      }
+
+      var secCont = document.getElementById("sections-container");
+      if(secCont){
+        secCont.innerHTML = "";
+        for(var s = 0; s < TARGET_SECTIONS.length; s++){
+          var secName = TARGET_SECTIONS[s];
+          var rawList = toList(rostersData[secName]);
+          var filteredNames = rawList.filter(function(nm){ return matchQ(secName + " " + nm, q); });
+
+          var card = document.createElement("div");
+          card.className = "sub-card";
+          card.innerHTML = "<div class='sub-title'>" + esc(secName) + " (" + filteredNames.length + " طالب)</div>";
+          if(!filteredNames.length){
+            card.innerHTML += "<div style='color:#94a3b8;font-size:13px'>لا توجد أسماء مسجلة في هذه الشعبة</div>";
+          } else {
+            var ol = document.createElement("ol");
+            ol.style.margin = "0";
+            ol.style.paddingRight = "20px";
+            for(var k = 0; k < filteredNames.length; k++){
+              var li = document.createElement("li");
+              li.style.marginBottom = "4px";
+              li.innerText = String(filteredNames[k] || "");
+              ol.appendChild(li);
+            }
+            card.appendChild(ol);
+          }
+          secCont.appendChild(card);
+        }
+      }
+    } catch(e){}
   }
 
-  for(var j = 0; j < absData.length; j++){
-    var a = absData[j];
-    if(!a) continue;
-    var stA = ensureStudent(a.n || a.student, a.c || a.className);
-    if(stA){
-      stA.abs.push({
-        type: String(a.t || a.type || "غياب"),
-        date: String(a.d || a.date || "")
-      });
-    }
+  function pullPath(path, cb){
+    var u = cloudUrl(path);
+    if(!u) return;
+    fetch(u).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
+      if(d !== null && d !== undefined) cb(d);
+    }).catch(function(){});
   }
 
-  for(var s = 0; s < TARGET_SECTIONS.length; s++){
-    var secName = TARGET_SECTIONS[s];
-    var list = Array.isArray(rostersData[secName]) ? rostersData[secName] : [];
-    for(var k = 0; k < list.length; k++){
-      ensureStudent(list[k], secName);
-    }
-  }
+  function loadAdminData(){
+    gradesData = readArr("al_d_gr");
+    absData = readArr("al_d_abs");
+    paidData = readArr("al_d_acc").length ? readArr("al_d_acc") : readArr("al_d_pay");
+    rostersData = readObj("al_d_rosters");
+    grLocked = localStorage.getItem("al_lock_gr") === "1";
+    absLocked = localStorage.getItem("al_lock_abs") === "1";
+    renderAll();
+    setStatus("جاري المزامنة...", false);
 
-  return Object.keys(map).map(function(k){ return map[k]; });
-}
-
-function openStudentDetails(st){
-  var box = document.getElementById("st-detail-box");
-  var title = document.getElementById("st-detail-title");
-  var gBody = document.getElementById("st-detail-grades");
-  var aBody = document.getElementById("st-detail-abs");
-
-  title.innerText = "ملف الطالب: " + st.name + (st.section ? (" — الشعبة: " + st.section) : "");
-
-  gBody.innerHTML = "";
-  if(!st.grades.length){
-    gBody.innerHTML = "<tr><td colspan='2' class='empty'>لا توجد درجات مرصودة لهذا الطالب</td></tr>";
-  } else {
-    for(var i = 0; i < st.grades.length; i++){
-      var gr = st.grades[i];
-      var trG = document.createElement("tr");
-      trG.innerHTML = "<td>" + esc(gr.subject) + "</td><td><strong style='color:#22d3ee'>" + esc(gr.grade) + " / 100</strong></td>";
-      gBody.appendChild(trG);
-    }
-  }
-
-  aBody.innerHTML = "";
-  if(!st.abs.length){
-    aBody.innerHTML = "<tr><td colspan='2' class='empty'>لا توجد سجلات غياب أو هروب أو إجازة لهذا الطالب</td></tr>";
-  } else {
-    for(var j = 0; j < st.abs.length; j++){
-      var ab = st.abs[j];
-      var col = ab.type === "هروب" ? "#fb7185" : (ab.type === "غياب" ? "#fbbf24" : "#34d399");
-      var trA = document.createElement("tr");
-      trA.innerHTML = "<td style='color:" + col + ";font-weight:bold'>" + esc(ab.type) + "</td><td>" + esc(ab.date) + "</td>";
-      aBody.appendChild(trA);
-    }
-  }
-
-  box.style.display = "block";
-}
-
-function matchQ(txt, q){
-  if(!q) return true;
-  return String(txt || "").toLowerCase().indexOf(q) > -1;
-}
-
-function renderAll(){
-  renderLocks();
-  var q = (document.getElementById("adm-search").value || "").trim().toLowerCase();
-
-  // 1. الطلاب (مرة واحدة فقط)
-  var allStudents = buildUnifiedStudents().filter(function(st){
-    var extra = st.grades.map(function(x){ return x.subject + " " + x.grade; }).join(" ") +
-                " " + st.abs.map(function(y){ return y.type + " " + y.date; }).join(" ");
-    return matchQ(st.name + " " + st.section + " " + extra, q);
-  });
-
-  var stBody = document.getElementById("body-students");
-  stBody.innerHTML = "";
-  if(!allStudents.length){
-    stBody.innerHTML = "<tr><td colspan='4' class='empty'>لا توجد بيانات طلاب مطابقة</td></tr>";
-  } else {
-    for(var i = 0; i < allStudents.length; i++){
-      (function(st){
-        var tr = document.createElement("tr");
-        var tdName = document.createElement("td");
-        var span = document.createElement("span");
-        span.className = "st-click";
-        span.innerText = st.name;
-        span.onclick = function(){ openStudentDetails(st); };
-        tdName.appendChild(span);
-
-        var tdSec = document.createElement("td");
-        tdSec.innerText = st.section;
-
-        var tdGrCount = document.createElement("td");
-        tdGrCount.innerText = st.grades.length + " مواد";
-
-        var tdAbsCount = document.createElement("td");
-        tdAbsCount.innerText = st.abs.length + " سجل";
-
-        tr.appendChild(tdName);
-        tr.appendChild(tdSec);
-        tr.appendChild(tdGrCount);
-        tr.appendChild(tdAbsCount);
-        stBody.appendChild(tr);
-      })(allStudents[i]);
-    }
-  }
-
-  // 2. الطلاب الذين دفعوا أقساطاً
-  var paidBody = document.getElementById("body-paid");
-  var fPaid = paidData.filter(function(p){
-    var amt = p.amount !== undefined ? p.amount : (p.paid !== undefined ? p.paid : 0);
-    return p && Number(amt) > 0 && matchQ((p.n || p.student || p.name || "") + " " + (p.c || p.className || "") + " " + amt + " " + (p.note || p.d || p.date || ""), q);
-  });
-  paidBody.innerHTML = "";
-  if(!fPaid.length){
-    paidBody.innerHTML = "<tr><td colspan='4' class='empty'>لا توجد أقساط مدفوعة معروضة حالياً</td></tr>";
-  } else {
-    for(var j = 0; j < fPaid.length; j++){
-      var p = fPaid[j];
-      var amt = p.amount !== undefined ? p.amount : (p.paid !== undefined ? p.paid : 0);
-      var trP = document.createElement("tr");
-      trP.innerHTML =
-        "<td>" + esc(p.n || p.student || p.name || "") + "</td>" +
-        "<td>" + esc(p.c || p.className || "") + "</td>" +
-        "<td><strong style='color:#38bdf8'>" + esc(amt) + "</strong></td>" +
-        "<td>" + esc(p.note || p.d || p.date || "") + "</td>";
-      paidBody.appendChild(trP);
-    }
-  }
-
-  // 3. قوائم أسماء الطلاب لكل شعبة
-  var secCont = document.getElementById("sections-container");
-  secCont.innerHTML = "";
-  for(var s = 0; s < TARGET_SECTIONS.length; s++){
-    var secName = TARGET_SECTIONS[s];
-    var rawList = Array.isArray(rostersData[secName]) ? rostersData[secName] : [];
-    var filteredNames = rawList.filter(function(nm){
-      return matchQ(secName + " " + nm, q);
+    pullPath("gr", function(d){
+      gradesData = toList(d);
+      writeArr("al_d_gr", gradesData);
+      setStatus("متصل سحابياً (Firebase)", true);
+      renderAll();
     });
 
-    var card = document.createElement("div");
-    card.className = "sub-card";
-    card.innerHTML = "<div class='sub-title'>" + esc(secName) + " (" + filteredNames.length + " طالب)</div>";
-    if(!filteredNames.length){
-      card.innerHTML += "<div style='color:#94a3b8;font-size:13px'>لا توجد أسماء مسجلة في هذه الشعبة</div>";
-    } else {
-      var ol = document.createElement("ol");
-      ol.style.margin = "0";
-      ol.style.paddingRight = "20px";
-      for(var k = 0; k < filteredNames.length; k++){
-        var li = document.createElement("li");
-        li.style.marginBottom = "4px";
-        li.innerText = filteredNames[k];
-        ol.appendChild(li);
-      }
-      card.appendChild(ol);
-    }
-    secCont.appendChild(card);
-  }
-}
-
-function pullPath(path, cb){
-  var u = cloudUrl(path);
-  if(!u) return;
-  fetch(u).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
-    if(d !== null && d !== undefined) cb(d);
-  }).catch(function(){});
-}
-
-function loadAdminData(){
-  gradesData = readArr("al_d_gr");
-  absData = readArr("al_d_abs");
-  paidData = readArr("al_d_acc").length ? readArr("al_d_acc") : readArr("al_d_pay");
-  rostersData = readObj("al_d_rosters");
-  grLocked = localStorage.getItem("al_lock_gr") === "1";
-  absLocked = localStorage.getItem("al_lock_abs") === "1";
-  renderAll();
-  setStatus("جاري المزامنة...", false);
-
-  pullPath("gr", function(d){
-    gradesData = Array.isArray(d) ? d : Object.values(d);
-    writeArr("al_d_gr", gradesData);
-    setStatus("متصل سحابياً (Firebase)", true);
-    renderAll();
-  });
-
-  pullPath("abs", function(d){
-    absData = Array.isArray(d) ? d : Object.values(d);
-    writeArr("al_d_abs", absData);
-    setStatus("متصل سحابياً (Firebase)", true);
-    renderAll();
-  });
-
-  pullPath("acc", function(d){
-    paidData = Array.isArray(d) ? d : Object.values(d);
-    writeArr("al_d_acc", paidData);
-    renderAll();
-  });
-
-  pullPath("rosters", function(d){
-    if(d && typeof d === "object" && !Array.isArray(d)){
-      rostersData = d;
-      writeObj("al_d_rosters", rostersData);
+    pullPath("abs", function(d){
+      absData = toList(d);
+      writeArr("al_d_abs", absData);
+      setStatus("متصل سحابياً (Firebase)", true);
       renderAll();
-    }
-  });
+    });
 
-  pullPath("locks/grades", function(d){
-    if(typeof d === "boolean"){
-      grLocked = d;
-      localStorage.setItem("al_lock_gr", d ? "1" : "0");
-      renderLocks();
-    }
-  });
+    pullPath("acc", function(d){
+      paidData = toList(d);
+      writeArr("al_d_acc", paidData);
+      renderAll();
+    });
 
-  pullPath("locks/abs", function(d){
-    if(typeof d === "boolean"){
-      absLocked = d;
-      localStorage.setItem("al_lock_abs", d ? "1" : "0");
-      renderLocks();
-    }
-  });
-}
+    pullPath("rosters", function(d){
+      if(d && typeof d === "object" && !Array.isArray(d)){
+        rostersData = d;
+        writeObj("al_d_rosters", rostersData);
+        renderAll();
+      }
+    });
 
-function doLogin(){
-  var inp = document.getElementById("adm-pass");
-  var val = inp ? String(inp.value || "").trim() : "";
-  if(val === String(ADMIN_PASS).trim()){
-    if(inp) inp.value = "";
-    document.getElementById("adm-login").style.display = "none";
-    document.getElementById("adm-view").style.display = "block";
-    loadAdminData();
-  } else {
-    alert("الرمز السري غير صحيح");
-  }
-}
+    pullPath("locks/grades", function(d){
+      if(typeof d === "boolean"){
+        grLocked = d;
+        localStorage.setItem("al_lock_gr", d ? "1" : "0");
+        renderLocks();
+      }
+    });
 
-document.getElementById("btn-adm-login").onclick = doLogin;
-document.getElementById("adm-pass").addEventListener("keydown", function(e){
-  if(e.key === "Enter") doLogin();
-});
-
-document.getElementById("btn-logout").onclick = function(){
-  document.getElementById("adm-view").style.display = "none";
-  document.getElementById("adm-login").style.display = "block";
-};
-
-document.getElementById("btn-toggle-gr-lock").onclick = function(){
-  
+    pullPath("locks/abs", function(d){
+      if(typeof d === "boolean"){
+        absLocked = d;
+        localStorage.setItem("al_lock_abs", d ? "1" 
