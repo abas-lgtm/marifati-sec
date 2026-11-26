@@ -231,10 +231,6 @@ function cloudUrl(path){
   return base ? (base + "/alpha_sec/" + path + ".json") : "";
 }
 
-function isLocked(k){
-  return localStorage.getItem(k) === "1";
-}
-
 function readArr(k){
   try { var d = JSON.parse(localStorage.getItem(k) || "[]"); return Array.isArray(d) ? d : []; }
   catch(e){ return []; }
@@ -269,8 +265,7 @@ function syncPush(cloudKey, localKey, arr, cb){
   }).catch(function(){});
 }
 
-function startNewMonth(cloudKey, localKey, label, lockKey, cb){
-  if(lockKey && isLocked(lockKey)){ alert("هذا القسم مقفول حالياً من الإدارة."); return; }
+function startNewMonth(cloudKey, localKey, label, cb){
   var cur = readArr(localKey);
   var m = new Date().toISOString().slice(0, 7);
   if(!confirm("تأكيد بدء شهر جديد (" + m + ") لـ " + label + "؟")) return;
@@ -370,7 +365,6 @@ function la(){
 }
 
 function aa(){
-  if(isLocked("al_lock_abs")){ alert("إضافة وتعديل وحذف الغيابات مقفول من الإدارة."); return; }
   var n = document.getElementById("an").value.trim();
   var c = document.getElementById("ac").value;
   var t = document.getElementById("at").value;
@@ -400,7 +394,6 @@ function drawAbs(){
         btn.style.fontSize = "12px";
         btn.innerText = "حذف";
         btn.onclick = function(){
-          if(isLocked("al_lock_abs")){ alert("حذف وتعديل الغيابات مقفول من الإدارة."); return; }
           var cur = readArr("al_d_abs");
           cur.splice(idx, 1);
           syncPush("abs", "al_d_abs", cur, drawAbs);
@@ -426,7 +419,6 @@ function lt(){
 }
 
 function ag(){
-  if(isLocked("al_lock_gr")){ alert("إضافة وتعديل وحذف الدرجات مقفول من الإدارة."); return; }
   if(!CS) return;
   var n = document.getElementById("tn").value.trim();
   var c = document.getElementById("tc").value;
@@ -457,7 +449,6 @@ function drawGr(){
         btn.style.fontSize = "12px";
         btn.innerText = "حذف";
         btn.onclick = function(){
-          if(isLocked("al_lock_gr")){ alert("حذف وتعديل الدرجات مقفول من الإدارة."); return; }
           var cur = readArr("al_d_gr");
           cur.splice(idx, 1);
           syncPush("gr", "al_d_gr", cur, drawGr);
@@ -479,10 +470,13 @@ document.getElementById("save-abs").onclick = aa;
 document.getElementById("save-gr").onclick = ag;
 document.getElementById("af").oninput = drawAbs;
 document.getElementById("gf").oninput = drawGr;
-document.getElementById("new-month-abs").onclick = function(){ startNewMonth("abs", "al_d_abs", "الغيابات", "al_lock_abs", drawAbs); };
-document.getElementById("new-month-gr").onclick = function(){ startNewMonth("gr", "al_d_gr", "الدرجات", "al_lock_gr", drawGr); };
-document.getElementById("clr-abs").onclick = function(){
-  if(isLocked("al_lock_abs")){ alert("مسح وتعديل الغيابات مقفول من الإدارة."); return; }
-  if(confirm("مسح سجل المعاون؟")){ syncPush("abs", "al_d_abs", [], drawAbs); }
-};
-document.getEleme
+document.getElementById("new-month-abs").onclick = function(){ startNewMonth("abs", "al_d_abs", "الغيابات", drawAbs); };
+document.getElementById("new-month-gr").onclick = function(){ startNewMonth("gr", "al_d_gr", "الدرجات", drawGr); };
+document.getElementById("clr-abs").onclick = function(){ if(confirm("مسح سجل المعاون؟")){ syncPush("abs", "al_d_abs", [], drawAbs); } };
+document.getElementById("clr-gr").onclick = function(){ if(confirm("مسح سجل الدرجات؟")){ syncPush("gr", "al_d_gr", [], drawGr); } };
+var backBtns = document.querySelectorAll(".back-home");
+for(var i = 0; i < backBtns.length; i++){ backBtns[i].onclick = function(){ sw("home"); }; }
+</script>
+</body>
+  </html>
+  
