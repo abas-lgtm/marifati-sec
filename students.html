@@ -1,179 +1,255 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALPHA-SEC // بوابة درجات الطلاب</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-    <style>
-        body { font-family: 'Cairo', sans-serif; background-color: #030712; color: #f3f4f6; }
-        .cyber-card { background-color: #0b0f19; border: 1px solid rgba(168, 85, 247, 0.4); }
-        @media print {
-            body { background: white !important; color: black !important; }
-            .no-print { display: none !important; }
-            .cyber-card { border: 1px solid #333 !important; background: white !important; color: black !important; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ALPHA-SEC // بوابة الطلاب (الدرجات والغيابات)</title>
+<style>
+*{box-sizing:border-box;font-family:Tahoma,Arial,sans-serif}
+body{margin:0;padding:0 0 75px;background:#030712;color:#f3f4f6;font-size:15px}
+.wrap{max-width:980px;margin:0 auto;padding:18px 18px 0}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid #c084fc55;padding-bottom:14px;margin-bottom:22px;flex-wrap:wrap}
+header h1{margin:0;font-size:20px;color:#fff}
+header .sub{font-size:13px;color:#c084fc;margin-top:4px}
+.sync-badge{font-size:12px;padding:5px 10px;border-radius:999px;background:#0b1324;border:1px solid #c084fc55;color:#c084fc}
+.panel{background:#0b0f19;border:1px solid #c084fc66;border-radius:16px;padding:20px;margin-bottom:18px}
+.search-row{display:grid;grid-template-columns:1fr auto auto;gap:10px}
+@media(max-width:650px){.search-row{grid-template-columns:1fr}}
+input,select{width:100%;padding:12px 14px;border-radius:10px;border:1px solid #334155;background:#020617;color:#fff;font-size:15px}
+button,.btn-d{cursor:pointer;border-radius:10px;border:1px solid #334155;background:#1e293b;color:#f1f5f9;padding:11px 16px;font-weight:bold;font-size:14px;text-decoration:none;display:inline-block;text-align:center}
+.btn-p{background:#c084fc;color:#000;border:0}
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:14px}
+.stat{background:#020617;border:1px solid #1e293b;border-radius:12px;padding:14px}
+.stat .k{font-size:12px;color:#94a3b8;display:block;margin-bottom:6px}
+.stat .v{font-size:18px;font-weight:bold;color:#c084fc}
+table{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px}
+th,td{border:1px solid #1e293b;padding:10px;text-align:right}
+th{background:#020617;color:#c084fc}
+.empty{text-align:center;color:#94a3b8;padding:16px}
+footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1px solid #c084fc55;padding:12px;text-align:center;font-size:13px;color:#cbd5e1;z-index:10}
+</style>
 </head>
-<body class="min-h-screen flex flex-col justify-between p-4 sm:p-6 pb-16">
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>بوابة الطلاب — استعلام الدرجات والغيابات</h1>
+      <div class="sub">إعدادية المعرفة المهنية الاهلية // برمجة: عباس محمد عزيز</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <span id="cloud-status" class="sync-badge">جاري المزامنة...</span>
+      <a href="index.html" class="btn-d">الرئيسية</a>
+    </div>
+  </header>
 
-    <header class="flex justify-between items-center border-b border-purple-500/30 pb-4 no-print">
-        <div class="flex flex-col text-right">
-            <h1 class="text-white font-bold text-base md:text-lg">بوابة درجات الطلاب الرقمية (سحابي ☁️)</h1>
-            <span class="text-[11px] md:text-xs text-purple-400 font-mono">إعدادية المعرفة المهنية الاهلية</span>
-        </div>
-        <button onclick="window.location.href='index.html'" class="bg-slate-900 text-purple-400 px-4 py-2 rounded-lg border border-purple-500/30 text-sm font-semibold cursor-pointer">الرئيسية 🏠</button>
-    </header>
+  <div class="panel">
+    <h3 style="margin-top:0;color:#c084fc">البحث عن طالب أو صف</h3>
+    <div class="search-row">
+      <input type="text" id="st-query" placeholder="اكتب اسم الطالب أو الصف (مثال: امن سيبراني A)...">
+      <button type="button" id="btn-search" class="btn-p">بحث</button>
+      <button type="button" id="btn-show-all" class="btn-d">عرض الكل</button>
+    </div>
 
-    <main class="max-w-xl mx-auto w-full my-8 flex-grow">
-        
-        <!-- صندوق البحث المبسط -->
-        <div class="cyber-card p-6 rounded-2xl shadow-xl space-y-4">
-            <div class="text-center">
-                <h2 class="text-xl font-bold text-white mb-1">استعلام عن الدرجات</h2>
-                <p class="text-xs text-slate-400">اكتب اسمك الثلاثي لعرض بطاقتك الرقمية ودرجاتك فوراً من السحابة</p>
-            </div>
-
-            <div class="flex gap-2 no-print">
-                <input type="text" id="student-name-input" placeholder="اكتب اسم الطالب هنا..." class="flex-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-white text-sm focus:outline-none focus:border-purple-500">
-                <button onclick="searchStudentGrades()" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-5 py-3 rounded-xl text-sm cursor-pointer transition">بحث 🔍</button>
-            </div>
-        </div>
-
-        <!-- بطاقة الطالب الرقمية (تظهر هنا عند البحث) -->
-        <div id="digital-student-card" class="mt-6"></div>
-
-    </main>
-
-    <footer class="fixed bottom-0 left-0 w-full bg-slate-900/95 backdrop-blur-md border-t border-purple-500/30 py-2.5 px-4 z-50 text-center shadow-lg no-print">
-      <div class="flex items-center justify-center gap-2 text-xs md:text-sm font-mono dir-rtl">
-        <span class="inline-block w-2 h-2 rounded-full bg-purple-500 animate-pulse"></span>
-        <span class="text-slate-300">تم التطوير والبرمجة بواسطة:</span>
-        <span class="font-bold text-purple-400 tracking-wide border-b border-purple-500/40 pb-0.5">عباس محمد عزيز</span>
+    <div class="summary">
+      <div class="stat">
+        <span class="k">سجلات الدرجات المطابقة</span>
+        <span id="cnt-grades" class="v">0</span>
       </div>
-    </footer>
+      <div class="stat">
+        <span class="k">سجلات الغياب / الهروب / الإجازة</span>
+        <span id="cnt-abs" class="v" style="color:#fbbf24">0</span>
+      </div>
+      <div class="stat">
+        <span class="k">معدل الدرجات المعروضة</span>
+        <span id="avg-grades" class="v" style="color:#34d399">0 / 100</span>
+      </div>
+    </div>
+  </div>
 
-    <script>
-        // إعدادات قاعدة بيانات Firebase السحابية
-        const firebaseConfig = {
-          apiKey: "AIzaSyB6jzXTFRW6h3r7E5s8aWd0Ry5ixvBG-Do",
-          authDomain: "al-maarefa-school.firebaseapp.com",
-          databaseURL: "https://al-maarefa-school-default-rtdb.firebaseio.com",
-          projectId: "al-maarefa-school",
-          storageBucket: "al-maarefa-school.appspot.com",
-          messagingSenderId: "922687511699",
-          appId: "1:922687511699:web:5b77f972833cf9bb984166"
-        };
+  <div class="panel">
+    <h3 style="margin-top:0;color:#22d3ee">الدرجات المرصودة (من 100)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>الطالب</th>
+          <th>الصف</th>
+          <th>المادة</th>
+          <th>الدرجة</th>
+        </tr>
+      </thead>
+      <tbody id="st-grades-body"></tbody>
+    </table>
+  </div>
 
-        // تهيئة فايربيس
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-        const db = firebase.database();
+  <div class="panel">
+    <h3 style="margin-top:0;color:#34d399">سجل الغيابات، الهروب، والإجازات</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>الطالب</th>
+          <th>الصف</th>
+          <th>الحالة</th>
+          <th>التاريخ</th>
+        </tr>
+      </thead>
+      <tbody id="st-abs-body"></tbody>
+    </table>
+  </div>
+</div>
 
-        function searchStudentGrades() {
-            let nameInput = document.getElementById('student-name-input').value.trim();
-            let cardContainer = document.getElementById('digital-student-card');
+<footer>برمجة وتطوير: <strong style="color:#c084fc">عباس محمد عزيز</strong></footer>
 
-            if (!nameInput) {
-                alert('الرجاء كتابة اسم الطالب أولاً!');
-                return;
-            }
+<script>
+var FIREBASE_DB_URL = "https://al-maarefa-school-default-rtdb.firebaseio.com";
+var gradesCache = [];
+var absCache = [];
 
-            cardContainer.innerHTML = `<p class="text-center text-purple-400 text-xs py-4 animate-pulse">جاري البحث في السحابة...</p>`;
+function norm(txt){
+  return String(txt || "")
+    .toLowerCase()
+    .replace(/[أإآا]/g, "ا")
+    .replace(/ة/g, "ه")
+    .replace(/ى/g, "ي")
+    .replace(/\s+/g, " ")
+    .trim();
+}
 
-            // جلب البيانات من قاعدة بيانات Firebase سحابياً
-            db.ref('grades').once('value', (gradesSnapshot) => {
-                db.ref('abs').once('value', (absSnapshot) => {
-                    let gradesData = gradesSnapshot.val() || {};
-                    let absData = absSnapshot.val() || {};
+function readLocal(key){
+  try {
+    var d = JSON.parse(localStorage.getItem(key) || "[]");
+    return Array.isArray(d) ? d : [];
+  } catch(e){ return []; }
+}
 
-                    let allGrades = Object.values(gradesData);
-                    let allAbsences = Object.values(absData);
+function writeLocal(key, arr){
+  try { localStorage.setItem(key, JSON.stringify(arr)); } catch(e){}
+}
 
-                    // تصفية البيانات حسب الاسم المدخل
-                    let studentGrades = allGrades.filter(item => item.name && item.name.includes(nameInput));
-                    let studentAbsences = allAbsences.filter(item => item.name && item.name.includes(nameInput));
+function setStatus(txt, ok){
+  var el = document.getElementById("cloud-status");
+  if(!el) return;
+  el.innerText = txt;
+  el.style.color = ok ? "#34d399" : "#fbbf24";
+}
 
-                    // تصميم بطاقة الطالب الرقمية
-                    let cardHTML = `
-                        <div class="cyber-card p-6 rounded-2xl shadow-2xl relative bg-slate-950 border-2 border-purple-500/50">
-                            <!-- رأس البطاقة -->
-                            <div class="flex justify-between items-center border-b border-purple-500/30 pb-4 mb-4">
-                                <div>
-                                    <span class="text-[10px] uppercase tracking-wider text-purple-400 font-mono">Digital Student ID // بطاقة رسمية سحابية</span>
-                                    <h3 class="text-lg font-black text-white mt-0.5">${nameInput}</h3>
-                                </div>
-                                <button onclick="window.print()" class="bg-purple-600/80 hover:bg-purple-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer no-print shadow">🖨️ طباعة البطاقة</button>
-                            </div>
+function cloudUrl(path){
+  var base = String(FIREBASE_DB_URL || "").trim().replace(/\/+$/, "");
+  return base ? (base + "/alpha_sec/" + path + ".json") : "";
+}
 
-                            <!-- درجات المواد -->
-                            <div class="mb-4">
-                                <h4 class="text-xs font-bold text-cyan-400 mb-2">📊 درجات المواد الدراسية المرصودة:</h4>
-                    `;
+function matchesQuery(text, q){
+  var nq = norm(q);
+  if(!nq) return true;
+  var nt = norm(text);
+  if(nt.indexOf(nq) > -1) return true;
+  var parts = nq.split(" ");
+  for(var i = 0; i < parts.length; i++){
+    if(parts[i] && nt.indexOf(parts[i]) === -1) return false;
+  }
+  return true;
+}
 
-                    if (studentGrades.length > 0) {
-                        cardHTML += `<div class="space-y-2">`;
-                        studentGrades.forEach(g => {
-                            let gradeNum = Number(g.grade);
-                            // الشرط: إذا الدرجة أقل من 50 تكون باللون الأحمر، وإذا 50 فما فوق تكون باللون الأخضر
-                            let isFail = gradeNum <= 49;
-                            let gradeColorClass = isFail 
-                                ? "text-red-400 bg-red-950/50 border-red-500/30" 
-                                : "text-emerald-400 bg-emerald-950/50 border-emerald-500/30";
+function renderAll(){
+  var q = document.getElementById("st-query").value || "";
+  var gBody = document.getElementById("st-grades-body");
+  var aBody = document.getElementById("st-abs-body");
+  var cntG = document.getElementById("cnt-grades");
+  var cntA = document.getElementById("cnt-abs");
+  var avgG = document.getElementById("avg-grades");
 
-                            cardHTML += `
-                                <div class="flex justify-between items-center bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-xs">
-                                    <div>
-                                        <span class="font-bold text-white">${g.subj}</span>
-                                        <span class="text-slate-400 block text-[10px]">${g.cls}</span>
-                                    </div>
-                                    <span class="font-black text-sm px-2.5 py-1 rounded-lg border ${gradeColorClass}">${g.grade} / 100</span>
-                                </div>
-                            `;
-                        });
-                        cardHTML += `</div>`;
-                    } else {
-                        cardHTML += `<p class="text-slate-500 text-xs bg-slate-900/40 p-3 rounded-xl text-center">لا توجد درجات مرصودة لهذا الاسم حالياً.</p>`;
-                    }
+  var filteredGrades = gradesCache.filter(function(item){
+    return matchesQuery((item.n || item.student || "") + " " + (item.c || item.className || "") + " " + (item.s || item.subject || ""), q);
+  });
 
-                    // سجل الغيابات داخل البطاقة
-                    cardHTML += `
-                            </div>
-                            <div>
-                                <h4 class="text-xs font-bold text-amber-400 mb-2">📋 سجل الغيابات والدوام:</h4>
-                    `;
+  var filteredAbs = absCache.filter(function(item){
+    return matchesQuery((item.n || item.student || "") + " " + (item.c || item.className || "") + " " + (item.t || item.type || ""), q);
+  });
 
-                    if (studentAbsences.length > 0) {
-                        cardHTML += `<div class="space-y-2">`;
-                        studentAbsences.forEach(a => {
-                            cardHTML += `
-                                <div class="flex justify-between items-center bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-xs">
-                                    <span class="text-slate-300">${a.date} <span class="text-slate-500">(${a.cls})</span></span>
-                                    <span class="text-amber-400 font-bold bg-amber-950/50 px-2.5 py-0.5 rounded-lg border border-amber-500/30">${a.type}</span>
-                                </div>
-                            `;
-                        });
-                        cardHTML += `</div>`;
-                    } else {
-                        cardHTML += `<p class="text-slate-500 text-xs bg-slate-900/40 p-3 rounded-xl text-center">سجل الدوام نظيف، لا توجد غيابات مسجلة.</p>`;
-                    }
+  if(cntG) cntG.innerText = String(filteredGrades.length);
+  if(cntA) cntA.innerText = String(filteredAbs.length);
 
-                    cardHTML += `
-                            </div>
-                            <div class="mt-5 pt-3 border-t border-slate-900 text-center text-[10px] text-slate-500">
-                                إعدادية المعرفة المهنية الاهلية - نظام إدارة الطلاب الآمن
-                            </div>
-                        </div>
-                    `;
+  var sum = 0;
+  for(var i = 0; i < filteredGrades.length; i++){
+    sum += Number(filteredGrades[i].g !== undefined ? filteredGrades[i].g : filteredGrades[i].grade) || 0;
+  }
+  var avg = filteredGrades.length ? (sum / filteredGrades.length).toFixed(1) : "0";
+  if(avgG) avgG.innerText = avg + " / 100";
 
-                    cardContainer.innerHTML = cardHTML;
-                });
-            });
-        }
-    </script>
+  gBody.innerHTML = "";
+  if(!filteredGrades.length){
+    gBody.innerHTML = "<tr><td colspan='4' class='empty'>لا توجد درجات مطابقة للبحث حالياً</td></tr>";
+  } else {
+    for(var j = 0; j < filteredGrades.length; j++){
+      var gItem = filteredGrades[j];
+      var trG = document.createElement("tr");
+      trG.innerHTML =
+        "<td>" + (gItem.n || gItem.student || "") + "</td>" +
+        "<td>" + (gItem.c || gItem.className || "") + "</td>" +
+        "<td>" + (gItem.s || gItem.subject || "") + "</td>" +
+        "<td><strong style='color:#22d3ee'>" + (gItem.g !== undefined ? gItem.g : (gItem.grade || 0)) + " / 100</strong></td>";
+      gBody.appendChild(trG);
+    }
+  }
+
+  aBody.innerHTML = "";
+  if(!filteredAbs.length){
+    aBody.innerHTML = "<tr><td colspan='4' class='empty'>لا توجد سجلات غياب أو هروب أو إجازة مطابقة حالياً</td></tr>";
+  } else {
+    for(var k = 0; k < filteredAbs.length; k++){
+      var aItem = filteredAbs[k];
+      var stType = aItem.t || aItem.type || "غياب";
+      var col = stType === "هروب" ? "#fb7185" : (stType === "غياب" ? "#fbbf24" : "#34d399");
+      var trA = document.createElement("tr");
+      trA.innerHTML =
+        "<td>" + (aItem.n || aItem.student || "") + "</td>" +
+        "<td>" + (aItem.c || aItem.className || "") + "</td>" +
+        "<td style='color:" + col + ";font-weight:bold'>" + stType + "</td>" +
+        "<td>" + (aItem.d || aItem.date || "") + "</td>";
+      aBody.appendChild(trA);
+    }
+  }
+}
+
+function loadStudentRecords(){
+  gradesCache = readLocal("al_d_gr");
+  absCache = readLocal("al_d_abs");
+  renderAll();
+
+  var uGr = cloudUrl("gr");
+  var uAbs = cloudUrl("abs");
+  if(!uGr || !uAbs){
+    setStatus("وضع محلي", false);
+    return;
+  }
+
+  Promise.all([
+    fetch(uGr).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; }),
+    fetch(uAbs).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; })
+  ]).then(function(res){
+    var anyCloud = false;
+    if(res[0] !== null && res[0] !== undefined){
+      gradesCache = Array.isArray(res[0]) ? res[0] : Object.values(res[0]);
+      writeLocal("al_d_gr", gradesCache);
+      anyCloud = true;
+    }
+    if(res[1] !== null && res[1] !== undefined){
+      absCache = Array.isArray(res[1]) ? res[1] : Object.values(res[1]);
+      writeLocal("al_d_abs", absCache);
+      anyCloud = true;
+    }
+    setStatus(anyCloud ? "متصل سحابياً (Firebase)" : "احتياط محلي", anyCloud);
+    renderAll();
+  });
+}
+
+document.getElementById("btn-search").onclick = renderAll;
+document.getElementById("st-query").oninput = renderAll;
+document.getElementById("btn-show-all").onclick = function(){
+  document.getElementById("st-query").value = "";
+  renderAll();
+};
+
+loadStudentRecords();
+</script>
 </body>
 </html>
