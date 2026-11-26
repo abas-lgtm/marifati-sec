@@ -11,6 +11,7 @@ body{margin:0;padding:0 0 92px;background:#030712;color:#f3f4f6;font-size:15px}
 header{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid #fb718555;padding-bottom:14px;margin-bottom:22px;flex-wrap:wrap}
 header h1{margin:0;font-size:20px;color:#fff}
 header .sub{font-size:13px;color:#fb7185;margin-top:4px}
+.sync-badge{font-size:12px;padding:5px 10px;border-radius:999px;background:#0b1324;border:1px solid #fb718555;color:#fb7185}
 .panel{background:#0b0f19;border:1px solid #fb718566;border-radius:16px;padding:20px;margin-bottom:18px}
 .box-sm{max-width:440px;margin:24px auto}
 input,select{width:100%;padding:11px 13px;margin-bottom:10px;border-radius:10px;border:1px solid #334155;background:#020617;color:#fff;font-size:14px}
@@ -44,14 +45,15 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
       <h1>بوابة المديرة</h1>
       <div class="sub">إعدادية المعرفة المهنية الاهلية // برمجة: عباس محمد عزيز</div>
     </div>
-    <div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <span id="cloud-status" class="sync-badge">متصل سحابياً (Firebase)</span>
       <a href="index.html" class="btn-d">الرئيسية</a>
     </div>
   </header>
 
   <div id="adm-login" class="panel box-sm np">
     <h3 style="margin-top:0;color:#fb7185;text-align:center">دخول بوابة المديرة</h3>
-    <input type="text" id="adm-pass" autocomplete="off" placeholder="أدخل الرمز السري">
+    <input type="password" id="adm-pass" autocomplete="off" placeholder="أدخل الرمز السري">
     <button type="button" id="btn-adm-login" class="btn-r" style="width:100%">دخول</button>
   </div>
 
@@ -60,7 +62,7 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
       <div class="bar">
         <h3 style="margin:0;color:#fb7185">لوحة التحكم الإدارية</h3>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button type="button" id="btn-reload" class="btn-g">تحديث</button>
+          <button type="button" id="btn-reload" class="btn-g">تحديث سحابي</button>
           <button type="button" onclick="window.print()" class="btn-d">طباعة PDF</button>
           <button type="button" id="btn-logout" class="btn-d">خروج</button>
         </div>
@@ -172,6 +174,7 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
 
 <script>
 (function(){
+  var FIREBASE_DB_URL = "https://al-maarefa-school-default-rtdb.firebaseio.com";
   var ADMIN_PASS = "99100";
   var TARGET_SECTIONS = [
     "اول امن سيبراني A",
@@ -216,6 +219,10 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
     catch(e){ return []; }
   }
 
+  function writeArr(key, arr){
+    try { localStorage.setItem(key, JSON.stringify(arr)); } catch(e){}
+  }
+
   function readObj(key){
     try {
       var d = JSON.parse(localStorage.getItem(key) || "{}");
@@ -225,6 +232,28 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
 
   function writeObj(key, obj){
     try { localStorage.setItem(key, JSON.stringify(obj)); } catch(e){}
+  }
+
+  function cloudUrl(path){
+    var base = String(FIREBASE_DB_URL || "").trim().replace(/\/+$/, "");
+    return base ? (base + "/alpha_sec/" + path + ".json") : "";
+  }
+
+  function putCloud(path, val){
+    var u = cloudUrl(path);
+    if(!u) return;
+    fetch(u, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(val)
+    }).catch(function(){});
+  }
+
+  function setStatus(txt, ok){
+    var el = document.getElementById("cloud-status");
+    if(!el) return;
+    el.innerText = txt;
+    el.style.color = ok ? "#34d399" : "#fbbf24";
   }
 
   function renderLocks(){
@@ -459,7 +488,15 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
     }
   });
 
-  function loadLocalData(){
+  function pullPath(path, cb){
+    var u = cloudUrl(path);
+    if(!u) return;
+    fetch(u).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
+      if(d !== null && d !== undefined) cb(d);
+    }).catch(function(){});
+  }
+
+  function loadCloudData(){
     gradesData = readArr("al_d_gr");
     absData = readArr("al_d_abs");
     paidData = readArr("al_d_acc").length ? readArr("al_d_acc") : readArr("al_d_pay");
@@ -467,63 +504,46 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
     grLocked = localStorage.getItem("al_lock_gr") === "1";
     absLocked = localStorage.getItem("al_lock_abs") === "1";
     renderAll();
-  }
+    setStatus("جاري المزامنة...", false);
 
-  function doLogin(){
-    var inp = document.getElementById("adm-pass");
-    var val = inp ? String(inp.value || "").trim() : "";
-    if(val === ADMIN_PASS){
-      if(inp) inp.value = "";
-      document.getElementById("adm-login").style.display = "none";
-      document.getElementById("adm-view").style.display = "block";
-      loadLocalData();
-    } else {
-      alert("الرمز السري غير صحيح");
-    }
-  }
+    pullPath("gr", function(d){
+      gradesData = toList(d);
+      writeArr("al_d_gr", gradesData);
+      setStatus("متصل سحابياً (Firebase)", true);
+      renderAll();
+    });
 
-  document.getElementById("btn-adm-login").onclick = doLogin;
-  document.getElementById("adm-pass").addEventListener("keydown", function(e){
-    if(e.key === "Enter") doLogin();
-  });
+    pullPath("abs", function(d){
+      absData = toList(d);
+      writeArr("al_d_abs", absData);
+      setStatus("متصل سحابياً (Firebase)", true);
+      renderAll();
+    });
 
-  document.getElementById("btn-logout").onclick = function(){
-    document.getElementById("adm-view").style.display = "none";
-    document.getElementById("adm-login").style.display = "block";
-  };
+    pullPath("acc", function(d){
+      paidData = toList(d);
+      writeArr("al_d_acc", paidData);
+      renderAll();
+    });
 
-  document.getElementById("btn-toggle-gr-lock").onclick = function(){
-    grLocked = !grLocked;
-    try { localStorage.setItem("al_lock_gr", grLocked ? "1" : "0"); } catch(e){}
-    renderLocks();
-  };
+    pullPath("rosters", function(d){
+      if(d && typeof d === "object" && !Array.isArray(d)){
+        rostersData = d;
+        writeObj("al_d_rosters", rostersData);
+        renderAll();
+      }
+    });
 
-  document.getElementById("btn-toggle-abs-lock").onclick = function(){
-    absLocked = !absLocked;
-    try { localStorage.setItem("al_lock_abs", absLocked ? "1" : "0"); } catch(e){}
-    renderLocks();
-  };
+    pullPath("locks/grades", function(d){
+      if(typeof d === "boolean"){
+        grLocked = d;
+        localStorage.setItem("al_lock_gr", d ? "1" : "0");
+        renderLocks();
+      }
+    });
 
-  document.getElementById("btn-add-sec-student").onclick = function(){
-    var sec = document.getElementById("sec-select").value;
-    var inp = document.getElementById("sec-add-name");
-    var nm = inp ? String(inp.value || "").trim() : "";
-    if(!nm){ alert("اكتب اسم الطالب أولاً"); return; }
-    if(!Array.isArray(rostersData[sec])) rostersData[sec] = [];
-    rostersData[sec].push(nm);
-    writeObj("al_d_rosters", rostersData);
-    inp.value = "";
-    renderAll();
-  };
-
-  document.getElementById("btn-close-detail").onclick = function(){
-    document.getElementById("st-detail-box").style.display = "none";
-  };
-
-  document.getElementById("btn-reload").onclick = loadLocalData;
-  document.getElementById("adm-search").oninput = renderAll;
-})();
-</script>
-</body>
-  </html>
-  
+    pullPath("locks/abs", function(d){
+      if(typeof d === "boolean"){
+        absLocked = d;
+        localStorage.setItem("al_lock_abs", d ? "1" : "0");
+        renderLocks(
