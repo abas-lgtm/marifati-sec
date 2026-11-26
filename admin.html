@@ -203,6 +203,14 @@ var grLocked = false;
 var absLocked = false;
 var dirNoteText = "";
 
+function esc(s){
+  return String(s === undefined || s === null ? "" : s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
 function readArr(key){
   try {
     var d = JSON.parse(localStorage.getItem(key) || "[]");
@@ -244,6 +252,7 @@ function groupGradesByStudent(list){
   var map = {};
   for(var i = 0; i < list.length; i++){
     var item = list[i];
+    if(!item) continue;
     var name = String(item.n || item.student || "").trim();
     if(!name) continue;
     var cls = String(item.c || item.className || "").trim();
@@ -272,7 +281,7 @@ function openStudentGrades(st){
   for(var i = 0; i < st.items.length; i++){
     var r = st.items[i];
     var tr = document.createElement("tr");
-    tr.innerHTML = "<td>" + r.subject + "</td><td><strong style='color:#22d3ee'>" + r.grade + " / 100</strong></td>";
+    tr.innerHTML = "<td>" + esc(r.subject) + "</td><td><strong style='color:#22d3ee'>" + esc(r.grade) + " / 100</strong></td>";
     body.appendChild(tr);
   }
   box.style.display = "block";
@@ -315,123 +324,139 @@ function matchText(str, q){
 }
 
 function renderAllSections(){
-  renderLockBadges();
-  var q = (document.getElementById("adm-search").value || "").trim().toLowerCase();
-  var minExcel = Number(document.getElementById("min-excel").value) || 90;
+  try {
+    renderLockBadges();
+    var q = (document.getElementById("adm-search").value || "").trim().toLowerCase();
+    var minExcel = Number(document.getElementById("min-excel").value) || 90;
 
-  var grouped = groupGradesByStudent(gradesArr).filter(function(st){
-    var subNames = st.items.map(function(x){ return x.subject + " " + x.grade; }).join(" ");
-    return matchText(st.name + " " + st.className + " " + subNames, q);
-  });
-
-  var gBody = document.getElementById("body-grades");
-  gBody.innerHTML = "";
-  if(!grouped.length){
-    gBody.innerHTML = "<tr><td colspan='4' class='empty'>لا توجد درجات معروضة</td></tr>";
-  } else {
-    grouped.forEach(function(st){
-      var tr = document.createElement("tr");
-      var tdName = document.createElement("td");
-      var link = document.createElement("span");
-      link.className = "st-click";
-      link.innerText = st.name;
-      link.onclick = function(){ openStudentGrades(st); };
-      tdName.appendChild(link);
-
-      tr.appendChild(tdName);
-      var tdCls = document.createElement("td"); tdCls.innerText = st.className; tr.appendChild(tdCls);
-      var tdCnt = document.createElement("td"); tdCnt.innerText = st.items.length + " مواد"; tr.appendChild(tdCnt);
-      var tdAvg = document.createElement("td"); tdAvg.innerHTML = "<strong style='color:#34d399'>" + st.avg.toFixed(1) + " / 100</strong>"; tr.appendChild(tdAvg);
-      gBody.appendChild(tr);
+    var grouped = groupGradesByStudent(gradesArr).filter(function(st){
+      var subNames = st.items.map(function(x){ return x.subject + " " + x.grade; }).join(" ");
+      return matchText(st.name + " " + st.className + " " + subNames, q);
     });
-  }
 
-  var aBody = document.getElementById("body-abs");
-  var fAbs = absArr.filter(function(x){
-    return matchText((x.n || x.student || "") + " " + (x.c || x.className || "") + " " + (x.t || x.type || "") + " " + (x.d || x.date || ""), q);
-  });
-  aBody.innerHTML = "";
-  if(!fAbs.length){
-    aBody.innerHTML = "<tr><td colspan='4' class='empty'>لا توجد سجلات غياب أو هروب أو إجازة</td></tr>";
-  } else {
-    fAbs.forEach(function(x){
-      var st = x.t || x.type || "غياب";
-      var col = st === "هروب" ? "#fb7185" : (st === "غياب" ? "#fbbf24" : "#34d399");
-      var tr = document.createElement("tr");
-      tr.innerHTML =
-        "<td>" + (x.n || x.student || "") + "</td>" +
-        "<td>" + (x.c || x.className || "") + "</td>" +
-        "<td style='color:" + col + ";font-weight:bold'>" + st + "</td>" +
-        "<td>" + (x.d || x.date || "") + "</td>";
-      aBody.appendChild(tr);
+    var gBody = document.getElementById("body-grades");
+    gBody.innerHTML = "";
+    if(!grouped.length){
+      gBody.innerHTML = "<tr><td colspan='4' class='empty'>لا توجد درجات معروضة</td></tr>";
+    } else {
+      grouped.forEach(function(st){
+        var tr = document.createElement("tr");
+        var tdName = document.createElement("td");
+        var link = document.createElement("span");
+        link.className = "st-click";
+        link.innerText = st.name;
+        link.onclick = function(){ openStudentGrades(st); };
+        tdName.appendChild(link);
+
+        var tdCls = document.createElement("td");
+        tdCls.innerText = st.className;
+
+        var tdCnt = document.createElement("td");
+        tdCnt.innerText = st.items.length + " مواد";
+
+        var tdAvg = document.createElement("td");
+        tdAvg.innerHTML = "<strong style='color:#34d399'>" + st.avg.toFixed(1) + " / 100</strong>";
+
+        tr.appendChild(tdName);
+        tr.appendChild(tdCls);
+        tr.appendChild(tdCnt);
+        tr.appendChild(tdAvg);
+        gBody.appendChild(tr);
+      });
+    }
+
+    var aBody = document.getElementById("body-abs");
+    var fAbs = absArr.filter(function(x){
+      return x && matchText((x.n || x.student || "") + " " + (x.c || x.className || "") + " " + (x.t || x.type || "") + " " + (x.d || x.date || ""), q);
     });
-  }
+    aBody.innerHTML = "";
+    if(!fAbs.length){
+      aBody.innerHTML = "<tr><td colspan='4' class='empty'>لا توجد سجلات غياب أو هروب أو إجازة</td></tr>";
+    } else {
+      fAbs.forEach(function(x){
+        var st = x.t || x.type || "غياب";
+        var col = st === "هروب" ? "#fb7185" : (st === "غياب" ? "#fbbf24" : "#34d399");
+        var tr = document.createElement("tr");
+        tr.innerHTML =
+          "<td>" + esc(x.n || x.student || "") + "</td>" +
+          "<td>" + esc(x.c || x.className || "") + "</td>" +
+          "<td style='color:" + col + ";font-weight:bold'>" + esc(st) + "</td>" +
+          "<td>" + esc(x.d || x.date || "") + "</td>";
+        aBody.appendChild(tr);
+      });
+    }
 
-  var eBody = document.getElementById("body-excel");
-  var excelStudents = groupGradesByStudent(gradesArr).filter(function(st){
-    var hasHigh = st.avg >= minExcel || st.items.some(function(it){ return it.grade >= minExcel; });
-    return hasHigh && matchText(st.name + " " + st.className, q);
-  });
-  eBody.innerHTML = "";
-  if(!excelStudents.length){
-    eBody.innerHTML = "<tr><td colspan='4' class='empty'>لا يوجد طلاب متميزون بالحد المحدد حالياً</td></tr>";
-  } else {
-    excelStudents.forEach(function(st){
-      var tr = document.createElement("tr");
-      var tdN = document.createElement("td");
-      var sp = document.createElement("span");
-      sp.className = "st-click";
-      sp.innerText = st.name;
-      sp.onclick = function(){ openStudentGrades(st); };
-      tdN.appendChild(sp);
-      tr.appendChild(tdN);
-      tr.innerHTML += "<td>" + st.className + "</td><td>" + st.items.length + " مواد</td><td><strong style='color:#fbbf24'>" + st.avg.toFixed(1) + " / 100</strong></td>";
-      tr.firstChild.innerHTML = "";
-      tr.firstChild.appendChild(sp);
-      eBody.appendChild(tr);
+    var eBody = document.getElementById("body-excel");
+    var excelStudents = groupGradesByStudent(gradesArr).filter(function(st){
+      var hasHigh = st.avg >= minExcel || st.items.some(function(it){ return it.grade >= minExcel; });
+      return hasHigh && matchText(st.name + " " + st.className, q);
     });
-  }
+    eBody.innerHTML = "";
+    if(!excelStudents.length){
+      eBody.innerHTML = "<tr><td colspan='4' class='empty'>لا يوجد طلاب متميزون بالحد المحدد حالياً</td></tr>";
+    } else {
+      excelStudents.forEach(function(st){
+        var tr = document.createElement("tr");
+        var tdN = document.createElement("td");
+        var sp = document.createElement("span");
+        sp.className = "st-click";
+        sp.innerText = st.name;
+        sp.onclick = function(){ openStudentGrades(st); };
+        tdN.appendChild(sp);
 
-  var cBody = document.getElementById("body-counselor");
-  var fCon = counselorArr.filter(function(x){
-    return matchText((x.n || x.student || x.name || "") + " " + (x.c || x.className || "") + " " + (x.note || x.case || x.t || x.type || ""), q);
-  });
-  cBody.innerHTML = "";
-  if(!fCon.length){
-    cBody.innerHTML = "<tr><td colspan='4' class='empty'>لا توجد أسماء مدرجة في بوابة المرشد التربوي حالياً</td></tr>";
-  } else {
-    fCon.forEach(function(x){
-      var tr = document.createElement("tr");
-      tr.innerHTML =
-        "<td>" + (x.n || x.student || x.name || "") + "</td>" +
-        "<td>" + (x.c || x.className || "") + "</td>" +
-        "<td style='color:#c084fc'>" + (x.note || x.case || x.t || x.type || "متابعة تربوية") + "</td>" +
-        "<td>" + (x.d || x.date || "") + "</td>";
-      cBody.appendChild(tr);
+        var tdC = document.createElement("td"); tdC.innerText = st.className;
+        var tdM = document.createElement("td"); tdM.innerText = st.items.length + " مواد";
+        var tdA = document.createElement("td"); tdA.innerHTML = "<strong style='color:#fbbf24'>" + st.avg.toFixed(1) + " / 100</strong>";
+
+        tr.appendChild(tdN);
+        tr.appendChild(tdC);
+        tr.appendChild(tdM);
+        tr.appendChild(tdA);
+        eBody.appendChild(tr);
+      });
+    }
+
+    var cBody = document.getElementById("body-counselor");
+    var fCon = counselorArr.filter(function(x){
+      return x && matchText((x.n || x.student || x.name || "") + " " + (x.c || x.className || "") + " " + (x.note || x.case || x.t || x.type || ""), q);
     });
-  }
+    cBody.innerHTML = "";
+    if(!fCon.length){
+      cBody.innerHTML = "<tr><td colspan='4' class='empty'>لا توجد أسماء مدرجة في بوابة المرشد التربوي حالياً</td></tr>";
+    } else {
+      fCon.forEach(function(x){
+        var tr = document.createElement("tr");
+        tr.innerHTML =
+          "<td>" + esc(x.n || x.student || x.name || "") + "</td>" +
+          "<td>" + esc(x.c || x.className || "") + "</td>" +
+          "<td style='color:#c084fc'>" + esc(x.note || x.case || x.t || x.type || "متابعة تربوية") + "</td>" +
+          "<td>" + esc(x.d || x.date || "") + "</td>";
+        cBody.appendChild(tr);
+      });
+    }
 
-  var pBody = document.getElementById("body-payments");
-  var fPay = paymentsArr.filter(function(x){
-    return matchText((x.n || x.student || x.name || "") + " " + (x.c || x.className || "") + " " + (x.amount || x.paid || "") + " " + (x.note || x.d || x.date || ""), q);
-  });
-  pBody.innerHTML = "";
-  if(!fPay.length){
-    pBody.innerHTML = "<tr><td colspan='4' class='empty'>لا توجد أقساط مدفوعة مسجلة حالياً</td></tr>";
-  } else {
-    fPay.forEach(function(x){
-      var amt = x.amount !== undefined ? x.amount : (x.paid !== undefined ? x.paid : 0);
-      var tr = document.createElement("tr");
-      tr.innerHTML =
-        "<td>" + (x.n || x.student || x.name || "") + "</td>" +
-        "<td>" + (x.c || x.className || "") + "</td>" +
-        "<td><strong style='color:#38bdf8'>" + amt + "</strong></td>" +
-        "<td>" + (x.note || x.d || x.date || "") + "</td>";
-      pBody.appendChild(tr);
+    var pBody = document.getElementById("body-payments");
+    var fPay = paymentsArr.filter(function(x){
+      return x && matchText((x.n || x.student || x.name || "") + " " + (x.c || x.className || "") + " " + (x.amount || x.paid || "") + " " + (x.note || x.d || x.date || ""), q);
     });
-  }
+    pBody.innerHTML = "";
+    if(!fPay.length){
+      pBody.innerHTML = "<tr><td colspan='4' class='empty'>لا توجد أقساط مدفوعة مسجلة حالياً</td></tr>";
+    } else {
+      fPay.forEach(function(x){
+        var amt = x.amount !== undefined ? x.amount : (x.paid !== undefined ? x.paid : 0);
+        var tr = document.createElement("tr");
+        tr.innerHTML =
+          "<td>" + esc(x.n || x.student || x.name || "") + "</td>" +
+          "<td>" + esc(x.c || x.className || "") + "</td>" +
+          "<td><strong style='color:#38bdf8'>" + esc(amt) + "</strong></td>" +
+          "<td>" + esc(x.note || x.d || x.date || "") + "</td>";
+        pBody.appendChild(tr);
+      });
+    }
 
-  document.getElementById("dir-note-display").innerText = dirNoteText ? ("توجيه الإدارة: " + dirNoteText) : "لا يوجد توجيه إداري منشور حالياً.";
+    document.getElementById("dir-note-display").innerText = dirNoteText ? ("توجيه الإدارة: " + dirNoteText) : "لا يوجد توجيه إداري منشور حالياً.";
+  } catch(err){}
 }
 
 function pullSingle(path, onData){
@@ -494,26 +519,3 @@ function loadAllDirectorData(){
     if(typeof d === "string"){
       dirNoteText = d;
       localStorage.setItem("al_dir_note", d);
-      document.getElementById("dir-note-input").value = d;
-      renderAllSections();
-    }
-  });
-}
-
-document.getElementById("btn-adm-login").onclick = function(){
-  var p = document.getElementById("adm-pass").value.trim();
-  if(p === ADMIN_PASS){
-    document.getElementById("adm-pass").value = "";
-    document.getElementById("adm-login").style.display = "none";
-    document.getElementById("adm-view").style.display = "block";
-    loadAllDirectorData();
-  } else {
-    alert("الرمز السري غير صحيح");
-  }
-};
-
-document.getElementById("adm-pass").addEventListener("keydown", function(e){
-  if(e.key === "Enter") document.getElementById("btn-adm-login").click();
-});
-
-document.getElementById("btn-lock-portal").onclic
