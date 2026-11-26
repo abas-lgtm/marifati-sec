@@ -27,8 +27,9 @@ button,.btn-d{cursor:pointer;border-radius:10px;border:1px solid #334155;backgro
 table{width:100%;border-collapse:collapse;margin-top:8px;font-size:14px}
 th,td{border:1px solid #1e293b;padding:10px;text-align:right}
 th{background:#020617;color:#fb7185}
-.st-click{cursor:pointer;color:#22d3ee;font-weight:bold;text-decoration:underline}
-.st-detail{background:#020617;border:1px solid #22d3ee66;border-radius:14px;padding:16px;margin-top:14px;display:none}
+.st-btn{background:transparent;border:0;padding:0;margin:0;color:#22d3ee;font-weight:bold;text-decoration:underline;font-size:14px;cursor:pointer;text-align:right}
+.st-btn:hover{color:#67e8f9}
+.st-detail{background:#020617;border:2px solid #22d3ee88;border-radius:14px;padding:16px;margin-top:16px;display:none}
 .sub-card{background:#0b0f19;border:1px solid #334155;border-radius:12px;padding:12px;margin-top:10px}
 .sub-title{font-weight:bold;color:#fbbf24;margin-bottom:8px;font-size:14px}
 .empty{text-align:center;color:#94a3b8;padding:14px}
@@ -187,6 +188,7 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
   var absData = [];
   var paidData = [];
   var rostersData = {};
+  var unifiedStudentsList = [];
   var grLocked = false;
   var absLocked = false;
 
@@ -258,13 +260,21 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
 
   function buildUnifiedStudents(){
     var map = {};
+    var idxCounter = 0;
+
     function ensureStudent(name, sec){
       var cleanName = String(name || "").trim();
       if(!cleanName) return null;
       var cleanSec = String(sec || "").trim();
       var key = norm(cleanName) + "__" + norm(cleanSec);
       if(!map[key]){
-        map[key] = { name: cleanName, section: cleanSec, grades: [], abs: [] };
+        map[key] = {
+          id: idxCounter++,
+          name: cleanName,
+          section: cleanSec,
+          grades: [],
+          abs: []
+        };
       }
       return map[key];
     }
@@ -301,22 +311,33 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
       }
     }
 
-    return Object.keys(map).map(function(k){ return map[k]; });
+    unifiedStudentsList = Object.keys(map).map(function(k){ return map[k]; });
+    return unifiedStudentsList;
   }
 
-  function openStudentDetails(st){
+  function showStudentById(studentId){
+    var st = null;
+    for(var i = 0; i < unifiedStudentsList.length; i++){
+      if(String(unifiedStudentsList[i].id) === String(studentId)){
+        st = unifiedStudentsList[i];
+        break;
+      }
+    }
+    if(!st) return;
+
     var box = document.getElementById("st-detail-box");
     var title = document.getElementById("st-detail-title");
     var gBody = document.getElementById("st-detail-grades");
     var aBody = document.getElementById("st-detail-abs");
-    title.innerText = "ملف الطالب: " + st.name + (st.section ? (" — الشعبة: " + st.section) : "");
+
+    title.innerText = "تفاصيل الطالب: " + st.name + (st.section ? (" — الشعبة: " + st.section) : "");
 
     gBody.innerHTML = "";
     if(!st.grades.length){
       gBody.innerHTML = "<tr><td colspan='2' class='empty'>لا توجد درجات مرصودة لهذا الطالب</td></tr>";
     } else {
-      for(var i = 0; i < st.grades.length; i++){
-        var gr = st.grades[i];
+      for(var g = 0; g < st.grades.length; g++){
+        var gr = st.grades[g];
         var trG = document.createElement("tr");
         trG.innerHTML = "<td>" + esc(gr.subject) + "</td><td><strong style='color:#22d3ee'>" + esc(gr.grade) + " / 100</strong></td>";
         gBody.appendChild(trG);
@@ -327,8 +348,8 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
     if(!st.abs.length){
       aBody.innerHTML = "<tr><td colspan='2' class='empty'>لا توجد سجلات غياب أو هروب أو إجازة لهذا الطالب</td></tr>";
     } else {
-      for(var j = 0; j < st.abs.length; j++){
-        var ab = st.abs[j];
+      for(var a = 0; a < st.abs.length; a++){
+        var ab = st.abs[a];
         var col = ab.type === "هروب" ? "#fb7185" : (ab.type === "غياب" ? "#fbbf24" : "#34d399");
         var trA = document.createElement("tr");
         trA.innerHTML = "<td style='color:" + col + ";font-weight:bold'>" + esc(ab.type) + "</td><td>" + esc(ab.date) + "</td>";
@@ -337,6 +358,9 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
     }
 
     box.style.display = "block";
+    if(box.scrollIntoView){
+      box.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
   }
 
   function matchQ(txt, q){
@@ -359,27 +383,18 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
     if(!allStudents.length){
       stBody.innerHTML = "<tr><td colspan='4' class='empty'>لا توجد بيانات طلاب مطابقة</td></tr>";
     } else {
+      var rowsHtml = "";
       for(var i = 0; i < allStudents.length; i++){
-        (function(st){
-          var tr = document.createElement("tr");
-          var tdName = document.createElement("td");
-          var span = document.createElement("span");
-          span.className = "st-click";
-          span.innerText = st.name;
-          span.onclick = function(){ openStudentDetails(st); };
-          tdName.appendChild(span);
-
-          var tdSec = document.createElement("td"); tdSec.innerText = st.section;
-          var tdGrCount = document.createElement("td"); tdGrCount.innerText = st.grades.length + " مواد";
-          var tdAbsCount = document.createElement("td"); tdAbsCount.innerText = st.abs.length + " سجل";
-
-          tr.appendChild(tdName);
-          tr.appendChild(tdSec);
-          tr.appendChild(tdGrCount);
-          tr.appendChild(tdAbsCount);
-          stBody.appendChild(tr);
-        })(allStudents[i]);
+        var st = allStudents[i];
+        rowsHtml +=
+          "<tr>" +
+            "<td><button type='button' class='st-btn' data-st-id='" + st.id + "'>" + esc(st.name) + "</button></td>" +
+            "<td>" + esc(st.section) + "</td>" +
+            "<td>" + st.grades.length + " مواد</td>" +
+            "<td>" + st.abs.length + " سجل</td>" +
+          "</tr>";
       }
+      stBody.innerHTML = rowsHtml;
     }
 
     var paidBody = document.getElementById("body-paid");
@@ -432,6 +447,17 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
       secCont.appendChild(card);
     }
   }
+
+  document.getElementById("body-students").addEventListener("click", function(e){
+    var target = e.target;
+    while(target && target !== this){
+      if(target.hasAttribute && target.hasAttribute("data-st-id")){
+        showStudentById(target.getAttribute("data-st-id"));
+        break;
+      }
+      target = target.parentNode;
+    }
+  });
 
   function loadLocalData(){
     gradesData = readArr("al_d_gr");
@@ -499,5 +525,5 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
 })();
 </script>
 </body>
-        </html>
-        
+  </html>
+  
