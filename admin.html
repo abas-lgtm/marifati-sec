@@ -3,41 +3,43 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>ALPHA-SEC // بوابة الإدارة / المديرة</title>
+<title>ALPHA-SEC // بوابة المديرة</title>
 <style>
 *{box-sizing:border-box;font-family:Tahoma,Arial,sans-serif}
 body{margin:0;padding:0 0 92px;background:#030712;color:#f3f4f6;font-size:15px}
-.wrap{max-width:1020px;margin:0 auto;padding:18px 18px 0}
+.wrap{max-width:1040px;margin:0 auto;padding:18px 18px 0}
 header{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid #fb718555;padding-bottom:14px;margin-bottom:22px;flex-wrap:wrap}
 header h1{margin:0;font-size:20px;color:#fff}
 header .sub{font-size:13px;color:#fb7185;margin-top:4px}
 .sync-badge{font-size:12px;padding:5px 10px;border-radius:999px;background:#0b1324;border:1px solid #fb718555;color:#fb7185}
 .panel{background:#0b0f19;border:1px solid #fb718566;border-radius:16px;padding:20px;margin-bottom:18px}
 .box-sm{max-width:440px;margin:24px auto}
-input{width:100%;padding:12px 14px;margin-bottom:12px;border-radius:10px;border:1px solid #334155;background:#020617;color:#fff;font-size:15px}
-button,.btn-d{cursor:pointer;border-radius:10px;border:1px solid #334155;background:#1e293b;color:#f1f5f9;padding:11px 16px;font-weight:bold;font-size:14px;text-decoration:none;display:inline-block;text-align:center}
+input,select,textarea{width:100%;padding:11px 13px;margin-bottom:10px;border-radius:10px;border:1px solid #334155;background:#020617;color:#fff;font-size:14px}
+textarea{min-height:75px;resize:vertical}
+button,.btn-d{cursor:pointer;border-radius:10px;border:1px solid #334155;background:#1e293b;color:#f1f5f9;padding:10px 15px;font-weight:bold;font-size:13px;text-decoration:none;display:inline-block;text-align:center}
 .btn-r{background:#fb7185;color:#000;border:0}
 .btn-g{background:#10b981;color:#000;border:0}
 .btn-w{background:#f59e0b;color:#000;border:0}
-.bar{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:14px}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px}
-.stat{background:#020617;border:1px solid #1e293b;border-radius:12px;padding:14px}
-.stat .k{font-size:12px;color:#94a3b8;display:block;margin-bottom:6px}
-.stat .v{font-size:20px;font-weight:bold;color:#fb7185}
-#adm-dashboard{display:none}
-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px}
+.btn-b{background:#22d3ee;color:#000;border:0}
+.bar{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:12px}
+.lock-pill{font-size:12px;padding:5px 10px;border-radius:8px;font-weight:bold}
+.locked{background:#450a0a;color:#fca5a5;border:1px solid #ef444466}
+.unlocked{background:#052e16;color:#6ee7b7;border:1px solid #10b98166}
+#adm-view{display:none}
+table{width:100%;border-collapse:collapse;margin-top:8px;font-size:14px}
 th,td{border:1px solid #1e293b;padding:10px;text-align:right}
 th{background:#020617;color:#fb7185}
 .empty{text-align:center;color:#94a3b8;padding:14px}
+.note-box{background:#020617;border:1px dashed #fb718577;border-radius:12px;padding:12px;color:#fde68a;font-size:14px;margin-top:8px}
 footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1px solid #fb718555;padding:10px 12px;text-align:center;font-size:13px;color:#cbd5e1;z-index:10}
-@media print{body{background:#fff;color:#000;padding:0}.np,footer{display:none!important}th,td{border:1px solid #000;color:#000}}
+@media print{body{background:#fff;color:#000;padding:0}.np,footer{display:none!important}th,td{border:1px solid #000;color:#000}.panel{border:1px solid #999;background:#fff}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header class="np">
     <div>
-      <h1>بوابة الإدارة / المديرة</h1>
+      <h1>بوابة المديرة</h1>
       <div class="sub">إعدادية المعرفة المهنية الاهلية // برمجة: عباس محمد عزيز</div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
@@ -46,66 +48,32 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
     </div>
   </header>
 
-  <!-- شاشة دخول المديرة -->
+  <!-- دخول المديرة -->
   <div id="adm-login" class="panel box-sm np">
     <h3 style="margin-top:0;color:#fb7185;text-align:center">دخول بوابة المديرة</h3>
-    <div style="text-align:center;font-size:12px;color:#94a3b8;margin-bottom:12px">أدخل الرمز السري الخاص بالإدارة</div>
-    <input type="password" id="adm-pass" placeholder="الرمز السري">
-    <button type="button" id="btn-adm-login" class="btn-r" style="width:100%">دخول إلى البوابة</button>
+    <input type="password" id="adm-pass" placeholder="أدخل الرمز السري">
+    <button type="button" id="btn-adm-login" class="btn-r" style="width:100%">دخول</button>
   </div>
 
-  <!-- لوحة المديرة -->
-  <div id="adm-dashboard">
-    <div class="panel">
-      <div class="bar np">
-        <h3 style="margin:0;color:#fb7185">الإحصائيات العامة للمدرسة</h3>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button type="button" id="btn-refresh" class="btn-g">تحديث البيانات</button>
-          <button type="button" onclick="window.print()" class="btn-r">طباعة PDF</button>
-          <button type="button" id="btn-lock" class="btn-d">قفل البوابة</button>
-        </div>
+  <!-- محتوى بوابة المديرة -->
+  <div id="adm-view">
+    <div class="bar np" style="margin-bottom:16px">
+      <input type="text" id="adm-search" style="max-width:420px;margin:0" placeholder="بحث سريع باسم الطالب أو الصف أو المادة...">
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button type="button" id="btn-reload" class="btn-g">تحديث الكل</button>
+        <button type="button" onclick="window.print()" class="btn-d">طباعة PDF</button>
+        <button type="button" id="btn-lock-portal" class="btn-d">خروج</button>
       </div>
-
-      <div class="stats">
-        <div class="stat">
-          <span class="k">إجمالي سجلات الغياب والهروب والإجازة</span>
-          <span id="st-abs-total" class="v">0</span>
-        </div>
-        <div class="stat">
-          <span class="k">إجمالي الدرجات المرصودة</span>
-          <span id="st-gr-total" class="v" style="color:#22d3ee">0</span>
-        </div>
-        <div class="stat">
-          <span class="k">المعدل العام للدرجات</span>
-          <span id="st-gr-avg" class="v" style="color:#34d399">0 / 100</span>
-        </div>
-      </div>
-
-      <input type="text" id="adm-filter" class="np" placeholder="بحث شامل باسم الطالب أو الصف أو المادة أو الحالة...">
     </div>
 
+    <!-- 1. الدرجات + قفل/فتح التعديل على المدرسين -->
     <div class="panel">
       <div class="bar np">
-        <h3 style="margin:0;color:#34d399">سجل الغيابات، الهروب، والإجازات</h3>
-        <button type="button" id="adm-new-month-abs" class="btn-w">بدء شهر جديد (الغيابات)</button>
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th>الطالب</th>
-            <th>الصف</th>
-            <th>الحالة</th>
-            <th>التاريخ</th>
-          </tr>
-        </thead>
-        <tbody id="adm-abs-body"></tbody>
-      </table>
-    </div>
-
-    <div class="panel">
-      <div class="bar np">
-        <h3 style="margin:0;color:#22d3ee">سجل الدرجات المرصودة (من 100)</h3>
-        <button type="button" id="adm-new-month-gr" class="btn-w">بدء شهر جديد (الدرجات)</button>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <h3 style="margin:0;color:#22d3ee">الدرجات المرصودة (من 100)</h3>
+          <span id="badge-gr-lock" class="lock-pill unlocked">التعديل مفتوح للمدرسين</span>
+        </div>
+        <button type="button" id="btn-toggle-gr-lock" class="btn-w">قفل التعديل على المدرسين</button>
       </div>
       <table>
         <thead>
@@ -116,8 +84,94 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
             <th>الدرجة</th>
           </tr>
         </thead>
-        <tbody id="adm-gr-body"></tbody>
+        <tbody id="body-grades"></tbody>
       </table>
+    </div>
+
+    <!-- 2. الغيابات + قفل/فتح التعديل على المعاون -->
+    <div class="panel">
+      <div class="bar np">
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <h3 style="margin:0;color:#34d399">الغيابات، الهروب، والإجازات</h3>
+          <span id="badge-abs-lock" class="lock-pill unlocked">التعديل مفتوح للمعاون</span>
+        </div>
+        <button type="button" id="btn-toggle-abs-lock" class="btn-w">قفل التعديل على المعاون</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>الطالب</th>
+            <th>الصف</th>
+            <th>الحالة</th>
+            <th>التاريخ</th>
+          </tr>
+        </thead>
+        <tbody id="body-abs"></tbody>
+      </table>
+    </div>
+
+    <!-- 3. الطلاب المتميزون -->
+    <div class="panel">
+      <div class="bar np">
+        <h3 style="margin:0;color:#fbbf24">الطلاب المتميزون</h3>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span style="font-size:13px;color:#94a3b8">الحد الأدنى للتميز:</span>
+          <input type="number" id="min-excel" value="90" min="50" max="100" style="width:85px;margin:0;padding:7px 10px">
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>الطالب</th>
+            <th>الصف</th>
+            <th>المادة</th>
+            <th>الدرجة</th>
+          </tr>
+        </thead>
+        <tbody id="body-excel"></tbody>
+      </table>
+    </div>
+
+    <!-- 4. الطلاب المدرجة أسماؤهم في بوابة المرشد التربوي -->
+    <div class="panel">
+      <h3 style="margin-top:0;color:#c084fc">الطلاب المدرجة أسماؤهم في بوابة المرشد التربوي</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>الطالب</th>
+            <th>الصف</th>
+            <th>الحالة / الملاحظة</th>
+            <th>التاريخ</th>
+          </tr>
+        </thead>
+        <tbody id="body-counselor"></tbody>
+      </table>
+    </div>
+
+    <!-- 5. الأقساط المدفوعة -->
+    <div class="panel">
+      <h3 style="margin-top:0;color:#38bdf8">الأقساط المدفوعة</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>الطالب</th>
+            <th>الصف</th>
+            <th>المبلغ المدفوع</th>
+            <th>التفاصيل / التاريخ</th>
+          </tr>
+        </thead>
+        <tbody id="body-payments"></tbody>
+      </table>
+    </div>
+
+    <!-- 6. توجيه / تعميم إداري للمدرسة -->
+    <div class="panel">
+      <h3 style="margin-top:0;color:#fb7185">توجيه أو تعميم إداري</h3>
+      <div class="np">
+        <textarea id="dir-note-input" placeholder="اكتب توجيهاً أو ملاحظة إدارية للمدرسين والمعاون..."></textarea>
+        <button type="button" id="btn-save-note" class="btn-r">حفظ ونشر التوجيه</button>
+      </div>
+      <div id="dir-note-display" class="note-box">لا يوجد توجيه إداري منشور حالياً.</div>
     </div>
   </div>
 </div>
@@ -130,8 +184,14 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
 <script>
 var FIREBASE_DB_URL = "https://al-maarefa-school-default-rtdb.firebaseio.com";
 var ADMIN_PASS = "99100";
-var absList = [];
-var grList = [];
+
+var gradesArr = [];
+var absArr = [];
+var counselorArr = [];
+var paymentsArr = [];
+var grLocked = false;
+var absLocked = false;
+var dirNoteText = "";
 
 function readArr(key){
   try {
@@ -149,6 +209,16 @@ function cloudUrl(path){
   return base ? (base + "/alpha_sec/" + path + ".json") : "";
 }
 
+function putCloud(path, val){
+  var u = cloudUrl(path);
+  if(!u) return;
+  fetch(u, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(val)
+  }).catch(function(){});
+}
+
 function setStatus(txt, ok){
   var el = document.getElementById("cloud-status");
   if(!el) return;
@@ -156,121 +226,230 @@ function setStatus(txt, ok){
   el.style.color = ok ? "#34d399" : "#fbbf24";
 }
 
-function renderAdmin(){
-  var q = (document.getElementById("adm-filter").value || "").trim().toLowerCase();
-  var aBody = document.getElementById("adm-abs-body");
-  var gBody = document.getElementById("adm-gr-body");
+function renderLockBadges(){
+  var gBadge = document.getElementById("badge-gr-lock");
+  var gBtn = document.getElementById("btn-toggle-gr-lock");
+  var aBadge = document.getElementById("badge-abs-lock");
+  var aBtn = document.getElementById("btn-toggle-abs-lock");
 
-  var fAbs = absList.filter(function(x){
-    return !q || ((x.n || "") + " " + (x.c || "") + " " + (x.t || "") + " " + (x.d || "")).toLowerCase().indexOf(q) > -1;
+  if(grLocked){
+    gBadge.className = "lock-pill locked";
+    gBadge.innerText = "التعديل مقفول على المدرسين";
+    gBtn.className = "btn-g";
+    gBtn.innerText = "فتح التعديل للمدرسين";
+  } else {
+    gBadge.className = "lock-pill unlocked";
+    gBadge.innerText = "التعديل مفتوح للمدرسين";
+    gBtn.className = "btn-w";
+    gBtn.innerText = "قفل التعديل على المدرسين";
+  }
+
+  if(absLocked){
+    aBadge.className = "lock-pill locked";
+    aBadge.innerText = "التعديل مقفول على المعاون";
+    aBtn.className = "btn-g";
+    aBtn.innerText = "فتح التعديل للمعاون";
+  } else {
+    aBadge.className = "lock-pill unlocked";
+    aBadge.innerText = "التعديل مفتوح للمعاون";
+    aBtn.className = "btn-w";
+    aBtn.innerText = "قفل التعديل على المعاون";
+  }
+}
+
+function matchText(str, q){
+  if(!q) return true;
+  return String(str || "").toLowerCase().indexOf(q) > -1;
+}
+
+function renderAllSections(){
+  renderLockBadges();
+  var q = (document.getElementById("adm-search").value || "").trim().toLowerCase();
+  var minExcel = Number(document.getElementById("min-excel").value) || 90;
+
+  // الدرجات
+  var gBody = document.getElementById("body-grades");
+  var fGr = gradesArr.filter(function(x){
+    return matchText((x.n || x.student || "") + " " + (x.c || x.className || "") + " " + (x.s || x.subject || "") + " " + (x.g ?? x.grade ?? ""), q);
   });
+  gBody.innerHTML = "";
+  if(!fGr.length){
+    gBody.innerHTML = "<tr><td colspan='4' class='empty'>لا توجد درجات معروضة</td></tr>";
+  } else {
+    fGr.forEach(function(x){
+      var tr = document.createElement("tr");
+      tr.innerHTML =
+        "<td>" + (x.n || x.student || "") + "</td>" +
+        "<td>" + (x.c || x.className || "") + "</td>" +
+        "<td>" + (x.s || x.subject || "") + "</td>" +
+        "<td><strong style='color:#22d3ee'>" + (x.g ?? x.grade ?? 0) + " / 100</strong></td>";
+      gBody.appendChild(tr);
+    });
+  }
 
-  var fGr = grList.filter(function(x){
-    return !q || ((x.n || "") + " " + (x.c || "") + " " + (x.s || "") + " " + (x.g || "")).toLowerCase().indexOf(q) > -1;
+  // الغيابات
+  var aBody = document.getElementById("body-abs");
+  var fAbs = absArr.filter(function(x){
+    return matchText((x.n || x.student || "") + " " + (x.c || x.className || "") + " " + (x.t || x.type || "") + " " + (x.d || x.date || ""), q);
   });
-
-  document.getElementById("st-abs-total").innerText = String(fAbs.length);
-  document.getElementById("st-gr-total").innerText = String(fGr.length);
-
-  var sum = 0;
-  for(var i = 0; i < fGr.length; i++){ sum += Number(fGr[i].g) || 0; }
-  var avg = fGr.length ? (sum / fGr.length).toFixed(1) : "0";
-  document.getElementById("st-gr-avg").innerText = avg + " / 100";
-
   aBody.innerHTML = "";
   if(!fAbs.length){
     aBody.innerHTML = "<tr><td colspan='4' class='empty'>لا توجد سجلات غياب أو هروب أو إجازة</td></tr>";
   } else {
-    for(var j = 0; j < fAbs.length; j++){
-      var a = fAbs[j];
-      var col = a.t === "هروب" ? "#fb7185" : (a.t === "غياب" ? "#fbbf24" : "#34d399");
-      var trA = document.createElement("tr");
-      trA.innerHTML =
-        "<td>" + (a.n || "") + "</td>" +
-        "<td>" + (a.c || "") + "</td>" +
-        "<td style='color:" + col + ";font-weight:bold'>" + (a.t || "") + "</td>" +
-        "<td>" + (a.d || "") + "</td>";
-      aBody.appendChild(trA);
-    }
+    fAbs.forEach(function(x){
+      var st = x.t || x.type || "غياب";
+      var col = st === "هروب" ? "#fb7185" : (st === "غياب" ? "#fbbf24" : "#34d399");
+      var tr = document.createElement("tr");
+      tr.innerHTML =
+        "<td>" + (x.n || x.student || "") + "</td>" +
+        "<td>" + (x.c || x.className || "") + "</td>" +
+        "<td style='color:" + col + ";font-weight:bold'>" + st + "</td>" +
+        "<td>" + (x.d || x.date || "") + "</td>";
+      aBody.appendChild(tr);
+    });
   }
 
-  gBody.innerHTML = "";
-  if(!fGr.length){
-    gBody.innerHTML = "<tr><td colspan='4' class='empty'>لا توجد درجات مرصودة</td></tr>";
+  // الطلاب المتميزون
+  var eBody = document.getElementById("body-excel");
+  var excelList = gradesArr.filter(function(x){
+    var val = Number(x.g ?? x.grade ?? 0);
+    return val >= minExcel && matchText((x.n || x.student || "") + " " + (x.c || x.className || "") + " " + (x.s || x.subject || ""), q);
+  });
+  eBody.innerHTML = "";
+  if(!excelList.length){
+    eBody.innerHTML = "<tr><td colspan='4' class='empty'>لا يوجد طلاب متميزون بالحد المحدد حالياً</td></tr>";
   } else {
-    for(var k = 0; k < fGr.length; k++){
-      var g = fGr[k];
-      var trG = document.createElement("tr");
-      trG.innerHTML =
-        "<td>" + (g.n || "") + "</td>" +
-        "<td>" + (g.c || "") + "</td>" +
-        "<td>" + (g.s || "") + "</td>" +
-        "<td><strong style='color:#22d3ee'>" + (g.g || 0) + " / 100</strong></td>";
-      gBody.appendChild(trG);
-    }
+    excelList.forEach(function(x){
+      var tr = document.createElement("tr");
+      tr.innerHTML =
+        "<td>" + (x.n || x.student || "") + "</td>" +
+        "<td>" + (x.c || x.className || "") + "</td>" +
+        "<td>" + (x.s || x.subject || "") + "</td>" +
+        "<td><strong style='color:#fbbf24'>" + (x.g ?? x.grade ?? 0) + " / 100</strong></td>";
+      eBody.appendChild(tr);
+    });
   }
+
+  // المرشد التربوي
+  var cBody = document.getElementById("body-counselor");
+  var fCon = counselorArr.filter(function(x){
+    return matchText((x.n || x.student || x.name || "") + " " + (x.c || x.className || "") + " " + (x.note || x.case || x.t || x.type || ""), q);
+  });
+  cBody.innerHTML = "";
+  if(!fCon.length){
+    cBody.innerHTML = "<tr><td colspan='4' class='empty'>لا توجد أسماء مدرجة في بوابة المرشد التربوي حالياً</td></tr>";
+  } else {
+    fCon.forEach(function(x){
+      var tr = document.createElement("tr");
+      tr.innerHTML =
+        "<td>" + (x.n || x.student || x.name || "") + "</td>" +
+        "<td>" + (x.c || x.className || "") + "</td>" +
+        "<td style='color:#c084fc'>" + (x.note || x.case || x.t || x.type || "متابعة تربوية") + "</td>" +
+        "<td>" + (x.d || x.date || "") + "</td>";
+      cBody.appendChild(tr);
+    });
+  }
+
+  // الأقساط المدفوعة
+  var pBody = document.getElementById("body-payments");
+  var fPay = paymentsArr.filter(function(x){
+    return matchText((x.n || x.student || x.name || "") + " " + (x.c || x.className || "") + " " + (x.amount || x.paid || "") + " " + (x.note || x.d || x.date || ""), q);
+  });
+  pBody.innerHTML = "";
+  if(!fPay.length){
+    pBody.innerHTML = "<tr><td colspan='4' class='empty'>لا توجد أقساط مدفوعة مسجلة حالياً</td></tr>";
+  } else {
+    fPay.forEach(function(x){
+      var amt = x.amount ?? x.paid ?? x.g ?? 0;
+      var tr = document.createElement("tr");
+      tr.innerHTML =
+        "<td>" + (x.n || x.student || x.name || "") + "</td>" +
+        "<td>" + (x.c || x.className || "") + "</td>" +
+        "<td><strong style='color:#38bdf8'>" + amt + "</strong></td>" +
+        "<td>" + (x.note || x.d || x.date || "") + "</td>";
+      pBody.appendChild(tr);
+    });
+  }
+
+  // التوجيه الإداري
+  var noteDisp = document.getElementById("dir-note-display");
+  noteDisp.innerText = dirNoteText ? ("توجيه الإدارة: " + dirNoteText) : "لا يوجد توجيه إداري منشور حالياً.";
 }
 
-function loadAllData(){
-  absList = readArr("al_d_abs");
-  grList = readArr("al_d_gr");
-  renderAdmin();
+function fetchJsonSafe(path){
+  var u = cloudUrl(path);
+  if(!u) return Promise.resolve(null);
+  return fetch(u).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; });
+}
 
-  var uAbs = cloudUrl("abs");
-  var uGr = cloudUrl("gr");
-  if(!uAbs || !uGr){ setStatus("وضع محلي", false); return; }
+function loadAllDirectorData(){
+  gradesArr = readArr("al_d_gr");
+  absArr = readArr("al_d_abs");
+  counselorArr = readArr("al_d_con").length ? readArr("al_d_con") : readArr("al_d_counselor");
+  paymentsArr = readArr("al_d_acc").length ? readArr("al_d_acc") : readArr("al_d_pay");
+  grLocked = localStorage.getItem("al_lock_gr") === "1";
+  absLocked = localStorage.getItem("al_lock_abs") === "1";
+  dirNoteText = localStorage.getItem("al_dir_note") || "";
+  document.getElementById("dir-note-input").value = dirNoteText;
+  renderAllSections();
 
   Promise.all([
-    fetch(uAbs).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; }),
-    fetch(uGr).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; })
+    fetchJsonSafe("gr"),
+    fetchJsonSafe("abs"),
+    fetchJsonSafe("counselor"),
+    fetchJsonSafe("acc"),
+    fetchJsonSafe("locks/grades"),
+    fetchJsonSafe("locks/abs"),
+    fetchJsonSafe("director_note")
   ]).then(function(res){
-    var synced = false;
+    var any = false;
     if(res[0] !== null && res[0] !== undefined){
-      absList = Array.isArray(res[0]) ? res[0] : Object.values(res[0]);
-      writeArr("al_d_abs", absList);
-      synced = true;
+      gradesArr = Array.isArray(res[0]) ? res[0] : Object.values(res[0]);
+      writeArr("al_d_gr", gradesArr);
+      any = true;
     }
     if(res[1] !== null && res[1] !== undefined){
-      grList = Array.isArray(res[1]) ? res[1] : Object.values(res[1]);
-      writeArr("al_d_gr", grList);
-      synced = true;
+      absArr = Array.isArray(res[1]) ? res[1] : Object.values(res[1]);
+      writeArr("al_d_abs", absArr);
+      any = true;
     }
-    setStatus(synced ? "متصل سحابياً (Firebase)" : "احتياط محلي", synced);
-    renderAdmin();
+    if(res[2] !== null && res[2] !== undefined){
+      counselorArr = Array.isArray(res[2]) ? res[2] : Object.values(res[2]);
+      writeArr("al_d_con", counselorArr);
+      any = true;
+    }
+    if(res[3] !== null && res[3] !== undefined){
+      paymentsArr = Array.isArray(res[3]) ? res[3] : Object.values(res[3]);
+      writeArr("al_d_acc", paymentsArr);
+      any = true;
+    }
+    if(typeof res[4] === "boolean"){
+      grLocked = res[4];
+      localStorage.setItem("al_lock_gr", grLocked ? "1" : "0");
+    }
+    if(typeof res[5] === "boolean"){
+      absLocked = res[5];
+      localStorage.setItem("al_lock_abs", absLocked ? "1" : "0");
+    }
+    if(typeof res[6] === "string"){
+      dirNoteText = res[6];
+      localStorage.setItem("al_dir_note", dirNoteText);
+      document.getElementById("dir-note-input").value = dirNoteText;
+    }
+    setStatus(any ? "متصل سحابياً (Firebase)" : "احتياط محلي", any);
+    renderAllSections();
   });
 }
 
-function resetMonth(cloudKey, localKey, label){
-  var cur = readArr(localKey);
-  var m = new Date().toISOString().slice(0, 7);
-  if(!confirm("تأكيد بدء شهر جديد (" + m + ") لـ " + label + "؟")) return;
-  var arch = cloudUrl("archives/" + m + "/" + cloudKey);
-  var done = function(){
-    writeArr(localKey, []);
-    var u = cloudUrl(cloudKey);
-    if(u){
-      fetch(u, { method:"PUT", headers:{"Content-Type":"application/json"}, body:JSON.stringify([]) }).catch(function(){});
-    }
-    alert("تم بدء شهر جديد (" + m + ") وتصفير " + label + ".");
-    loadAllData();
-  };
-  if(arch && cur.length){
-    fetch(arch, { method:"PUT", headers:{"Content-Type":"application/json"}, body:JSON.stringify(cur) })
-      .then(done).catch(done);
-  } else {
-    done();
-  }
-}
-
 document.getElementById("btn-adm-login").onclick = function(){
-  var val = document.getElementById("adm-pass").value.trim();
-  if(val === ADMIN_PASS){
+  var p = document.getElementById("adm-pass").value.trim();
+  if(p === ADMIN_PASS){
     document.getElementById("adm-pass").value = "";
     document.getElementById("adm-login").style.display = "none";
-    document.getElementById("adm-dashboard").style.display = "block";
-    loadAllData();
+    document.getElementById("adm-view").style.display = "block";
+    loadAllDirectorData();
   } else {
-    alert("الرمز السري الخاص بالإدارة غير صحيح");
+    alert("الرمز السري غير صحيح");
   }
 };
 
@@ -278,16 +457,36 @@ document.getElementById("adm-pass").addEventListener("keydown", function(e){
   if(e.key === "Enter") document.getElementById("btn-adm-login").click();
 });
 
-document.getElementById("btn-lock").onclick = function(){
-  document.getElementById("adm-dashboard").style.display = "none";
+document.getElementById("btn-lock-portal").onclick = function(){
+  document.getElementById("adm-view").style.display = "none";
   document.getElementById("adm-login").style.display = "block";
 };
 
-document.getElementById("btn-refresh").onclick = loadAllData;
-document.getElementById("adm-filter").oninput = renderAdmin;
-document.getElementById("adm-new-month-abs").onclick = function(){ resetMonth("abs", "al_d_abs", "سجل الغيابات"); };
-document.getElementById("adm-new-month-gr").onclick = function(){ resetMonth("gr", "al_d_gr", "سجل الدرجات"); };
+document.getElementById("btn-toggle-gr-lock").onclick = function(){
+  grLocked = !grLocked;
+  localStorage.setItem("al_lock_gr", grLocked ? "1" : "0");
+  putCloud("locks/grades", grLocked);
+  renderLockBadges();
+};
+
+document.getElementById("btn-toggle-abs-lock").onclick = function(){
+  absLocked = !absLocked;
+  localStorage.setItem("al_lock_abs", absLocked ? "1" : "0");
+  putCloud("locks/abs", absLocked);
+  renderLockBadges();
+};
+
+document.getElementById("btn-save-note").onclick = function(){
+  dirNoteText = document.getElementById("dir-note-input").value.trim();
+  localStorage.setItem("al_dir_note", dirNoteText);
+  putCloud("director_note", dirNoteText);
+  renderAllSections();
+  alert("تم حفظ التوجيه الإداري");
+};
+
+document.getElementById("btn-reload").onclick = loadAllDirectorData;
+document.getElementById("adm-search").oninput = renderAllSections;
+document.getElementById("min-excel").oninput = renderAllSections;
 </script>
 </body>
-  </html>
-  
+</html>
