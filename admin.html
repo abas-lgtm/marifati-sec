@@ -65,7 +65,6 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
       </div>
     </div>
 
-    <!-- 1. الدرجات (اسم الطالب مرة وحدة + ضغط لعرض جميع درجاته) -->
     <div class="panel">
       <div class="bar np">
         <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
@@ -104,7 +103,6 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
       </div>
     </div>
 
-    <!-- 2. الغيابات -->
     <div class="panel">
       <div class="bar np">
         <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
@@ -126,7 +124,6 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
       </table>
     </div>
 
-    <!-- 3. الطلاب المتميزون -->
     <div class="panel">
       <div class="bar np">
         <h3 style="margin:0;color:#fbbf24">الطلاب المتميزون</h3>
@@ -140,7 +137,7 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
           <tr>
             <th>الطالب</th>
             <th>الصف</th>
-            <th>عدد المواد المتميزة</th>
+            <th>عدد المواد</th>
             <th>المعدل</th>
           </tr>
         </thead>
@@ -148,7 +145,6 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
       </table>
     </div>
 
-    <!-- 4. المرشد التربوي -->
     <div class="panel">
       <h3 style="margin-top:0;color:#c084fc">الطلاب المدرجة أسماؤهم في بوابة المرشد التربوي</h3>
       <table>
@@ -164,7 +160,6 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
       </table>
     </div>
 
-    <!-- 5. الأقساط المدفوعة -->
     <div class="panel">
       <h3 style="margin-top:0;color:#38bdf8">الأقساط المدفوعة</h3>
       <table>
@@ -180,7 +175,6 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
       </table>
     </div>
 
-    <!-- 6. توجيه إداري -->
     <div class="panel">
       <h3 style="margin-top:0;color:#fb7185">توجيه أو تعميم إداري</h3>
       <div class="np">
@@ -282,7 +276,6 @@ function openStudentGrades(st){
     body.appendChild(tr);
   }
   box.style.display = "block";
-  box.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
 function renderLockBadges(){
@@ -326,7 +319,6 @@ function renderAllSections(){
   var q = (document.getElementById("adm-search").value || "").trim().toLowerCase();
   var minExcel = Number(document.getElementById("min-excel").value) || 90;
 
-  // الدرجات مجمعة لكل طالب مرة وحدة
   var grouped = groupGradesByStudent(gradesArr).filter(function(st){
     var subNames = st.items.map(function(x){ return x.subject + " " + x.grade; }).join(" ");
     return matchText(st.name + " " + st.className + " " + subNames, q);
@@ -347,17 +339,13 @@ function renderAllSections(){
       tdName.appendChild(link);
 
       tr.appendChild(tdName);
-      tr.innerHTML +=
-        "<td>" + st.className + "</td>" +
-        "<td>" + st.items.length + " مواد</td>" +
-        "<td><strong style='color:#34d399'>" + st.avg.toFixed(1) + " / 100</strong></td>";
-      tr.firstChild.innerHTML = "";
-      tr.firstChild.appendChild(link);
+      var tdCls = document.createElement("td"); tdCls.innerText = st.className; tr.appendChild(tdCls);
+      var tdCnt = document.createElement("td"); tdCnt.innerText = st.items.length + " مواد"; tr.appendChild(tdCnt);
+      var tdAvg = document.createElement("td"); tdAvg.innerHTML = "<strong style='color:#34d399'>" + st.avg.toFixed(1) + " / 100</strong>"; tr.appendChild(tdAvg);
       gBody.appendChild(tr);
     });
   }
 
-  // الغيابات
   var aBody = document.getElementById("body-abs");
   var fAbs = absArr.filter(function(x){
     return matchText((x.n || x.student || "") + " " + (x.c || x.className || "") + " " + (x.t || x.type || "") + " " + (x.d || x.date || ""), q);
@@ -379,7 +367,6 @@ function renderAllSections(){
     });
   }
 
-  // الطلاب المتميزون (حسب المعدل أو الدرجات العالية)
   var eBody = document.getElementById("body-excel");
   var excelStudents = groupGradesByStudent(gradesArr).filter(function(st){
     var hasHigh = st.avg >= minExcel || st.items.some(function(it){ return it.grade >= minExcel; });
@@ -391,17 +378,20 @@ function renderAllSections(){
   } else {
     excelStudents.forEach(function(st){
       var tr = document.createElement("tr");
-      tr.innerHTML =
-        "<td><span class='st-click'>" + st.name + "</span></td>" +
-        "<td>" + st.className + "</td>" +
-        "<td>" + st.items.length + " مواد</td>" +
-        "<td><strong style='color:#fbbf24'>" + st.avg.toFixed(1) + " / 100</strong></td>";
-      tr.querySelector(".st-click").onclick = function(){ openStudentGrades(st); };
+      var tdN = document.createElement("td");
+      var sp = document.createElement("span");
+      sp.className = "st-click";
+      sp.innerText = st.name;
+      sp.onclick = function(){ openStudentGrades(st); };
+      tdN.appendChild(sp);
+      tr.appendChild(tdN);
+      tr.innerHTML += "<td>" + st.className + "</td><td>" + st.items.length + " مواد</td><td><strong style='color:#fbbf24'>" + st.avg.toFixed(1) + " / 100</strong></td>";
+      tr.firstChild.innerHTML = "";
+      tr.firstChild.appendChild(sp);
       eBody.appendChild(tr);
     });
   }
 
-  // المرشد التربوي
   var cBody = document.getElementById("body-counselor");
   var fCon = counselorArr.filter(function(x){
     return matchText((x.n || x.student || x.name || "") + " " + (x.c || x.className || "") + " " + (x.note || x.case || x.t || x.type || ""), q);
@@ -421,7 +411,6 @@ function renderAllSections(){
     });
   }
 
-  // الأقساط المدفوعة
   var pBody = document.getElementById("body-payments");
   var fPay = paymentsArr.filter(function(x){
     return matchText((x.n || x.student || x.name || "") + " " + (x.c || x.className || "") + " " + (x.amount || x.paid || "") + " " + (x.note || x.d || x.date || ""), q);
@@ -442,14 +431,15 @@ function renderAllSections(){
     });
   }
 
-  var noteDisp = document.getElementById("dir-note-display");
-  noteDisp.innerText = dirNoteText ? ("توجيه الإدارة: " + dirNoteText) : "لا يوجد توجيه إداري منشور حالياً.";
+  document.getElementById("dir-note-display").innerText = dirNoteText ? ("توجيه الإدارة: " + dirNoteText) : "لا يوجد توجيه إداري منشور حالياً.";
 }
 
-function fetchJsonSafe(path){
+function pullSingle(path, onData){
   var u = cloudUrl(path);
-  if(!u) return Promise.resolve(null);
-  return fetch(u).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; });
+  if(!u) return;
+  fetch(u).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
+    if(d !== null && d !== undefined) onData(d);
+  }).catch(function(){});
 }
 
 function loadAllDirectorData(){
@@ -462,52 +452,51 @@ function loadAllDirectorData(){
   dirNoteText = localStorage.getItem("al_dir_note") || "";
   document.getElementById("dir-note-input").value = dirNoteText;
   renderAllSections();
+  setStatus("جاري المزامنة...", false);
 
-  Promise.all([
-    fetchJsonSafe("gr"),
-    fetchJsonSafe("abs"),
-    fetchJsonSafe("counselor"),
-    fetchJsonSafe("acc"),
-    fetchJsonSafe("locks/grades"),
-    fetchJsonSafe("locks/abs"),
-    fetchJsonSafe("director_note")
-  ]).then(function(res){
-    var any = false;
-    if(res[0] !== null && res[0] !== undefined){
-      gradesArr = Array.isArray(res[0]) ? res[0] : Object.values(res[0]);
-      writeArr("al_d_gr", gradesArr);
-      any = true;
-    }
-    if(res[1] !== null && res[1] !== undefined){
-      absArr = Array.isArray(res[1]) ? res[1] : Object.values(res[1]);
-      writeArr("al_d_abs", absArr);
-      any = true;
-    }
-    if(res[2] !== null && res[2] !== undefined){
-      counselorArr = Array.isArray(res[2]) ? res[2] : Object.values(res[2]);
-      writeArr("al_d_con", counselorArr);
-      any = true;
-    }
-    if(res[3] !== null && res[3] !== undefined){
-      paymentsArr = Array.isArray(res[3]) ? res[3] : Object.values(res[3]);
-      writeArr("al_d_acc", paymentsArr);
-      any = true;
-    }
-    if(typeof res[4] === "boolean"){
-      grLocked = res[4];
-      localStorage.setItem("al_lock_gr", grLocked ? "1" : "0");
-    }
-    if(typeof res[5] === "boolean"){
-      absLocked = res[5];
-      localStorage.setItem("al_lock_abs", absLocked ? "1" : "0");
-    }
-    if(typeof res[6] === "string"){
-      dirNoteText = res[6];
-      localStorage.setItem("al_dir_note", dirNoteText);
-      document.getElementById("dir-note-input").value = dirNoteText;
-    }
-    setStatus(any ? "متصل سحابياً (Firebase)" : "احتياط محلي", any);
+  pullSingle("gr", function(d){
+    gradesArr = Array.isArray(d) ? d : Object.values(d);
+    writeArr("al_d_gr", gradesArr);
+    setStatus("متصل سحابياً (Firebase)", true);
     renderAllSections();
+  });
+  pullSingle("abs", function(d){
+    absArr = Array.isArray(d) ? d : Object.values(d);
+    writeArr("al_d_abs", absArr);
+    setStatus("متصل سحابياً (Firebase)", true);
+    renderAllSections();
+  });
+  pullSingle("counselor", function(d){
+    counselorArr = Array.isArray(d) ? d : Object.values(d);
+    writeArr("al_d_con", counselorArr);
+    renderAllSections();
+  });
+  pullSingle("acc", function(d){
+    paymentsArr = Array.isArray(d) ? d : Object.values(d);
+    writeArr("al_d_acc", paymentsArr);
+    renderAllSections();
+  });
+  pullSingle("locks/grades", function(d){
+    if(typeof d === "boolean"){
+      grLocked = d;
+      localStorage.setItem("al_lock_gr", d ? "1" : "0");
+      renderLockBadges();
+    }
+  });
+  pullSingle("locks/abs", function(d){
+    if(typeof d === "boolean"){
+      absLocked = d;
+      localStorage.setItem("al_lock_abs", d ? "1" : "0");
+      renderLockBadges();
+    }
+  });
+  pullSingle("director_note", function(d){
+    if(typeof d === "string"){
+      dirNoteText = d;
+      localStorage.setItem("al_dir_note", d);
+      document.getElementById("dir-note-input").value = d;
+      renderAllSections();
+    }
   });
 }
 
@@ -515,4 +504,16 @@ document.getElementById("btn-adm-login").onclick = function(){
   var p = document.getElementById("adm-pass").value.trim();
   if(p === ADMIN_PASS){
     document.getElementById("adm-pass").value = "";
-    document.getElementById("adm-login").style.display 
+    document.getElementById("adm-login").style.display = "none";
+    document.getElementById("adm-view").style.display = "block";
+    loadAllDirectorData();
+  } else {
+    alert("الرمز السري غير صحيح");
+  }
+};
+
+document.getElementById("adm-pass").addEventListener("keydown", function(e){
+  if(e.key === "Enter") document.getElementById("btn-adm-login").click();
+});
+
+document.getElementById("btn-lock-portal").onclic
