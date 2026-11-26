@@ -230,6 +230,14 @@ var SUBS = [
   {n:"مبادى الحاسوب", c:"1998"}
 ];
 
+function escHtml(s){
+  return String(s === undefined || s === null ? "" : s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
 function cloudUrl(path){
   var base = String(FIREBASE_DB_URL || "").trim().replace(/\/+$/, "");
   var cleanPath = String(path || "").replace(/^\/+/, "");
@@ -384,7 +392,7 @@ function drawSubjs(){
       b.style.marginBottom = "8px";
       b.style.minHeight = "0";
       b.style.padding = "14px 16px";
-      b.innerHTML = "<span class='title' style='margin:0;font-size:16px;color:#22d3ee'>" + sub.n + "</span>";
+      b.innerHTML = "<span class='title' style='margin:0;font-size:16px;color:#22d3ee'>" + escHtml(sub.n) + "</span>";
       b.onclick = function(){
         CS = sub;
         document.getElementById("th").innerText = "دخول: " + sub.n;
@@ -429,10 +437,10 @@ function drawAbs(){
   tb.innerHTML = "";
   for(var i = 0; i < a.length; i++){
     (function(x, idx){
-      if(!f || (x.n + " " + x.c + " " + x.t).toLowerCase().indexOf(f) > -1){
+      if(!f || ((x.n || "") + " " + (x.c || "") + " " + (x.t || "")).toLowerCase().indexOf(f) > -1){
         var tr = document.createElement("tr");
         var col = x.t === "هروب" ? "#fb7185" : (x.t === "غياب" ? "#fbbf24" : "#34d399");
-        tr.innerHTML = "<td>" + x.n + "</td><td>" + x.c + "</td><td style='color:" + col + ";font-weight:bold'>" + x.t + "</td><td>" + x.d + "</td><td class='np'></td>";
+        tr.innerHTML = "<td>" + escHtml(x.n) + "</td><td>" + escHtml(x.c) + "</td><td style='color:" + col + ";font-weight:bold'>" + escHtml(x.t) + "</td><td>" + escHtml(x.d) + "</td><td class='np'></td>";
         var btn = document.createElement("button");
         btn.type = "button";
         btn.className = "btn-r";
@@ -472,7 +480,7 @@ function ag(){
   var c = document.getElementById("tc").value;
   var gi = document.getElementById("tg"), g = Number(gi.value);
   if(!n || gi.value === ""){ alert("أدخل اسم الطالب والدرجة"); return; }
-  if(g < 0 || g > 100){ alert("الدرجة بين 0 و 100"); return; }
+  if(isNaN(g) || g < 0 || g > 100){ alert("الدرجة بين 0 و 100"); return; }
   var a = readArr("al_d_gr");
   a.unshift({n:n, c:c, s:CS.n, g:g});
   document.getElementById("tn").value = "";
@@ -485,9 +493,4 @@ function drawGr(){
   var f = (document.getElementById("gf").value || "").trim().toLowerCase();
   var a = readArr("al_d_gr"), tb = document.getElementById("gb");
   if(!tb) return;
-  tb.innerHTML = "";
-  for(var i = 0; i < a.length; i++){
-    (function(x, idx){
-      if((!CS || x.s === CS.n) && (!f || (x.n + " " + x.c + " " + x.s).toLowerCase().indexOf(f) > -1)){
-        var tr = document.createElement("tr");
-        tr.innerHTML = "<td>" + x.n + "</td><td>" + x.
+  tb.innerHTM
