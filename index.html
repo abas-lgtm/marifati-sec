@@ -260,21 +260,26 @@ function pullLocks(cb){
 
   var uG = cloudUrl("locks/grades");
   var uA = cloudUrl("locks/abs");
-  Promise.all([
-    uG ? fetch(uG).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; }) : Promise.resolve(null),
-    uA ? fetch(uA).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; }) : Promise.resolve(null)
-  ]).then(function(res){
-    if(typeof res[0] === "boolean"){
-      GR_LOCKED = res[0];
-      localStorage.setItem("al_lock_gr", GR_LOCKED ? "1" : "0");
-    }
-    if(typeof res[1] === "boolean"){
-      ABS_LOCKED = res[1];
-      localStorage.setItem("al_lock_abs", ABS_LOCKED ? "1" : "0");
-    }
-    renderLockBanners();
-    if(cb) cb();
-  });
+  if(uG){
+    fetch(uG).then(function(r){ return r.ok ? r.json() : null; }).then(function(v){
+      if(typeof v === "boolean"){
+        GR_LOCKED = v;
+        localStorage.setItem("al_lock_gr", v ? "1" : "0");
+        renderLockBanners();
+        if(cb) cb();
+      }
+    }).catch(function(){});
+  }
+  if(uA){
+    fetch(uA).then(function(r){ return r.ok ? r.json() : null; }).then(function(v){
+      if(typeof v === "boolean"){
+        ABS_LOCKED = v;
+        localStorage.setItem("al_lock_abs", v ? "1" : "0");
+        renderLockBanners();
+        if(cb) cb();
+      }
+    }).catch(function(){});
+  }
 }
 
 function syncPull(cloudKey, localKey, cb){
@@ -361,10 +366,10 @@ function sw(v){
   var t = document.getElementById("v-" + v);
   if(t) t.style.display = (v === "home" ? "grid" : "block");
   if(v === "al") pm("a", "am");
-  if(v === "ad") pullLocks(function(){ syncPull("abs", "al_d_abs", drawAbs); });
+  if(v === "ad"){ pullLocks(drawAbs); syncPull("abs", "al_d_abs", drawAbs); }
   if(v === "ts") drawSubjs();
   if(v === "tl" && CS) pm("t_" + CS.n, "tm");
-  if(v === "td") pullLocks(function(){ syncPull("gr", "al_d_gr", drawGr); });
+  if(v === "td"){ pullLocks(drawGr); syncPull("gr", "al_d_gr", drawGr); }
 }
 
 function drawSubjs(){
@@ -485,4 +490,4 @@ function drawGr(){
     (function(x, idx){
       if((!CS || x.s === CS.n) && (!f || (x.n + " " + x.c + " " + x.s).toLowerCase().indexOf(f) > -1)){
         var tr = document.createElement("tr");
-        tr.innerHTML = "<td>" 
+        tr.innerHTML = "<td>" + x.n + "</td><td>" + x.
