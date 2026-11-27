@@ -25,6 +25,7 @@ button,.btn-d{cursor:pointer;border-radius:10px;border:1px solid #334155;backgro
 .locked{background:#450a0a;color:#fca5a5;border:1px solid #ef444466}
 .unlocked{background:#052e16;color:#6ee7b7;border:1px solid #10b98166}
 #adm-view{display:none}
+.err-msg{color:#fb7185;font-size:13px;min-height:18px;margin-bottom:8px;text-align:center}
 table{width:100%;border-collapse:collapse;margin-top:8px;font-size:14px}
 th,td{border:1px solid #1e293b;padding:10px;text-align:right}
 th{background:#020617;color:#fb7185}
@@ -53,7 +54,8 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
 
   <div id="adm-login" class="panel box-sm np">
     <h3 style="margin-top:0;color:#fb7185;text-align:center">دخول بوابة المديرة</h3>
-    <input type="password" id="adm-pass" autocomplete="off" placeholder="أدخل الرمز السري (99100)">
+    <input type="password" id="adm-pass" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="أدخل الرمز السري">
+    <div id="adm-err" class="err-msg"></div>
     <button type="button" id="btn-adm-login" class="btn-r" style="width:100%">دخول</button>
   </div>
 
@@ -172,7 +174,7 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
 </footer>
 
 <script>
-window.addEventListener("DOMContentLoaded", function(){
+(function(){
   var FIREBASE_DB_URL = "https://al-maarefa-school-default-rtdb.firebaseio.com";
   var ADMIN_PASS = "99100";
   var TARGET_SECTIONS = [
@@ -476,17 +478,6 @@ window.addEventListener("DOMContentLoaded", function(){
     }
   }
 
-  document.getElementById("body-students").addEventListener("click", function(e){
-    var target = e.target;
-    while(target && target !== this){
-      if(target.hasAttribute && target.hasAttribute("data-st-id")){
-        showStudentById(target.getAttribute("data-st-id"));
-        break;
-      }
-      target = target.parentNode;
-    }
-  });
-
   function pullPath(path, cb){
     var u = cloudUrl(path);
     if(!u) return;
@@ -550,4 +541,8 @@ window.addEventListener("DOMContentLoaded", function(){
     });
   }
 
-  function doLogin(
+  function openAdminPanel(){
+    try { sessionStorage.setItem("al_adm_logged", "1"); } catch(e){}
+    var errEl = document.getElementById("adm-err");
+    if(errEl) errEl.innerText = "";
+    document.getElementById("adm-lo
