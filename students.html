@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>ALPHA-SEC // بوابة الطلاب (استعلام الدرجات بالاسم)</title>
+<title>ALPHA-SEC // بوابة الطلاب (استعلام الدرجات والغيابات)</title>
 <style>
 *{box-sizing:border-box;font-family:Tahoma,Arial,sans-serif}
 body{margin:0;padding:0 0 75px;background:#030712;color:#f3f4f6;font-size:15px}
@@ -28,6 +28,7 @@ button,.btn-d{cursor:pointer;border-radius:10px;border:1px solid #334155;backgro
 table{width:100%;border-collapse:collapse;margin-top:8px;font-size:14px}
 th,td{border:1px solid #1e293b;padding:10px;text-align:right}
 th{background:#020617;color:#c084fc}
+.sec-title{margin-top:20px;margin-bottom:8px;font-size:16px;font-weight:bold}
 footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1px solid #c084fc55;padding:12px;text-align:center;font-size:13px;color:#cbd5e1;z-index:10}
 </style>
 </head>
@@ -35,7 +36,7 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
 <div class="wrap">
   <header>
     <div>
-      <h1>بوابة الطلاب — استعلام الدرجات</h1>
+      <h1>بوابة الطلاب — استعلام النتائج والغيابات</h1>
       <div class="sub">إعدادية المعرفة المهنية الاهلية // برمجة: عباس محمد عزيز</div>
       <div class="train">تحت تدريب الأستاذة أسمى حيدر</div>
     </div>
@@ -46,12 +47,12 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
   </header>
 
   <div class="panel">
-    <h3 style="margin-top:0;color:#c084fc">ابحث باسمك لعرض درجاتك فقط</h3>
+    <h3 style="margin-top:0;color:#c084fc">ابحث باسمك لعرض درجاتك وغياباتك فقط</h3>
     <div class="search-row">
       <input type="text" id="st-name-input" placeholder="اكتب اسم الطالب هنا..." autocomplete="off">
-      <button type="button" id="btn-find" class="btn-p">بحث عن درجاتي</button>
+      <button type="button" id="btn-find" class="btn-p">بحث عن بياناتي</button>
     </div>
-    <div id="search-msg" class="msg">اكتب اسمك واضغط على «بحث عن درجاتي» لإظهار درجاتك فقط.</div>
+    <div id="search-msg" class="msg">اكتب اسمك واضغط على «بحث عن بياناتي» لإظهار السجل الخاص بك.</div>
   </div>
 
   <div id="result-box" class="panel">
@@ -65,22 +66,37 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
         <span id="res-count" class="v" style="color:#22d3ee">0</span>
       </div>
       <div class="stat">
-        <span class="k">المعدل</span>
+        <span class="k">المعدل العام</span>
         <span id="res-avg" class="v" style="color:#34d399">0 / 100</span>
+      </div>
+      <div class="stat">
+        <span class="k">سجلات الانضباط</span>
+        <span id="res-abs-count" class="v" style="color:#fb7185">0 سجل</span>
       </div>
     </div>
 
-    <h3 style="margin-top:0;color:#22d3ee">درجاتك المرصودة (من 100)</h3>
+    <div class="sec-title" style="color:#22d3ee">📚 درجاتك المرصودة (من 100)</div>
     <table>
       <thead>
         <tr>
-          <th>الطالب</th>
           <th>الصف</th>
           <th>المادة</th>
           <th>الدرجة</th>
         </tr>
       </thead>
       <tbody id="my-grades-body"></tbody>
+    </table>
+
+    <div class="sec-title" style="color:#fbbf24">📋 سجل الغيابات، الهروب، والإجازات</div>
+    <table>
+      <thead>
+        <tr>
+          <th>الصف</th>
+          <th>الحالة</th>
+          <th>التاريخ</th>
+        </tr>
+      </thead>
+      <tbody id="my-abs-body"></tbody>
     </table>
   </div>
 </div>
@@ -90,6 +106,7 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
 <script>
 var FIREBASE_DB_URL = "https://al-maarefa-school-default-rtdb.firebaseio.com";
 var gradesData = [];
+var absData = [];
 
 function norm(txt){
   return String(txt || "")
@@ -101,15 +118,22 @@ function norm(txt){
     .trim();
 }
 
-function readLocalGrades(){
+function toList(d){
+  if(!d) return [];
+  if(Array.isArray(d)) return d;
+  if(typeof d === "object") return Object.values(d);
+  return [];
+}
+
+function readLocalArr(key){
   try {
-    var d = JSON.parse(localStorage.getItem("al_d_gr") || "[]");
+    var d = JSON.parse(localStorage.getItem(key) || "[]");
     return Array.isArray(d) ? d : [];
   } catch(e){ return []; }
 }
 
-function writeLocalGrades(arr){
-  try { localStorage.setItem("al_d_gr", JSON.stringify(arr)); } catch(e){}
+function writeLocalArr(key, arr){
+  try { localStorage.setItem(key, JSON.stringify(arr)); } catch(e){}
 }
 
 function setStatus(txt, ok){
@@ -119,40 +143,56 @@ function setStatus(txt, ok){
   el.style.color = ok ? "#34d399" : "#fbbf24";
 }
 
-function pullGrades(){
-  gradesData = readLocalGrades();
+function pullData(){
+  gradesData = readLocalArr("al_d_gr");
+  absData = readLocalArr("al_d_abs");
+  
   var base = String(FIREBASE_DB_URL || "").trim().replace(/\/+$/, "");
   if(!base){ setStatus("وضع محلي", false); return; }
+
+  // جلب الدرجات
   fetch(base + "/alpha_sec/gr.json")
     .then(function(r){ return r.ok ? r.json() : null; })
     .then(function(data){
       if(data !== null && data !== undefined){
-        gradesData = Array.isArray(data) ? data : Object.values(data);
-        writeLocalGrades(gradesData);
-        setStatus("متصل سحابياً (Firebase)", true);
-      } else {
-        setStatus("احتياط محلي", false);
+        gradesData = toList(data);
+        writeLocalArr("al_d_gr", gradesData);
       }
+      setStatus("متصل سحابياً (Firebase)", true);
     })
     .catch(function(){ setStatus("احتياط محلي", false); });
+
+  // جلب الغيابات من المعاون
+  fetch(base + "/alpha_sec/abs.json")
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(data){
+      if(data !== null && data !== undefined){
+        absData = toList(data);
+        writeLocalArr("al_d_abs", absData);
+      }
+    })
+    .catch(function(){});
 }
 
-function searchMyGrades(){
+function searchMyData(){
   var rawName = document.getElementById("st-name-input").value.trim();
   var msgEl = document.getElementById("search-msg");
   var boxEl = document.getElementById("result-box");
-  var bodyEl = document.getElementById("my-grades-body");
+  var gBody = document.getElementById("my-grades-body");
+  var aBody = document.getElementById("my-abs-body");
 
   var nq = norm(rawName);
   if(!nq){
     boxEl.style.display = "none";
     msgEl.style.color = "#fbbf24";
-    msgEl.innerText = "يرجى كتابة اسم الطالب أولاً للبحث عن درجاته.";
+    msgEl.innerText = "يرجى كتابة اسم الطالب أولاً للبحث عن بياناته.";
     return;
   }
 
   var parts = nq.split(" ");
-  var matches = gradesData.filter(function(item){
+  
+  // تصفية الدرجات
+  var matchGrades = gradesData.filter(function(item){
     var stName = norm(item.n || item.student || "");
     if(!stName) return false;
     if(stName.indexOf(nq) > -1) return true;
@@ -162,46 +202,82 @@ function searchMyGrades(){
     return true;
   });
 
-  if(!matches.length){
+  // تصفية الغيابات
+  var matchAbs = absData.filter(function(item){
+    var stName = norm(item.n || item.student || "");
+    if(!stName) return false;
+    if(stName.indexOf(nq) > -1) return true;
+    for(var i = 0; i < parts.length; i++){
+      if(parts[i] && stName.indexOf(parts[i]) === -1) return false;
+    }
+    return true;
+  });
+
+  if(!matchGrades.length && !matchAbs.length){
     boxEl.style.display = "none";
     msgEl.style.color = "#fb7185";
-    msgEl.innerText = "لم يتم العثور على درجات مسجلة باسم «" + rawName + "».";
+    msgEl.innerText = "لم يتم العثور على درجات أو غيابات مسجلة باسم «" + rawName + "».";
     return;
   }
 
   msgEl.style.color = "#34d399";
-  msgEl.innerText = "تم عرض درجات الطالب «" + rawName + "» فقط.";
+  msgEl.innerText = "تم عرض نتائج وغيابات الطالب «" + rawName + "».";
   boxEl.style.display = "block";
 
-  document.getElementById("res-name").innerText = matches[0].n || matches[0].student || rawName;
-  document.getElementById("res-count").innerText = String(matches.length);
+  var resolvedName = (matchGrades[0] && (matchGrades[0].n || matchGrades[0].student)) ||
+                     (matchAbs[0] && (matchAbs[0].n || matchAbs[0].student)) || rawName;
 
+  document.getElementById("res-name").innerText = resolvedName;
+  document.getElementById("res-count").innerText = String(matchGrades.length);
+  document.getElementById("res-abs-count").innerText = matchAbs.length + " سجل";
+
+  // عرض الدرجات
   var sum = 0;
-  bodyEl.innerHTML = "";
-  for(var j = 0; j < matches.length; j++){
-    var m = matches[j];
-    var gVal = Number(m.g !== undefined ? m.g : (m.grade || 0)) || 0;
-    sum += gVal;
-    var tr = document.createElement("tr");
-    tr.innerHTML =
-      "<td>" + (m.n || m.student || "") + "</td>" +
-      "<td>" + (m.c || m.className || "") + "</td>" +
-      "<td>" + (m.s || m.subject || "") + "</td>" +
-      "<td><strong style='color:#22d3ee'>" + gVal + " / 100</strong></td>";
-    bodyEl.appendChild(tr);
+  gBody.innerHTML = "";
+  if(!matchGrades.length){
+    gBody.innerHTML = "<tr><td colspan='3' style='text-align:center;color:#94a3b8'>لا توجد درجات مرصودة لهذا الطالب</td></tr>";
+    document.getElementById("res-avg").innerText = "0 / 100";
+  } else {
+    for(var j = 0; j < matchGrades.length; j++){
+      var m = matchGrades[j];
+      var gVal = Number(m.g !== undefined ? m.g : (m.grade || 0)) || 0;
+      sum += gVal;
+      var tr = document.createElement("tr");
+      tr.innerHTML =
+        "<td>" + (m.c || m.className || "") + "</td>" +
+        "<td>" + (m.s || m.subject || "") + "</td>" +
+        "<td><strong style='color:#22d3ee'>" + gVal + " / 100</strong></td>";
+      gBody.appendChild(tr);
+    }
+    var avg = (sum / matchGrades.length).toFixed(1);
+    document.getElementById("res-avg").innerText = avg + " / 100";
   }
 
-  var avg = (sum / matches.length).toFixed(1);
-  document.getElementById("res-avg").innerText = avg + " / 100";
+  // عرض الغيابات
+  aBody.innerHTML = "";
+  if(!matchAbs.length){
+    aBody.innerHTML = "<tr><td colspan='3' style='text-align:center;color:#94a3b8'>لا توجد سجلات غياب، هروب، أو إجازة لهذا الطالب</td></tr>";
+  } else {
+    for(var k = 0; k < matchAbs.length; k++){
+      var ab = matchAbs[k];
+      var typeTxt = String(ab.t || ab.type || "غياب");
+      var col = typeTxt === "هروب" ? "#fb7185" : (typeTxt === "غياب" ? "#fbbf24" : "#34d399");
+      var trA = document.createElement("tr");
+      trA.innerHTML =
+        "<td>" + (ab.c || ab.className || "") + "</td>" +
+        "<td style='color:" + col + ";font-weight:bold'>" + typeTxt + "</td>" +
+        "<td>" + (ab.d || ab.date || "") + "</td>";
+      aBody.appendChild(trA);
+    }
+  }
 }
 
-document.getElementById("btn-find").onclick = searchMyGrades;
+document.getElementById("btn-find").onclick = searchMyData;
 document.getElementById("st-name-input").addEventListener("keydown", function(e){
-  if(e.key === "Enter") searchMyGrades();
+  if(e.key === "Enter") searchMyData();
 });
 
-pullGrades();
+pullData();
 </script>
 </body>
 </html>
- 
