@@ -53,7 +53,7 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
 
   <div id="adm-login" class="panel box-sm np">
     <h3 style="margin-top:0;color:#fb7185;text-align:center">دخول بوابة المديرة</h3>
-    <input type="password" id="adm-pass" autocomplete="off" placeholder="أدخل الرمز السري">
+    <input type="password" id="adm-pass" autocomplete="off" placeholder="أدخل الرمز السري (99100)">
     <button type="button" id="btn-adm-login" class="btn-r" style="width:100%">دخول</button>
   </div>
 
@@ -169,11 +169,10 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
 
 <footer>
   <div>برمجة وتطوير: <strong style="color:#fb7185">عباس محمد عزيز</strong></div>
-  <div style="margin-top:3px;font-size:12px;color:#94a3b8">تحت تدريب الأستاذة أسمى حيدر</div>
 </footer>
 
 <script>
-(function(){
+window.addEventListener("DOMContentLoaded", function(){
   var FIREBASE_DB_URL = "https://al-maarefa-school-default-rtdb.firebaseio.com";
   var ADMIN_PASS = "99100";
   var TARGET_SECTIONS = [
@@ -546,4 +545,9 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;border-top:1
       if(typeof d === "boolean"){
         absLocked = d;
         localStorage.setItem("al_lock_abs", d ? "1" : "0");
-        renderLocks(
+        renderLocks();
+      }
+    });
+  }
+
+  function doLogin(
